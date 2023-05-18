@@ -1,0 +1,132 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  .container-nav {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    width: 15vw;
+    background-color: #c4c4c4;
+    color: #333;
+  }
+  
+  .sidebar ul {
+    margin-top: 8vh;
+    list-style-type: none;
+  }
+  
+  .sidebar li {
+    padding: 1.5vh;
+    position: relative;
+  }
+  
+  .sidebar li a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebar li i {
+    margin-right: .5vw;
+  }
+  
+  .submenu {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: #f2f2f2;
+    display: none;
+    z-index: 1;
+  }
+  
+  .submenu li {
+    padding: 10px;
+  }
+  
+  .has-submenu:hover .submenu {
+    display: block;
+  }
+  
+  .content h1 {
+    margin-bottom: 20px;
+  }
+  .nav-row{
+    background-color: rgb(255, 145, 0);
+    height: 10vh;
+    width: 100vw;
+    display: grid;
+    grid-template: "logo   empty1 content-nav"/
+                     24%    1fr     30%   ;
+  }
+  .burger {
+    grid-area: burger;
+    color: #333;
+    display: flex;
+    align-items: center;
+    font-size: 1.6vw;
+    cursor: pointer;
+    margin: 4vh 1vw 0vw 1vw;
+  }
+  
+  .logo {
+    grid-area: logo;
+    display: flex;
+    align-items: center;
+    font-size: 2vw;
+    margin: 1vw;
+    gap: 1vw;
+  }
+  .logo i{
+    cursor: pointer;
+  }
+  
+  .search {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search input {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    margin: 1vw;
+
+  }
+  .search i{
+    color: #f2f2f2;
+    font-size: 1.3vw;
+  }
+  .content-nav{
+    display: flex;
+    grid-area: content-nav;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.3vw;
+}
+.exit{
+    display: flex;
+    gap: 1vw;
+}
+.user{
+    display: flex;
+    gap: 1vw;
+}
+h2{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    font-size: .7em;
+    display: grid;
+    place-content: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(3, 129, 13);
+}
