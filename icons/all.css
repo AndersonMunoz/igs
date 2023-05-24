@@ -1,7 +1,13 @@
 /*!
+<<<<<<< HEAD
  * Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  * Copyright 2022 Fonticons, Inc.
+=======
+ * Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Copyright 2023 Fonticons, Inc.
+>>>>>>> development
  */
 .fa {
   font-family: var(--fa-style-family, "Font Awesome 6 Free");
@@ -258,8 +264,15 @@
             animation-duration: 1ms;
     -webkit-animation-iteration-count: 1;
             animation-iteration-count: 1;
+<<<<<<< HEAD
     transition-delay: 0s;
     transition-duration: 0s; } }
+=======
+    -webkit-transition-delay: 0s;
+            transition-delay: 0s;
+    -webkit-transition-duration: 0s;
+            transition-duration: 0s; } }
+>>>>>>> development
 
 @-webkit-keyframes fa-beat {
   0%, 90% {
@@ -491,6 +504,10 @@
 
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
 readers do not read off random characters that represent icons */
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
 .fa-0::before {
   content: "\30"; }
 
@@ -1493,6 +1510,12 @@ readers do not read off random characters that represent icons */
 .fa-v::before {
   content: "\56"; }
 
+<<<<<<< HEAD
+=======
+.fa-bangladeshi-taka-sign::before {
+  content: "\e2e6"; }
+
+>>>>>>> development
 .fa-bicycle::before {
   content: "\f206"; }
 
@@ -4064,9 +4087,12 @@ readers do not read off random characters that represent icons */
 .fa-subtract::before {
   content: "\f068"; }
 
+<<<<<<< HEAD
 .fa-child-rifle::before {
   content: "\e4e0"; }
 
+=======
+>>>>>>> development
 .fa-chess::before {
   content: "\f439"; }
 
@@ -5174,6 +5200,15 @@ readers do not read off random characters that represent icons */
 .fa-share-square::before {
   content: "\f14d"; }
 
+<<<<<<< HEAD
+=======
+.fa-child-combatant::before {
+  content: "\e4e0"; }
+
+.fa-child-rifle::before {
+  content: "\e4e0"; }
+
+>>>>>>> development
 .fa-gun::before {
   content: "\e19b"; }
 
@@ -5351,6 +5386,12 @@ readers do not read off random characters that represent icons */
 .fa-hand-lizard::before {
   content: "\f258"; }
 
+<<<<<<< HEAD
+=======
+.fa-notdef::before {
+  content: "\e1fe"; }
+
+>>>>>>> development
 .fa-disease::before {
   content: "\f7fa"; }
 
@@ -7735,6 +7776,12 @@ readers do not read off random characters that represent icons */
 .fa-internet-explorer:before {
   content: "\f26b"; }
 
+<<<<<<< HEAD
+=======
+.fa-stubber:before {
+  content: "\e5c7"; }
+
+>>>>>>> development
 .fa-telegram:before {
   content: "\f2c6"; }
 
@@ -7744,6 +7791,12 @@ readers do not read off random characters that represent icons */
 .fa-old-republic:before {
   content: "\f510"; }
 
+<<<<<<< HEAD
+=======
+.fa-odysee:before {
+  content: "\e5c6"; }
+
+>>>>>>> development
 .fa-square-whatsapp:before {
   content: "\f40c"; }
 
