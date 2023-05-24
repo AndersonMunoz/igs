@@ -1,0 +1,116 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    font-family: "Poppins", sans-serif;
+}
+
+/*  MENUS BARRA*/
+.logo{
+    right: 95%;
+    position: absolute;
+    display: flex;
+    background-color: azure;
+    width: 50px;
+    height: 50PX;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    border-radius: 50%;
+    color: rgb(255, 145, 0);
+}
+
+.hamburgesa{
+    display: flex;
+    width: 60px;
+    height: 60px;
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    right: 90%;
+    position: absolute;
+}
+.icon-menu {
+    position: absolute;
+    color: rgb(255, 255, 255);
+    font-size: 1.9714656290531778vw;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu_init{
+    display: flex;
+    height: 70px;
+    width: 100%;
+    background-color: rgb(19, 160, 0);
+}
+.menu_barra{
+    display: flex;
+    gap: 30px;
+    margin-left: 70%;
+    justify-content: center;
+    align-items: center;
+}
+.buscar{
+    display: flex;
+    gap: 15px;
+}
+/*MENU LATERAL*/
+
+
+.menu_lat{  
+    position: relative;
+    width: 230px;
+    height: 100vh;
+}
+.menu_lateral{
+    width: 100%;
+    display: block;
+    background-color: rgb(255, 94, 0);
+}
+ul{
+    height: 100vh;
+}
+li{
+    padding: 15px;
+    display:flex;
+    height: 40px;
+    width: 87.1%;
+    text-decoration: none;
+    background-color: rgb(255, 94, 0);
+    align-items: center;
+    justify-content:left;
+    text-align: center;
+    gap: 10px;
+    border-bottom: 2px solid rgb(255, 255, 255) ;
+}
+a{
+    display: block;
+    list-style: none;
+    text-decoration: none;
+    color: white;
+    text-align: justify;
+}
+li:hover{
+    background-color: rgb(255, 124, 48);
+}
+i{
+    color: white;
+    font-size: 1.5em;
+}
+
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/poppins-v20-latin-regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/poppins-v20-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/poppins-v20-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/poppins-v20-latin-regular.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/poppins-v20-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/poppins-v20-latin-regular.svg#Poppins') format('svg'); /* Legacy iOS */
+}
+
+    
