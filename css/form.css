@@ -1,0 +1,51 @@
+.todo{
+    text-align: center;
+    border:solid 1px rgb(0, 0, 0);
+    margin-left: 200px;
+    margin-right: 200px;
+    font-family: cursive;
+    margin-top: 50px;
+    font-size: 1.2em;
+    position: relative;
+    overflow: hidden;
+}
+.f1{
+    height: 20px;
+    width: 300px;
+    margin-top: 50px;
+    text-shadow: 10px 10px 10px rgb(99, 32, 206);
+}
+.f2{
+    margin-top: 50px;
+    height: 42px;
+    width: 100px;
+    background-color: rgb(152, 152, 179);
+    color: white;
+    cursor: pointer;
+    font-size: 1.0em;
+    background-color: rgb(31, 204, 204);
+}
+.l1{
+    margin-left: -67px;
+    position: absolute;
+    margin-top: 50px;
+}
+.l2{
+    position: absolute;
+    margin-top: 50px;
+    margin-left: -28px;
+}
+.l3{
+    position: absolute;
+    margin-top: 50px;
+    margin-left: -45px;
+}
+.fondo{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.4;
+    z-index: -1;
+}
