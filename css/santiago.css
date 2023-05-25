@@ -10,12 +10,10 @@
     height: 70px;
     background-color: rgb(19, 160, 0);
     grid-template   : "logo hamburgesa empty-1 buscar empty-2 login"100%/
-                    150px 50px 1fr 300px 1fr 250px;
+                    150px 40px 1fr 350px  1fr 250px;
                     justify-content: center;
                     align-items: center;
 }
-
-
 
 .logo{
     grid-area: logo;
@@ -45,38 +43,71 @@
     align-items: center;
     text-align: center;
     display: flex;
+    cursor: pointer;
 }
 .buscar{
     grid-area: buscar;
-    width: 200px;
-    height: 30px;
+    width: 340px;
+    height: 35px;
     position: relative;
-    border-radius: 5%;
     zoom: 100%;
+    color: white;
 }
 .iconBuscar{
-    gap: 10px;
     position: absolute;
     left: 0;
     padding-left:8px;
     top: calc(50% - 8px);
     font-size: 1em;
+    color: white;
 }
 input[type=search]{
     padding-left: 27px;
     width: 100%;
-    height: 100%;
-    border: 1px solid black;
+    height: 100%;   
+    border: 1px solid rgb(19, 160, 0);
     border-radius:5px;
-    
+    background-color: rgba(131, 223, 119, 0.664);
 }
 input[type=search]:focus{
     outline: none;
 }
-
+input[type=search]:focus{
+    background-color: rgb(135, 218, 124);
+}
+::placeholder{
+    color: white;
+}
 .login{
+    display: flex;
     grid-area: login;
-}/* 
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    cursor: pointer;
+}
+.userlogo{
+    color: white;
+    font-size: 1.5em;
+    text-align: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+.texlogin{
+    display: flex;
+    list-style: none;
+    text-decoration: none;
+    color: rgb(248, 248, 248);
+    text-align: justify;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    border-radius: 10px;
+}
+.texlogin:hover{
+    background-color: rgb(131, 223, 119, 0.664);
+}
+
 
 
 
