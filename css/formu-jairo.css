@@ -1,0 +1,92 @@
+:root {
+    --color-dark: #11101d;
+    --color-dark-x: #e86e12;
+    --color-dark-xx: #1f232b;
+    --color-light: #ffffff;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    background-color: var(--color-grey);
+    color: var(--color-light);
+    letter-spacing: .05rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.contact-box {
+    padding: 3rem;
+    width: 100%;
+    max-width: 900px;
+    background-color: var(--color-dark);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.btn {
+    font-weight: 400;
+    padding: 1rem 9rem;
+    border-radius: 9rem;
+    min-width: 10rem;
+    background-color: var(--color-dark-xx);
+    border: none;
+    color: var(--color-light);
+}
+
+.btn:hover {
+    background-color: var(--color-dark-x);
+}
+
+.form-control {
+    background-color: var(--color-dark-x);
+    border: 2px solid ;
+    border-radius: .2rem;
+    padding: 1.5rem 1rem;
+    color: var(--color-light);
+}
+
+.form-group {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1.5rem;
+}
+
+.form-group.col-md-6 {
+    width: 100%;
+    max-width: none;
+}
+
+@media (max-width: 575.98px) {
+    .p-6 {
+        padding: 2rem;
+    }
+
+    .contact-box {
+        padding: 0;
+    }
+
+    .width-100 {
+        width: 100%;
+    }
+}
+.form-control {
+    background-color: var(--color-dark-xx);
+    border: 2px solid var(--color-dark-xx);
+    border-radius: .9rem;
+    padding: 1.5rem 1rem;
+    color: var(--color-light);
+    transition: border-color 0.8s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #22ed1b;
+}
