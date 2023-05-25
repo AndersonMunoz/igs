@@ -9,33 +9,52 @@
     <title>IGS</title>
 </head>
 <body>
-    <div class="head">
-        <div class="logo">Logo</div>
-        <div class="user-data">User</div>
-        <div id="menuHamb" class="menu-hamb">
-            <i class="fa-solid fa-bars-progress"></i>
+    <div class="container">
+        
+        <div class="head">
+            <div class="logo">Logo</div>
+            <div class="user-data">User</div>
+            <div id="menuHamb" class="menu-hamb">
+                <i class="fa-solid fa-bars-progress"></i>
+            </div>
+        </div>
+        <div class="menu-container">
+    
+            <div id="full" class="none">
+                <div class=" items inventario"><i class="fa-solid fa-boxes-stacked"></i><span class="delate1">ver inventario</span></div>
+                <div class=" items movimiento"><i class="fa-solid fa-cart-flatbed"></i><span class="delate2">realizar movimiento</span></div>
+                <div class=" items reporte"><i class="fa-solid fa-table-list"></i><span class="delate3">Generar reporte</span></div>
+                <div class=" items caducar"><i class="fa-regular fa-clock"></i><span class="delate4">productos por caducar</span></div>
+                <div class=" items lengua"><i class="fa-solid fa-language"></i><span class="delate5">cambiar lenguaje</span></div>
+                <div class=" items new" id="newUser"> <a href="#" class="link"><i class="fa-solid fa-users"></i>nuevo usuario</a></div>
+                <div class=" items mod-noc"><i class="fa-solid fa-moon"></i><span class="delate6">modo noche</span></div>    
+            </div>
+            <div id="mini" class="menu">
+                <div class="items inventario"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <div class="items movimiento"><i class="fa-solid fa-cart-flatbed"></i></div>
+                <div class="items reporte"><i class="fa-solid fa-table-list"></i></div>
+                <div class="items caducar"><i id="newUser2" class="fa-regular fa-clock"></i></div>
+                <div class="items new"><a href="#" class="link"><i class="fa-solid fa-users"></i></a></div>
+                <div class="items lengua"><i class="fa-solid fa-language"></i></div>
+                <div class="items mod-noc"><i class="fa-solid fa-moon"></i></div>
+            </div>
+        </div>
+        <div id="addNewUser" class="none">
+            <h2>Nuevo usuario</h2>
+                <input type="text" class="name" id="name" placeholder="Nombre(s)">
+                <input type="text" class="surname" id="sueName" placeholder="Apeliidos">
+                <input type="email" class="email" id="Email" placeholder="Email">
+                <input type="password" class="password" id="passWord" placeholder="Contraseña">                
+                <h3 class="user-title">Tipo de usuario</h3>
+                    <select name="user-type" id="userType" class="user-type">
+                        <option value="0"><p class="select-user">Selecione</p></option>
+                        <option value="1"><p class="select-user">Super usuario</p></option>
+                        <option value="2"><p class="select-user">Administrador</p></option>
+                    </select>
+                    <button>Registrar</button>
         </div>
     </div>
-    <div class="menu-container">
 
-        <div id="full" class="menu">
-            <div class=" items inventario"><i class="fa-solid fa-boxes-stacked"></i><span class="delate1">ver inventario</span></div>
-            <div class=" items movimiento"><i class="fa-solid fa-cart-flatbed"></i><span class="delate2">realizar movimiento</span></div>
-            <div class=" items reporte"><i class="fa-solid fa-table-list"></i><span class="delate3">Generar reporte</span></div>
-            <div class=" items caducar"><i class="fa-regular fa-clock"></i><span class="delate4">productos por caducar</span></div>
-            <div class=" items lengua"><i class="fa-solid fa-language"></i><span class="delate5">cambiar lenguaje</span></div>
-            <div class=" items mod-noc"><i class="fa-solid fa-moon"></i><span class="delate6">modo noche</span></div>    
-        </div>
-
-        <div id="mini" class="none">
-            <div class="items inventario"><i class="fa-solid fa-boxes-stacked"></i></div>
-            <div class="items movimiento"><i class="fa-solid fa-cart-flatbed"></i></div>
-            <div class="items reporte"><i class="fa-solid fa-table-list"></i></div>
-            <div class="items caducar"><i class="fa-regular fa-clock"></i></div>
-            <div class="items lengua"><i class="fa-solid fa-language"></i></div>
-            <div class="items mod-noc"><i class="fa-solid fa-moon"></i></div>
-        </div>
-    </div>
 </body>
 <script src="js/igs.js"></script>
 </html>
