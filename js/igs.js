@@ -1,6 +1,9 @@
 let mini=document.querySelector('#mini');
 let full=document.querySelector('#full');
 let mian=document.getElementById('menuHamb');
+let newUser=document.querySelector('#addNewUser');
+let btnNew=document.querySelector('#newUser');
+let btnNew2=document.querySelector('#newUser2');
 
 
 mian.addEventListener('click', function () {
@@ -18,3 +21,16 @@ mian.addEventListener('click', function () {
     }
 }
 );
+
+btnNew.addEventListener('click', function add() {
+    if (newUser.classList.contains('none')) {
+        newUser.classList.remove('none');
+        newUser.classList.add('add-new-user');
+    }else{
+        newUser.classList.add('none');
+        newUser.classList.remove('add-new-user');
+    }
+});
+btnNew2.addEventListener('click', function () {
+    alert('sduhdsfkjh')
+})
