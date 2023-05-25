@@ -1,0 +1,115 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.form2,
+.form3,
+.form4{
+    display: none;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .form1 {
+    width: 25vw;
+    height: 40vh;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    
+  }
+  
+  h1 {
+    color: #FFA500;
+  }
+  
+  h2 {
+    color: #008000;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
+    color: #008000;
+  }
+  
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #008000;
+  }
+  
+  input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #FFA500;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #FF8C00;
+  }
+  
+  .content-step-num {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    grid-template-areas:
+      "steps"
+      "numbers";
+  }
+  
+  .steps {
+    grid-area: steps;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 1.2vw;
+  }
+  
+  .steps p {
+    margin-bottom: 10px;
+    color: #FFA500;
+  }
+  
+  .numbers {
+    grid-area: numbers;
+    display: flex;
+    justify-content: center;
+    font-size: 1.2vw;
+  }
+  
+  .numbers span {
+    display: flex;
+    align-items: center;
+  }
+  
+  .numbers span i {
+    padding: 6px;
+    border-radius: 50%;
+    border: solid 1px #008000;
+  }
+  
+  .numbers .linea::before {
+    content: "";
+    display: inline-block;
+    width: 3.3vw;
+    height: 0.3vh;
+    background-color: #008000;
+    margin: 5px;
+  }
+  
