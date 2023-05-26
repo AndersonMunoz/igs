@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login | IGS</title>
     <link rel="stylesheet" href="css/formularioSanti.css">
 </head>
 
 <body>
-    <img  class="fondo" src="img/R.jpg" alt="">
+    <!-- <img class="fondo" src="img/R.jpg" alt=""> -->
     <section>
         <div class="boxarea">
             <div class="imgLogo">
@@ -18,26 +18,35 @@
             </div>
             <form action="">
                 <h1>Registro IGS</h1>
-                <label for="">Ingrese su tipo de Documento</label>
-                <select>
-                    <option value="">Registro Civil</option>
-                    <option value="">Tarjeta de Identidad</option>
-                    <option value="">Cedula de Identidad</option>
-                    <option value="">Cedula Extranjera</option>
+
+                <label for="doc" id="tipoDoc">Ingrese su tipo de Documento</label>
+                <select id="doc">
+                    <option value="">Seleccionar tipo de documento</option>
+                    <option value="tarjeta">Tarjeta de Identidad</option>
+                    <option value="cedula">Cedula de Identidad</option>
+                    <option value="cedulaExtranjera">Cedula Extranjera</option>
                 </select>
-                <label for="">Ingrese su numero de documento</label>
-                <input type="text" placeholder="Ingrese su numero de documento">
-                <label> Ingrese su(s) Nombres</label>
-                <input type="text" placeholder="Ingrese sus nombre(s)">
-                <label> Ingrese su(s) Apellidos</label>
-                <input type="text" placeholder="Ingrese sus Apellido(s)">
-                <label for="">Tipo de Usuario</label>
-                <input type="radio" name="genero" id="">Instructor <br>
-                <input type="radio" name="genero" id="">Encargado<br>
-                <input type="submit" value="REGISTRAR"> <br>
+
+                <label for="documento" id="docLabel">Documento:</label>
+                <input type="text" id="documento" placeholder="Ingrese su numero de documento" required>
+
+                <label for="nombre" id="nombreLabel">Nombre:</label>
+                <input type="text" id="nombre" placeholder="Ingrese su nombre(s)" required>
+
+                <label for="apellido" id="apeLabel">Apellidos:</label>
+                <input type="text" id="apellido" placeholder="Ingrese sus Apellido(s)">
+                <label for="tipoUsuario">Tipo de Usuario:</label>
+                <div class="radi">
+                    <input type="radio" name="tipoUsuario" id="instructor"><span>Instructor</span>
+                    <input type="radio" name="tipoUsuario" id="encargado"><span>Encargado</span>
+                </div>
+
+
+                <button type="submit"><a href="devsanti.html">REGISTRAR</a></button>
             </form>
         </div>
     </section>
+    <script src="js/jssanti.js"></script>
 </body>
 
 </html>
