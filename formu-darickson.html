@@ -6,44 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/8d35a45d51.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/formu-darickson.css">
+    <link rel="icon" href="img/iconoindex.ico">
     <title>Formulario</title>
 </head>
 <body>
     <div class="container">
-        <form class="form1">
+
+        <form class="form1" id="form1">
             <h1>Registrar Usuario</h1>
             <div class="content-step-num">
-              <div class="numbers">
-                <span><i class="fa-solid fa-1"></i></span>
-                <span class="linea"><i class="fa-solid fa-2"></i></span>
-                <span class="linea"><i class="fa-solid fa-3"></i></span>
-                <span class="linea"><i class="fa-solid fa-4"></i></span>
-              </div>
+                <div class="numbers">
+                    <span><i class="fa-solid fa-"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                </div>
             </div>
             <div class="info">
-              <h2>Información básica</h2>
-              <label for="nombre">Nombre(s)</label>
-              <input type="text" id="nombre">
-              <label for="apellidos">Apellidos</label>
-              <input type="text" id="apellidos">
+                <h2>Información básica</h2>
+                <label for="nombre">Nombre(s)</label>
+                <input type="text" id="nombre">
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos">
             </div>
-            <input type="submit" value="Siguiente">
-          </form>
-          
+            <input type="submit" value="Siguiente" id="firstSubmit">
+        </form>
+        
 
-        <form class="form2">
+        <form class="form2" id="form2">
             <h1>Registrar Usuario</h1>
-            <div class="steps">
-                <p>Nombre(s)</p>
-                <p>Contacto</p>
-                <p>Contraseña</p>
-                <p>Enviar</p>
-            </div>
-            <div class="numbers">
-                <span><i class="fa-solid fa-circle-check"></i></span>
-                <span><i class="fa-solid fa-2"></i></span>
-                <span><i class="fa-solid fa-3"></i></span>
-                <span><i class="fa-solid fa-4"></i></span>
+            <div class="content step-num">
+                <div class="numbers">
+                    <span><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                </div>
             </div>
             <div class="info">
                 <h2>Información Contacto</h2>
@@ -52,23 +50,19 @@
                 <label>Numero</label>
                 <input type="number">
             </div>
-            <input type="submit" placeholder="Siguiente">
-            <input type="submit" placeholder="Atras">
+            <button class="back" id="firstBack">Atras</button>
+            <input type="submit" value="Siguiente" id="secondSubmit">
         </form>
 
-        <form class="form3">
+        <form class="form3" id="form3">
             <h1>Registrar Usuario</h1>
-            <div class="steps">
-                <p>Nombre(s)</p>
-                <p>Contacto</p>
-                <p>Contraseña</p>
-                <p>Enviar</p>
-            </div>
-            <div class="numbers">
-                <span><i class="fa-solid fa-circle-check"></i></span>
-                <span><i class="fa-solid fa-circle-check"></i></span>
-                <span><i class="fa-solid fa-3"></i></span>
-                <span><i class="fa-solid fa-4"></i></span>
+            <div class="content step-num">
+                <div class="numbers3">
+                    <span ><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="linea"><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                </div>
             </div>
             <div class="info">
                 <h2>Informacion básica</h2>
@@ -81,22 +75,19 @@
                     <option value="2">CoAdministrador</option>
                 </select>
             </div>
-            <input type="submit" placeholder="Siguiente">
+            <button class="back" id="secondtBack">Atras</button>
+            <input type="submit" value="Siguiente" id="thirdSubmit">
         </form>
 
-        <form class="form4">
+        <form class="form4" id="form4">
             <h1>Registrar Usuario</h1>
-            <div class="steps">
-                <p>Nombre(s)</p>
-                <p>Contacto</p>
-                <p>Contraseña</p>
-                <p>Enviar</p>
-            </div>
-            <div class="numbers">
-                <span><i class="fa-solid fa-circle-check"></i></span>
-                <span><i class="fa-solid fa-circle-check"></i></span>
-                <span><i class="fa-solid fa-circle-check"></i></span>
-                <span><i class="fa-solid fa-4"></i></span>
+            <div class="content step-num">
+                <div class="numbers4">
+                    <span><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="linea"><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="linea"><i class="fa-solid fa-circle-check"></i></span>
+                    <span class="linea"><i class="fa-solid fa-"></i></span>
+                </div>
             </div>
             <div class="info">
                 <h2>Informacion básica</h2>
@@ -105,7 +96,8 @@
                 <label>....</label>
                 <input type="text">
             </div>
-            <input type="submit" placeholder="Siguiente">
+            <button class="back" id="thirdBack">Atras</button>
+            <input type="submit" value="Enviar" id="fourthSubmit">
         </form>
 
     </div>
