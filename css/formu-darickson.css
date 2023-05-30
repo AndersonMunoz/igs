@@ -21,14 +21,14 @@ body{
 .form3,
 .form4 {
   width: 25vw;
-  height: 50vh;
+  height: 60vh;
   padding: 2.5vh;
   border-radius: 2vw;
   box-shadow: 0 0 1vw rgba(0, 0, 0, 0.2);
   font-family: Arial, sans-serif;
   text-align: center;
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 5px;
   backdrop-filter: blur(15px); 
   background-color: rgba(0, 0, 0, 0.5);
 }
