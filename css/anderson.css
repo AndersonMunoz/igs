@@ -135,7 +135,7 @@ input[type="text"] {
 .nav-hidden {
     width: 220px;
     height: 100vh;
-    background: linear-gradient(90deg, rgb(32, 128, 32),transparent); 
+    background: linear-gradient(90deg, rgb(6, 54, 6) 50%,transparent); 
     font-size: 1.2em;
     display: block;
     color: rgb(224, 224, 224);
