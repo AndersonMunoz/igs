@@ -19,9 +19,10 @@ form.addEventListener('submit', function(event) {
 form.addEventListener('input', function() {
   const requiredFields = Array.from(form.querySelectorAll('input[required]'));
   const radioFields = Array.from(form.querySelectorAll('input[type="radio"]'));
+  const textFields = Array.from(form.querySelectorAll('input[type="text"]'));
 
   // Verificar si todos los campos requeridos están completos
-  const allFieldsCompleted = requiredFields.every(field => field.value.trim() !== '');
+/*   const allFieldsCompleted = requiredFields.every(field => field.value.trim() !== ''); */
 
   // Verificar si al menos uno de los campos de tipo radio está seleccionado
   const radioSelected = radioFields.some(field => field.checked);
