@@ -18,56 +18,62 @@
                         </div>
                     </div>
                 </div>
-                <form>
+                <form onsubmit="validarFormulario(event)">
                     <div class="form-group text-center">
-                        <h1 class="font-weight-bold mb-3">Registro de usuario</h1>
+                        <h1 class="font-weight-bold ">Registro de usuario</h1>
                         <p class="text-muted mb-5">Ingresa la siguiente información para registrarte.</p>
                     </div>
-                    <div class="form-row mb-2">
-                        <div class="form-group col-md-12">
+                    <div class="form-row ">
+                        <div class="form-group">
                             <label class="font-weight-bold">Nombre <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Tu nombre">
+                            <input type="text" class="form-control" id="nombre" placeholder="Tu nombre">
                         </div>
                     </div>
-                    <div class="form-row mb-2">
-                        <div class="form-group col-md-12">
+                    <div class="form-row ">
+                        <div class="form-group ">
                             <label class="font-weight-bold">Apellido <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Tu apellido">
+                            <input type="text" class="form-control" id="apellido" placeholder="Tu apellido">
                         </div>
                     </div>
-                    <div class="form-group mb-3">
+                    <div class="form-group ">
                         <label class="font-weight-bold">Cédula <span class="text-danger">*</span></label>
-                        <input type="cedula" class="form-control" placeholder="Ingresa el número de la cédula">
+                        <input type="cedula" class="form-control" id="cedula" placeholder="Ingresa el número de la cédula">
                     </div>
-                    <div class="form-group mb-3">
+                    <div class="form-group ">
                         <label class="font-weight-bold">Correo electrónico <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" placeholder="Ingresa tu correo electrónico">
+                        <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo electrónico">
                     </div>
-                    <div class="form-group mb-3">
+                    <div class="form-group ">
                         <label class="font-weight-bold">Tipo de usuario <span class="text-danger">*</span></label>
                         <select class="form-control">
                             <option value="opcion1">Opción 1</option>
                             <option value="opcion2">Opción 2</option>
                         </select>
                     </div>  
-                    <div class="form-group mb-3">
+                    <div class="form-group ">
                         <label class="font-weight-bold">Contraseña <span class="text-danger">*</span></label>
                         <input type="password" class="form-control" placeholder="Ingresa una contraseña">
                     </div>
-                    <div class="form-group mb-5">
+                    <div class="form-group ">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox">
                             <label class="form-check-label">Acepto los términos y condiciones</label>
                         </div>
                     </div>
-                    <button class="btn btn-primary width-100">Regístrate</button>
+                    <button  id="open" class="btn btn-primary width-100">Regístrate </button>
+                    <div id="modal_container" class="modal-container">
+                        <div class="modal">
+                          <h1>Ventana Modal</h1>
+                          <p>
+                            Lorem ipdasdsum dolor sit amet, consectetur adipisicing elit. Itaque assumenda dignissimos illo explicabo natus quia repellat, praesentium voluptatibus harum ipsam dolorem cumque labore sunt dicta consectetur, nesciunt maiores delectus maxime?
+                          </p>
+                          <button id="close">Cerrar</button>
+                        </div>
+                      </div>
                 </form>
-                
-                    </div>
-                </div>
             </div>
         </div>
     </section>
+    <script src="js/formu-jairo.js"></script>
 </body>
 </html>
-             
