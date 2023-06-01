@@ -19,15 +19,17 @@
     width: 300px;
     margin-top: 50px;
     text-shadow: 10px 10px 10px rgb(99, 32, 206);
+    font-family: cursive;
 }
 .f2{
     margin-top: 50px;
-    height: 42px;
-    width: 100px;
+    height: 82px;
+    width: 150px;
     background-color: rgb(152, 152, 179);
     color: white;
     cursor: pointer;
-    font-size: 1.0em;
+    font-size: 1.5em;
+    font-family: cursive;
     background-color: rgb(31, 204, 204);
 }
 .l1{
@@ -56,7 +58,7 @@
 }
 .logoo{
     width: 570px;
-    height: 792px;
+    height: 832px;
     border: solid 1px black;
     position: absolute;
     margin-top: -0.1px;
