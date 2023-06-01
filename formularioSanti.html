@@ -10,8 +10,19 @@
 </head>
 
 <body>
-    <!-- <img class="fondo" src="img/R.jpg" alt=""> -->
+    <img class="fondo" src="img/fruit-171671.jpg" alt="">
     <section>
+        <div class="modal-alert">
+            <div class="aler">
+                <span>Por favor rellena los campos requeridos</span> 
+                <div class="iii">
+                <img class="cancel"src="img/status_browser_negative_error_icon_220289.png" alt="">
+                </div>
+                <div class="boton"><input type="submit" name="" id="modal"></div>
+                
+            </div>
+
+        </div>
         <div class="boxarea">
             <div class="imgLogo">
                 <img src="img/_b49393d1-e9fc-4a1d-8083-8f42a60634a2.jpeg" alt="">
@@ -20,7 +31,7 @@
                 <h1>Registro IGS</h1>
 
                 <label for="doc" id="tipoDoc">Ingrese su tipo de Documento</label>
-                <select id="doc">
+                <select id="doc" required>
                     <option value="">Seleccionar tipo de documento</option>
                     <option value="tarjeta">Tarjeta de Identidad</option>
                     <option value="cedula">Cedula de Identidad</option>
@@ -34,15 +45,14 @@
                 <input type="text" id="nombre" placeholder="Ingrese su nombre(s)" required>
 
                 <label for="apellido" id="apeLabel">Apellidos:</label>
-                <input type="text" id="apellido" placeholder="Ingrese sus Apellido(s)">
+                <input type="text" id="apellido" placeholder="Ingrese sus Apellido(s)" required>
                 <label for="tipoUsuario">Tipo de Usuario:</label>
                 <div class="radi">
-                    <input type="radio" name="tipoUsuario" id="instructor"><span>Instructor</span>
-                    <input type="radio" name="tipoUsuario" id="encargado"><span>Encargado</span>
+                    <input type="radio" name="tipoUsuario" id="instructor" required><span>Instructor</span>
+                    <input type="radio" name="tipoUsuario" id="encargado" required><span>Encargado</span>
                 </div>
-
-
-                <button type="submit"><a href="devsanti.html">REGISTRAR</a></button>
+                <input type="submit" value="REGISTRAR" id="enviar">
+                <!-- <button type="submit" id="enviar"><a>REGISTRAR</a></button> -->
             </form>
         </div>
     </section>
