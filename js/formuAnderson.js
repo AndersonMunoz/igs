@@ -34,4 +34,13 @@ form.addEventListener('input', function() {
   }
 });
 
+registerButton.addEventListener("click",function(){
+  if (modelAlert.classList.contains("model-alert")) {
+    modelAlert.classList.add("model-alert-hidden");
+    modelAlert.classList.remove("model-alert");
+  } else {
+    modelAlert.classList.remove("model-alert-hidden");
+    modelAlert.classList.add("model-alert");
+  }
+})
 
