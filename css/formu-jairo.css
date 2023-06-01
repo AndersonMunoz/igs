@@ -16,6 +16,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    
 }
 
 .contact-box {
@@ -39,6 +40,7 @@ body {
     background-color: var(--color-dark-xx);
     border: none;
     color: var(--color-light);
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -77,6 +79,7 @@ body {
         width: 100%;
     }
 }
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 .form-control {
     background-color: var(--color-dark-xx);
     border: 2px solid var(--color-dark-xx);
@@ -90,3 +93,51 @@ body {
     outline: none;
     border-color: #22ed1b;
 }
+.modal-container {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    pointer-events: none;
+    opacity: 0;  
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    transition: opacity 0.3s ease;
+  }
+  
+  .show {
+    pointer-events: auto;
+    opacity: 1;
+  }
+  
+  .modal {
+    background-color: #59bf22;
+    width: 600px;
+    max-width: 100%;
+    padding: 30px 50px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(18, 18, 18, 0.2);
+    text-align: center;
+  }
+  
+  .modal h1 {
+    margin: 0;
+  }
+  
+  .modal p {
+    opacity: 0.7;
+    font-size: 14px;
+  }
+  button {
+    background-color: #e86e12;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 25px;
+    cursor: pointer;
+  }
