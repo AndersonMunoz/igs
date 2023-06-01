@@ -10,8 +10,13 @@
     <title>Formulario</title>
 </head>
 <body>
-    <div class="container">
-
+    <div class="container" id="container">
+        <div class="modal-alert" id="modalAlert">
+            <div class="box-alert">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio, nulla? Quis minima itaque culpa quidem! Modi, explicabo! Expedita quae assumenda ea. Provident cupiditate quasi est eos unde excepturi, qui suscipit.</p>
+                <input type="submit" value="Aceptar" class="btn-aceptar">
+            </div>
+        </div>
         <form class="form1" id="form1">
             <h1>Registrar Usuario</h1>
             <div class="content-step-num">
@@ -24,9 +29,9 @@
             </div>
             <div class="info">
                 <h2>Información básica</h2>
-                <label for="nombre">Nombre(s)</label>
+                <label for="nombre">Nombre(s)*</label>
                 <input type="text" id="nombre">
-                <label for="apellidos">Apellidos</label>
+                <label for="apellidos">Apellidos*</label>
                 <input type="text" id="apellidos">
             </div>
             <input type="submit" value="Siguiente" id="firstSubmit">
@@ -46,9 +51,9 @@
             <div class="info">
                 <h2>Información Contacto</h2>
                 <label>Email</label>
-                <input type="email">
-                <label>Numero</label>
-                <input type="number">
+                <input type="email" id="form2Email" >
+                <label>Numero Celular</label>
+                <input type="number" id="numeroTele">
             </div>
             <button class="back" id="firstBack">Atras</button>
             <input type="submit" value="Siguiente" id="secondSubmit">
@@ -66,14 +71,14 @@
             </div>
             <div class="info">
                 <h2>Informacion básica</h2>
-                <label>Cedula</label>
-                <input type="number">
-                <label>Tipo de Usuario</label>
+                <label>Tipo de documento</label>
                 <select name="" id="">
                     <option value="0">Selecione...</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">CoAdministrador</option>
+                    <option value="1">Tarjeta de Identidad</option>
+                    <option value="2">Cedula de Ciudadania</option>
                 </select>
+                <label>Numero de Cedula</label>
+                <input type="number">
             </div>
             <button class="back" id="secondtBack">Atras</button>
             <input type="submit" value="Siguiente" id="thirdSubmit">
@@ -91,10 +96,14 @@
             </div>
             <div class="info">
                 <h2>Informacion básica</h2>
+                <label>Tipo de Usuario</label>
+                <select name="" id="">
+                    <option value="0">Selecione...</option>
+                    <option value="1">Administrador</option>
+                    <option value="2">CoAdministrador</option>
+                </select>
                 <label>Contraseña</label>
                 <input type="password">
-                <label>....</label>
-                <input type="text">
             </div>
             <button class="back" id="thirdBack">Atras</button>
             <input type="submit" value="Enviar" id="fourthSubmit">
