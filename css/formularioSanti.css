@@ -4,21 +4,21 @@
     font-family: "Poppins", sans-serif;
 }
 
-body {
-    background: rgb(255, 136, 0);
-    /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, rgb(10, 154, 0), rgb(255, 136, 0));
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, rgb(22, 159, 15), rgb(255, 136, 0));
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
+/* body {
+    background: rgb(104, 102, 100);
 
-/* .fondo {
+    background: -webkit-linear-gradient(to bottom, rgb(210, 255, 206), rgb(105, 105, 105));
+
+    background: linear-gradient(to bottom, rgb(163, 163, 163), rgb(116, 116, 116));
+
+} */
+
+.fondo {
     width: 100%;
     height: 100%;
     position: fixed;
     z-index: -2;
-} */
+}
 
 .boxarea {
     justify-content: center;
@@ -33,7 +33,8 @@ body {
     width: 475px;
     height: 730px;
     display: flex;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(252, 254, 251) ;
+   
     justify-content: center;
     align-items: center;
     border-radius: 15px 0px 0px 15px;
@@ -56,7 +57,7 @@ form {
     justify-content: center;
     align-items: center;
     width: 450px;
-    background-color: rgb(24, 194, 2);
+    background-color: #006414;
     height: 700px;
     border-radius: 0px 15px 15px 0px;
     box-shadow: 0 0 15px 0 rgba(255, 255, 255, 0.747);
@@ -64,7 +65,7 @@ form {
 
 h1 {
     text-align: center;
-    color: rgb(255, 136, 0);
+    color: rgb(255, 115, 0);
     font-size: 2.5em;
     font-family: "Poppins", sans-serif;
     font-weight: 700;
@@ -77,8 +78,8 @@ select{
     padding: 12px;
     font-size: 1em;
     border-radius: 8px;
-    background-color: rgb(55, 207, 63);
-    color: white;
+    background-color: #009929;
+    color: rgb(255, 255, 255);
     border: none;
     cursor: pointer;
 }
@@ -91,18 +92,21 @@ select:focus{
     outline: none;
     border: none;
     cursor: pointer;
+    background-color: rgb(68, 196, 72);
+
 }
 select:checked{
     cursor: pointer;
 }
 select:hover{
-    background-color: rgb(105, 233, 112);
+    background-color: rgb(68, 196, 72);
     cursor: pointer;
 }
 
 label {
     display: block;
-    color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);;
+    /* color: rgb(255, 255, 255); */
     margin-top:20px;
     margin-bottom: -5px;
     text-align: justify;
@@ -110,7 +114,7 @@ label {
 }
 
 label:hover {
-    color: rgb(255, 136, 0);
+    color: rgb(255, 115, 0);
 }
 
 input[type="text"] {
@@ -122,18 +126,21 @@ input[type="text"] {
     height: 30px;
     width: 350px;
     border: none;
-    background-color: rgb(55, 207, 63);
+    background-color: #009929;
     color: white;
 }
 input[type="text"]:focus {
     outline: none;
-    background-color: rgb(105, 233, 112);
+    background-color: rgb(68, 196, 72);
+}
+input:hover{
+    background-color: rgb(68, 196, 72);
 }
 input[type="text"]:active {
     outline: none;
 }
 ::placeholder {
-    color: rgba(230, 230, 230, 0.737);
+    color: rgba(230, 230, 230, 0.829);
 }
 input {
     margin: 10px;
@@ -170,12 +177,12 @@ span{
     text-align: center;
     color: white;
 }
-button {
+input[type="submit"] {
     width: 400px;
     border: none;
     border-radius: 10px;
     height: 70px;
-    background-color: rgb(255, 136, 0);
+    background-color: rgb(255, 115, 0);
     color: white;
     font-size: 2em;
     font-weight: 600;
@@ -183,15 +190,62 @@ button {
     cursor: pointer;
 }
 
-a {
-    text-decoration: none;
-    color: white;
-    width: 400px;
-    height: 70px;
-    padding: 9px 103px 9px 103px;
+input[type="submit"]:hover{
+    background-color: rgb(255, 155, 0);
+ }
+
+
+.modal-alert{
+    background-color: rgba(0, 0, 0, 0.623);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
 }
-
-
+.aler{
+    background-color: aliceblue;
+    width: 500px;
+    height: 350px;
+    border-radius: 10px;
+    padding: 25px 15px 15px 15px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: inline;
+}
+.iii{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    margin-top: 30px;
+}
+.cancel{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 200px;
+    height: 200px;
+    display: inline-flex;
+}
+.boton{
+    margin: -10px 0px 0px 330px;
+}
+input[type="submit"]#modal{
+    background-color: rgb(255, 123, 0);
+    width: 150px;
+    height: 60px;
+    font-size: 1.5em;   
+}
+span{
+    width: 300px;
+    height: 50px;
+    color: black;
+    font-size: 1.5em;
+}
 
 
 
