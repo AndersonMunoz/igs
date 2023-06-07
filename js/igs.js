@@ -34,7 +34,6 @@ btnNew.addEventListener('click', function add() {
     }
 });
 btnReg.addEventListener('click', function () {
-    Form.reportability(alert('llene todos los espacios'));
     if (alerta.classList.contains('none')) {
         alerta.classList.add('modal-alert');
         alerta.classList.remove('none');
