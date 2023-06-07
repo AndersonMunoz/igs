@@ -41,17 +41,25 @@
         </div>
         <div id="addNewUser" class="none">
             <h2>Nuevo usuario</h2>
-                <input type="text" class="name" id="name" placeholder="Nombre(s)">
-                <input type="text" class="surname" id="sueName" placeholder="Apeliidos">
-                <input type="email" class="email" id="Email" placeholder="Email">
-                <input type="password" class="password" id="passWord" placeholder="Contraseña">                
+                <input type="text" class="notEmpty name" id="name" placeholder="Nombre(s)*" required>
+                <input type="text" class="notEmpty surname" id="sueName" placeholder="Apeliidos*" required>
+                <input type="email" class="notEmpty email" id="Email" placeholder="Email*" required>
+                <input type="password" class="notEmpty password" id="passWord" placeholder="Contraseña*" required>               
                 <h3 class="user-title">Tipo de usuario</h3>
-                    <select name="user-type" id="userType" class="user-type">
+                    <select name="user-type" id="userType" class="user-type" required>
                         <option value="0"><p class="select-user">Selecione</p></option>
-                        <option value="1"><p class="select-user">Super usuario</p></option>
+                        <option value="1"><p class="select-user">Super usuario</p></option> 
                         <option value="2"><p class="select-user">Administrador</p></option>
                     </select>
-                    <button>Registrar</button>
+                    <input id="btnReg" type="button" value="Registrar" class="button">
+        </div>
+    </div>
+    <div id="modalAlert" class="none">
+        <div class="box-alert">
+            <p id="Welcome" class="text-val">
+                <i class="fa-regular fa-circle-check"></i> <br> Registro exitoso
+            </p>
+            <a href="modelo-brayan.html" class="btn-aceptar">Aceptar</a>
         </div>
     </div>
 
