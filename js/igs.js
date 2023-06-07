@@ -4,6 +4,8 @@ let mian=document.getElementById('menuHamb');
 let newUser=document.querySelector('#addNewUser');
 let btnNew=document.querySelector('#newUser');
 let btnNew2=document.querySelector('#newUser2');
+let alerta = document.querySelector('#modalAlert');
+let btnReg = document.querySelector('#btnReg')
 
 
 mian.addEventListener('click', function () {
@@ -31,6 +33,11 @@ btnNew.addEventListener('click', function add() {
         newUser.classList.remove('add-new-user');
     }
 });
-btnNew2.addEventListener('click', function () {
-    alert('sduhdsfkjh')
+btnReg.addEventListener('click', function () {
+    Form.reportability(alert('llene todos los espacios'));
+    if (alerta.classList.contains('none')) {
+        alerta.classList.add('modal-alert');
+        alerta.classList.remove('none');
+    }
+    
 })

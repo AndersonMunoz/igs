@@ -22,11 +22,12 @@
 }
 .btn-aceptar{
     position: relative;
-    left: 40%;
+    left: 35%;
     top: -74px;
-    width: 120px;
-    height: 70px;
+    width: fit-content;
+    height: fit-content;
     border-radius: 13px;
+    padding: 20px 20px 20px 20px;
     background-color: rgb(255, 183, 0);
     border: none;
     color: white;
@@ -45,7 +46,7 @@
     font-weight: 800;
     font-size: 2em;
 }
-.fa-regular{
+.check{
     position: absolute;
     font-size: 4em;
     top: 10px;
