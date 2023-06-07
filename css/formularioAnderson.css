@@ -169,7 +169,7 @@ button:hover {
     background-color: rgb(248, 86, 86);
 }
 
-.model-alert-hidden {
+.model-alert {
     display: flex;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.575);
@@ -178,18 +178,19 @@ button:hover {
     display: none;
     justify-content: center;
     align-items: center;
-    position: fixed;
     top: 0;
+    transition: 400ms;
 }
-.model-alert {
+.model-alert-hidden {
     background-color: rgba(0, 0, 0, 0.575);
     width: 100%;
     height: 100vh;
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 0;
+    top: 0; 
+    transition: 400ms;
 }
 
 .box-alert{

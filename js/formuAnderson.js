@@ -1,46 +1,34 @@
 const form = document.getElementById('registration-form');
 const registerButton = document.getElementById('idReg');
-const cancelButton = document.getElementById('idCan');
+const modelAlert = document.querySelector('.model-alert');
+let btnAceptar = document.getElementById("btnAceptar");
+let letX = document.getElementById("letX");
 
 form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Evitar el envío del formulario
+  event.preventDefault(); // Evitar el envío del formulario
 
-    // Validar si todos los campos requeridos están completos
-    if (form.checkValidity()) {
-      alert('¡Registro exitoso!');
-      form.reset(); // Opcionalmente puedes restablecer los campos del formulario
-    }
-  });
-  // Agregar evento al botón de cancelar para redirigir a otra página
-  cancelButton.addEventListener('click', function() {
-    window.location.href = 'modelo-anderson.html'; // Reemplaza 'otra_pagina.html' con la URL de la página a la que deseas redirigir
-  });
-// Mostrar el botón de registro cuando se completen todos los campos requeridos
-form.addEventListener('input', function() {
-  const requiredFields = Array.from(form.querySelectorAll('input[required]'));
-  const radioFields = Array.from(form.querySelectorAll('input[type="radio"]'));
-  const textFields = Array.from(form.querySelectorAll('input[type="text"]'));
-
-  // Verificar si todos los campos requeridos están completos
-/*   const allFieldsCompleted = requiredFields.every(field => field.value.trim() !== ''); */
-
-  // Verificar si al menos uno de los campos de tipo radio está seleccionado
-  const radioSelected = radioFields.some(field => field.checked);
-
-  if (allFieldsCompleted || radioSelected) {
-    registerButton.style.display = 'inline-block';
-  } else {
-    registerButton.style.display = 'none';
+  // Validar si todos los campos requeridos están completos
+  if (form.checkValidity()) {
+    form.reset(); // Opcionalmente puedes restablecer los campos del formulario
+    
+    // Mostrar el div modelAlert
+    modelAlert.style.display = 'flex';
   }
 });
 
-registerButton.addEventListener("click",function(){
-  if (modelAlert.classList.contains("model-alert")) {
-    modelAlert.classList.add("model-alert-hidden");
-    modelAlert.classList.remove("model-alert");
-  } else {
-    modelAlert.classList.remove("model-alert-hidden");
-    modelAlert.classList.add("model-alert");
+registerButton.addEventListener('click', function() {
+  form.reportValidity(); // Mostrar los mensajes de validación si existen campos incompletos
+  
+  // Si todos los campos requeridos están llenos, se ejecutará el evento 'submit' del formulario
+  if (form.checkValidity()) {
+    form.dispatchEvent(new Event('submit'));
   }
-})
+});
 
+btnAceptar.addEventListener('click', function() {
+  modelAlert.style.display = 'none';
+});
+
+letX.addEventListener('click', function() {
+  modelAlert.style.display = 'none';
+});
