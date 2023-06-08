@@ -3,6 +3,8 @@ const registerButton = document.getElementById('idReg');
 const modelAlert = document.querySelector('.model-alert');
 let btnAceptar = document.getElementById("btnAceptar");
 let letX = document.getElementById("letX");
+const cancelButton = document.getElementById('idCan');
+
 
 form.addEventListener('submit', function(event) {
   event.preventDefault(); // Evitar el envío del formulario
@@ -32,3 +34,6 @@ btnAceptar.addEventListener('click', function() {
 letX.addEventListener('click', function() {
   modelAlert.style.display = 'none';
 });
+
+cancelButton.addEventListener('click', function() {
+window.location.href = 'modelo-anderson.html'})
