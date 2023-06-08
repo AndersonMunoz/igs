@@ -1,49 +1,17 @@
-
-        // function validarFormulario(event) {
-        //     event.preventDefault(); 
-          
-        //       // let nombre = document.getElementById("nombre").value;
-        //       // let apellido = document.getElementById("apellido").value;
-        //       // let cedula = document.getElementById("cedula").value;
-        //       // let email = document.getElementById("email").value;
-              
-        
-        //     // if (nombre === "" || apellido === "" || cedula === "" || email === "") {
-        //     //     alert("Por favor, completa todos los campos.");
-        //     // } else {
-        //     //     alert("¡Bienvenido!");
-        //     // }
-        // }
-        // const open = document.getElementById('open');
-        // const modal_container = document.getElementById('modal_container');
-        // const close = document.getElementById('close');
-        
-        // open.addEventListener('click', () => {
-        //   modal_container.classList.add('show');  
-        // });
-        
-        // close.addEventListener('click', () => {
-        //   modal_container.classList.remove('show');
-        // });
-
-        const formulario = document.getElementById('formulario');
+const formulario = document.getElementById('formulario');
 const inputs = document.querySelectorAll('#formulario input');
 
 const expresiones = {
-	// usuario: /^[a-zA-Z0-9\_\-]{4,16}$/,
-	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
-	apellido: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
-	cedula: /^\d{8,10}$/,
-	password: /^.{4,12}$/, 
+	usuario: /^[a-zA-Z0-9\_\-]{4,16}$/, // Letras, numeros, guion y guion_bajo
+	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+	password: /^.{4,12}$/, // 4 a 12 digitos.
 	correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-	telefono: /^\d{8,10}$/ 
+	telefono: /^\d{7,14}$/ // 7 a 10 numeros.
 }
 
 const campos = {
 	usuario: false,
 	nombre: false,
-	apellido:false,
-	cedula :false,
 	password: false,
 	correo: false,
 	telefono: false
@@ -51,15 +19,12 @@ const campos = {
 
 const validarFormulario = (e) => {
 	switch (e.target.name) {
+		case "usuario":
+			validarCampo(expresiones.usuario, e.target, 'usuario');
+		break;
 		case "nombre":
 			validarCampo(expresiones.nombre, e.target, 'nombre');
 		break;
-		case "apellido":
-			validarCampo(expresiones.apellido, e.target, 'apellido');
-		break;
-		case "cedula":
-		validarCampo(expresiones.cedula, e.target, 'cedula');
-	break;
 		case "password":
 			validarCampo(expresiones.password, e.target, 'password');
 			validarPassword2();
@@ -124,7 +89,7 @@ formulario.addEventListener('submit', (e) => {
 	e.preventDefault();
 
 	const terminos = document.getElementById('terminos');
-	if(campos.nombre && campos.apellido && campos.cedula && campos.password   && campos.correo && campos.telefono && terminos.checked ){
+	if(campos.usuario && campos.nombre && campos.password && campos.correo && campos.telefono && terminos.checked ){
 		formulario.reset();
 
 		document.getElementById('formulario__mensaje-exito').classList.add('formulario__mensaje-exito-activo');
