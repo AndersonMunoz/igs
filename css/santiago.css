@@ -110,7 +110,7 @@ input[type=search]:focus{
 
 
 /*MENU LATERAL*/
-/* 
+
 
 .menu_lat{  
     position: relative;
@@ -153,10 +153,10 @@ li:hover{
 i{
     color: white;
     font-size: 1.5em;
-} */
+}
 
 
-#container{
+/* #container{
 	display: flex;
 	flex-direction: column;
 	width: 200px;
@@ -377,7 +377,7 @@ i{
 	display: flex;
 	color: #191919;
 	font-size: 30px;
-}
+} */
 
 
 @font-face {

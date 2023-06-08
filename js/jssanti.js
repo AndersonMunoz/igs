@@ -13,12 +13,6 @@ btnEnviar.addEventListener("click", function() {
     }
 });
 
-let enviarModal = document.querySelectorAll('modal')
-let modal = document.querySelectorAll('modal-alert')
-
-enviarModal.addEventListener("click", function(){
-    alert(sadfasdf)
-})
 
 
 
