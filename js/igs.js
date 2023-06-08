@@ -5,7 +5,12 @@ let newUser=document.querySelector('#addNewUser');
 let btnNew=document.querySelector('#newUser');
 let btnNew2=document.querySelector('#newUser2');
 let alerta = document.querySelector('#modalAlert');
-let btnReg = document.querySelector('#btnReg')
+let btnReg = document.querySelector('#btnReg');
+let nombre = document.getElementById('Name');
+let Surname = document.getElementById('Surname');
+let Email = document.getElementById('Email');
+let Pass = document.getElementById('passWord');
+let userType = document.getElementById('userType')
 
 
 mian.addEventListener('click', function () {
@@ -34,10 +39,11 @@ btnNew.addEventListener('click', function add() {
     }
 });
 btnReg.addEventListener('click', function () {
-    Form.reportability(alert('llene todos los espacios'));
-    if (alerta.classList.contains('none')) {
+    if ((nombre.value.length === 0)||(Email.value.length === 0)||(Pass.value.length === 0)||(userType.value == 0)) {
+        alert ('Por favor, asegúrese de llenar todos los campos correctamente.')
+    }else{ 
         alerta.classList.add('modal-alert');
         alerta.classList.remove('none');
+ 
     }
-    
-})
+});
