@@ -18,6 +18,14 @@
         </div>
         <div id="letX" class="equis"><i class="fa-solid fa-circle-xmark"></i></div>
     </div>
+    <div id="modelAlert2" class="model-alert2">
+        <div class="box-alert">
+            <p><span class="triangulo"><i class="fa-solid fa-triangle-exclamation"></i></span><br>
+            Se necesita llenar todos los campos</p>
+            <input id="btnAceptar2" type="button" class="btn-aceptar" value="Aceptar">
+        </div>
+        <div id="letX2" class="equis"><i class="fa-solid fa-circle-xmark"></i></div>
+    </div>
     <div class="main-container">
         <h1>Registro de usuario</h1><br>
         <div class="container">
@@ -27,36 +35,42 @@
             <form id="registration-form" action="">
                 <fieldset>
                    <label><br>Ingrese nombre(s):</label><br>
-                        <input id="nombreUsuario"type="text" placeholder="Ingrese nombre(s)" required><br>
+                        <input id="nombreUsuario" type="text" placeholder="Ingrese nombre(s)" ><br>
+                        <label id="textoAlert" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Ingrese apellido(s):</label><br>
-                        <input type="text" placeholder="Ingrese apellido(s)" required><br>
+                        <input id="apellido"type="text" placeholder="Ingrese apellido(s)" ><br>
+                        <label id="textoAlert2" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Ingrese email:</label><br>
-                        <input type="email" placeholder="Ingrese email" required><br>
+                        <input id="emailPe"type="email" placeholder="Ingrese email" ><br>
+                        <label id="textoAlert3" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Seleccione tipo de documento:</label><br>
-                    <select class="id" required>
-                        <option class="op">Selecciona una opción</option>
-                        <option class="op">Tarjeta de Indentidad</option>
-                        <option class="op">Cédula de Ciudadanía</option>
-                        <option class="op">Cédula de Extranjería</option>
-                        <option class="op">Pasaporte</option>
+                    <select id="ide" class="id" >
+                        <option value="0"class="op">Selecciona una opción</option>
+                        <option value="2" class="op">Tarjeta de Indentidad</option>
+                        <option value="2" class="op">Cédula de Ciudadanía</option>
+                        <option value="3" class="op">Cédula de Extranjería</option>
+                        <option value="4" class="op">Pasaporte</option>
                     </select><br>
+                    <label id="textoAlert4" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Ingrese número de documento</label><br>
-                        <input type="number" placeholder="Ingrese documento" required><br>
+                        <input id="numId"type="number" placeholder="Ingrese documento" ><br>
+                        <label id="textoAlert5" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Seleccione tipo de usario:</label><br>
-                        <input type="radio" name="genero" required>Administrador&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="genero" required>Co-administrador<br>
+                        <input id="admin" type="radio" name="genero" >Administrador&nbsp;&nbsp;&nbsp;
+                        <input id="coadmin" type="radio" name="genero" >Co-administrador<br>
                     <label><br>Seleccione cargo</label><br>
-                    <select class="id" required>
+                    <select class="id" >
                         <option>Selecciona una opción</option>
                         <option>Instructor</option>
                         <option>Aprendiz</option>
                         <option>Coordinación</option>
                     </select><br>
                     <label><br>Seleccione sede:</label><br>
-                        <input type="radio" name="sede" required>Yamboró&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="sede" required>Comercio<br>
+                        <input type="radio" name="sede" >Yamboró&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="sede" >Comercio<br>
                     <label><br>Ingrese contraseña</label><br>
-                        <input type="password" placeholder="Ingrese contraseña" required><br><br>
+                        <input id="contra" type="password" placeholder="Ingrese contraseña" ><br>
+                        <label id="textoAlert6" class="texto-alert-hidden">Por favor ingrese este dato</label><br>
                     <button id="idReg" class="reg">Registrar</button>
                     <button type="button" id="idCan" class="can">Cancelar</button>
                 </fieldset>
