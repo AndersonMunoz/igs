@@ -10,7 +10,12 @@ let nombre = document.getElementById('Name');
 let Surname = document.getElementById('Surname');
 let Email = document.getElementById('Email');
 let Pass = document.getElementById('passWord');
-let userType = document.getElementById('userType')
+let userType = document.getElementById('userType');
+
+let notnom = document.getElementById('notName');
+let notapl = document.getElementById('notSurName');
+let notMail = document.getElementById('notSurName');
+let notPass = document.getElementById('notPassWord');
 
 
 mian.addEventListener('click', function () {
@@ -39,11 +44,20 @@ btnNew.addEventListener('click', function add() {
     }
 });
 btnReg.addEventListener('click', function () {
-    if ((nombre.value.length === 0)||(Email.value.length === 0)||(Pass.value.length === 0)||(userType.value == 0)) {
-        alert ('Por favor, asegúrese de llenar todos los campos correctamente.')
-    }else{ 
+    if (nombre.value.length === 0) {
+        alert ('te falta el nombre');
+    }else if (Surname.value.length === 0) {
+        alert ('falta los apellidos');
+    }else if (Email.value.length === 0) {
+        alert('te falta el email');
+    }else if (Pass.value.length === 0) {
+        alert ('falta la contraseña');
+    }else if (userType.value == 0) {
+        alert ('tipo de usuario');
+    }
+    if ((nombre.value.length !== 0)&&(Email.value.length !== 0)&&(Pass.value.length !== 0)&&(userType.value != 0)) {
         alerta.classList.add('modal-alert');
         alerta.classList.remove('none');
- 
     }
+
 });
