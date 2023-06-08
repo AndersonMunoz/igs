@@ -235,6 +235,21 @@ select{
     top: 10px;
     color: rgb(202, 0, 0);
 }
+.btn-aceptar-none{
+    position: relative;
+    left: 35%;
+    top: -10%;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 13px;
+    padding: 20px 20px 20px 20px;
+    background-color: rgb(255, 0, 0);
+    border: none;
+    color: rgb(255, 255, 255);
+    font-size: 1.2em;
+    font-weight: 900;
+    cursor: pointer;
+}
 
 
 
