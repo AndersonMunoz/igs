@@ -33,7 +33,7 @@
                     <label><br>Ingrese email:</label><br>
                         <input type="email" placeholder="Ingrese email" required><br>
                     <label><br>Seleccione tipo de documento:</label><br>
-                    <select class="id">
+                    <select class="id" required>
                         <option class="op">Selecciona una opción</option>
                         <option class="op">Tarjeta de Indentidad</option>
                         <option class="op">Cédula de Ciudadanía</option>
@@ -43,18 +43,18 @@
                     <label><br>Ingrese número de documento</label><br>
                         <input type="number" placeholder="Ingrese documento" required><br>
                     <label><br>Seleccione tipo de usario:</label><br>
-                        <input type="radio" name="genero">Administrador&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="genero">Co-administrador<br>
+                        <input type="radio" name="genero" required>Administrador&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="genero" required>Co-administrador<br>
                     <label><br>Seleccione cargo</label><br>
-                    <select class="id">
+                    <select class="id" required>
                         <option>Selecciona una opción</option>
                         <option>Instructor</option>
                         <option>Aprendiz</option>
                         <option>Coordinación</option>
                     </select><br>
                     <label><br>Seleccione sede:</label><br>
-                        <input type="radio" name="sede">Yamboró&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="sede">Comercio<br>
+                        <input type="radio" name="sede" required>Yamboró&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="sede" required>Comercio<br>
                     <label><br>Ingrese contraseña</label><br>
                         <input type="password" placeholder="Ingrese contraseña" required><br><br>
                     <button id="idReg" class="reg">Registrar</button>
