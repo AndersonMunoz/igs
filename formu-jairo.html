@@ -8,59 +8,106 @@
     <title>hola</title>
 </head>
 <body>
-    <section class="contact-box">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-5 col-lg-12">
-                    <div class="register-bg">
-                        <div class="position-absolute testiomonial p-4">
-                            <h3 class="font-weight-bold text-light">IGS</h3>
-                        </div>
-                    </div>
-                </div>
-                <form onsubmit="validarFormulario(event)">
-                    <div class="form-group text-center">
-                        <h1 class="font-weight-bold ">Registro de usuario</h1>
-                        <p class="text-muted mb-5">Ingresa la siguiente información para registrarte.</p>
-                    </div>
-                    <div class="form-row ">
-                        <div class="form-group">
-                            <label class="font-weight-bold">Nombre <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="nombre" placeholder="Tu nombre">
-                        </div>
-                    </div>
-                    <div class="form-row ">
-                        <div class="form-group ">
-                            <label class="font-weight-bold">Apellido <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="apellido" placeholder="Tu apellido">
-                        </div>
-                    </div>
-                    <div class="form-group ">
-                        <label class="font-weight-bold">Cédula <span class="text-danger">*</span></label>
-                        <input type="cedula" class="form-control" id="cedula" placeholder="Ingresa el número de la cédula">
-                    </div>
-                    <div class="form-group ">
-                        <label class="font-weight-bold">Correo electrónico <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo electrónico">
-                    </div>
-                    <div class="form-group ">
-                        <label class="font-weight-bold">Tipo de usuario <span class="text-danger">*</span></label>
-                        <select class="form-control">
-                            <option value="opcion1">Opción 1</option>
-                            <option value="opcion2">Opción 2</option>
-                        </select>
-                    </div>  
-                    <div class="form-group ">
-                        <label class="font-weight-bold">Contraseña <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" placeholder="Ingresa una contraseña">
-                    </div>
-                    <div class="form-group ">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                            <label class="form-check-label">Acepto los términos y condiciones</label>
-                        </div>
-                    </div>
-                    <button  id="open" class="btn btn-primary width-100">Regístrate </button>
+    <main>
+		<form action="" class="formulario" id="formulario">
+			<!-- Grupo: Usuario -->
+			<div class="formulario__grupo" id="grupo__nombre">
+				<label for="nombre" class="formulario__label">Nombre</label>
+				<div class="formulario__grupo-input">
+					<input type="text" class="formulario__input" name="nombre" id="nombre" placeholder="Escriba su Nombre">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">solo se aceptan lectras nada de numeros </p>
+			</div>
+			<div class="formulario__grupo" id="grupo__apellido">
+				<label for="apellido" class="formulario__label">Apellido</label>
+				<div class="formulario__grupo-input">
+					<input type="text" class="formulario__input" name="apellido" id="apellido" placeholder="Escriba su Apellido">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">solo se aceptan lectras nada de numeros</p>
+			</div>
+			<div class="formulario__grupo" id="grupo__cedula">
+				<label for="cedula" class="formulario__label">Cédula</label>
+				<div class="formulario__grupo-input">
+					<input type="text" class="formulario__input" name="cedula" id="cedula" placeholder="John Doe">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">la cedula tine que tener de 8 a 10 numeros no se acepta lectras  </p>
+			</div>
+			<div class="formulario__grupo formulario__grupo-select" id="grupo__opciones">
+				<label for="opciones" class="formulario__label">Opciones</label>
+				<div class="formulario__grupo-input">
+					<select class="formulario__select" name="opciones" id="opciones">
+						<option value="opcion1">Opción 1</option>
+						<option value="opcion2">Opción 2</option>
+					</select>
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">Selecciona una opción.</p>
+			</div>
+			
+
+			<!-- Grupo: Contraseña -->
+			<div class="formulario__grupo" id="grupo__password">
+				<label for="password" class="formulario__label">Contraseña</label>
+				<div class="formulario__grupo-input">
+					<input type="password" class="formulario__input" name="password" id="password">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">La contraseña tiene que ser de 4 a 12 dígitos.</p>
+			</div>
+
+			<!-- Grupo: Contraseña 2 -->
+			<div class="formulario__grupo" id="grupo__password2">
+				<label for="password2" class="formulario__label">Repetir Contraseña</label>
+				<div class="formulario__grupo-input">
+					<input type="password" class="formulario__input" name="password2" id="password2">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">Ambas contraseñas deben ser iguales.</p>
+			</div>
+
+			<!-- Grupo: Correo Electronico -->
+			<div class="formulario__grupo" id="grupo__correo">
+				<label for="correo" class="formulario__label">Correo Electrónico</label>
+				<div class="formulario__grupo-input">
+					<input type="email" class="formulario__input" name="correo" id="correo" placeholder="correo@correo.com">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">El correo solo puede contener letras, numeros, puntos, guiones y guion bajo.</p>
+			</div>
+
+			<!-- Grupo: Teléfono -->
+			<div class="formulario__grupo" id="grupo__telefono">
+				<label for="telefono" class="formulario__label">Teléfono</label>
+				<div class="formulario__grupo-input">
+					<input type="text" class="formulario__input" name="telefono" id="telefono" placeholder="4491234567">
+					<i class="formulario__validacion-estado fas fa-times-circle"></i>
+				</div>
+				<p class="formulario__input-error">El telefono solo puede contener numeros y el maximo son 14 dígitos.</p>
+			</div>
+
+			<!-- Grupo: Terminos y Condiciones -->
+			<div class="formulario__grupo" id="grupo__terminos">
+				<label class="formulario__label">
+					<input class="formulario__checkbox" type="checkbox" name="terminos" id="terminos">
+					Acepto los Terminos y Condiciones
+				</label>
+			</div>
+
+			<div class="formulario__mensaje" id="formulario__mensaje">
+				<p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
+			</div>
+
+			<div class="formulario__grupo formulario__grupo-btn-enviar">
+				<button type="submit" class="formulario__btn">Enviar</button>
+				<p class="formulario__mensaje-exito" id="formulario__mensaje-exito">Formulario enviado exitosamente!</p>
+			</div>
+		</form>
+	</main>
+
+                    <!-- <button  id="open" class="btn btn-primary width-100">Regístrate </button>
                     <div id="modal_container" class="modal-container">
                         <div class="modal">
                           <h1>Ventana Modal</h1>
@@ -73,7 +120,8 @@
                 </form>
             </div>
         </div>
-    </section>
+    </section> -->
     <script src="js/formu-jairo.js"></script>
+    <script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
 </body>
 </html>
