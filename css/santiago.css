@@ -9,9 +9,12 @@
 	display: grid;
 	height: 70px;
 	background-color: rgb(19, 160, 0);
-	grid-template: "hamburgesa logo empty-1 buscar empty-2 login" 100%/ 100px 60px 1fr 350px 1fr 250px;
+	grid-template: "hamburgesa logo empty-1 buscar empty-2 login" 100%/ 100px 60px 1fr 350px 1fr 260px;
 	justify-content: center;
 	align-items: center;
+	width: 100%;
+    position: fixed;
+	z-index: 90;
 }
 
 .logo {
@@ -122,57 +125,70 @@ input[type=search]:focus {
 /*MENU LATERAL*/
 
 .menu--show {
-	width: 250px;
-	height: 100vh;
+	width: auto;
+	height: auto;
 	opacity: 1;
+	display: flex;
+	position: fixed;
+	overflow-y: auto;
+	background-color: rgb(255, 94, 0);
 }
 
 .menu_lat {
-	height: 100vh;
 	opacity: 0;
 	pointer-events: none;
 	position: fixed;
-	visibility: hidden;	
-	display: none;
-}
-
-.menu--latt{
-	visibility: hidden;
+	
+	left: 100%;	
+	transition: left 20s;
 }
 .menu_lateral ul{
-	width: 100%;
 	background-color: rgb(255, 94, 0); 	
 	list-style: none;
 	left: 0;
-
-}
-.menu_lateral ul li{
-	border-bottom: 1px solid rgb(255, 255, 255);
-	padding: 25px;
+	position: relative;
+	width: 250px;
+	transition: left 20s;
 }
 .menu_lateral ul li a{
 	color: white;
 	text-decoration: none;
 	display: block;	
-
+	
 }
 
 .menu_lateral ul .submenu{
-	margin: 0;
-	background-color: rgb(255, 94, 0);
-	width: 100%;
+	background-color: rgb(0, 174, 255);
+	width: 250px;
 	color: white;
 }
 .menu_lateral ul .submenu li a{
 	color: white;
 }
+.menu_lateral{
+	overflow-y: auto;
+	height: 100vh;
+}
+span{
+	padding: 25px;
+	border-bottom: 1px solid white;
+}
 
-li{
+nav >ul li> span {
 	gap: 15px;
 	display: flex;
+	flex: none;
 }
-li:hover {
-	background-color: rgb(255, 124, 48);
+
+nav >ul > li >span:hover{
+	background-color: rgb(255, 130, 47);
+}
+nav >ul > li > ul> li>span:hover{
+	background-color: rgb(238, 163, 133);
+}
+
+nav>ul{
+	margin-top: 71px;
 }
 i {
 	color: white;
@@ -180,6 +196,16 @@ i {
 	cursor: pointer;
 }
 
+
+/* .submenu1{
+	display: none;
+}
+.submenu2{
+	display: none;
+}
+.submenu3{
+	display: none;
+} */
 
 @font-face {
 	font-display: swap;
