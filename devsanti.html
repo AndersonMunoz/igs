@@ -8,6 +8,7 @@
     <title>dashboard</title>
     <link rel="stylesheet" href="css/santiago.css">
     <link rel="stylesheet" href="icons/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 </head>
 
@@ -15,7 +16,7 @@
     <header>
         <nav class="menu_barra">
             <div class="hamburgesa" id="menu">
-                <svg class="hamburguer-icon" width="35" height="35" viewBox="0 0 16 16" fill="blac"
+                <svg class="hamburguer-icon" width="35" height="35" viewBox="0 0 16 16" fill="white"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.75 11.75H1V13.5H9.75V11.75Z" fill="white"></path>
                     <path d="M9.75 3H1V4.75H9.75V3Z" fill="white"></path>
@@ -42,27 +43,27 @@
         <div class="menu_lat" id="menu-lat">
             <nav class="menu_lateral" id="menu--">
                 <ul>                     
-                    <li><i class="fa-solid fa-house-chimney"></i><a href="#">Home</a></li>                                              
-                    <li><i class="fa-solid fa-box-archive"></i><a href="#">Inventario</a> 
-                        <!-- <ul>
-                            <li><i class="fa-solid fa-apple-whole"></i>kardes</li>
-                            <li><i class="fa-solid fa-diagram-predecessor"></i>submenu</li>
-                        </ul> -->
+                    <li><span><i class="fa-solid fa-house-chimney"></i></span><a href="#">Home</a></li>                                              
+                    <li><i class="fa-solid fa-box-archive"></i><a href="#">Inventario</a><span class=""><i class="ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><i class="fa-solid fa-apple-whole"></i></span><a href="#">Kardes</a></li>
+                            <li><span><i class="fa-solid fa-diagram-predecessor"></i></span><a href="#">Submenu</a></li>
+                        </ul>
                     </li>
-                    <li> <i class="fa-solid fa-shuffle"></i><a href="#">Movimientos</a>
-                        <!-- <ul>
-                            <li><i class="fa-solid fa-pen-to-square"></i>entrada</li>
-                            <li><i class="fa-solid fa-arrow-up-right-from-square"></i>salida</li>
-                        </ul> -->
+                    <li><span><i class="fa-solid fa-shuffle"></i></span><a href="#">Movimientos</a><span><i class="ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><i class="fa-solid fa-pen-to-square"></i></span><a href="#">Entrada</a></li>
+                            <li><span><i class="fa-solid fa-arrow-up-right-from-square"></i></span><a href="#">Salida</a></li>
+                        </ul>
                     </li>
-                    <li> <i class="fa-solid fa-receipt"></i><a href="#">Reportes</a></li>
-                    <li><i class="fa-solid fa-calendar-xmark"></i><a href="#">Caducidad</a></li>
-                    <li class="ajuste"><i class="fa-solid fa-gear"></i><a href="#">Senttings</a>
-                        <!-- <ul>
-                            <li><i class="fa-solid fa-info"></i>ayuda</li>
-                            <li><i class="fa-solid fa-globe"></i>idioma</li>
-                            <li><i class="fa-regular fa-circle-check"></i>modo oscuro</li>
-                        </ul> -->
+                    <li><span><i class="fa-solid fa-receipt"></i></span><a href="#">Reportes</a></li>
+                    <li><span><i class="fa-solid fa-calendar-xmark"></i></span><a href="#">Caducidad</a></li>
+                    <li class="ajuste"><i class="fa-solid fa-gear"></i><a href="#">Senttings</a><span><i class="ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><i class="fa-solid fa-info"></i></span><a href="#">Ayuda</a></li>
+                            <li><span><i class="fa-solid fa-globe"></i></span><a href="#">Idioma</a></li>
+                            <li><span><i class="fa-regular fa-circle-check"></i></span><a href="#">Modo Oscuro</a></li>
+                        </ul>
                     </li>
                 </ul>
             </nav>
