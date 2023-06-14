@@ -250,27 +250,10 @@ select{
     font-weight: 900;
     cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .relative{
     position: relative;
     left: 90%;
     top: -40px;
-    color: rgb(239, 2, 2);
+    color: rgb(83, 83, 83);
     visibility: hidden;
 }
