@@ -11,7 +11,12 @@ let textoAlert2 = document.getElementById("textoAlert2");
 let textoAlert3 = document.getElementById("textoAlert3");
 let textoAlert4 = document.getElementById("textoAlert4");
 let textoAlert5 = document.getElementById("textoAlert5");
+let textoAlert6 = document.getElementById("textoAlert6");
+let textoAlert7 = document.getElementById("textoAlert7");
+let textoAlert8 = document.getElementById("textoAlert8");
+let textoAlert9 = document.getElementById("textoAlert9");
 let ide = document.getElementById("ide");
+let idTipoCargo = document.getElementById("idTipoCargo");
 let numId = document.getElementById("numId");
 let nombreUsuario = document.getElementById("nombreUsuario");
 let apellido = document.getElementById("apellido");
@@ -45,10 +50,11 @@ form.addEventListener('submit', function(event) {
     form.dispatchEvent(new Event('submit'));
   } */
 registerButton.addEventListener('click', function() {
-  
-  if (nombreUsuario.value.length===0) {
+
+   if (nombreUsuario.value.length===0) {
     textoAlert.classList.add('texto-alert-visible');
     textoAlert.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
   } else {
     textoAlert.classList.remove('texto-alert-visible');
     textoAlert.classList.add('texto-alert-hidden');
@@ -57,6 +63,7 @@ registerButton.addEventListener('click', function() {
   if (apellido.value.length===0) {
     textoAlert2.classList.add('texto-alert-visible');
     textoAlert2.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
   } else {
     textoAlert2.classList.remove('texto-alert-visible');
     textoAlert2.classList.add('texto-alert-hidden');
@@ -64,6 +71,7 @@ registerButton.addEventListener('click', function() {
   if (emailPe.value.length===0) {
     textoAlert3.classList.add('texto-alert-visible');
     textoAlert3.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
   } else {
     textoAlert3.classList.remove('texto-alert-visible');
     textoAlert3.classList.add('texto-alert-hidden');
@@ -71,6 +79,7 @@ registerButton.addEventListener('click', function() {
   if (ide.value.length===0) {
     textoAlert4.classList.add('texto-alert-visible');
     textoAlert4.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
   } else {
     textoAlert4.classList.remove('texto-alert-visible');
     textoAlert4.classList.add('texto-alert-hidden');
@@ -79,30 +88,54 @@ registerButton.addEventListener('click', function() {
   if (numId.value.length===0) {
     textoAlert5.classList.add('texto-alert-visible');
     textoAlert5.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
   } else {
     textoAlert5.classList.remove('texto-alert-visible');
     textoAlert5.classList.add('texto-alert-hidden');
   }
 
-  if (contra.value.length===0) {
+  if(!document.querySelector('input[name="tipoAdmin"]:checked')) {
     textoAlert6.classList.add('texto-alert-visible');
     textoAlert6.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
   } else {
     textoAlert6.classList.remove('texto-alert-visible');
     textoAlert6.classList.add('texto-alert-hidden');
+  }
+
+  if (idTipoCargo.value.length===0) {
+    textoAlert7.classList.add('texto-alert-visible');
+    textoAlert7.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
+  } else {
+    textoAlert7.classList.remove('texto-alert-visible');
+    textoAlert7.classList.add('texto-alert-hidden');
+  }
+
+  if(!document.querySelector('input[name="sede"]:checked')) {
+    textoAlert8.classList.add('texto-alert-visible');
+    textoAlert8.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
+  } else {
+    textoAlert8.classList.remove('texto-alert-visible');
+    textoAlert8.classList.add('texto-alert-hidden');
+  }
+
+  if (contra.value.length===0) {
+    textoAlert9.classList.add('texto-alert-visible');
+    textoAlert9.classList.remove('texto-alert-hidden');
+    modelAlert2.style.display = 'flex';
+  } else {
+    textoAlert9.classList.remove('texto-alert-visible');
+    textoAlert9.classList.add('texto-alert-hidden');
   }
   
   
   // Validar si todos los campos requeridos están completos
   if (form.checkValidity()===0) {
-    form.reset(); // Opcionalmente puedes restablecer los campos del formulario
-      // Mostrar el div modelAlert
-      modelAlert1.style.display = 'flex';
+    form.reset(); 
   } 
-  if (!form.checkValidity()) {
-    // Mostrar el div modelAlert
-      modelAlert2.style.display = 'flex';
-  }  
+
 });
 
 btnAceptar.addEventListener('click', function() {

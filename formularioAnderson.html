@@ -45,32 +45,35 @@
                         <label id="textoAlert3" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Seleccione tipo de documento:</label><br>
                     <select id="ide" class="id" >
-                        <option value="0"class="op">Selecciona una opción</option>
-                        <option value="2" class="op">Tarjeta de Indentidad</option>
+                        <option value=""class="op">Selecciona una opción</option>
+                        <option value="1" class="op">Tarjeta de Indentidad</option>
                         <option value="2" class="op">Cédula de Ciudadanía</option>
                         <option value="3" class="op">Cédula de Extranjería</option>
                         <option value="4" class="op">Pasaporte</option>
                     </select><br>
-                    <label id="textoAlert4" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label id="textoAlert4" class="texto-alert-hidden">Por favor selecciona una opción</label>
                     <label><br>Ingrese número de documento</label><br>
-                        <input id="numId"type="number" placeholder="Ingrese documento" ><br>
-                        <label id="textoAlert5" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                        <input id="numId"type="text" pattern="[0-9]*" placeholder="Ingrese documento" ><br>
+                    <label id="textoAlert5" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Seleccione tipo de usario:</label><br>
-                        <input id="admin" type="radio" name="genero" >Administrador&nbsp;&nbsp;&nbsp;
-                        <input id="coadmin" type="radio" name="genero" >Co-administrador<br>
+                        <input id="admin" type="radio" name="tipoAdmin" >Administrador&nbsp;&nbsp;&nbsp;
+                        <input id="coadmin" type="radio" name="tipoAdmin" >Co-administrador<br>
+                        <label id="textoAlert6" class="texto-alert-hidden">Por favor seleccione una opción</label>
                     <label><br>Seleccione cargo</label><br>
-                    <select class="id" >
-                        <option>Selecciona una opción</option>
-                        <option>Instructor</option>
-                        <option>Aprendiz</option>
-                        <option>Coordinación</option>
+                    <select id="idTipoCargo" class="id" >
+                        <option value="">Selecciona una opción</option>
+                        <option value="1">Instructor</option>
+                        <option value="2">Aprendiz</option>
+                        <option value="3">Coordinación</option>
                     </select><br>
+                    <label id="textoAlert7" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Seleccione sede:</label><br>
                         <input type="radio" name="sede" >Yamboró&nbsp;&nbsp;&nbsp;
                         <input type="radio" name="sede" >Comercio<br>
+                        <label id="textoAlert8" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <label><br>Ingrese contraseña</label><br>
                         <input id="contra" type="password" placeholder="Ingrese contraseña" ><br>
-                        <label id="textoAlert6" class="texto-alert-hidden">Por favor ingrese este dato</label><br>
+                        <label id="textoAlert9" class="texto-alert-hidden">Por favor ingrese este dato</label>
                     <button id="idReg" class="reg">Registrar</button>
                     <button type="button" id="idCan" class="can">Cancelar</button>
                 </fieldset>

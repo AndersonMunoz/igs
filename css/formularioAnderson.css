@@ -85,7 +85,7 @@ input[type="text"],[type="email"],[type="password"],[type="number"] {
 }
 
 input[type="radio"] {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 input:focus{
@@ -282,6 +282,7 @@ p{
 .texto-alert-visible {
     color: red;
     font-weight: 550;
+    padding-bottom: 10px;
 }
 
 
