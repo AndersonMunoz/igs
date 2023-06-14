@@ -11,12 +11,14 @@
 </head>
 <body>
     <div class="container" id="container">
-        <div class="modal-alert" id="modalAlert">
-            <div class="box-alert">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio, nulla? Quis minima itaque culpa quidem! Modi, explicabo! Expedita quae assumenda ea. Provident cupiditate quasi est eos unde excepturi, qui suscipit.</p>
-                <input type="submit" value="Aceptar" class="btn-aceptar">
+        <section class="modal modal--show">
+            <div class="modal_cont">
+                <img class="cancel"src="img/status_browser_negative_error_icon_220289.png" alt="">
+                    <h2 class="modal_titulo">UpSsss</h2>
+                    <p class="modal_parrafo">Por favor rellenar los campos requeridos</p>
+                    <a href="#" class="modal_close">Cerrar</a>
             </div>
-        </div>
+        </section>
         <form class="form1" id="form1">
             <h1>Registrar Usuario</h1>
             <div class="content-step-num">
@@ -30,9 +32,11 @@
             <div class="info">
                 <h2>Información básica</h2>
                 <label for="nombre">Nombre(s)*</label>
-                <input type="text" id="nombre">
+                <input type="text" id="nombre" class="inputInfo" required>
+                <label class="text-alert"><i class="fa-solid fa-triangle-exclamation"></i></label>
                 <label for="apellidos">Apellidos*</label>
-                <input type="text" id="apellidos">
+                <input type="text" id="apellidos" class="inputInfo"required>
+                <label class="text-alert2"><i class="fa-solid fa-triangle-exclamation"></i></label>
             </div>
             <input type="submit" value="Siguiente" id="firstSubmit">
         </form>
@@ -51,9 +55,9 @@
             <div class="info">
                 <h2>Información Contacto</h2>
                 <label>Email</label>
-                <input type="email" id="form2Email" >
+                <input type="email" id="form2Email" class="inputInfo">
                 <label>Numero Celular</label>
-                <input type="number" id="numeroTele">
+                <input type="number" id="numeroTele" class="inputInfo"> 
             </div>
             <button class="back" id="firstBack">Atras</button>
             <input type="submit" value="Siguiente" id="secondSubmit">
@@ -78,7 +82,7 @@
                     <option value="2">Cedula de Ciudadania</option>
                 </select>
                 <label>Numero de Cedula</label>
-                <input type="number">
+                <input type="number" class="inputInfo">
             </div>
             <button class="back" id="secondtBack">Atras</button>
             <input type="submit" value="Siguiente" id="thirdSubmit">
@@ -103,7 +107,7 @@
                     <option value="2">CoAdministrador</option>
                 </select>
                 <label>Contraseña</label>
-                <input type="password">
+                <input type="password" class="inputInfo">
             </div>
             <button class="back" id="thirdBack">Atras</button>
             <input type="submit" value="Enviar" id="fourthSubmit">
