@@ -34,10 +34,10 @@ let inputInfo = document.querySelectorAll(".inputInfo");
 
 firstSubmit.addEventListener("click", function(event){
     for(i = 0; i < inputInfo.length; i++){
-        if(inputInfo[i] === 0 || inputInfo[i] === ""){
+        if(inputInfo[i].value === 0 || inputInfo[i].value === ""){
             modalAlerts.style.display = "flex";
-            event.preventDefault(); 
             container.style.background = "rgba(0, 0, 0, 0.4)";
+            event.preventDefault(); 
             btnAceptar.addEventListener("click", function(){
                 modalAlerts.style.display = "none";
                 event.preventDefault(); 
@@ -50,6 +50,10 @@ firstSubmit.addEventListener("click", function(event){
         }
     }
 });
+if(inputInfo[i].value === 0 || inputInfo[i].value === ""){
+    inputName.style.border = "3px solid red";
+    textAlert.style.display = "flex";
+}
 
 
 // firstSubmit.addEventListener("click", function(event) {

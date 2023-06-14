@@ -331,21 +331,17 @@ input[type="text"] {
 
 /* LABEL ALERT */
 
-.text-alert{
+.text-alert,
+.text-alert2{
   padding: 6px;
-  display: none;
   color: rgb(255, 0, 0);
   font-weight: 700;
-  top: 44.2%;
+  top: 44.1%;
   left: 87%;
+  display: none;
   position: fixed;
 }
 .text-alert2{
-  padding: 6px;
-  display: none;
-  color: rgb(255, 0, 0);
-  font-weight: 700;
-  top: 61.6%;
+  top: 61.2%;
   left: 87%;
-  position: fixed;
 }
