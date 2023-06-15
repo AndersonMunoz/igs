@@ -24,6 +24,7 @@ const emailPe = document.getElementById("emailPe");
 const admin = document.getElementById("admin");
 const coadmin = document.getElementById("coadmin");
 const contra = document.getElementById("contra");
+const cancelButton = document.getElementById('idCan');
 
 // Función para mostrar el elemento con la clase model-alert y restablecer el formulario
 function mostrarModelAlert() {
