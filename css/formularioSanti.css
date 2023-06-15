@@ -336,61 +336,6 @@ h2{
 
 
 
-/* 
-.modal-alert{
-    background-color: rgba(0, 0, 0, 0.623);
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1;
-}
-.aler{
-    background-color: aliceblue;
-    width: 500px;
-    height: 350px;
-    border-radius: 10px;
-    padding: 25px 15px 15px 15px;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    display: inline;
-}
-.iii{
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    display: flex;
-    margin-top: 30px;
-}
-.cancel{
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 200px;
-    height: 200px;
-    display: inline-flex;
-}
-.boton{
-    margin: -10px 0px 0px 330px;
-}
-input[type="submit"]#modal{
-    background-color: rgb(255, 123, 0);
-    width: 150px;
-    height: 60px;
-    font-size: 1.5em;   
-}
-span{
-    width: 300px;
-    height: 50px;
-    color: black;
-    font-size: 1.5em;
-} */
-
-
-
 
 
 
