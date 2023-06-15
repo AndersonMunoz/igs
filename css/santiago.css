@@ -205,9 +205,8 @@ li{
 	cursor: pointer;
 }
 .option {
-	/* Estilos predeterminados */
 	transition: all 0.3s ease;
-  }
+}
 
 @font-face {
 	font-display: swap;

@@ -5,13 +5,19 @@ let apellidoTxt = document.getElementById('apellido');
 let btnEnviar = document.getElementById('enviar');
 
 btnEnviar.addEventListener("click", function() {
-    if (documentoTxt || nombreTxt || apellidoTxt.value.length === 0 || ' '){
+    if (apellidoTxt.value.length === 0){
+
+        
         alert("Este campo es requerido, porfavor completar")
     }
     else{
         alert("bienvendido")
     }
 });
+
+
+
+
 
 
 
