@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dashboard</title>
+    <title>Dashboard | IGS</title>
     <link rel="stylesheet" href="css/santiago.css">
     <link rel="stylesheet" href="icons/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 </head>
 
 <body>
     <header>
         <nav class="menu_barra">
-            <div class="logo">
-                <div class="logo_int">I.G.S</div>
-            </div>
-            <div class="hamburgesa">
-                <svg class="hamburguer-icon" width="35" height="35" viewBox="0 0 16 16" fill="blac"
+            <div class="hamburgesa" id="menu">
+                <svg class="hamburguer-icon" width="35" height="35" viewBox="0 0 16 16" fill="white"
                     xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.75 11.75H1V13.5H9.75V11.75Z" fill="white"></path>
                     <path d="M9.75 3H1V4.75H9.75V3Z" fill="white"></path>
@@ -28,6 +26,10 @@
                         fill="white"></path>
                 </svg>
             </div>
+            <div class="logo">
+                <div class="logo_int"><img class="intlogo" src="img/logotrans.png" alt=""></div>
+            </div>
+            
             <div class="buscar">
                 <input type="search" placeholder="Buscar..."><i class="iconBuscar fa-solid fa-magnifying-glass"></i>
             </div>
@@ -35,74 +37,42 @@
                 <a class="texlogin" href="formularioSanti.html"><i class="userlogo fa-solid fa-user"></i>Inicio de
                     sesion</a>
             </div>
-
         </nav>
-    </header>
+    </header>   
         <section>
-        <div class="menu_lat">
-            <nav class="menu_lateral">
+        <div class="menu_lat" id="menu-lat">
+            <nav class="menu_lateral" id="menu--">
                 <ul>                     
-                    <li><i class="fa-solid fa-house-chimney"></i><a href="#">Homes</a></li>                                              
-                    <li><i class="fa-solid fa-box-archive"></i><a href="">Inventario</a> 
-                        <!-- <ul>
-                            <li><i class="fa-solid fa-apple-whole"></i>kardes</li>
-                            <li><i class="fa-solid fa-diagram-predecessor"></i>submenu</li>
-                        </ul> -->
+                    <li><span><a href="#"><i class="fa-solid fa-house-chimney"></i></a><a href="#">Home</a></span></li>                                              
+                    <li class="option"><span><a href="#"><i class="fa-solid fa-box-archive"></i></a><a href="#">Inventario</a><i class="ta ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><a href="#"><i class="fa-solid fa-apple-whole"></i></a><a href="#">Kardes</a></span></li>
+                            <li><span><a href="#"><i class="fa-solid fa-diagram-predecessor"></i></a><a href="#">Submenu</a></span></li>
+                        </ul>
                     </li>
-                    <li> <i class="fa-solid fa-shuffle"></i><a href="#">Movimientos</a>
-                        <!-- <ul>
-                            <li><i class="fa-solid fa-pen-to-square"></i>entrada</li>
-                            <li><i class="fa-solid fa-arrow-up-right-from-square"></i>salida</li>
-                        </ul> -->
+                    <li class="option"><span><a href="#"><i class="fa-solid fa-shuffle"></i></a><a href="#">Movimientos</a><i class="ta ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><a href="#"><i class="fa-solid fa-pen-to-square"></i></a><a href="#">Entrada</a></span></li>
+                            <li><span><a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="#">Salida</a></span></li>
+                        </ul>
                     </li>
-                    <li> <i class="fa-solid fa-receipt"></i><a href="#">Reportes</a></li>
-                    <li><i class="fa-solid fa-calendar-xmark"></i><a href="#">Caducidad</a></li>
-                    <li class="ajuste"><i class="fa-solid fa-gear"></i><a href="#">Senttings</a>
-                        <!-- <ul>
-                            <li><i class="fa-solid fa-info"></i>ayuda</li>
-                            <li><i class="fa-solid fa-globe"></i>idioma</li>
-                            <li><i class="fa-regular fa-circle-check"></i>modo oscuro</li>
-                        </ul> -->
+                    <li><span><a href="#"><i class="fa-solid fa-receipt"></i></a><a href="#">Reportes</a></span></li>
+                    <li><span><a href="#"><i class="fa-solid fa-calendar-xmark"></i></a><a href="#">Caducidad</a></span></li>
+                    <li><span><a href="#"><i class="ti ti-user-plus"></i></a><a href="formularioSanti.html">Resgistro</a></span></li>
+                    <li class="option"><span><a href="#"><i class="fa-solid fa-gear"></i></a><a href="#">Senttings</a><i class="ta ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><a href="#"><i class="fa-solid fa-info"></i></a><a href="#">Ayuda</a></span></li>
+                            <li><span><a href="#"><i class="fa-solid fa-globe"></i></a><a href="#">Idioma</a></span></li>
+                            <li><span><a href="#"><i class="fa-regular fa-circle-check"></i></a><a href="#">Modo Oscuro</a></span></li>
+                        </ul>
                     </li>
                 </ul>
             </nav>
         </div>
     </section>
-<!--     <section>
-        <div class="container" id="container">
-            <div class="brand">
-                <div class="logo">
-                    <ion-icon name="logo-snapchat"></ion-icon>
-                </div>
-                <h3>IGS</h3>
-                <a href="#" id="toggle"><ion-icon name="menu"></ion-icon></a>
-            </div>
-            <div class="navbar">
-                <ul>
-                    <li><a href="#"><ion-icon name="grid-outline"></ion-icon><span>DashBoard</span></a></li>
-                    <li><a href="#"><ion-icon name="person-outline"></ion-icon><span>User</span></a></li>
-                    <li><a href="#"><ion-icon name="chatbubbles-outline"></ion-icon><span>Message</span></a></li>
-                    <li><a href="#"><ion-icon name="pie-chart-outline"></ion-icon><span>Analytics</span></a></li>
-                    <li><a href="#"><ion-icon name="folder-open-outline"></ion-icon><span>file manager</span></a></li>
-                    <li><a href="#"><ion-icon name="cart-outline"></ion-icon><span>Order</span></a></li>
-                    <li><a href="#"><ion-icon name="heart-outline"></ion-icon><span>WishList</span></a></li>
-                    <li><a href="#"><ion-icon name="settings-outline"></ion-icon><span>Setting</span></a></li>
-                </ul>
-            </div>
-            <div class="user">
-                <img src="1.jpg" alt="">
-                <div class="name">
-                    <h5>Akash Lakade</h5>
-                    <span>web Designer</span>
-                </div>
-                <a href="#"><ion-icon name="log-out-outline"></ion-icon></a>
-            </div>
-        </div>
-    </section> -->
+
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-
     <script src="js/mainsanti.js"></script>
 </body>
