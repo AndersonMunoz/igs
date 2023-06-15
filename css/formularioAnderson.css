@@ -275,13 +275,13 @@ p{
 
 .texto-alert-hidden {
     color: red;
-    font-weight: 550;
+    font-weight: 400;
     visibility: hidden;
 }
 
 .texto-alert-visible {
     color: red;
-    font-weight: 550;
+    font-weight: 400;
     padding-bottom: 10px;
 }
 
