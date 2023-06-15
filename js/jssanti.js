@@ -55,19 +55,6 @@ cerrar.addEventListener("click",function(){
         modalCor.classList.add('modal')
         })
 
-/* cerrar2.addEventListener("click",function(){
-            modalCor2.classList.remove('modal--show2')
-        modalCor2.classList.add('modal2')
-        })
- */
-
-
-
-
-
-
-
-
 
 const nombreInput = document.getElementById('nombre');
 const nombreLabel = document.getElementById('nombreLabel');
