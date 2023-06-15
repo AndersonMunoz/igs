@@ -195,6 +195,9 @@ input[type="submit"]:hover{
 
 
 /*modal*/
+h2{
+    color: rgb(255, 115, 0);
+}
 
 .cancel{
     width: 240px;
@@ -210,16 +213,25 @@ input[type="submit"]:hover{
     background-color: #111111bd;
     z-index: 2;
     display: flex;
-    opacity: 1;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .modal--show{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
     opacity: 1;
-    pointer-events: unset;
+
 }
 .modal_cont{
     margin: auto;
-    width: 750%;
+    width: 65%;
     max-width: 500px;
     max-height: 75%;
     border-radius: 6px;
@@ -251,6 +263,74 @@ input[type="submit"]:hover{
     cursor: pointer;
 }
 .modal_close:hover{
+    background-color: rgb(255, 155, 0);
+}
+
+/*modal2*/
+.cancel2{
+    width: 240px;
+    height: 240px;
+}
+
+.modal2{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal--show2{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
+    opacity: 1;
+
+}
+.modal_cont2{
+    margin: auto;
+    width: 750%;
+    max-width: 500px;
+    max-height: 75%;
+    border-radius: 6px;
+    padding: 3em 2.5em;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns:  100%;
+    background-color: #ffffff;
+}
+
+.modal_titulo2{
+    font-size: 2.5rem;
+}
+
+.modal_parrafo2{
+    margin-bottom: 10px
+}
+
+.modal_close2{
+    text-decoration: none;
+    color:white;
+    background-color: #ff8800;
+    padding: 1em 3em;
+    border-radius: 6px;
+    display: inline;
+    font-weight: 700;
+    transition: background-color .3s;
+    cursor: pointer;
+}
+.modal_close2:hover{
     background-color: rgb(255, 155, 0);
 }
 
