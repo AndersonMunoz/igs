@@ -7,19 +7,10 @@ let modalCor = document.getElementById('modal');
 let cerrar = document.getElementById('cerrarModal');
 let modalCor2 = document.getElementById('modal2');
 let cerrar2 = document.getElementById('cerrarModal2');
+let formulario = document.getElementById('formulario');
 
-btnEnviar.addEventListener("click", function() {
-    if (documentoTxt.value.length === 0 && " "){
-
-        modalCor.classList.add('modal--show');
-        modalCor.classList.remove('modal');
-
-        cerrar.addEventListener("click",function(){
-            modalCor.classList.remove('modal--show')
-        modalCor.classList.add('modal')
-        })
-    }
-    if(nombreTxt.value.length === 0 && " "){
+btnEnviar.addEventListener("click", function(event) {
+    if (documentoTxt.value.length == 0){
 
         modalCor.classList.add('modal--show');
         modalCor.classList.remove('modal');
@@ -29,7 +20,17 @@ btnEnviar.addEventListener("click", function() {
         modalCor.classList.add('modal')
         })
     }
-    if(apellidoTxt.value.length === 0 && " "){
+    if(nombreTxt.value.length === 0){
+
+        modalCor.classList.add('modal--show');
+        modalCor.classList.remove('modal');
+
+        cerrar.addEventListener("click",function(){
+            modalCor.classList.remove('modal--show')
+        modalCor.classList.add('modal')
+        })
+    }
+    if(apellidoTxt.value.length === 0){
 
         modalCor.classList.add('modal--show');
         modalCor.classList.remove('modal');
@@ -42,22 +43,24 @@ btnEnviar.addEventListener("click", function() {
     else{
         modalCor2.classList.add('modal--show2');
         modalCor2.classList.remove('modal2');
-
         cerrar2.addEventListener("click",function(){
         modalCor2.classList.remove('modal--show2')
         modalCor2.classList.add('modal2')
-        })
+        });
     }
+    
+event.preventDefault();
+cerrar2.addEventListener("click",function(){
+        formulario.submit();
+        window.location.reload();
+    });
+
 });
 
-cerrar.addEventListener("click",function(){
-            modalCor.classList.remove('modal--show')
-        modalCor.classList.add('modal')
-        })
 
 
-const nombreInput = document.getElementById('nombre');
-const nombreLabel = document.getElementById('nombreLabel');
+let nombreInput = document.getElementById('nombre');
+let nombreLabel = document.getElementById('nombreLabel');
 
 nombreInput.addEventListener('input', function () {
     if (nombreInput.value !== '') {
@@ -67,8 +70,8 @@ nombreInput.addEventListener('input', function () {
     }
 });
 
-const docInput = document.getElementById('documento');
-const docLabel = document.getElementById('docLabel');
+let docInput = document.getElementById('documento');
+let docLabel = document.getElementById('docLabel');
 
 docInput.addEventListener('input', function () {
     if (docInput.value !== '') {
@@ -78,8 +81,8 @@ docInput.addEventListener('input', function () {
     }
 });
 
-const apeInput = document.getElementById('apellido');
-const apeLabel = document.getElementById('apeLabel');
+let apeInput = document.getElementById('apellido');
+let apeLabel = document.getElementById('apeLabel');
 
 apeInput.addEventListener('input', function () {
     if (apeInput.value !== '') {
@@ -89,8 +92,8 @@ apeInput.addEventListener('input', function () {
     }
 });
 
-const docnput = document.getElementById('doc');
-const tipoLabel = document.getElementById('tipoDoc');
+let docnput = document.getElementById('doc');
+let tipoLabel = document.getElementById('tipoDoc');
 
 docnput.addEventListener('change', function () {
     if (docnput.value !== '') {
@@ -98,13 +101,14 @@ docnput.addEventListener('change', function () {
     }
 });
 
-const instructorInput = document.getElementById('instructor');
-const encargadoInput = document.getElementById('encargado');
-const tipoUsuarioLabel = document.querySelector('label[for="tipoUsuario"]');
+let instructorInput = document.getElementById('instructor');
+let encargadoInput = document.getElementById('encargado');
+let tipoUsuarioLabel = document.getElementById('tipoUsuario');
 
 instructorInput.addEventListener('change', function () {
     if (instructorInput.checked) {
         tipoUsuarioLabel.style.color = 'rgb(255, 115, 0)'; 
+        /* url = "formularioSanti.html" */
     } else {
         tipoUsuarioLabel.style.color = ''; 
     }
