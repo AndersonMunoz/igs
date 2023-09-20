@@ -10,12 +10,12 @@
     left: 0;
     height: 100%;
     width: 260px;
-    background: rgb(0, 0, 0);
+    background: rgb(255, 103, 25);
     z-index: 100;
     transition: all 0.5s ease;
   }
   .sidebar.close{
-    width: 78px;
+    width: 50px;
   }
   .sidebar .logo-details{
     height: 60px;
@@ -25,15 +25,14 @@
   }
   .sidebar .logo-details i{
     font-size: 30px;
-    color: #fff;
-    height: 50px;
-    min-width: 78px;
+    height: 40px;
+    min-width: 50px;
     text-align: center;
     line-height: 50px;
   }
   .sidebar .logo-details .logo_name{
-    font-size: 22px;
-    color: #fff;
+    font-size: 1.8em;
+    color: rgb(255, 255, 255);
     font-weight: 600;
     transition: 0.3s ease;
     transition-delay: 0.1s;
@@ -45,7 +44,7 @@
   }
   .sidebar .nav-links{
     height: 100%;
-    padding: 30px 0 150px 0;
+    padding: 30px 0 100px 0;
     overflow: auto;
   }
   .sidebar.close .nav-links{
@@ -60,7 +59,7 @@
     transition: all 0.4s ease;
   }
   .sidebar .nav-links li:hover{
-    background: rgb(39, 82, 201);
+    background: rgb(141, 206, 108);
   }
   .sidebar .nav-links li .iocn-link{
     display: flex;
@@ -68,18 +67,32 @@
     justify-content: space-between;
   }
   .sidebar.close .nav-links li .iocn-link{
-    display: block
+    display: block;
+    
   }
-  .sidebar .nav-links li i{
+  .sidebar .nav-links li .flecha{
     height: 50px;
-    min-width: 78px;
+    min-width: 50px;
     text-align: center;
     line-height: 50px;
     color: #fff;
-    font-size: 20px;
+    font-size: 25px;
+    font-weight: 300;
     cursor: pointer;
     transition: all 0.3s ease;
   }
+  .sidebar .nav-links li .ti{
+    height: 50px;
+    min-width: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-size: 33px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
   .sidebar .nav-links li.showMenu i.arrow{
     transform: rotate(-180deg);
   }
@@ -90,21 +103,24 @@
     display: flex;
     align-items: center;
     text-decoration: none;
+    width: 100%;
   }
   .sidebar .nav-links li a .link_name{
     font-size: 18px;
     font-weight: 400;
     color: #fff;
     transition: all 0.4s ease;
+    width: 60%;
+    
   }
   .sidebar.close .nav-links li a .link_name{
     opacity: 0;
     pointer-events: none;
   }
   .sidebar .nav-links li .sub-menu{
-    padding: 6px 6px 14px 80px;
-    margin-top: -10px;
-    background: rgb(72, 111, 161);
+    padding: 1px 0px 0px 50px;
+    margin-top: 0px;
+    background: rgb(57, 169, 0);
     display: none;
   }
   .sidebar .nav-links li.showMenu .sub-menu{
@@ -113,10 +129,11 @@
   .sidebar .nav-links li .sub-menu a{
     color: #fff;
     font-size: 15px;
-    padding: 5px 0;
+    padding: 13px 30px 10px 10px;
     white-space: nowrap;
     opacity: 0.6;
     transition: all 0.3s ease;
+    border-radius: 0 6px 6px 0;
   }
   .sidebar .nav-links li .sub-menu a:hover{
     opacity: 1;
@@ -126,7 +143,7 @@
     left: 100%;
     top: -10px;
     margin-top: 0;
-    padding: 10px 20px;
+    padding: 0px 0px 0px 0px;
     border-radius: 0 6px 6px 0;
     opacity: 0;
     display: block;
@@ -141,6 +158,7 @@
   }
   .sidebar .nav-links li .sub-menu .link_name{
     display: none;
+    
   }
   .sidebar.close .nav-links li .sub-menu .link_name{
     font-size: 18px;
@@ -158,7 +176,7 @@
     top: 50%;
     transform: translateY(-50%);
   }
-  .sidebar .profile-details{
+  /* .sidebar .profile-details{
     position: fixed;
     bottom: 0;
     width: 260px;
@@ -205,7 +223,7 @@
   }
   .sidebar .profile-details .job{
     font-size: 12px;
-  }
+  } */
   .home-section{
     position: relative;
     background: white;
@@ -215,47 +233,29 @@
     transition: all 0.5s ease;
   }
   .sidebar.close ~ .home-section{
-    left: 78px;
-    width: calc(100% - 78px);
+    left: 50px;
+    width: calc(100% - 50px);
   }
   .home-section .home-content{
+    background-color: rgb(57, 169, 0);
     height: 60px;
     display: flex;
     align-items: center;
   }
   .home-section .home-content .bx-menu,
   .home-section .home-content .text{
-    color: rgb(63, 14, 14);
+    color: rgb(255, 255, 255);
     font-size: 35px;
   }
   .home-section .home-content .bx-menu{
-    margin: 0 15px;
+    margin: 0 10px;
     cursor: pointer;
   }
   .home-section .home-content .text{
     font-size: 26px;
     font-weight: 600;
   }
-  @media (max-width: 400px) {
-    .sidebar.close .nav-links li .sub-menu{
-      display: none;
-    }
-    .sidebar{
-      width: 78px;
-    }
-    .sidebar.close{
-      width: 0;
-    }
-    .home-section{
-      left: 78px;
-      width: calc(100% - 78px);
-      z-index: 100;
-    }
-    .sidebar.close ~ .home-section{
-      width: 100%;
-      left: 0;
-    }
-  }
+  
 .f1{
     margin-top: 950px;
     height: 1000px;
@@ -266,5 +266,5 @@
   color: black;
 }
 .logo1{
-  height: 50px;
+  height: 40px;
 }
