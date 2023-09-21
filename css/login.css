@@ -1,244 +1,206 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
-*{  
+*{ 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-body{
-    background: url('./media/pexels-philippe-donn-1114690.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-    overflow: hidden;
+header{
+    height: 75px;
+    width: 100vw;
+	display: grid;
+    grid-template:"empty-left sena empty container-logo empty-right"100%/
+					1.5%        50px   1fr   50px          1.5%;
 }
-.wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; 
-    /* color fondo */
-    background: rgba(39, 39, 39, 0.4); 
+.sena{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  	grid-area:sena ;
+  	width: 60px;
+	height: 100%;
+}
+.container-logo{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	grid-area:container-logo ;
+}
+.logoigs{
+	width: 50px;
 }
 .nav{
-    position: fixed;
-    top: 0;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    height: 100px;
-    line-height: 100px;
-    background: linear-gradient(rgba(39,39,39, 0.6), transparent);
-    z-index: 100;
+	height: 70px;
+	background-color: rgb(57, 169, 0);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 }
-.nav-logo p{
-    /* color del logo  */
-    color: white;
-    font-size: 25px;
-    font-weight: 600;
+.userOculto{
+	display: none;
 }
-.nav-menu ul{
-    display: flex;
+.closeUser{
+	position: absolute;
+	color: rgb(120, 120, 120);
+	font-size: 2em;
+	z-index: 80;
+	top: 230px;
+	right: 550px;
+	cursor: pointer;
 }
-.nav-menu ul li{
-    list-style-type: none;
+.carousel-inner img{
+	width: 100vw;
+	height: 81.2vh;
 }
-.nav-menu ul li .link{
-    text-decoration: none;
-    font-weight: 500;
-    color: #fff;
-    padding-bottom: 15px;
-    margin: 0 25px;
+.inicio{
+	position: absolute;
+	right: 20px;
+	height: 40px;
+	width: 120px;
+	background-color: aliceblue;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
 }
-.link:hover, .active{
-    border-bottom: 2px solid #00B400;
+.inicio:hover{
+	cursor: pointer;
 }
-.nav-button .btn{
-    width: 130px;
-    height: 40px;
-    font-weight: 500;
-    background: #00B400 ;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: .3s ease;
+
+.container-login{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	padding-top: 30px;
+	background-color: rgba(0, 0, 0, 0.321);
 }
-.btn:hover{
-    background: rgba(255, 255, 255, 0.3);
+
+.wrapper {
+    max-width: 500px;
+    border-radius: 10px;
+    padding: 30px 40px;
+	position: absolute;
 }
-#registerBtn{
-    margin-left: 15px;
+.h4{
+	font-size: 1.2em;
 }
-.btn.white-btn{
-    background: rgba(255, 255, 255, 0.7);
+.h2{
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: rgb(57, 169, 0);
 }
-.btn.btn.white-btn:hover{
-    background: rgba(255, 255, 255, 0.5);
-}
-.nav-menu-btn{
-    display: none;
-}
-.form-box{
-    position: relative;
+.input-field {
+    border-radius: 5px;
+    padding: 5px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 512px;
-    height: 420px;
-    overflow: hidden;
-    z-index: 2;
-}
-.login-container{
-    position: absolute;
-    left: 4px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    transition: .5s ease-in-out;
-}
-.register-container{
-    position: absolute;
-    right: -520px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    transition: .5s ease-in-out;
-}
-.top span{
-    color: #fff;
-    font-size: small;
-    padding: 10px 0;
-    display: flex;
-    justify-content: center;
-}
-.top span a{
-    font-weight: 500;
-    color: #fff;
-    margin-left: 5px;
-}
-header{
-    color: #fff;
-    font-size: 30px;
-    text-align: center;
-    padding: 10px 0 30px 0;
-}
-.two-forms{
-    display: flex;
-    gap: 10px;
-}
-.input-field{
-    font-size: 15px;
-    background: rgba(236, 231, 231, 0.2);
-    color: #fff;
-    height: 50px;
-    width: 100%;
-    padding: 0 10px 0 45px;
-    border: none;
-    border-radius: 30px;
-    outline: none;
-    transition: .2s ease;
-}
-.input-field:hover, .input-field:focus{
-    background: rgba(255, 255, 255, 0.25);
-}
-::-webkit-input-placeholder{
-    color: #fff;
-}
-.input-box i{
-    position: relative;
-    top: -35px;
-    left: 17px;
-    color: #fff;
-}
-.submit{
-    font-size: 15px;
-    font-weight: 500;
-    color: black;
-    height: 45px;
-    width: 100%;
-    border: none;
-    border-radius: 30px;
-    outline: none;
-    background: #EB700C;
     cursor: pointer;
-    transition: .3s ease-in-out;
+    border: 1px solid rgba(121, 121, 121, 0.55) ;
+
 }
-.submit:hover{
-    background: rgba(255, 255, 255, 0.5);
-    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+
+.input-field:hover {
+    color: rgb(57, 169, 0);
+    border: 1px solid rgb(57, 169, 0);
+	
 }
-.two-col{
-    display: flex;
-    justify-content: space-between;
-    color: #fff;
-    font-size: small;
-    margin-top: 10px;
+input {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding: 0px 2px;
 }
-.two-col .one{
-    display: flex;
-    gap: 5px;
+
+.fa-eye-slash.btn {
+    border: none;
+    outline: none;
+    box-shadow: none
 }
-.two label a{
+
+a {
     text-decoration: none;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 700;
+	margin:  0 0 0 90px;
+}
+
+a:hover {
+    text-decoration: none;
+    color: rgb(57, 169, 0);
+}
+
+.option {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.option label.text-muted {
+    display: block;
+    cursor: pointer;
+}
+
+.option input {
+    display: none;
+}
+
+.checkmark {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.option input:checked~.checkmark:after {
+    display: block
+}
+
+.option .checkmark:after {
+    content: "";
+    width: 13px;
+    height: 13px;
+    display: block;
+    background: rgb(57, 169, 0);
+    position: absolute;
+    top: 48%;
+    left: 53%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 300ms ease-in-out 0s;
+}
+
+.option input[type="radio"]:checked~.checkmark {
+    background: #fff;
+    transition: 300ms ease-in-out 0s;
+    border: 1px solid rgb(57, 169, 0);
+}
+
+.option input[type="radio"]:checked~.checkmark:after {
+    transform: translate(-55%, -48%) scale(1)
+}
+
+.btn.btn-block {
+    border-radius: 20px;
+    background-color: rgb(57, 169, 0);
     color: #fff;
+	justify-content: center;
+	display: flex;
+	align-items: center;
 }
-.two label a:hover{
-    text-decoration: underline;
+
+.btn.btn-block:hover {
+    background-color: rgb(57, 169, 0);
+	opacity: .6;
 }
-@media only screen and (max-width: 786px){
-    .nav-button{
-        display: none;
-    }
-    .nav-menu.responsive{
-        top: 100px;
-    }
-    .nav-menu{
-        position: absolute;
-        top: -800px;
-        display: flex;
-        justify-content: center;
-        background:#EB700C;
-        width: 100%;
-        height: 90vh;
-        backdrop-filter: blur(20px);
-        transition: .3s;
-    }
-    .nav-menu ul{
-        flex-direction: column;
-        text-align: center;
-    }
-    .nav-menu-btn{
-        display: block;
-    }
-    .nav-menu-btn i{
-        font-size: 25px;
-        color:#EB700C;
-        padding: 10px;
-        background: #00B400;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: .3s;
-    }
-    .nav-menu-btn i:hover{
-        background: rgba(255, 255, 255, 0.15);
-    }
-}
-@media only screen and (max-width: 540px) {
-    .wrapper{
-        min-height: 100vh;
-    }
-    .form-box{
-        width: 100%;
-        height: 500px;
-    }
-    .register-container, .login-container{
-        width: 100%;
-        padding: 0 20px;
-    }
-    .register-container .two-forms{
-        flex-direction: column;
-        gap: 0;
-    }
-}
+
