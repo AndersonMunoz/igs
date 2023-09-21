@@ -261,7 +261,7 @@
 }
 
 .usuario:hover {
-  background-color: rgb(108, 206, 129);
+  background-color: rgb(141, 206, 108);
   border-radius: 12px;
 }
 
@@ -330,6 +330,7 @@ box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
   font-size: 1.2em;
   align-items: center;
   padding: 4px 10px 4px 10px;
+  text-decoration: none;
 }
 
 .userSpace {
