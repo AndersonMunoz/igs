@@ -11,3 +11,20 @@ console.log(sidebarBtn);
 sidebarBtn.addEventListener("click", () => {
     sidebar.classList.toggle("close");
 });
+
+
+
+
+let modalUser = document.getElementById("userAlert");
+let modal = document.querySelector(".modalClose");
+let closeX = document.getElementById("closeX");
+
+userAlert.addEventListener('click', () => {
+    modal.classList.toggle('modalClose');
+    modal.classList.toggle('modalUser');
+});
+
+closeX.addEventListener('click', () => {
+    modal.classList.remove('modalUser')
+    modal.classList.add('modalClose')
+});
