@@ -6,17 +6,18 @@
     font-family: 'Poppins', sans-serif;
 }
 header{
+    width: 100%;
+    background-color: rgb(255, 255, 255);
     height: 75px;
-    width: 100vw;
 	display: grid;
-    grid-template:"empty-left sena empty container-logo empty-right"100%/
-					1.5%        50px   1fr   50px          1.5%;
+    grid-template:"empty-3 sena empty-1 container-logo empty-2" 100%/
+					20px        50px   1fr   50px          20px;
 }
 .sena{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  	grid-area:sena ;
+  	grid-area: sena;
   	width: 60px;
 	height: 100%;
 }
