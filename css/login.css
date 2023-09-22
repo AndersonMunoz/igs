@@ -45,10 +45,8 @@ header{
 	position: absolute;
 	color: rgb(120, 120, 120);
 	font-size: 2em;
-	z-index: 80;
-	top: 230px;
-	right: 550px;
 	cursor: pointer;
+    margin-left: 380px;
 }
 .carousel-inner img{
 	width: 100vw;
@@ -192,9 +190,12 @@ a:hover {
 }
 
 .btn.btn-block {
-    border-radius: 20px;
+    width: 100%;
+    height: 50px;
+    font-weight: 600;
     background-color: rgb(57, 169, 0);
     color: #fff;
+    text-align: center;
 	justify-content: center;
 	display: flex;
 	align-items: center;
@@ -202,6 +203,7 @@ a:hover {
 
 .btn.btn-block:hover {
     background-color: rgb(57, 169, 0);
-	opacity: .6;
+    color: #fff;
+    opacity: .6;
 }
 

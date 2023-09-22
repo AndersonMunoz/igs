@@ -20,7 +20,8 @@ let modal = document.querySelector(".modalClose");
 let closeX = document.getElementById("closeX");
 
 userAlert.addEventListener('click', () => {
-
+    modal.classList.toggle('modalUser')
+    modal.classList.toggle('modalClose')
 });
 
 closeX.addEventListener('click', () => {
