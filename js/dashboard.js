@@ -20,11 +20,25 @@ let modal = document.querySelector(".modalClose");
 let closeX = document.getElementById("closeX");
 
 userAlert.addEventListener('click', () => {
-    modal.classList.toggle('modalClose');
-    modal.classList.toggle('modalUser');
+
 });
 
 closeX.addEventListener('click', () => {
     modal.classList.remove('modalUser')
     modal.classList.add('modalClose')
 });
+
+
+let producto = document.getElementById("clickProduct")
+let inputP = document.querySelector(".producto");
+
+producto.addEventListener('click', () => {
+    if (inputP.classList.contains('producto')) {
+        inputP.classList.remove('producto');
+        inputP.classList.add('productoAll');
+    } else {
+        inputP.classList.add('producto');
+        inputP.classList.remove('productoAll');
+    }
+
+})

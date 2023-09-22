@@ -218,7 +218,6 @@
 .home-section {
   position: relative;
   background: white;
-  height: 100vh;
   left: 260px;
   width: calc(100% - 260px);
   transition: all 0.5s ease;
@@ -286,9 +285,11 @@
 }
 
 .modalUser {
+  z-index: 800;
   position: fixed;
   left: calc(100% - 200px);
-  width: white;
+  background-color: #fff;
+  color: white;
   width: 175.5px;
   height: 115px;
   display: flex;
@@ -355,4 +356,38 @@ p {
 
 .text {
   color: rgb(255, 255, 255);
+}
+
+.contenido{
+  width: calc(100% - 260px);
+  background-color: rgb(215, 215, 215);
+  left: 260px;
+  height: 679px;
+  display: flex;
+  position: relative;
+  transition: all 0.5s ease;
+  align-items: center;
+  justify-content: center;
+}
+/* .paginas{
+  width: 300px;
+  padding: 20px;
+  background-color: red;
+}
+ */
+
+.sidebar.close~.contenido {
+  left: 50px;
+  width: calc(100% - 50px);
+  background-color: rgb(215, 215, 215);
+  height: 679px;
+  align-items: center;
+  justify-content: center;
+}
+
+.producto{
+  display: none;
+}
+.productoAll{
+ display: contents;
 }
