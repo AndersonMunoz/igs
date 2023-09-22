@@ -25,7 +25,7 @@ header{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	grid-area:container-logo ;
+	grid-area: container-logo;
 }
 .logoigs{
 	width: 50px;
