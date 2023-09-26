@@ -1,113 +1,152 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-*{ 
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-header{
+
+header {
     width: 100%;
     background-color: rgb(255, 255, 255);
     height: 75px;
-	display: grid;
-    grid-template:"empty-3 sena empty-1 container-logo empty-2" 100%/
-					20px        50px   1fr   50px          20px;
+    display: grid;
+    grid-template: "empty-3 sena empty-1 title empty-4 container-logo empty-2" 100%/
+        30px 50px 1fr 700px 1fr 50px 30px;
 }
-.sena{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-  	grid-area: sena;
-  	width: 60px;
-	height: 100%;
+
+.sena {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: sena;
+    width: 60px;
+    height: 100%;
 }
-.container-logo{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	grid-area: container-logo;
+
+.titleIgs {
+    display: flex;
+    grid-area: title;
+    color: rgb(57, 169, 0);
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
-.logoigs{
-	width: 50px;
+
+h1{
+    font-weight: 600;
+    display: flex;
+    font-size: 2.2em;
 }
-.nav{
-	height: 70px;
-	background-color: rgb(57, 169, 0);
-	display: flex;
-	align-items: center;
-	justify-content: center;
+
+.container-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: container-logo;
+}
+
+.logoigs {
+    width: 50px;
+}
+
+.nav {
+    height: 70px;
+    background-color: rgb(57, 169, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
-.userOculto{
-	display: none;
+
+.userOculto {
+    display: none;
 }
-.closeUser{
-	position: absolute;
-	color: rgb(120, 120, 120);
-	font-size: 2em;
-	cursor: pointer;
+
+.closeUser {
+    position: absolute;
+    color: rgb(120, 120, 120);
+    font-size: 2em;
+    cursor: pointer;
     margin-left: 380px;
 }
-.carousel-inner img{
-	width: 100vw;
-	height: 81.2vh;
-}
-.inicio{
-	position: absolute;
-	right: 20px;
-	height: 40px;
-	width: 120px;
-	background-color: aliceblue;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 10px;
-}
-.inicio:hover{
-	cursor: pointer;
+
+button{
+    caret-color: aqua;
+    color: blue;
+    font-size: 2em;
+    width: 200px;
 }
 
-.container-login{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: fixed;
-	width: 100vw;
-	height: 100vh;
-	top: 0;
-	padding-top: 30px;
-	background-color: rgba(0, 0, 0, 0.321);
+.carousel-inner img {
+    width: 100vw;
+    height: 81.2vh;
+    z-index: -200;
+}
+
+.inicio {
+    position: absolute;
+    right: 20px;
+    height: 40px;
+    width: 120px;
+    background-color: aliceblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.inicio:hover {
+    cursor: pointer;
+}
+
+.container-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    padding-top: 30px;
+    background-color: rgba(0, 0, 0, 0.321);
 }
 
 .wrapper {
     max-width: 500px;
     border-radius: 10px;
     padding: 30px 40px;
-	position: absolute;
+    position: absolute;
 }
-.h4{
-	font-size: 1.2em;
+
+.h4 {
+    font-size: 1.2em;
 }
-.h2{
+
+.h2 {
     font-size: 2.5rem;
     font-weight: bold;
     color: rgb(57, 169, 0);
 }
+
 .input-field {
     border-radius: 5px;
     padding: 5px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    border: 1px solid rgba(121, 121, 121, 0.55) ;
+    border: 1px solid rgba(121, 121, 121, 0.55);
 
 }
 
 .input-field:hover {
     color: rgb(57, 169, 0);
     border: 1px solid rgb(57, 169, 0);
-	
+
 }
+
 input {
     border: none;
     outline: none;
@@ -126,7 +165,7 @@ a {
     text-decoration: none;
     color: rgba(0, 0, 0, 0.6);
     font-weight: 700;
-	margin:  0 0 0 90px;
+    margin: 0 0 0 90px;
 }
 
 a:hover {
@@ -196,9 +235,9 @@ a:hover {
     background-color: rgb(57, 169, 0);
     color: #fff;
     text-align: center;
-	justify-content: center;
-	display: flex;
-	align-items: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 
 .btn.btn-block:hover {
@@ -207,3 +246,8 @@ a:hover {
     opacity: .6;
 }
 
+footer {
+    background-color: rgb(57, 169, 0);
+    width: 100%;
+    height: 200px;
+}
