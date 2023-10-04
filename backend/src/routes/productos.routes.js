@@ -1,5 +1,5 @@
 import  router  from "express";
-import {guardarProducto,listarProductos,buscarProducto,actualizarProducto,eliminarProducto} from '../controllers/productos.controller.js';
+import {guardarProducto,listarProductos,buscarProducto,actualizarProducto,deshabilitarProducto} from '../controllers/productos.controller.js';
 
 const productoRouter = router();
 
@@ -7,6 +7,6 @@ productoRouter.post('/registar',guardarProducto);
 productoRouter.get('/listar',listarProductos);
 productoRouter.get('/buscar/:id',buscarProducto);
 productoRouter.put('/actualizar/:id',actualizarProducto);
-productoRouter.patch('/eliminar/:id',eliminarProducto);
+productoRouter.patch('/deshabilitar/:id',deshabilitarProducto);
 
 export default productoRouter;
