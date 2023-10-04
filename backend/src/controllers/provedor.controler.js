@@ -6,6 +6,7 @@ export const listarProvedor = async (req,res)=>{
         res.status(200).json(result);
     } catch (e) {
         res.status(500).json({message: 'error en listar proveedores: '+e})
+        console.log(e);
     }
 }
 
@@ -24,8 +25,8 @@ export const buscarProvedor = async (req,res)=>{
 export const registrarProvedor = async (req, res) => {
     try{
         let {nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores} = req.body;
-        let sql = `insert into Provedor (nombre_proveedores,telefono_proveedores,direccion_proveedores,usuario,contrato_proveedores)
-                    values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${usuario}','${contrato_proveedores}','${estado}')`;
+        let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores)
+                    values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}')`;
         const [rows] = await pool.query(sql);
         if(rows.affectedRows > 0) {
             res.status(200).json({"status":200,"message":"Se registro con exito Provedor "
@@ -59,8 +60,8 @@ export const eliminarProvedor = async (req,res) =>{
 export const actualizarProvedor = async (req,res) => {
     try{
         let id=req.params.id;
-        let {nombre_proveedores,telefono_proveedores,contrato_proveedores} = req.body;
-        let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', estado='${estado}' where id_proveedores= ${id}`;
+        let {nombre_proveedores,telefono_proveedores,contrato_proveedores,direccion_proveedores} = req.body;
+        let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}' where id_proveedores= ${id}`;
         const [rows] = await pool.query(sql);
         if(rows.affectedRows > 0){
             res.status(200).json({"status":200,"message":"Se actualizo con exito el Provedor"
