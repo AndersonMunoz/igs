@@ -1,8 +1,11 @@
 import { Router } from "express";
 
-import {guardarFactura} from '../controllers/facturaMovimiento.controller.js';
+import {guardarMovimiento,listarMovimientos,buscarMovimiento,actualizarMovimiento} from '../controllers/facturaMovimiento.controller.js';
 const facturaMovimientoRoute = Router();
 
-facturaMovimientoRoute.post('/registar',guardarFactura);
+facturaMovimientoRoute.post('/registar',guardarMovimiento);
+facturaMovimientoRoute.get('/listar',listarMovimientos);
+facturaMovimientoRoute.get('/buscar/:id',buscarMovimiento);
+facturaMovimientoRoute.put('/actualizar/:id',actualizarMovimiento);
 
 export default facturaMovimientoRoute ;
