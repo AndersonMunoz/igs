@@ -1,10 +1,8 @@
 import express from 'express';
 import body_parser from  'body-parser';
 import facturaMovimientoRoute from './backend/src/routes/facturaMovimiento.route.js';
-import productoRouter from './backend/src/routes/productos.routes.js'
-
-// importar la ruta de provedor
-import provedorRouter from './backend/src/routes/provedor.routes.js'
+import productoRouter from './backend/src/routes/productos.routes.js';
+import provedorRouter from './backend/src/routes/provedor.routes.js';
 
 const igs = express();
 
