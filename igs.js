@@ -2,8 +2,7 @@ import express from 'express';
 import body_parser from  'body-parser';
 
 // importar la ruta de provedor
-import provedorRouter from './backend/src/routes/provedor.router'
-
+import provedorRouter from './backend/src/routes/provedor.routes.js'
 
 const igs = express();
 
