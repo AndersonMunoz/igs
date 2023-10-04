@@ -1,13 +1,13 @@
 import express from 'express';
 import body_parser from  'body-parser';
-import facturaMovimientoRoute from './backend/src/routes/facturaMovimiento.route';
+import facturaMovimientoRoute from './backend/src/routes/facturaMovimiento.route.js';
 
 const igs = express();
 
 igs.use(body_parser.json());
 igs.use(body_parser.urlencoded({extended:false}));
 
-igs.use('/facturaMovimiento',facturaMovimientoRoute);
+igs.use('/facturamovimiento',facturaMovimientoRoute);
 
 
 igs.listen(3000,()=>{
