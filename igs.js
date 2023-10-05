@@ -3,6 +3,8 @@ import body_parser from  'body-parser';
 import facturaMovimientoRoute from './backend/src/routes/facturaMovimiento.routes.js';
 import productoRouter from './backend/src/routes/productos.routes.js';
 import provedorRouter from './backend/src/routes/provedor.routes.js';
+import usuarioRoute from './backend/src/routes/usuario.routes.js';
+
 
 const igs = express();
 
