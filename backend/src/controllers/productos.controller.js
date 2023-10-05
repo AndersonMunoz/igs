@@ -32,20 +32,6 @@ export const buscarProducto = async (req,res) =>{
 		res.status(500).json({message: 'Error en buscarProducto: '+e})
 	}
 }
-export const eliminarProducto = async (req,res) =>{
-	try{
-		let id = req.params.id;
-		let sql = `DELETE FROM productos WHERE id_producto=${id}`;
-		const [rows] = await pool.query(sql);
-		if(rows.affectedRows > 0){
-			res.status(200).json({"status":200,"message":"Se elimino con exito el producto"});
-		}else{
-			res.status(401).json({"status":401,"message":"No se elimino el producto"});
-		}
-	}catch(e){
-		res.status(500).json({message: 'Error en eliminarProducto: '+e})
-	}
-}
 export const actualizarProducto = async (req,res) =>{
 	try{
 		let id=req.params.id;
@@ -61,3 +47,17 @@ export const actualizarProducto = async (req,res) =>{
 		res.status(500).json({message: 'Error en actualizarProducto: '+e})
 	}
 }
+export const deshabilitarProducto = async (req, res) => {
+	try {
+			let id = req.params.id;
+			let sql = `UPDATE productos SET estado = 0 WHERE id_producto = ${id}`;
+			const [rows] = await pool.query(sql);
+			if (rows.affectedRows > 0) {
+					res.status(200).json({ "status": 200, "message": "Se deshabilitó con éxito el producto" });
+			} else {
+					res.status(401).json({ "status": 401, "message": "No se deshabilitó el producto" });
+			}
+	} catch (e) {
+			res.status(500).json({ message: 'Error en deshabilitarProducto: ' + e });
+	}
+};
