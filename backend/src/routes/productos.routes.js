@@ -1,9 +1,9 @@
-import  router  from "express";
+import { Router } from "express";
 import {guardarProducto,listarProductos,buscarProducto,actualizarProducto,deshabilitarProducto} from '../controllers/productos.controller.js';
 
-const productoRouter = router();
+const productoRouter = Router();
 
-productoRouter.post('/registar',guardarProducto);
+productoRouter.post('/registrar',guardarProducto);
 productoRouter.get('/listar',listarProductos);
 productoRouter.get('/buscar/:id',buscarProducto);
 productoRouter.put('/actualizar/:id',actualizarProducto);

@@ -1,20 +1,13 @@
-import  router  from "express";
+import { Router } from "express";
+import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado} from '../controllers/usuario.controller.js';
+import { validarToken } from "../controllers/autentificacion.controller.js";
 
-import { registroUsuario } from "../controllers/usuario.controller.js";
-import { listarUsuario } from "../controllers/usuario.controller.js";
-import { buscarUsuario } from "../controllers/usuario.controller.js";
-import { actualizarEstado } from "../controllers/usuario.controller.js";
-import { activarEstado } from "../controllers/usuario.controller.js";
+const usuarioRouter = Router();
 
+usuarioRouter.post("/registrar",registroUsuario );
+usuarioRouter.get("/listar", listarUsuario );
+usuarioRouter.get("/buscar/:id", buscarUsuario );
+usuarioRouter.patch("/deshabilitar/:id",validarToken, actualizarEstado );
+usuarioRouter.patch("/activar/:id",validarToken, activarEstado );
 
-
-const usuarioRoute = router();
-
-
-usuarioRoute.post("/registro", registroUsuario );
-usuarioRoute.get("/listar", listarUsuario );
-usuarioRoute.get("/buscar/:id", buscarUsuario );
-usuarioRoute.patch("/eliminar/:id", actualizarEstado );
-usuarioRoute.patch("/activar/:id", activarEstado );
-
-export default usuarioRoute;
+export default usuarioRouter;

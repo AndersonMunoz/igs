@@ -3,7 +3,8 @@ import body_parser from  'body-parser';
 import facturaMovimientoRoute from './backend/src/routes/facturaMovimiento.routes.js';
 import productoRouter from './backend/src/routes/productos.routes.js';
 import provedorRouter from './backend/src/routes/provedor.routes.js';
-import usuarioRoute from './backend/src/routes/usuario.routes.js';
+import usuarioRouter from './backend/src/routes/usuario.routes.js';
+import autRouter from './backend/src/routes/autentificacion.routes.js';
 
 
 const igs = express();
@@ -17,7 +18,9 @@ igs.use('/producto',productoRouter);
 
 igs.use('/provedor', provedorRouter);
 
-igs.use('/usuario', usuarioRoute);
+igs.use('/usuario', usuarioRouter);
+
+igs.use('/aut', autRouter);
 
 igs.listen(3000,()=>{
     console.log('Servidor IGS ejecutando en el puerto 3000');
