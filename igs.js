@@ -16,11 +16,6 @@ igs.use('/producto',productoRouter);
 
 igs.use('/provedor', provedorRouter);
 
-
-
-
-
-
 igs.use('/usuario', usuarioRoute);
 
 igs.listen(3000,()=>{

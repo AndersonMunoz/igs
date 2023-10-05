@@ -18,7 +18,7 @@ export const guardarProducto = async (req,res) =>{
 export const listarProductos = async (req, res) =>{
 	try{
 		const [result] = await pool.query('SELECT * FROM productos');
-      res.status(200).json(result);
+    res.status(200).json(result);
 	}catch(e){
 		res.status(500).json({message: 'Error en listarProductos: '+e})
 	}
