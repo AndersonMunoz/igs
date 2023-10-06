@@ -1,8 +1,13 @@
 import { pool } from "../database/conexion.js";
+import {validationResult} from 'express-validator';
 
 
 export const guardarProducto = async (req,res) =>{
 	try{	
+		let error = validationResult(req);
+		if(!error.isEmpty()){
+			return res.status(403).json(error)
+		}
 		let {fecha_caducidad_producto,cantidad_peso_producto,unidad_peso_producto,descripcion_producto,precio_producto,fk_id_categoria,fk_id_up,fk_id_tipo_producto} = req.body;
 		let sql = `INSERT INTO productos (fecha_caducidad_producto,cantidad_peso_producto,unidad_peso_producto,descripcion_producto,precio_producto,fk_id_categoria,fk_id_up,fk_id_tipo_producto) VALUES ('${fecha_caducidad_producto}','${cantidad_peso_producto}','${unidad_peso_producto}','${descripcion_producto}','${precio_producto}','${fk_id_categoria}','${fk_id_up}','${fk_id_tipo_producto}')`;
 		const [rows] = await pool.query(sql);
