@@ -1,11 +1,11 @@
 {
-  "name": "prenderia",
+  "name": "igs",
   "version": "1.0.0",
   "description": "",
-  "main": "api.js",
+  "main": "igs.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon api.js"
+    "dev": "nodemon igs.js"
   },
   "keywords": [],
   "author": "",
