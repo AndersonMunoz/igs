@@ -1,7 +1,12 @@
 import {pool} from '../database/conexion.js';
+import{validationResult} from 'express-validator';
 
 export const guardarMovimiento = async (req,res)=>{
-	try{
+	try{	
+		let error = validationResult(req);
+        if (!error.isEmpty()){
+            return res.status(400).json(error);
+        }
 			let{tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad_producto,fk_id_producto,fk_id_usuario,fk_id_proveedor} = req.body;
 			let sql=`INSERT INTO factura_movimiento (tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad_producto,fk_id_producto,fk_id_usuario,fk_id_proveedor)
 									VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}','${fecha_caducidad_producto}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}')`;
@@ -24,13 +29,8 @@ export const guardarMovimiento = async (req,res)=>{
 					)
 			}
 			console.log()
-	} catch {
-			res.status(500).json(
-					{
-							"status":500,
-							"message":"Error en el servidor"
-					}
-			)
+	} catch (e){
+			res.status(500).json({"status":500,"message":"Error en el servidor"+e});
 	}
 };
 
@@ -45,6 +45,10 @@ try{
 
 export const buscarMovimiento = async (req, res) => {
 	try {
+		let error = validationResult(req);
+        if (!error.isEmpty()){
+            return res.status(400).json(error);
+        }
 		let id = req.params.id;
 		const [result] = await pool.query('SELECT * FROM factura_movimiento WHERE id_factura = ?', [id]);
 
