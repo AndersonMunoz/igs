@@ -25,20 +25,5 @@ export const validatorProducto = [
     .exists()
     .not()
     .isEmpty()
-    .isFloat({ min: 0 }),
-    // (req, res, next) => {
-    //   const errors = validationResult(req);
-  
-    //   if (errors.isEmpty()) {
-    //     return next();
-    //   }
-  
-    //   const errorsObj = {};
-    //   errors.array().forEach(error => {
-    //     errorsObj[error.msg] = error.msg;
-    //   });
-  
-    //   res.status(403).json({ errors: errorsObj });
-    // }
-  
+    .isFloat({ min: 0 })  
 ];
