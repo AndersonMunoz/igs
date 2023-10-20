@@ -4,7 +4,7 @@ import {validatorProducto} from '../validation/validator.js'
 
 const productoRouter = Router();
 
-productoRouter.post('/registrar',validatorProducto,guardarProducto);
+productoRouter.post('/registrar',guardarProducto);
 productoRouter.get('/listar',listarProductos);
 productoRouter.get('/buscar/:id',buscarProducto);
 productoRouter.put('/actualizar/:id',validatorProducto,actualizarProducto);
