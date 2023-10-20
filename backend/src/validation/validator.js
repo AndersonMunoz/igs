@@ -41,3 +41,4 @@ export const validatorProducto = [
     //   res.status(403).json({ errors: errorsObj });
     // }
 ];
+

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario} from '../controllers/usuario.controller.js';
+import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario} from '../controllers/cliente.controller.js';
 import { validarToken } from "../controllers/autentificacion.controller.js";
 import { validatorUsuario } from "../validation/usuario.validator.js";
 
