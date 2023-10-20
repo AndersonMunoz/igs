@@ -8,8 +8,8 @@ export const guardarProducto = async (req,res) =>{
 		if(!error.isEmpty()){
 			return res.status(403).json(error)
 		}
-		let {fecha_caducidad_producto,cantidad_peso_producto,unidad_peso_producto,descripcion_producto,precio_producto,fk_id_categoria,fk_id_up,fk_id_tipo_producto} = req.body;
-		let sql = `INSERT INTO productos (fecha_caducidad_producto,cantidad_peso_producto,unidad_peso_producto,descripcion_producto,precio_producto,fk_id_categoria,fk_id_up,fk_id_tipo_producto) VALUES ('${fecha_caducidad_producto}','${cantidad_peso_producto}','${unidad_peso_producto}','${descripcion_producto}','${precio_producto}','${fk_id_categoria}','${fk_id_up}','${fk_id_tipo_producto}')`;
+		let {fecha_caducidad_producto,cantidad_peso_producto,unidad_peso_producto,descripcion_producto,precio_producto} = req.body;
+		let sql = `INSERT INTO productos (fecha_caducidad_producto, cantidad_peso_producto, unidad_peso_producto, descripcion_producto, precio_producto, fk_id_categoria, fk_id_up, fk_id_tipo_producto) VALUES ('${fecha_caducidad_producto}', '${cantidad_peso_producto}', '${unidad_peso_producto}', '${descripcion_producto}', '${precio_producto}', NULL, NULL, NULL)`;
 		const [rows] = await pool.query(sql);
 		if(rows.affectedRows > 0){
 			res.status(200).json({"status":200,"message":"Se registro con exito el producto"})
