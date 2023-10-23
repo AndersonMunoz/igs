@@ -22,7 +22,7 @@ igs.use(body_parser.json());
 igs.use(body_parser.urlencoded({extended:false}));
 
 
-// igs.use(express.json()); 
+igs.use(express.json()); 
 
 igs.use('/facturamovimiento',facturaMovimientoRoute);
 
@@ -39,24 +39,6 @@ igs.use('/categoria', categoria_productoRouter);
 igs.use('/up', unidadProductiva);
 
 igs.use('/aut', autRouter);
-
-// igs.get("/registerProducto", (req, res) => {
-//     res.send(JSON.stringify(registerProductoArr))
-// });
-
-
-// igs.post("/registerProducto", (req, res) => {
-//     try {
-//         const registerProducto = req.body;
-//         registerProductoArr.push(registerProducto);
-
-//         res.json({ message: "Producto Guardado" });
-//         console.log(registerProductoArr);
-//     } catch (e) {
-//         console.error(e);
-//         res.status(500).json({ message: e.message });
-//     }
-// });
 
 igs.listen(3000,()=>{
     console.log(`Servidor IGS ejecutando en http://localhost:${port}`);

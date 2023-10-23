@@ -25,6 +25,7 @@ export const validatorProducto = [
     .exists()
     .not()
     .isEmpty()
+<<<<<<< HEAD:backend/src/validation/validator.js
     .isFloat({ min: 0 }),
     // (req, res, next) => {
     //   const errors = validationResult(req);
@@ -40,5 +41,8 @@ export const validatorProducto = [
   
     //   res.status(403).json({ errors: errorsObj });
     // }
+=======
+    .isFloat({ min: 0 })  
+>>>>>>> devdsmc:backend/src/validation/producto.validator.js
 ];
 
