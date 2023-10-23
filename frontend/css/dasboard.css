@@ -81,11 +81,13 @@
   background: rgb(141, 206, 108);
   border-radius: 0 0px 0px 0;
 }
-.caja1{
+
+.caja1 {
   width: 200px;
   height: 300px;
   background-color: aqua;
 }
+
 .sidebar .nav-links li .content-nav {
   display: flex;
   align-items: center;
@@ -116,7 +118,7 @@
   line-height: 60px;
   color: #ffffff;
   font-size: 33px;
-  font-weight: 300;
+  font-weight: 100;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -223,52 +225,50 @@
 .home-section {
   position: fixed;
   background: rgb(57, 169, 0);
-  left: 260px;
-  width: 100%;
+  display: grid;
+  width: calc(100% - 260px);
   height: 60px;
-  z-index: 20;
+  z-index: 2;
+  left: 260px;
   transition: all 0.5s ease;
+  grid-template: "empty-1 box-menu-hader sena empty-2 usuario empty-3" 100%/
+    5px 50px 70px 1fr 190px 1.5%;
 }
 
 .sidebar.close~.home-section {
-  left: 50px;
-  width: calc(100% - 10px);
-  background-color: rgb(57, 169, 0);
+  left: 60px;
+  width: calc(100% - 60px);
 }
 
-
-.home-section .home-content {
-  position: absolute;
-  background: rgb(74, 74, 166);
-  height: 60px;
+.box-menu-hader {
+  grid-area: box-menu-hader;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  height: 100%;
+}
+
+.sena {
+  justify-content: center;
+  grid-area: sena;
   display: flex;
   align-items: center;
-  position: fixed;
-  z-index: 20;
 }
 
 .ti-menu-2 {
-  color: #fff;
+  color: #ffff;
   font-size: 35px;
-  margin: 0 10px;
   cursor: pointer;
 }
 
-.home-section .home-content .text {
-  font-size: 1em;
-  font-weight: 600;
-}
-
 .usuario {
-  position: absolute;
-  left: calc(100% - 260px);
+  grid-area: usuario;
   justify-content: center;
   align-items: center;
   display: flex;
-  justify-items: right;
-  width: 155px;
-  height: 60px;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 
@@ -283,7 +283,7 @@
   justify-content: center;
 }
 
-.home-section .home-content .usuario p {
+.home-section .usuario p {
   color: #fff;
   font-size: 1.2em;
   text-decoration: none;
@@ -309,9 +309,9 @@
   top: 65px;
   border-radius: 12px;
   border: 0.5px solid rgba(219, 219, 219, 0.648);
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
--moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
 }
 
 .modalClose {
@@ -320,7 +320,7 @@ box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
 
 .closeUser {
   color: rgb(126, 121, 121);
-  top: 67px;
+  top: 69px;
   right: 32px;
   position: fixed;
   font-size: 25px;
@@ -371,7 +371,7 @@ p {
   color: rgb(255, 255, 255);
 }
 
-.contenido{
+.contenido {
   width: calc(100% - 260px);
   background-color: rgb(220, 220, 220);
   left: 260px;
@@ -382,12 +382,6 @@ p {
   align-items: center;
   justify-content: center;
 }
-/* .paginas{
-  width: 300px;
-  padding: 20px;
-  background-color: red;
-}
- */
 
 .sidebar.close~.contenido {
   left: 50px;
@@ -398,9 +392,13 @@ p {
   justify-content: center;
 }
 
-.producto{
+.producto {
   display: none;
 }
-.productoAll{
- display: contents;
+
+.productoAll {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 }
