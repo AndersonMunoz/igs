@@ -8,8 +8,8 @@
   <title>IGS | HOME</title>
   <link rel="stylesheet" href="css/dasboard.css">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <link rel="icon" href="img/iconoindex.ico">
+  <link rel="stylesheet" href="../frontend/tabler-icons-2.36.0/webfont/tabler-icons.css">
 </head>
 
 <body>
@@ -31,26 +31,10 @@
       <li>
         <div class="content-nav">
           <a href="#">
-            <i class="ti ti-apple"></i>
-            <span  class="link_name">Productos</span>
-          </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
-        </div>
-        <ul class="sub-menu">
-          <li><a class="link_name" href="#">Productos</a></li>
-          <li id="clickProduct"><a href="#">Nuevo Producto</a></li>
-          <li><a href="#">Mostar Productos</a></li>
-          <li><a href="#">Nueva Categoria</a></li>
-          <li><a href="#">Mostar Categorias</a></li>
-        </ul>
-      </li>
-      <li>
-        <div class="content-nav">
-          <a href="#">
             <i class="ti ti-arrows-random"></i>
             <span class="link_name">Movimientos</span>
           </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
+          <i class='flecha ti ti-chevron-down arrow'></i>
         </div>
         <ul class="sub-menu">
           <li><a class="link_name" href="#">Movimientos</a></li>
@@ -64,7 +48,7 @@
             <i class="ti ti-building-store"></i>
             <span class="link_name">Inventario</span>
           </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
+          <i class='flecha ti ti-chevron-down arrow'></i>
         </div>
         <ul class="sub-menu">
           <li><a class="link_name" href="#">Inventario</a></li>
@@ -75,10 +59,40 @@
       <li>
         <div class="content-nav">
           <a href="#">
+            <i class="ti ti-apple"></i>
+            <span  class="link_name">Productos</span>
+          </a>
+          <i class='flecha ti ti-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Productos</a></li>
+          <li id="clickProduct"><a href="#">Nuevo Producto</a></li>
+          <li><a href="#">Mostar Productos</a></li>
+        </ul>
+      </li>
+      <li>
+        <div class="content-nav">
+          <a href="#">
+            <i class="ti ti-box-multiple"></i>
+            <span  class="link_name">Categoria</span>
+          </a>
+          <i class='flecha ti ti-chevron-down arrow'></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Categoria</a></li>
+          <li><a href="#">Nueva Categoria</a></li>
+          <li><a href="#">Mostar Categorias</a></li>
+        </ul>
+      </li>
+      
+      
+      <li>
+        <div class="content-nav">
+          <a href="#">
             <i class="ti ti-truck-delivery"></i>
             <span class="link_name">Proveedores</span>
           </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
+          <i class='flecha ti ti-chevron-down arrow'></i>
         </div>
         <ul class="sub-menu">
           <li><a class="link_name" href="#">Proveedores</a></li>
@@ -92,7 +106,7 @@
             <i class="ti ti-clipboard-text"></i>
             <span class="link_name">Reportes</span>
           </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
+          <i class='flecha ti ti-chevron-down arrow'></i>
         </div>
         <ul class="sub-menu">
           <li><a class="link_name" href="#">Reportes</a></li>
@@ -106,7 +120,7 @@
             <i class="ti ti-user"></i>
             <span class="link_name">Usuarios</span>
           </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
+          <i class='flecha ti ti-chevron-down arrow'></i>
         </div>
         <ul class="sub-menu">
           <li><a class="link_name" href="#">Usuarios</a></li>
@@ -120,7 +134,7 @@
             <i class="ti ti-help-circle"></i>
             <span class="link_name">Ajustes</span>
           </a>
-          <i class='flecha bx bxs-chevron-down arrow'></i>
+          <i class='flecha ti ti-chevron-down arrow'></i>
         </div>
         <ul class="sub-menu">
           <li><a class="link_name" href="#">Ajustes</a></li>
@@ -137,7 +151,7 @@
   </div>
   <section class="home-section">
     <div class="home-content">
-      <i class='bx bx-menu'></i>
+      <i class="ti ti-menu-2"></i>
       <div class="sena">
         <svg class="logoSena" xmlns="http://www.w3.org/2000/svg" id="a" viewBox="0 0 63.67 62.2">
           <defs>
@@ -161,7 +175,7 @@
       
       <div id="userAlert" class="usuario">
         <i class="user1 ti ti-user"></i>
-        <p>Santiago</p>
+        <p>Administrador</p>
       </div>
       
     </div>
@@ -174,6 +188,14 @@
     </div>
   </section>
   <div class="contenido">
+    <div class="caja1"></div>
+
+
+
+
+
+
+    
     <div id="addProduct" class="producto">
       <iframe src="formProducto.html" width="800" height="600" frameborder="0"></iframe>
     </div>
