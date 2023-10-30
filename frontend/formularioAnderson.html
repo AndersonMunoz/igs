@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="css/formularioAnderson.css">
+    <link rel="icon" href="img/iconoindex.ico">
+    <link rel="stylesheet" href="icons/all.css">
+</head>
+<body>
+    <div id="modelAlert" class="model-alert">
+        <div class="box-alert">
+            <p><span class="chulo"><i class="fa-solid fa-square-check"></i></span><br>
+            Registro Exitoso</p>
+            <input id="btnAceptar" type="button" class="btn-aceptar" value="Aceptar">
+        </div>
+        <div id="letX" class="equis"><i class="fa-solid fa-circle-xmark"></i></div>
+    </div>
+    <div id="modelAlert2" class="model-alert2">
+        <div class="box-alert">
+            <p><span class="triangulo"><i class="fa-solid fa-triangle-exclamation"></i></span><br>
+            Se necesita llenar todos los campos</p>
+            <input id="btnAceptar2" type="button" class="btn-aceptar" value="Aceptar">
+        </div>
+        <div id="letX2" class="equis"><i class="fa-solid fa-circle-xmark"></i></div>
+    </div>
+    <div class="main-container">
+        <h1>Registro de usuario</h1><br>
+        <div class="container">
+            <div class="logo">
+                <img src="img/logotrans.png" alt="">
+            </div>
+            <form id="registration-form" action="">
+                <fieldset>
+                   <label><br>Ingrese nombre(s):</label><br>
+                        <input id="nombreUsuario" type="text" placeholder="Ingrese nombre(s)" ><br>
+                        <label id="textoAlert" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label><br>Ingrese apellido(s):</label><br>
+                        <input id="apellido"type="text" placeholder="Ingrese apellido(s)" ><br>
+                        <label id="textoAlert2" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label><br>Ingrese email:</label><br>
+                        <input id="emailPe"type="email" placeholder="Ingrese email" ><br>
+                        <label id="textoAlert3" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label><br>Seleccione tipo de documento:</label><br>
+                    <select id="ide" class="id" >
+                        <option value=""class="op">Selecciona una opción</option>
+                        <option value="1" class="op">Tarjeta de Indentidad</option>
+                        <option value="2" class="op">Cédula de Ciudadanía</option>
+                        <option value="3" class="op">Cédula de Extranjería</option>
+                        <option value="4" class="op">Pasaporte</option>
+                    </select><br>
+                    <label id="textoAlert4" class="texto-alert-hidden">Por favor selecciona una opción</label>
+                    <label><br>Ingrese número de documento</label><br>
+                        <input id="numId"type="text" pattern="[0-9]*" placeholder="Ingrese documento" ><br>
+                    <label id="textoAlert5" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label><br>Seleccione tipo de usario:</label><br>
+                        <input id="admin" type="radio" name="tipoAdmin" >Administrador&nbsp;&nbsp;&nbsp;
+                        <input id="coadmin" type="radio" name="tipoAdmin" >Co-administrador<br>
+                        <label id="textoAlert6" class="texto-alert-hidden">Por favor seleccione una opción</label>
+                    <label><br>Seleccione cargo</label><br>
+                    <select id="idTipoCargo" class="id" >
+                        <option value="">Selecciona una opción</option>
+                        <option value="1">Instructor</option>
+                        <option value="2">Aprendiz</option>
+                        <option value="3">Coordinación</option>
+                    </select><br>
+                    <label id="textoAlert7" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label><br>Seleccione sede:</label><br>
+                        <input type="radio" name="sede" >Yamboró&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="sede" >Comercio<br>
+                        <label id="textoAlert8" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <label><br>Ingrese contraseña</label><br>
+                        <input id="contra" type="password" placeholder="Ingrese contraseña" ><br>
+                        <label id="textoAlert9" class="texto-alert-hidden">Por favor ingrese este dato</label>
+                    <button id="idReg" class="reg">Registrar</button>
+                    <button type="button" id="idCan" class="can">Cancelar</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script src="js/formuAnderson.js"></script>

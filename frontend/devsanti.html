@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | IGS</title>
+    <link rel="stylesheet" href="css/santiago.css">
+    <link rel="stylesheet" href="icons/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+</head>
+
+<body>
+    <header>
+        <nav class="menu_barra">
+            <div class="hamburgesa" id="menu">
+                <svg class="hamburguer-icon" width="35" height="35" viewBox="0 0 16 16" fill="white"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.75 11.75H1V13.5H9.75V11.75Z" fill="white"></path>
+                    <path d="M9.75 3H1V4.75H9.75V3Z" fill="white"></path>
+                    <path d="M8 7.375H1V9.125H8V7.375Z" fill="white"></path>
+                    <path
+                        d="M13.25 3.875L9.3125 7.63313C9.3125 8.11438 9.3125 8.38563 9.3125 8.87125L13.25 12.6294H15V3.875H13.25Z"
+                        fill="white"></path>
+                </svg>
+            </div>
+            <div class="logo">
+                <div class="logo_int"><img class="intlogo" src="img/logotrans.png" alt=""></div>
+            </div>
+            
+            <div class="buscar">
+                <input type="search" placeholder="Buscar..."><i class="iconBuscar fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div class="login">
+                <a class="texlogin" href="formularioSanti.html"><i class="userlogo fa-solid fa-user"></i>Inicio de
+                    sesion</a>
+            </div>
+        </nav>
+    </header>   
+        <section>
+        <div class="menu_lat" id="menu-lat">
+            <nav class="menu_lateral" id="menu--">
+                <ul>                     
+                    <li><span><a href="#"><i class="fa-solid fa-house-chimney"></i></a><a href="#">Home</a></span></li>                                              
+                    <li class="option"><span><a href="#"><i class="fa-solid fa-box-archive"></i></a><a href="#">Inventario</a><i class="ta ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><a href="#"><i class="fa-solid fa-apple-whole"></i></a><a href="#">Kardes</a></span></li>
+                            <li><span><a href="#"><i class="fa-solid fa-diagram-predecessor"></i></a><a href="#">Submenu</a></span></li>
+                        </ul>
+                    </li>
+                    <li class="option"><span><a href="#"><i class="fa-solid fa-shuffle"></i></a><a href="#">Movimientos</a><i class="ta ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><a href="#"><i class="fa-solid fa-pen-to-square"></i></a><a href="#">Entrada</a></span></li>
+                            <li><span><a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="#">Salida</a></span></li>
+                        </ul>
+                    </li>
+                    <li><span><a href="#"><i class="fa-solid fa-receipt"></i></a><a href="#">Reportes</a></span></li>
+                    <li><span><a href="#"><i class="fa-solid fa-calendar-xmark"></i></a><a href="#">Caducidad</a></span></li>
+                    <li><span><a href="#"><i class="ti ti-user-plus"></i></a><a href="formularioSanti.html">Resgistro</a></span></li>
+                    <li class="option"><span><a href="#"><i class="fa-solid fa-gear"></i></a><a href="#">Senttings</a><i class="ta ti ti-chevron-down"></i></span>
+                        <ul class="submenu">
+                            <li><span><a href="#"><i class="fa-solid fa-info"></i></a><a href="#">Ayuda</a></span></li>
+                            <li><span><a href="#"><i class="fa-solid fa-globe"></i></a><a href="#">Idioma</a></span></li>
+                            <li><span><a href="#"><i class="fa-regular fa-circle-check"></i></a><a href="#">Modo Oscuro</a></span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="js/mainsanti.js"></script>
+</body>

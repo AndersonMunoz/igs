@@ -1,0 +1,415 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    font-family: "Poppins", sans-serif;
+}
+
+/* body {
+    background: rgb(104, 102, 100);
+
+    background: -webkit-linear-gradient(to bottom, rgb(210, 255, 206), rgb(105, 105, 105));
+
+    background: linear-gradient(to bottom, rgb(163, 163, 163), rgb(116, 116, 116));
+
+} */
+
+.fondo {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -2;
+}
+
+.boxarea {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.imgLogo {
+    width: 475px;
+    height: 730px;
+    display: flex;
+    background-color: rgb(252, 254, 251) ;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px 0px 0px 15px;
+    box-shadow: 0 0 15px 0 rgba(255, 255, 255, 0.747);
+}
+
+img {
+    width: 400px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: block;
+    padding: 15px;
+    font-size: 1.1em;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 450px;
+    background-color: #006414;
+    height: 700px;
+    border-radius: 0px 15px 15px 0px;
+    box-shadow: 0 0 15px 0 rgba(255, 255, 255, 0.747);
+}
+
+h1 {
+    text-align: center;
+    color: rgb(255, 115, 0);
+    font-size: 2.5em;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+}
+
+select{
+    margin: 10px;
+    width: 380px;
+    height: 45px;
+    padding: 12px;
+    font-size: 1em;
+    border-radius: 8px;
+    background-color: #009929;
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+}
+select:active{
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+select:focus{
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(68, 196, 72);
+
+}
+select:checked{
+    cursor: pointer;
+}
+select:hover{
+    background-color: rgb(68, 196, 72);
+    cursor: pointer;
+}
+
+label {
+    display: block;
+    color: rgb(255, 255, 255);;
+    /* color: rgb(255, 255, 255); */
+    margin-top:20px;
+    margin-bottom: -5px;
+    text-align: justify;
+    margin-left:50px ;
+}
+
+label:hover {
+    color: rgb(255, 115, 0);
+}
+
+input[type="text"] {
+    border: none;
+    border-radius: 7px;
+    margin-bottom: 0px;
+    padding: 12px;
+    font-size: 1em;
+    height: 30px;
+    width: 350px;
+    border: none;
+    background-color: #009929;
+    color: white;
+}
+input[type="text"]:focus {
+    outline: none;
+    background-color: rgb(68, 196, 72);
+}
+input:hover{
+    background-color: rgb(68, 196, 72);
+}
+input[type="text"]:active {
+    outline: none;
+}
+::placeholder {
+    color: rgba(230, 230, 230, 0.829);
+}
+input {
+    margin: 10px;
+}
+
+input[type="radio"] {
+    -webkit-appearance: none; /* Quitar el estilo predeterminado del sistema */
+    -moz-appearance: none;
+    appearance: none;
+    width: 25px; /* Tamaño personalizado del círculo */
+    height: 25px;
+    border-radius: 50%; /* Forma circular */
+    border: 2px solid #009f0b; /* Grosor y color del borde */
+    outline: none; /* Quitar el borde al seleccionar */
+    background-color: #ffffff;
+}
+.radi{
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
+input[type="radio"]:checked {
+    background-color: #ff8800; /* Color de fondo cuando está seleccionado */
+    justify-content: center;
+    display: block;
+    align-items: center;
+    text-align: center;
+}
+span{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+input[type="submit"] {
+    width: 400px;
+    border: none;
+    border-radius: 10px;
+    height: 70px;
+    background-color: rgb(255, 115, 0);
+    color: white;
+    font-size: 2em;
+    font-weight: 600;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover{
+    background-color: rgb(255, 155, 0);
+}
+
+
+/*modal*/
+h2{
+    color: rgb(255, 115, 0);
+}
+
+.cancel{
+    width: 240px;
+    height: 240px;
+}
+
+.modal{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal--show{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
+    opacity: 1;
+
+}
+.modal_cont{
+    margin: auto;
+    width: 65%;
+    max-width: 500px;
+    max-height: 75%;
+    border-radius: 6px;
+    padding: 3em 2.5em;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns:  100%;
+    background-color: #ffffff;
+}
+
+.modal_titulo{
+    font-size: 2.5rem;
+}
+
+.modal_parrafo{
+    margin-bottom: 10px
+}
+
+.modal_close{
+    text-decoration: none;
+    color:white;
+    background-color: #ff8800;
+    padding: 1em 3em;
+    border-radius: 6px;
+    display: inline;
+    font-weight: 700;
+    transition: background-color .3s;
+    cursor: pointer;
+}
+.modal_close:hover{
+    background-color: rgb(255, 155, 0);
+}
+
+/*modal2*/
+.cancel2{
+    width: 240px;
+    height: 240px;
+}
+
+.modal2{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal--show2{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #111111bd;
+    z-index: 2;
+    display: flex;
+    opacity: 1;
+
+}
+.modal_cont2{
+    margin: auto;
+    width: 750%;
+    max-width: 500px;
+    max-height: 75%;
+    border-radius: 6px;
+    padding: 3em 2.5em;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns:  100%;
+    background-color: #ffffff;
+}
+
+.modal_titulo2{
+    font-size: 2.5rem;
+}
+
+.modal_parrafo2{
+    margin-bottom: 10px
+}
+
+.modal_close2{
+    text-decoration: none;
+    color:white;
+    background-color: #ff8800;
+    padding: 1em 3em;
+    border-radius: 6px;
+    display: inline;
+    font-weight: 700;
+    transition: background-color .3s;
+    cursor: pointer;
+}
+.modal_close2:hover{
+    background-color: rgb(255, 155, 0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@font-face {
+    font-display: swap;
+    /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/poppins-v20-latin-regular.eot');
+    /* IE9 Compat Modes */
+    src: url('../fonts/poppins-v20-latin-regular.eot?#iefix') format('embedded-opentype'),
+        /* IE6-IE8 */
+        url('../fonts/poppins-v20-latin-regular.woff2') format('woff2'),
+        /* Super Modern Browsers */
+        url('../fonts/poppins-v20-latin-regular.woff') format('woff'),
+        /* Modern Browsers */
+        url('../fonts/poppins-v20-latin-regular.ttf') format('truetype'),
+        /* Safari, Android, iOS */
+        url('../fonts/poppins-v20-latin-regular.svg#Poppins') format('svg');
+    /* Legacy iOS */
+}
+
+/* poppins-regular - latin */
+@font-face {
+    font-display: swap;
+    /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/poppins-v20-latin-regular.woff2') format('woff2');
+    /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* poppins-600 - latin */
+@font-face {
+    font-display: swap;
+    /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/poppins-v20-latin-600.woff2') format('woff2');
+    /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* poppins-800 - latin */
+@font-face {
+    font-display: swap;
+    /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 800;
+    src: url('../fonts/poppins-v20-latin-800.woff2') format('woff2');
+    /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* poppins-900 - latin */
+@font-face {
+    font-display: swap;
+    /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 900;
+    src: url('../fonts/poppins-v20-latin-900.woff2') format('woff2');
+    /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}

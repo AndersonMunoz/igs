@@ -1,0 +1,198 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+body{
+    background-image: url("../img/fondo.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+header{
+    background-color: rgb(1, 151, 1);
+    width: 100%;
+    color: white;
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    grid-template: "burger logo      search       lupa      empty-2 sesion   name    photo   " 60px /
+                    50px 100px        500px       40px        1fr   150px      100px       70px;
+} 
+
+.burger {
+    grid-area:burger;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+}
+
+.burger:hover{
+    cursor: pointer;
+    background-color:rgb(32, 128, 32) ;
+    transition: background-color 500ms;
+    border-radius: 5px;
+}
+
+.empty{
+    grid-area: empty-2;
+}
+
+.logo {
+    grid-area: logo;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+    transition: 500ms;
+}
+
+.logo:hover{
+    color: orange;
+    transition: 500ms;
+    cursor: pointer;
+}
+
+.search {
+    grid-area: search;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+
+.lupa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: lupa;
+    width: 100%;
+}
+
+.sublupa{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(133, 182, 59);
+    border-radius: 5px;
+}
+
+.sublupa:hover{
+    background-color: rgb(182, 218, 129);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 500ms;
+}
+.cerrar-sesion {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    grid-area: sesion;
+}
+
+.cerrar-sesion:hover {
+    cursor: pointer;
+    background-color:rgb(32, 128, 32) ;
+    border-radius: 50px;
+    transition: background-color 500ms;
+}
+
+.name {
+    grid-area: name;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.name:hover {
+    cursor: pointer;
+    background-color:rgb(32, 128, 32) ;
+    border-radius: 50px;
+    transition: background-color 500ms;
+}
+
+.photo {
+    grid-area: photo;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+}
+
+.nav-hidden {
+    width: 220px;
+    height: 100vh;
+    background: linear-gradient(90deg, rgb(6, 54, 6) 50%,transparent); 
+    font-size: 1.2em;
+    display: block;
+    color: rgb(224, 224, 224);
+    transition: 500ms;
+    
+}
+
+.nav-vi{
+    width: 200px;
+    height: 100vh;
+    background: linear-gradient(90deg, rgb(32, 128, 32),transparent); 
+    font-size: 1.2em;
+    display: block;
+    color: rgb(224, 224, 224);
+    margin-left: -500px;
+    transition: 500ms;
+}
+
+ul {
+    width: 100%;
+    list-style: none;
+}
+
+li {
+
+    width: 200px;
+    padding: 15px;
+    transition: 500ms;
+}
+
+li:hover {
+    color: white;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.205);
+    cursor: pointer;
+    transition: background-color 500ms;
+}
+
+
+.subsub{
+    
+    display: none;
+}
+
+.subsub-invisible {
+    margin-top: 10px;
+    margin-bottom: -15px;
+    color: rgb(189, 188, 188);
+    transition: 500ms;
+}
+.sub-mov{
+    margin-left: -15px;
+    transition: 500ms;
+
+}
+a{
+    text-decoration: none;
+    color: rgb(224, 224, 224);
+}
+

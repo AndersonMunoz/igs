@@ -1,0 +1,238 @@
+* {
+	margin: 0%;
+	padding: 0%;
+	font-family: "Poppins", sans-serif;
+}
+
+/*  MENUS BARRA*/
+.menu_barra {
+	display: grid;
+	height: 70px;
+	background-color: rgb(19, 160, 0);
+	grid-template: "hamburgesa logo empty-1 buscar empty-2 login" 100%/ 100px 60px 1fr 350px 1fr 260px;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+    position: fixed;
+	z-index: 90;
+}
+
+.intlogo{
+	width: 40px;
+	justify-content: center;
+}
+.logo {
+	grid-area: logo;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	align-items: center;
+}
+
+.logo_int {
+	display: flex;
+	background-color: white;
+	width: 55px;
+	height: 55px;
+	border-radius: 50%;
+	justify-content: center;
+	align-items: center;
+}
+
+.hamburgesa {
+	grid-area: hamburgesa;
+	font-size: 1.8em;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	display: flex;
+	cursor: pointer;
+}
+
+.buscar {
+	grid-area: buscar;
+	width: 340px;
+	height: 35px;
+	position: relative;
+	zoom: 100%;
+	color: white;
+}
+
+.iconBuscar {
+	position: absolute;
+	left: 0;
+	padding-left: 8px;
+	top: calc(50% - 8px);
+	font-size: 1em;
+	color: white;
+}
+
+input[type=search] {
+	padding-left: 27px;
+	width: 100%;
+	height: 100%;
+	border: 1px solid rgb(19, 160, 0);
+	border-radius: 5px;
+	background-color: rgba(131, 223, 119, 0.664);
+}
+
+input[type=search]:focus {
+	outline: none;
+}
+
+input[type=search]:focus {
+	background-color: rgb(135, 218, 124);
+}
+
+::placeholder {
+	color: white;
+}
+
+.login {
+	display: flex;
+	grid-area: login;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.userlogo {
+	color: white;
+	font-size: 1.5em;
+	text-align: center;
+	justify-content: center;
+	margin-right: 10px;
+}
+
+.texlogin {
+	display: flex;
+	list-style: none;
+	text-decoration: none;
+	color: rgb(248, 248, 248);
+	text-align: justify;
+	align-items: center;
+	justify-content: center;
+	width: 80%;
+	border-radius: 10px;
+}
+
+.texlogin:hover {
+	background-color: rgb(131, 223, 119, 0.664);
+}
+
+
+/*MENU LATERAL*/
+
+.menu--show {
+	width: auto;
+	height: auto;
+	opacity: 1;
+	display: flex;
+	position: fixed;
+	overflow-y: auto;
+	background-color: rgb(255, 94, 0);
+	transition:0.5s linear;
+}
+
+.menu_lat {
+	opacity: 0;
+	pointer-events: none;
+	position: fixed;
+	left: 100%;
+}
+.menu_lateral ul{
+	background-color: rgb(255, 94, 0); 	
+	list-style: none;
+	left: 0;
+	position: relative;
+	width: 250px;
+}
+.menu_lateral ul li a{
+	color: white;
+	text-decoration: none;
+	display: block;	
+	padding: auto;
+}
+
+.menu_lateral ul .submenu{
+	background-color: rgb(255, 94, 0);
+	width: 250px;
+    display: none;
+}
+.menu_lateral ul .submenu li a{
+	color: rgb(255, 255, 255);
+}
+.menu_lateral{
+	overflow-y: auto;
+	height: 100vh;
+}
+span{
+	padding: 25px;
+	border-bottom: 1px solid white;
+}
+
+nav >ul li> span {
+	gap: 15px;
+	display: flex;
+	flex: none;
+}
+
+nav >ul > li >span:hover{
+	background-color: rgb(255, 130, 47);
+}
+nav >ul > li > ul> li>span:hover{
+	background-color: rgb(255, 130, 47);
+}
+
+nav>ul{
+	margin-top: 71px;
+}
+i {
+	color: white;
+	font-size: 1.5em;
+	pointer-events: none;
+}
+
+.menu_lateral ul .activo{
+	display: block;
+	transition: 2s linear;
+}
+.ta{
+	pointer-events: none;	
+}
+li{
+	cursor: pointer;
+}
+.option {
+	transition: all 0.3s ease;
+}
+
+@font-face {
+	font-display: swap;
+	/* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/poppins-v20-latin-regular.eot');
+	/* IE9 Compat Modes */
+	src: url('../fonts/poppins-v20-latin-regular.eot?#iefix') format('embedded-opentype'),
+		/* IE6-IE8 */
+		url('../fonts/poppins-v20-latin-regular.woff2') format('woff2'),
+		/* Super Modern Browsers */
+		url('../fonts/poppins-v20-latin-regular.woff') format('woff'),
+		/* Modern Browsers */
+		url('../fonts/poppins-v20-latin-regular.ttf') format('truetype'),
+		/* Safari, Android, iOS */
+		url('../fonts/poppins-v20-latin-regular.svg#Poppins') format('svg');
+	/* Legacy iOS */
+}
+
+
+.hamburguer-icon {
+	transform: scaleX(-1);
+}
+
+.hamburguer-icon-transition {
+	transform: scaleX(-1);
+}
