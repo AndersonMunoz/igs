@@ -6,7 +6,11 @@ for (var i = 0; i < arrow.length; i++) {
     });
 }
 let sidebar = document.querySelector(".sidebar");
+<<<<<<< HEAD
 let sidebarBtn = document.querySelector(".bx-menu");
+=======
+let sidebarBtn = document.querySelector(".ti-menu-2");
+>>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 console.log(sidebarBtn);
 sidebarBtn.addEventListener("click", () => {
     sidebar.classList.toggle("close");

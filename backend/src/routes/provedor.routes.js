@@ -1,13 +1,15 @@
 import { Router } from "express";
 
-import {listarProvedor, buscarProvedor, registrarProvedor, eliminarProvedor, actualizarProvedor} from '../controllers/provedor.controler.js';
+import {validarProvedor} from "../validation/validatorProvedor.js";
+import {listarProvedor,buscarProvedor,registrarProvedor,eliminarProvedor,actualizarProvedor} from '../controllers/provedor.controler.js';
+import { validarToken } from "../controllers/autentificacion.controller.js";
 
-const ProvedorRouter = Router();
+const provedorRouter = Router();
 
-ProvedorRouter.get('/listar', listarProvedor);
-ProvedorRouter.get('/buscar', buscarProvedor);
-ProvedorRouter.post('/registrar', registrarProvedor);
-ProvedorRouter.put('/eliminar', eliminarProvedor);
-ProvedorRouter.put('/actualizar', actualizarProvedor);
+provedorRouter.get('/listar', listarProvedor);
+provedorRouter.get('/buscar/:id',buscarProvedor);
+provedorRouter.post('/registrar',validarProvedor,validarToken,registrarProvedor);
+provedorRouter.put('/eliminar/:id',validarToken, eliminarProvedor);
+provedorRouter.put('/actualizar/:id',validarProvedor,validarToken,actualizarProvedor);
 
-export default ProvedorRouter;
+export default provedorRouter;
