@@ -10,9 +10,9 @@ export const registroTipo_producto = async (req, res) => {
           return res.status(400).json(error)           
       }
 
-      let { nombre_tipo} = req.body;
-      let sql = `insert into tipo_productos (nombre_tipo)
-  values('${nombre_tipo}')`;
+      let { nombre_tipo,fk_categoria_pro} = req.body;
+      let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro)
+  values('${nombre_tipo}','${fk_categoria_pro}')`;
       console.log(sql);
 
       const [rows] = await pool.query(sql);
@@ -65,7 +65,7 @@ export const editarTipo_producto = async (req ,res) =>{
       let id = req.params.id;
   let {nombre_tipo} = req.body;
 
-  let sql=`update tipo_productos SET nombre_tipo = '${nombre_tipo}',
+  let sql=`update tipo_productos SET nombre_tipo = '${nombre_tipo},${fk_categoria_pro}',
   where id_tipo = ${id} `;
   console.log(sql)
 
@@ -76,7 +76,7 @@ export const editarTipo_producto = async (req ,res) =>{
   }else{
       res.status(401).json(
           {"status": 401,"menssge": "No se actualizo el tipo de producto  "});
-  }
+  }                                       
 
   } catch (e) {
       res.status(500).json({
