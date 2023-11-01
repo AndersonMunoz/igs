@@ -12,14 +12,23 @@ import autRouter from './backend/src/routes/autentificacion.routes.js';
 
 const port = 3000;
 
-// const registerProductoArr = [];
-
 const igs = express();
 
 igs.use(cors());
 
 igs.use(body_parser.json());
 igs.use(body_parser.urlencoded({extended:false}));
+
+igs.set('view engine','ejs')
+igs.set('views','../igs/backend/src/views');
+
+igs.use(express.static('../igs/backend/src/public'))
+igs.use(express.static('../igs/backend/src/views/js'))
+
+igs.get('/documents', (req,res) => {
+    res.render('index.ejs');
+});
+
 
 
 igs.use(express.json()); 
