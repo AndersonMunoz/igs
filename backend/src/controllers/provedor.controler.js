@@ -28,13 +28,8 @@ export const buscarProvedor = async (req,res)=>{
 export const registrarProvedor = async (req, res) => {
     try{
         let {nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores} = req.body;
-<<<<<<< HEAD
-        let sql = `insert into Provedor (nombre_proveedores,telefono_proveedores,direccion_proveedores,usuario,contrato_proveedores)
-                    values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${usuario}','${contrato_proveedores}','${estado}')`;
-=======
         let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores)
                     values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}')`;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
         const [rows] = await pool.query(sql);
         if(rows.affectedRows > 0) {
             res.status(200).json({"status":200,"message":"Se registro con exito Provedor "
