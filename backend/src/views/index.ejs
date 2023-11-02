@@ -1163,26 +1163,16 @@
                   </tr>
               </tbody>
           </table>
-<<<<<<< HEAD
-        </div>
-        <!-- Documentación Proveedores -->
-
-        <!-- Registro de Proveedor -->
-        <h2 id="unidad">Documentación proveedor</h2>
-        <div id="20" class="tabla">
-=======
       </div>
 
       <h2 id="producto">Documentación Producto</h2>
       <div id="20" class="tabla">
->>>>>>> devdsmc
           <table cellspacing="0">
               <tbody>
                   <tr>
                       <th class="radi" colspan="2">DOC. REGISTRO</th>
                   </tr>
                   <tr>
-<<<<<<< HEAD
                       <th class="num">Número</th>
                       <td class="num">1</td>
                   </tr>
@@ -1201,7 +1191,6 @@
                   <tr>
                       <th>Verbo HTTP</th>
                       <td>POST</td>
-=======
                       <th>Numero</th>
                       <td>
                           <p>1</p>
@@ -1231,13 +1220,11 @@
                       <td>
                           <p>POST</p>
                       </td>
->>>>>>> devdsmc
                   </tr>
                   <tr>
                       <th>Header</th>
                       <td>
                           <p>X-Powered-By: Express <br>
-<<<<<<< HEAD
                           Access-Control-Allow-Origin: *<br>
                           Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
                           Access-Control-Allow-Headers: Content-Type, Authorization<br>
@@ -1245,7 +1232,6 @@
                           Content-Length: Variable<br>
                           ETag: Variable<br>
                           Date: Fecha y Hora</p>
-=======
                               Access-Control-Allow-Origin: *<br>
                               Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
                               Access-Control-Allow-Headers: Content-Type, Authorization<br>
@@ -1255,12 +1241,10 @@
                               Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
                               Connection: keep-alive<br>
                               Keep-Alive: timeout=5</p>
->>>>>>> devdsmc
                       </td>
                   </tr>
                   <tr>
                       <th>Usuarios</th>
-<<<<<<< HEAD
                       <td>Administradores</td>
                   </tr>
                   <tr>
@@ -1282,7 +1266,6 @@
               </tbody>
           </table>
         </div>
-        <!-- Listar Proveedores -->
         <div id="21" class="tabla">
             <table cellspacing="0">
                 <tbody>
@@ -1295,15 +1278,15 @@
                     </tr>
                     <tr>
                         <th>Nombre del Webservice</th>
-                        <td>Listar Proveedores</td>
+                        <td>Listar Productos</td>
                     </tr>
                     <tr>
                         <th>URL</th>
-                        <td>localhost:3000/proveedor/listar</td>
+                        <td>localhost:3000/producto/listar</td>
                     </tr>
                     <tr>
                         <th>Descripción</th>
-                        <td>A través de una petición mediante el método GET se obtiene una lista de proveedores registrados hasta el momento.</td>
+                        <td>A través de una petición mediante el método GET se obtiene una lista de productos registrados hasta el momento.</td>
                     </tr>
                     <tr>
                         <th>Verbo HTTP</th>
@@ -1334,7 +1317,7 @@
                         <th>Response (JSON)</th>
                         <td>
                             <p>status: 200,<br>
-                            body: Lista de objetos JSON con información de proveedores</p>
+                            body: Lista de objetos JSON con información de productos</p>
                         </td>
                     </tr>
                     <tr>
@@ -1348,7 +1331,7 @@
                 </tbody>
             </table>
         </div>
-        <!-- Actualización de Proveedores -->
+
         <div id="22" class="tabla">
           <table cellspacing="0">
               <tbody>
@@ -1361,15 +1344,15 @@
                   </tr>
                   <tr>
                       <th>Nombre del Webservice</th>
-                      <td>Actualizar Proveedor</td>
+                      <td>Actualizar producto</td>
                   </tr>
                   <tr>
                       <th>URL</th>
-                      <td>localhost:3000/proveedor/actualizar/:id</td>
+                      <td>localhost:3000/producto/actualizar/:id</td>
                   </tr>
                   <tr>
                       <th>Descripción</th>
-                      <td>Mediante un formulario se lleva a cabo la petición de diversos datos para especificar un proveedor y luego poder ser actualizado.</td>
+                      <td>Mediante un formulario se lleva a cabo la petición de diversos datos para especificar un producto y luego poder ser actualizado.</td>
                   </tr>
                   <tr>
                       <th>Verbo HTTP</th>
@@ -1405,8 +1388,7 @@
                       <th>Response (JSON)</th>
                       <td>
                           <p>status: 200,<br>
-                          body: "Proveedor actualizado con éxito"</p>
-=======
+                          body: "producto actualizado con éxito"</p>
                       <td>
                           <p>administradores</p>
                       </td>
@@ -1432,21 +1414,18 @@
                           <p>status: 200,</p>
                           <h3>MENSAJE</h3>
                           <p>body: "Producto registrado con éxito "</p>
->>>>>>> devdsmc
                       </td>
                   </tr>
                   <tr>
                       <th class="rari"></th>
                       <td class="ra">
                           <h3>INCORRECTO</h3>
-<<<<<<< HEAD
                           <p>status: 401<br>
                           message: "No se actualizó el proveedor"<br>
                           <h3>NO AUTORIZADO</h3>
                           <p>status: 403</p>
                           status: 500<br>
                           message: "Error interno en el servidor"</p>
-=======
                           <p>status: 401
                           <h3>MENSAJE</h3>
                           <p>message: "Producto no se pudo registrar"</p>
@@ -1454,198 +1433,12 @@
                           <p>status: 403</p>
                           <h3 id="vdL">MENSAJE</h3>
                           <p>Error interno, intente nuevamente</p>
->>>>>>> devdsmc
                       </td>
                   </tr>
               </tbody>
           </table>
-<<<<<<< HEAD
         </div>
-
-=======
-      </div>
-      <div id="21" class="tabla">
-          <table cellspacing="0"> 
-              <tbody>
-                  <tr>
-                      <th class="radi" colspan="2">DOC. LISTAR</th>
-                  </tr>
-                  <tr>
-                      <th>Numero</th>
-                      <td>
-                          <p>2</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Nombre Del Webservice</th>
-                      <td>
-                          <p>Listar productos</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Url</th>
-                      <td>
-                          <p>localhost:3000/producto/listar</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Descripción</th>
-                      <td>
-                          <p>A través de una petición mediante el link por el método Get <br>
-                              da como respuesta mediante el body una tabla con los datos <br>
-                              registrados hasta al momento</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Verbo Http</th>
-                      <td>
-                          <p>GET</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Header</th>
-                      <td>
-                          <p>X-Powered-By Express<br>
-                              Access-Control-Allow-Origin *<br>
-                              Access-Control-Allow-Methods GET,POST,PUT,DELETE<br>
-                              Access-Control-Allow-Headers Content-Type, Authorization<br>
-                              Content-Type application/json; charset=utf-8<br>
-                              Content-Length 419<br>
-                              ETag W/"1a3-TjDb4POTNZzGTcASMLJ08d2UTaE"<br>
-                              Date Fri, 08 Sep 2023 12:22:03 GMT<br>
-                              Connection keep-alive<br>
-                              Keep-Alive timeout=5<br></p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Usuarios</th>
-                      <td>
-                          <p>administradores</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Request bodyform – data</th>
-                      <td>
-                          <p>Json</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Response</th>
-                      <td>
-                          <h3>CORRECTO</h3>
-                          <p>status: 200,</p>
-                          <h3>MENSAJE</h3>
-                          <p>body: json(result)</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th class="rari"></th>
-                      <td class="ra">
-                          <h3>INCORRECTO</h3>
-                          <p>status: 500</p>
-                          <p>message: error al conectar al servidor</p>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-      <div id="22" class="tabla">
-          <table cellspacing="0">
-              <tbody>
-                  <tr>
-                      <th class="radi" colspan="2">DOC. ACTUALIZACION</th>
-                  </tr>
-                  <tr>
-                      <th>Numero</th>
-                      <td>
-                          <p>3</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Nombre Del Webservice</th>
-                      <td>
-                          <p> ACTUALIZACION del producto </p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Url</th>
-                      <td>
-                          <p>localhost:3000/producto/editar/:id</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Descripción</th>
-                      <td>
-                          <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
-                              para especificar un producto para luego poder ser actualizado </p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Verbo Http</th>
-                      <td>
-                          <p>PUT</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Header</th>
-                      <td>
-                          <p>X-Powered-By: Express <br>
-                              Access-Control-Allow-Origin: *<br>
-                              Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
-                              Access-Control-Allow-Headers: Content-Type, Authorization<br>
-                              Content-Type: application/json; charset=utf-8<br>
-                              Content-Length: 57<br>
-                              ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
-                              Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
-                              Connection: keep-alive<br>
-                              Keep-Alive: timeout=5</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Usuarios</th>
-                      <td>
-                          <p>administradores</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Request bodyform – data</th>
-                      <td>
-                          <P>TOKEN REQUERIDO</P><br>
-                          <table class="intTable" cellspacing="0">
-                              <th class="tituInt">key</th>
-                              <th class="tituInt">Values</th>
-                              <tr>
-                                  <td class="teX">nombre_producto</td>
-                                  <td class="teX">Nuevo nombre del producto</td>
-                              </tr>
-                          </table>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Response</th>
-                      <td>
-                          <h3>CORRECTO</h3>
-                          <p>status: 200,</p>
-                          <h3>MENSAJE</h3>
-                          <p>body: "Se actualizó con éxito el producto"</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th class="rari"></th>
-                      <td class="ra">
-                          <h3>INCORRECTO</h3>
-                          <p>status: 401
-                          <h3>MENSAJE</h3>
-                          <p>message: "No se actualizó el producto"</p>
-                          <h3>NO AUTORIZADO</h3>
-                          <p>status: 403</p>
-                          <h3 id="vdL">MENSAJE</h3>
-                          <p>Error interno en el servidor</p>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
+        
       <div id="23" class="tabla">
         <table cellspacing="0">
             <tbody>
@@ -1818,4 +1611,3 @@
         </table>
     </div>      
      
->>>>>>> devdsmc
