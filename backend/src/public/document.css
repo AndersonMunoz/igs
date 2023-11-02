@@ -164,6 +164,8 @@ h2 {
 }
 .tabla{
     margin-top: 30px;
+    display: grid;
+    place-items: center;
 }
 tbody {
     background-color: rgb(255, 255, 255);
@@ -174,7 +176,6 @@ td {
     border: 1px solid rgb(54, 54, 54);
     padding: 10px;
     border-collapse: collapse;
-
 }
 
 th {
@@ -212,17 +213,12 @@ h3 {
 .ra {
     border-radius: 0px 0px 12px 0px;
 }
-
-.tabla{
-    justify-content: center;
-    display: flex;
-    flex-direction:row;
-    align-items: center;
+table{
+    width: 720px;
 }
-
 .intTable {
     justify-content: center;
-
+    width: fit-content;
 }
 
 .tituInt {
@@ -233,3 +229,4 @@ h3 {
 .teX {
     font-size: 0.7em;
 }
+

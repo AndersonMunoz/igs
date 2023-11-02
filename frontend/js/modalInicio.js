@@ -2,8 +2,11 @@ let UserInicio = document.getElementById("UserInicio");
 let modal = document.querySelector(".userOculto");
 let closeX = document.getElementById("closeX");
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 UserInicio.addEventListener('click', () => {
 
     
@@ -15,6 +18,9 @@ UserInicio.addEventListener('click', () => {
 closeX.addEventListener('click', () => {
     modal.classList.remove('container-login')
     modal.classList.add('userOculto')
+<<<<<<< HEAD
+});
+=======
 });
 
 // para el copy
@@ -28,3 +34,4 @@ const fechaActual = new Date();
 const añoActual = fechaActual.getFullYear();
 // Mostramos el año actual en el elemento con id "year"
 copyRight.textContent= `${añoActual}`
+>>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
