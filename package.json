@@ -1,7 +1,6 @@
 {
   "name": "igs",
   "version": "1.0.0",
-  "description": "",
   "main": "igs.js",
   "type": "module",
   "scripts": {
@@ -23,5 +22,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
-  }
+  },
+  "description": ""
 }
