@@ -108,203 +108,6 @@
 </header>
 
 <main>
-    <h2 id="juegos">Documentación Videojuegos</h2>
-    <section class="videojuego">
-        <div id="1" class="tabla">
-            <table cellspacing="0"><!-- tabla registro videojuegos -->
-                <tbody>
-                    <tr>
-                        <th class="radi" colspan="2">DOC. REGISTRO</th>
-                    </tr>
-                    <tr>
-                        <th>Numero</th>
-                        <td>
-                            <p>1</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Nombre Del Webservice</th>
-                        <td>
-                            <p>Registrar video juego</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Url</th>
-                        <td>
-                            <p>localhost:3000/juego/guardar</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Descripción</th>
-                        <td>
-                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
-                                para especificar un videojuego para luego registrar</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Verbo Http</th>
-                        <td>
-                            <p>POST</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Header</th>
-                        <td>
-                            <p>X-Powered-By: Express <br>
-                                Access-Control-Allow-Origin: *<br>
-                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
-                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
-                                Content-Type: application/json; charset=utf-8<br>
-                                Content-Length: 57<br>
-                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
-                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
-                                Connection: keep-alive<br>
-                                Keep-Alive: timeout=5</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Usuarios</th>
-                        <td>
-                            <p>Usuarios, administradores</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Request bodyform – data</th>
-                        <td>
-                            <P>TOKEN REQUERIDO</P><br>
-                            <table class="intTable" cellspacing="0">
-                                <th class="tituInt">key</th>
-                                <th class="tituInt">Values</th>
-                                <tr>
-                                    <td class="teX">nombre</td>
-                                    <td class="teX">fornite</td>
-                                </tr>
-                                <tr>
-                                    <td class="teX">descripcion</td>
-                                    <td class="teX">juego de sangre</td>
-                                </tr>
-                                <tr>
-                                    <td class="teX">img</td>
-                                    <td class="teX">img.JPG</td>
-                                </tr>
-                                <tr>
-                                    <td class="teX">precio</td>
-                                    <td class="teX">50</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Response</th>
-                        <td>
-                            <h3>CORRECTO</h3>
-                            <p>status: 200,</p>
-                            <h3>MENSAJE</h3>
-                            <p>body: "Se registro el juego con exito"</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="rari"></th>
-                        <td class="ra">
-                            <h3>INCORRECTO</h3>
-                            <p>status: 401
-                            <h3>MENSAJE</h3>
-                            <p>menssge: "no se registro el juego, datos insuficientes"</p>
-                            <h3>NO AUTORIZADO</h3>
-                            <p>status: 403</p>
-                            <h3 id="vdL">MENSAJE</h3>
-                            <p>error interno en el sevidor :(</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-<!-- copies desde el div tabla para hacer una nueva -->
-        <div id="2" class="tabla">
-            <table cellspacing="0"> <!-- tabla de listar video juegos -->
-                <tbody>
-                    <tr>
-                        <th class="radi" colspan="2">DOC. LISTAR</th>
-                    </tr>
-                    <tr>
-                        <th>Numero</th>
-                        <td>
-                            <p>2</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Nombre Del Webservice</th>
-                        <td>
-                            <p>Listar video juego</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Url</th>
-                        <td>
-                            <p>localhost:3000/juego/listar</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Descripción</th>
-                        <td>
-                            <p>A través de una petición mediante el link por el método Get <br>
-                                da como respuesta mediante el body una tabla con los datos <br>
-                                registrados hasta al momento</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Verbo Http</th>
-                        <td>
-                            <p>GET</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Header</th>
-                        <td>
-                            <p>X-Powered-By Express<br>
-                                Access-Control-Allow-Origin *<br>
-                                Access-Control-Allow-Methods GET,POST,PUT,DELETE<br>
-                                Access-Control-Allow-Headers Content-Type, Authorization<br>
-                                Content-Type application/json; charset=utf-8<br>
-                                Content-Length 419<br>
-                                ETag W/"1a3-TjDb4POTNZzGTcASMLJ08d2UTaE"<br>
-                                Date Fri, 08 Sep 2023 12:22:03 GMT<br>
-                                Connection keep-alive<br>
-                                Keep-Alive timeout=5<br></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Usuarios</th>
-                        <td>
-                            <p>Usuarios, administradores</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Request bodyform – data</th>
-                        <td>
-                            <p>Json</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Response</th>
-                        <td>
-                            <h3>CORRECTO</h3>
-                            <p>status: 200,</p>
-                            <h3>MENSAJE</h3>
-                            <p>body: json(result)</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="rari"></th>
-                        <td class="ra">
-                            <h3>INCORRECTO</h3>
-                            <p>status: 500</p>
-                            <p>message: error al conectar al servidor</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
         <h2 id="TipoProducto">Documentación Tipo de producto </h2>
           <div id="18" class="tabla">
             <table cellspacing="0"><!-- tabla registro videojuegos -->
@@ -1546,75 +1349,73 @@
                 </tbody>
             </table>
           </div>
-
-        <!-- Documentación Proveedores -->
-
-        <!-- Registro de Proveedor -->
-        <h2 id="unidad">Documentación proveedor</h2>
-        <div id="11" class="tabla">
-          <table cellspacing="0">
-              <tbody>
-                  <tr>
-                      <th class="radi" colspan="2">DOC. REGISTRO</th>
-                  </tr>
-                  <tr>
-                      <th class="num">Número</th>
-                      <td class="num">1</td>
-                  </tr>
-                  <tr>
-                      <th>Nombre del Webservice</th>
-                      <td>Registrar Proveedor</td>
-                  </tr>
-                  <tr>
-                      <th>URL</th>
-                      <td>localhost:3000/proveedor/registrar</td>
-                  </tr>
-                  <tr>
-                      <th>Descripción</th>
-                      <td>Mediante un formulario se lleva a cabo la petición de diversos datos para especificar un proveedor y luego registrarlos.</td>
-                  </tr>
-                  <tr>
-                      <th>Verbo HTTP</th>
-                      <td>POST</td>
-                  </tr>
-                  <tr>
-                      <th>Header</th>
-                      <td>
-                          <p>X-Powered-By: Express <br>
-                          Access-Control-Allow-Origin: *<br>
-                          Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
-                          Access-Control-Allow-Headers: Content-Type, Authorization<br>
-                          Content-Type: application/json; charset=utf-8<br>
-                          Content-Length: Variable<br>
-                          ETag: Variable<br>
-                          Date: Fecha y Hora</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Usuarios</th>
-                      <td>Administradores</td>
-                  </tr>
-                  <tr>
-                      <th>Request Body (form-data)</th>
-                      <td>
-                          <p>TOKEN REQUERIDO<br>
-                          nombre_proveedor: Variable<br>
-                          direccion: Variable<br>
-                          telefono: Variable</p>
-                      </td>
-                  </tr>
-                  <tr>
-                      <th>Response (JSON)</th>
-                      <td>
-                          <p>status: 200,<br>
-                          body: "Proveedor registrado con éxito"</p>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
+          <h2 id="producto">Documentación Producto</h2>
+          <div id="1" class="tabla">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. Registrar Producto</th>
+                    </tr>
+                    <tr>
+                        <th class="num">Número</th>
+                        <td class="num">1</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre del Webservice</th>
+                        <td>Registrar Productos</td>
+                    </tr>
+                    <tr>
+                        <th>URL</th>
+                        <td>localhost:3000/producto/registrar</td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>A través de un formulario del metodo POST se podra registrar un nuevo producto y este debera cumplir con ciertas validaciones para poder ser registrado exitosamente</td>
+                    </tr>
+                    <tr>
+                        <th>Verbo HTTP</th>
+                        <td>POST</td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                            Access-Control-Allow-Origin: *<br>
+                            Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
+                            Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                            Content-Type: application/json; charset=utf-8<br>
+                            Content-Length: Variable<br>
+                            ETag: Variable<br>
+                            Date: Fecha y Hora</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>Administradores</td>
+                    </tr>
+                    <tr>
+                        <th>Request Body (JSON)</th>
+                        <td>N/A</td>
+                    </tr>
+                    <tr>
+                        <th>Response (JSON)</th>
+                        <td>
+                            <p>status: 200,<br>
+                            Producto registrado con exito</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 500<br>
+                            message: error al conectar al servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <!-- Listar Proveedores -->
-        <div id="12" class="tabla">
+        <div id="2" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -1626,15 +1427,15 @@
                     </tr>
                     <tr>
                         <th>Nombre del Webservice</th>
-                        <td>Listar Proveedores</td>
+                        <td>Listar Productos</td>
                     </tr>
                     <tr>
                         <th>URL</th>
-                        <td>localhost:3000/proveedor/listar</td>
+                        <td>localhost:3000/producto/listar</td>
                     </tr>
                     <tr>
                         <th>Descripción</th>
-                        <td>A través de una petición mediante el método GET se obtiene una lista de proveedores registrados hasta el momento.</td>
+                        <td>A través de una petición mediante el método GET se obtiene una lista de productos registrados hasta el momento.</td>
                     </tr>
                     <tr>
                         <th>Verbo HTTP</th>
@@ -1665,7 +1466,7 @@
                         <th>Response (JSON)</th>
                         <td>
                             <p>status: 200,<br>
-                            body: Lista de objetos JSON con información de proveedores</p>
+                            body: Lista de objetos JSON con información de productos</p>
                         </td>
                     </tr>
                     <tr>
@@ -1679,8 +1480,8 @@
                 </tbody>
             </table>
         </div>
-        <!-- Actualización de Proveedores -->
-        <div id="13" class="tabla">
+
+        <div id="3" class="tabla">
           <table cellspacing="0">
               <tbody>
                   <tr>
@@ -1692,15 +1493,15 @@
                   </tr>
                   <tr>
                       <th>Nombre del Webservice</th>
-                      <td>Actualizar Proveedor</td>
+                      <td>Actualizar producto</td>
                   </tr>
                   <tr>
                       <th>URL</th>
-                      <td>localhost:3000/proveedor/actualizar/:id</td>
+                      <td>localhost:3000/producto/actualizar/:id</td>
                   </tr>
                   <tr>
                       <th>Descripción</th>
-                      <td>Mediante un formulario se lleva a cabo la petición de diversos datos para especificar un proveedor y luego poder ser actualizado.</td>
+                      <td>Mediante un formulario se lleva a cabo la petición de diversos datos para especificar un producto y luego poder ser actualizado.</td>
                   </tr>
                   <tr>
                       <th>Verbo HTTP</th>
@@ -1724,19 +1525,35 @@
                       <td>Administradores</td>
                   </tr>
                   <tr>
-                      <th>Request Body (form-data)</th>
-                      <td>
-                          <p>TOKEN REQUERIDO<br>
-                          nombre_proveedor: Variable<br>
-                          direccion: Variable<br>
-                          telefono: Variable</p>
-                      </td>
-                  </tr>
-                  <tr>
                       <th>Response (JSON)</th>
                       <td>
                           <p>status: 200,<br>
-                          body: "Proveedor actualizado con éxito"</p>
+                          body: "producto actualizado con éxito"</p>
+                      <td>
+                          <p>administradores</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Request bodyform – data</th>
+                      <td>
+                          <P>TOKEN REQUERIDO</P><br>
+                          <table class="intTable" cellspacing="0">
+                              <th class="tituInt">key</th>
+                              <th class="tituInt">Values</th>
+                              <tr>
+                                  <td class="teX">nombre_producto</td>
+                                  <td class="teX">Nombre del producto</td>
+                              </tr>
+                          </table>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Response</th>
+                      <td>
+                          <h3>CORRECTO</h3>
+                          <p>status: 200,</p>
+                          <h3>MENSAJE</h3>
+                          <p>body: "Producto actualizado con éxito "</p>
                       </td>
                   </tr>
                   <tr>
@@ -1744,14 +1561,189 @@
                       <td class="ra">
                           <h3>INCORRECTO</h3>
                           <p>status: 401<br>
-                          message: "No se actualizó el proveedor"<br>
+                          message: "No se actualizó el producto"<br>
                           <h3>NO AUTORIZADO</h3>
                           <p>status: 403</p>
                           status: 500<br>
                           message: "Error interno en el servidor"</p>
+                          <p>status: 403</p>
+                          <h3 id="vdL">MENSAJE</h3>
+                          <p>Error interno, intente nuevamente</p>
                       </td>
                   </tr>
               </tbody>
           </table>
         </div>
 
+      <div id="4" class="tabla">
+        <table cellspacing="0">
+            <tbody>
+                <tr>
+                    <th class="radi" colspan="2">DOC. BUSCAR POR ID</th>
+                </tr>
+                <tr>
+                    <th>Numero</th>
+                    <td>
+                        <p>4</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nombre Del Webservice</th>
+                    <td>
+                        <p>Buscar producto por ID</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Url</th>
+                    <td>
+                        <p>localhost:3000/producto/buscar/:id</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Descripción</th>
+                    <td>
+                        <p>Mediante un ID proporcionado, se busca un producto específico en la base de datos.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Verbo Http</th>
+                    <td>
+                        <p>GET</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Header</th>
+                    <td>
+                        <p>X-Powered-By: Express <br>
+                            Access-Control-Allow-Origin: *<br>
+                            Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                            Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                            Content-Type: application/json; charset=utf-8<br>
+                            Content-Length: 57<br>
+                            ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                            Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                            Connection: keep-alive<br>
+                            Keep-Alive: timeout=5</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Usuarios</th>
+                    <td>
+                        <p>administradores</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Request Params</th>
+                    <td>
+                        <p>ID del producto a buscar</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Response</th>
+                    <td>
+                        <h3>CORRECTO</h3>
+                        <p>status: 200,</p>
+                        <h3>MENSAJE</h3>
+                        <p>body: json(producto)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="rari"></th>
+                    <td class="ra">
+                        <h3>INCORRECTO</h3>
+                        <p>status: 404</p>
+                        <p>message: "Producto no encontrado"</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="5" class="tabla">
+        <table cellspacing="0">
+            <tbody>
+                <tr>
+                    <th class="radi" colspan="2">DOC. DESHABILITAR PRODUCTO</th>
+                </tr>
+                <tr>
+                    <th>Numero</th>
+                    <td>
+                        <p>5</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nombre Del Webservice</th>
+                    <td>
+                        <p>Deshabilitar producto</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Url</th>
+                    <td>
+                        <p>localhost:3000/producto/deshabilitar/:id</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Descripción</th>
+                    <td>
+                        <p>Mediante un ID proporcionado, se deshabilita la posibilidad de cambiar el estado del producto a 0.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Verbo Http</th>
+                    <td>
+                        <p>PUT</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Header</th>
+                    <td>
+                        <p>X-Powered-By: Express <br>
+                            Access-Control-Allow-Origin: *<br>
+                            Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                            Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                            Content-Type: application/json; charset=utf-8<br>
+                            Content-Length: 57<br>
+                            ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                            Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                            Connection: keep-alive<br>
+                            Keep-Alive: timeout=5</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Usuarios</th>
+                    <td>
+                        <p>administradores</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Request Params</th>
+                    <td>
+                        <p>ID del producto a deshabilitar</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Response</th>
+                    <td>
+                        <h3>CORRECTO</h3>
+                        <p>status: 200,</p>
+                        <h3>MENSAJE</h3>
+                        <p>body: "Producto deshabilitado con éxito"</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="rari"></th>
+                    <td class="ra">
+                        <h3>INCORRECTO</h3>
+                        <p>status: 401</p>
+                        <p>message: "No autorizado para deshabilitar el producto"</p>
+                        <h3>NO AUTORIZADO</h3>
+                        <p>status: 403</p>
+                        <h3 id="vdL">MENSAJE</h3>
+                        <p>Error interno en el servidor</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>      
+     
