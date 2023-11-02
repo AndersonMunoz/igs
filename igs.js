@@ -37,7 +37,7 @@ igs.use('/facturamovimiento',facturaMovimientoRoute);
 
 igs.use('/producto',productoRouter);
 
-igs.use('/provedor', provedorRouter);
+igs.use('/proveedor', provedorRouter);
 
 igs.use('/usuario', usuarioRouter);
 

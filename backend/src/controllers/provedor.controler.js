@@ -64,13 +64,13 @@ export const actualizarProvedor = async (req,res) => {
         let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}' where id_proveedores= ${id}`;
         const [rows] = await pool.query(sql);
         if(rows.affectedRows > 0){
-            res.status(200).json({"status":200,"message":"Se actualizo con exito el Provedor"
+            res.status(200).json({"status":200,"message":"Proveedor actualizado con éxito"
             })
         }else{
-            res.status(401).json({"status":401,"message":"No se actualizo el Provedor"
+            res.status(401).json({"status":401,"message":"No se actualizó el proveedor"
             }) 
         }
     }catch(e){
-        res.status(500).json({message: 'Error en update Provedor: '+e})
+        res.status(500).json({message: 'Error interno en el servidor: '+e})
     }
 }
