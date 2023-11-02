@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Api | IGS</title>
+    <link rel="stylesheet" href="document.css">
+</head>
+
+<script src="script.js">
+    
+</script>
+
+
+
+
+<header>
+    <div class="logo">
+        <a href="">Documentación API REST</a>
+    </div>
+    <nav>
+        <ul class="main-menu">
+            <!-- Copiar para Hacer una nueva Lista en el header -->
+            <li class="liPrin sub-menu-toggle">
+                <a href="#Productos">Productos</a>
+                <ul class="sub-menu">
+                    <li><a href="#1">Doc Registrar</a></li>
+                    <li><a href="#2">Doc Listar</a></li>
+                    <li><a href="#3">Doc Buscar</a></li>
+                    <li><a href="#4">Doc Actualizar</a></li>
+                    <li><a href="#5">Doc Eliminar</a></li>
+                </ul>
+            </li>
+        <!-- ---------------------------------------------------------- -->
+
+            <li class="liPrin sub-menu-toggle">
+                <a href="#usuario">Usuarios</a>
+                <ul class="sub-menu">
+                    <li><a href="#6">Doc Registrar</a></li>
+                    <li><a href="#7">Doc Listar</a></li>
+                    <li><a href="#8">Doc Buscar</a></li>
+                    <li><a href="#9">Doc Actualizar</a></li>
+                    <li><a href="#10">Doc Eliminar</a></li>
+                </ul>
+            </li>
+            <li class="liPrin sub-menu-toggle">
+                <a href="#usuario">Proveedores</a>
+                <ul class="sub-menu">
+                    <li><a href="#6">Doc Registrar</a></li>
+                    <li><a href="#7">Doc Listar</a></li>
+                    <li><a href="#8">Doc Buscar</a></li>
+                    <li><a href="#9">Doc Actualizar</a></li>
+                    <li><a href="#10">Doc Eliminar</a></li>
+                </ul>
+            </li>
+            <li class="liPrin sub-menu-toggle">
+                <a href="#usuario">Factura Movimiento</a>
+                <ul class="sub-menu">
+                    <li><a href="#6">Doc Registrar</a></li>
+                    <li><a href="#7">Doc Listar</a></li>
+                    <li><a href="#8">Doc Buscar</a></li>
+                    <li><a href="#9">Doc Actualizar</a></li>
+                    <li><a href="#10">Doc Eliminar</a></li>
+                </ul>
+            </li>
+            <li class="liPrin sub-menu-toggle">
+                <a href="#TipoProducto">Tipo Producto</a>
+                <ul class="sub-menu">
+                    <li><a href="#11">Doc Registrar</a></li>
+                    <li><a href="#12">Doc Listar</a></li>
+                    <li><a href="#13">Doc Actualizar</a></li>
+                </ul>
+            </li>
+            <li class="liPrin sub-menu-toggle">
+                <a href="#Categoria">Categoria Productos</a>
+                <ul class="sub-menu">
+                    <li><a href="#14">Doc Registrar</a></li>
+                    <li><a href="#15">Doc Listar</a></li>
+                    <li><a href="#16">Doc Actualizar</a></li>
+                </ul>
+            </li>
+
+            <li class="liPrin sub-menu-toggle">
+                <a href="#unidad">Unidad Procuctiva</a>
+                <ul class="sub-menu">
+                    <li><a href="#17">Doc Registrar</a></li>
+                    <li><a href="#18">Doc Listar</a></li>
+                    <li><a href="#19">Doc Actualizar</a></li>
+
+                </ul>
+            </li>
+            <li class="liPrin sub-menu-toggle">
+                <a href="#token">Token</a>
+                <ul class="sub-menu">
+                    <li><a href="#17">Doc Generar</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu-2" width="40" height="40"
+            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M4 6l16 0"></path>
+            <path d="M4 12l16 0"></path>
+            <path d="M4 18l16 0"></path>
+        </svg>
+    </div>
+</header>
+
+<main>
+    <h2 id="juegos">Documentación Videojuegos</h2>
+    <section class="videojuego">
+        <div id="1" class="tabla">
+            <table cellspacing="0"><!-- tabla registro videojuegos -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. REGISTRO</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>1</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Registrar video juego</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/juego/guardar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                                para especificar un videojuego para luego registrar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>POST</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>Usuarios, administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <P>TOKEN REQUERIDO</P><br>
+                            <table class="intTable" cellspacing="0">
+                                <th class="tituInt">key</th>
+                                <th class="tituInt">Values</th>
+                                <tr>
+                                    <td class="teX">nombre</td>
+                                    <td class="teX">fornite</td>
+                                </tr>
+                                <tr>
+                                    <td class="teX">descripcion</td>
+                                    <td class="teX">juego de sangre</td>
+                                </tr>
+                                <tr>
+                                    <td class="teX">img</td>
+                                    <td class="teX">img.JPG</td>
+                                </tr>
+                                <tr>
+                                    <td class="teX">precio</td>
+                                    <td class="teX">50</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: "Se registro el juego con exito"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "no se registro el juego, datos insuficientes"</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 403</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>error interno en el sevidor :(</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+<!-- copies desde el div tabla para hacer una nueva -->
+        <div id="2" class="tabla">
+            <table cellspacing="0"> <!-- tabla de listar video juegos -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. LISTAR</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>2</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Listar video juego</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/juego/listar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>A través de una petición mediante el link por el método Get <br>
+                                da como respuesta mediante el body una tabla con los datos <br>
+                                registrados hasta al momento</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By Express<br>
+                                Access-Control-Allow-Origin *<br>
+                                Access-Control-Allow-Methods GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers Content-Type, Authorization<br>
+                                Content-Type application/json; charset=utf-8<br>
+                                Content-Length 419<br>
+                                ETag W/"1a3-TjDb4POTNZzGTcASMLJ08d2UTaE"<br>
+                                Date Fri, 08 Sep 2023 12:22:03 GMT<br>
+                                Connection keep-alive<br>
+                                Keep-Alive timeout=5<br></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>Usuarios, administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <p>Json</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: json(result)</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 500</p>
+                            <p>message: error al conectar al servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h2 id="TipoProducto">Documentación Tipo de producto </h2>
+          <div id="11" class="tabla">
+            <table cellspacing="0"><!-- tabla registro videojuegos -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. REGISTRO</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>1</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Registrar  tipo  de producto </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/tipo/registrar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                                para especificar un tipo de prodcuto  para luego registrar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>POST</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <P>TOKEN REQUERIDO</P><br>
+                            <table class="intTable" cellspacing="0">
+                                <th class="tituInt">key</th>
+                                <th class="tituInt">Values</th>
+                                <tr>
+                                    <td class="teX">nombre_tipo</td>
+                                    <td class="teX">arroz</td>
+                                </tr>
+                                <tr>
+                                    <td class="teX">fk_categoria_pro</td>
+                                    <td class="teX">granos</td>
+                             
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: "el tipo de producto  registrado  con exito"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: ""el tipo de producto no se puedo registrar"</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 403</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error interno, intente nuevamente</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="12" class="tabla">
+            <table cellspacing="0"> 
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. LISTAR</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>2</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Listar  tipo de prodcuto</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/tipo/listar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>A través de una petición mediante el link por el método Get <br>
+                                da como respuesta mediante el body una tabla con los datos <br>
+                                registrados hasta al momento</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By Express<br>
+                                Access-Control-Allow-Origin *<br>
+                                Access-Control-Allow-Methods GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers Content-Type, Authorization<br>
+                                Content-Type application/json; charset=utf-8<br>
+                                Content-Length 419<br>
+                                ETag W/"1a3-TjDb4POTNZzGTcASMLJ08d2UTaE"<br>
+                                Date Fri, 08 Sep 2023 12:22:03 GMT<br>
+                                Connection keep-alive<br>
+                                Keep-Alive timeout=5<br></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p> administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <p>Json</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: json(result)</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 500</p>
+                            <p>message: error al conectar al servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="13" class="tabla">
+            <table cellspacing="0"><!-- tabla registro actulizacion tipo producto -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. ACTUALIZACION</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>3</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p> ACTUALIZACION EL  tipo  de producto </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/tipo/editar/:id</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                                para especificar un tipo de prodcuto  para luego  poder ser actualizado </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>PUT</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <P>TOKEN REQUERIDO</P><br>
+                            <table class="intTable" cellspacing="0">
+                                <th class="tituInt">key</th>
+                                <th class="tituInt">Values</th>
+                                <tr>
+                                    <td class="teX">nombre_tipo</td>
+                                    <td class="teX">lentejas</td>
+                                </tr>
+                                <tr>
+                                    <td class="teX">fk_categoria_pro</td>
+                                    <td class="teX">granos</td>
+                             
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: "Se actualizo con exito el tipo de producto"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: ""No se actualizo el tipo de producto "</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 403</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error interno en el sevidor </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- DOCUMENTACION DE CATEGORIA DE PRODUCTOS -->
+        <h2 id="Categoria">Documentación Categoria Producto </h2>
+          <div id="14" class="tabla">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. REGISTRO</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>1</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Registrar  categoria  </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/categoria/registrar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                                para especificar una categoria  para luego registrar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>POST</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <P>TOKEN REQUERIDO</P><br>
+                            <table class="intTable" cellspacing="0">
+                                <th class="tituInt">key</th>
+                                <th class="tituInt">Values</th>
+                                <tr>
+                                    <td class="teX">nombre_categoria</td>
+                                    <td class="teX">granos</td>
+                                </tr>
+                            
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: "el producto  de categoria fue  registrado  con exito"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: ""el producto  de categoria  no se puedo registrar"</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 403</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error interno, intente nuevamente</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="15" class="tabla">
+            <table cellspacing="0"> 
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. LISTAR</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>2</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Listar  categoria </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/categoria/listar</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>A través de una petición mediante el link por el método Get <br>
+                                da como respuesta mediante el body una tabla con los datos <br>
+                                registrados hasta al momento</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By Express<br>
+                                Access-Control-Allow-Origin *<br>
+                                Access-Control-Allow-Methods GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers Content-Type, Authorization<br>
+                                Content-Type application/json; charset=utf-8<br>
+                                Content-Length 419<br>
+                                ETag W/"1a3-TjDb4POTNZzGTcASMLJ08d2UTaE"<br>
+                                Date Fri, 08 Sep 2023 12:22:03 GMT<br>
+                                Connection keep-alive<br>
+                                Keep-Alive timeout=5<br></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p> administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <p>Json</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: json(result)</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 500</p>
+                            <p>message: error al conectar al servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="16" class="tabla">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. ACTUALIZACION</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>3</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p> ACTUALIZACION la categoria_producto </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/categoria/editar/:id</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                                para especificar un categoria_producto  para luego  poder ser actualizado </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>PUT</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>administradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <P>TOKEN REQUERIDO</P><br>
+                            <table class="intTable" cellspacing="0">
+                                <th class="tituInt">key</th>
+                                <th class="tituInt">Values</th>
+                                <tr>
+                                    <td class="teX">nombre_categoria</td>
+                                    <td class="teX">carnes</td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: "Se actualizo con exito la categoria  de producto"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "No se actualizo la  categoria de producto  "</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 403</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error interno en el sevidor </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Documentacion Unidad Productiva -->
+        <h2 id="unidad">Documentación Unidad Productiva </h2>
+        <div id="17" class="tabla">
+          <table cellspacing="0">
+              <tbody>
+                  <tr>
+                      <th class="radi" colspan="2">DOC. REGISTRO</th>
+                  </tr>
+                  <tr>
+                      <th>Numero</th>
+                      <td>
+                          <p>1</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Nombre Del Webservice</th>
+                      <td>
+                          <p>Registrar  unidad productiva   </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Url</th>
+                      <td>
+                          <p>localhost:3000/up/registrar</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Descripción</th>
+                      <td>
+                          <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                              para especificar una unidad productiva   para luego registrar</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Verbo Http</th>
+                      <td>
+                          <p>POST</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Header</th>
+                      <td>
+                          <p>X-Powered-By: Express <br>
+                              Access-Control-Allow-Origin: *<br>
+                              Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                              Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                              Content-Type: application/json; charset=utf-8<br>
+                              Content-Length: 57<br>
+                              ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                              Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                              Connection: keep-alive<br>
+                              Keep-Alive: timeout=5</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Usuarios</th>
+                      <td>
+                          <p>administradores</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Request bodyform – data</th>
+                      <td>
+                          <P>TOKEN REQUERIDO</P><br>
+                          <table class="intTable" cellspacing="0">
+                              <th class="tituInt">key</th>
+                              <th class="tituInt">Values</th>
+                              <tr>
+                                  <td class="teX">nombre_up</td>
+                                  <td class="teX">agronomia</td>
+                              </tr>
+                          
+                          </table>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Response</th>
+                      <td>
+                          <h3>CORRECTO</h3>
+                          <p>status: 200,</p>
+                          <h3>MENSAJE</h3>
+                          <p>body: "Unidad productiva registrada con exito "</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th class="rari"></th>
+                      <td class="ra">
+                          <h3>INCORRECTO</h3>
+                          <p>status: 401
+                          <h3>MENSAJE</h3>
+                          <p>menssge: ""Unidad productiva no se puedo registrar"</p>
+                          <h3>NO AUTORIZADO</h3>
+                          <p>status: 403</p>
+                          <h3 id="vdL">MENSAJE</h3>
+                          <p>Error interno, intente nuevamente</p>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div id="18" class="tabla">
+          <table cellspacing="0"> 
+              <tbody>
+                  <tr>
+                      <th class="radi" colspan="2">DOC. LISTAR</th>
+                  </tr>
+                  <tr>
+                      <th>Numero</th>
+                      <td>
+                          <p>2</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Nombre Del Webservice</th>
+                      <td>
+                          <p>Listar  unidad_productiva </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Url</th>
+                      <td>
+                          <p>localhost:3000/up/listar</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Descripción</th>
+                      <td>
+                          <p>A través de una petición mediante el link por el método Get <br>
+                              da como respuesta mediante el body una tabla con los datos <br>
+                              registrados hasta al momento</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Verbo Http</th>
+                      <td>
+                          <p>GET</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Header</th>
+                      <td>
+                          <p>X-Powered-By Express<br>
+                              Access-Control-Allow-Origin *<br>
+                              Access-Control-Allow-Methods GET,POST,PUT,DELETE<br>
+                              Access-Control-Allow-Headers Content-Type, Authorization<br>
+                              Content-Type application/json; charset=utf-8<br>
+                              Content-Length 419<br>
+                              ETag W/"1a3-TjDb4POTNZzGTcASMLJ08d2UTaE"<br>
+                              Date Fri, 08 Sep 2023 12:22:03 GMT<br>
+                              Connection keep-alive<br>
+                              Keep-Alive timeout=5<br></p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Usuarios</th>
+                      <td>
+                          <p> administradores</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Request bodyform – data</th>
+                      <td>
+                          <p>Json</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Response</th>
+                      <td>
+                          <h3>CORRECTO</h3>
+                          <p>status: 200,</p>
+                          <h3>MENSAJE</h3>
+                          <p>body: json(result)</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th class="rari"></th>
+                      <td class="ra">
+                          <h3>INCORRECTO</h3>
+                          <p>status: 500</p>
+                          <p>message: error al conectar al servidor</p>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div id="19" class="tabla">
+          <table cellspacing="0">
+              <tbody>
+                  <tr>
+                      <th class="radi" colspan="2">DOC. ACTUALIZACION</th>
+                  </tr>
+                  <tr>
+                      <th>Numero</th>
+                      <td>
+                          <p>3</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Nombre Del Webservice</th>
+                      <td>
+                          <p> ACTUALIZACION la unidad_productiva </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Url</th>
+                      <td>
+                          <p>localhost:3000/up/editar/:id</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Descripción</th>
+                      <td>
+                          <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                              para especificar  una unidad_productiva para luego  poder ser actualizado </p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Verbo Http</th>
+                      <td>
+                          <p>PUT</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Header</th>
+                      <td>
+                          <p>X-Powered-By: Express <br>
+                              Access-Control-Allow-Origin: *<br>
+                              Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                              Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                              Content-Type: application/json; charset=utf-8<br>
+                              Content-Length: 57<br>
+                              ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                              Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                              Connection: keep-alive<br>
+                              Keep-Alive: timeout=5</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Usuarios</th>
+                      <td>
+                          <p>administradores</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Request bodyform – data</th>
+                      <td>
+                          <P>TOKEN REQUERIDO</P><br>
+                          <table class="intTable" cellspacing="0">
+                              <th class="tituInt">key</th>
+                              <th class="tituInt">Values</th>
+                              <tr>
+                                  <td class="teX">nombre_up</td>
+                                  <td class="teX">agricula</td>
+                              </tr>
+
+                          </table>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th>Response</th>
+                      <td>
+                          <h3>CORRECTO</h3>
+                          <p>status: 200,</p>
+                          <h3>MENSAJE</h3>
+                          <p>body: "Se actualizo con exito la unidad productiva"</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th class="rari"></th>
+                      <td class="ra">
+                          <h3>INCORRECTO</h3>
+                          <p>status: 401
+                          <h3>MENSAJE</h3>
+                          <p>menssge: "No se actualizo la unidad productiva  "</p>
+                          <h3>NO AUTORIZADO</h3>
+                          <p>status: 403</p>
+                          <h3 id="vdL">MENSAJE</h3>
+                          <p>Error interno en el sevidor </p>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+     

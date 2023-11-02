@@ -27,3 +27,4 @@ export const validatorProducto = [
     .isEmpty()
     .isFloat({ min: 0 })  
 ];
+
