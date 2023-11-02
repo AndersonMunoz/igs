@@ -1,7 +1,7 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
 
-export const registroTipo_producto = async (req, res) => {
+export const    registroTipo_producto = async (req, res) => {
 
   try {
 
