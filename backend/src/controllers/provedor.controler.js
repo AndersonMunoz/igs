@@ -49,7 +49,7 @@ export const eliminarProvedor = async (req,res) =>{
             res.status(200).json({"status":200,"message":"Se elimino con exito el Provedor"
             })
         }else{
-            res.status(401).json({"status":401,"message":"No se elimino el Provedor"
+            res.status(401).json({"status":401,"message":"No autorizado"
             }) 
         }
     }catch(e){

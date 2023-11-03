@@ -1371,4 +1371,78 @@
               </tbody>
           </table>
         </div>
+        <!-- Actualización del Estado del Cliente -->
+        <div id="23" class="tabla">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. ACTUALIZACIÓN DE ESTADO</th>
+                    </tr>
+                    <tr>
+                        <th class="num">Número</th>
+                        <td class="num">4</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre del Webservice</th>
+                        <td>Actualizar Estado del Cliente</td>
+                    </tr>
+                    <tr>
+                        <th>URL</th>
+                        <td>localhost:3000/cliente/eliminar/:id</td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>Mediante esta solicitud, el estado de un cliente se actualiza y se pone en 0, lo que generalmente indica que el cliente está desactivado o eliminado del sistema.</td>
+                    </tr>
+                    <tr>
+                        <th>Verbo HTTP</th>
+                        <td>PUT</td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                            Access-Control-Allow-Origin: *<br>
+                            Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
+                            Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                            Content-Type: application/json; charset=utf-8<br>
+                            Content-Length: Variable<br>
+                            ETag: Variable<br>
+                            Date: Fecha y Hora</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>Administradores</td>
+                    </tr>
+                    <tr>
+                        <th>Request Body (form-data)</th>
+                        <td>
+                            <p>TOKEN REQUERIDO<br>
+                            estado: 0</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response (JSON)</th>
+                        <td>
+                            <p>status: 200,<br>
+                            body: "Estado del cliente actualizado correctamente"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401<br>
+                            message: "No autorizado"<br>
+                            status: 404<br>
+                            message: "Cliente no encontrado"<br>
+                            status: 500<br>
+                            message: "Error interno en el servidor"</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
 
