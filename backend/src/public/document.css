@@ -12,7 +12,6 @@ body {
     overflow-y: hidden;
 }
 main {
-    margin-top: 61px;
     overflow-y: scroll;
     width: 100%;
     height: calc(100vh - 61px);
@@ -20,7 +19,6 @@ main {
 
 header {
     background-color: black;
-    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,7 +46,7 @@ header {
 
 /* Estilo para la barra de navegación */
 nav ul.main-menu {
-    margin-right: 80px;
+    margin-right: 20px;
     list-style: none;
     display: flex;
 }
@@ -61,7 +59,7 @@ nav ul.main-menu li {
 nav ul.main-menu li a {
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 10px 10px;
     display: block;
 }
 
