@@ -1145,7 +1145,7 @@
                     </tr>
                     <tr>
                         <th class="num">Número</th>
-                        <td class="num">2</td>
+                        <td class="num">13</td>
                     </tr>
                     <tr>
                         <th>Nombre del Webservice</th>
@@ -1213,7 +1213,7 @@
                     </tr>
                     <tr>
                         <th class="num">Número</th>
-                        <td class="num">3</td>
+                        <td class="num">14</td>
                     </tr>
                     <tr>
                         <th>Nombre del Webservice</th>
@@ -1280,6 +1280,80 @@
                 </tbody>
             </table>
         </div>
+        <!-- Actualización del Estado del Cliente PROVEEDOR -->
+<div id="15" class="tabla">
+    <table cellspacing="0">
+        <tbody>
+            <tr>
+                <th class="radi" colspan="2">DOC. ACTUALIZACIÓN DE ESTADO</th>
+            </tr>
+            <tr>
+                <th class="num">Número</th>
+                <td class="num">15</td>
+            </tr>
+            <tr>
+                <th>Nombre del Webservice</th>
+                <td>Actualizar Estado del Cliente</td>
+            </tr>
+            <tr>
+                <th>URL</th>
+                <td>localhost:3000/cliente/actualizar_estado/:id</td>
+            </tr>
+            <tr>
+                <th>Descripción</th>
+                <td>Mediante esta solicitud, el estado de un cliente se actualiza y se pone en 0, lo que generalmente indica que el cliente está desactivado o eliminado del sistema.</td>
+            </tr>
+            <tr>
+                <th>Verbo HTTP</th>
+                <td>PUT</td>
+            </tr>
+            <tr>
+                <th>Header</th>
+                <td>
+                    <p>X-Powered-By: Express <br>
+                    Access-Control-Allow-Origin: *<br>
+                    Access-Control-Allow-Methods: GET, POST, PUT, DELETE<br>
+                    Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                    Content-Type: application/json; charset=utf-8<br>
+                    Content-Length: Variable<br>
+                    ETag: Variable<br>
+                    Date: Fecha y Hora</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Usuarios</th>
+                <td>Administradores</td>
+            </tr>
+            <tr>
+                <th>Request Body (form-data)</th>
+                <td>
+                    <p>TOKEN REQUERIDO<br>
+                    estado: 0</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Response (JSON)</th>
+                <td>
+                    <p>status: 200,<br>
+                    body: "Estado del cliente actualizado correctamente"</p>
+                </td>
+            </tr>
+            <tr>
+                <th class="rari"></th>
+                <td class="ra">
+                    <h3>INCORRECTO</h3>
+                    <p>status: 401<br>
+                    message: "No autorizado"<br>
+                    status: 404<br>
+                    message: "Cliente no encontrado"<br>
+                    status: 500<br>
+                    message: "Error interno en el servidor"</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
         <!-- DOCUMENTACION FACATURA MOVIENTO -->
         <h2 id="FacturaMovimiento">Documentación Factura Movimiento </h2>
         <div id="16" class="tabla">
@@ -1291,7 +1365,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>1</p>
+                            <p>16</p>
                         </td>
                     </tr>
                     <tr>
@@ -1397,7 +1471,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>3</p>
+                            <p>17</p>
                         </td>
                     </tr>
                     <tr>
@@ -1495,7 +1569,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>1</p>
+                            <p>18</p>
                         </td>
                     </tr>
                     <tr>
@@ -1595,7 +1669,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>1</p>
+                            <p>19</p>
                         </td>
                     </tr>
                     <tr>
@@ -1694,7 +1768,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>1</p>
+                            <p>20</p>
                         </td>
                     </tr>
                     <tr>
@@ -1791,7 +1865,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>2</p>
+                            <p>21</p>
                         </td>
                     </tr>
                     <tr>
@@ -1876,7 +1950,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>3</p>
+                            <p>22</p>
                         </td>
                     </tr>
                     <tr>
@@ -1975,7 +2049,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>1</p>
+                            <p>23</p>
                         </td>
                     </tr>
                     <tr>
@@ -2072,7 +2146,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>2</p>
+                            <p>24</p>
                         </td>
                     </tr>
                     <tr>
@@ -2157,7 +2231,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>3</p>
+                            <p>25</p>
                         </td>
                     </tr>
                     <tr>
@@ -2255,7 +2329,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>1</p>
+                            <p>26</p>
                         </td>
                     </tr>
                     <tr>
@@ -2351,7 +2425,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>2</p>
+                            <p>27</p>
                         </td>
                     </tr>
                     <tr>
@@ -2436,7 +2510,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>3</p>
+                            <p>28</p>
                         </td>
                     </tr>
                     <tr>
@@ -2622,8 +2696,6 @@
                     </tbody>
                 </table>
             </div>
-
-
     </main>
 </body>
 
