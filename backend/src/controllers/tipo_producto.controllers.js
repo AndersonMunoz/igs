@@ -11,8 +11,7 @@ export const registroTipo_producto = async (req, res) => {
         }
 
         let { nombre_tipo, fk_categoria_pro } = req.body;
-        let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro)
-  values('${nombre_tipo}','${fk_categoria_pro}')`;
+        let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro) values('${nombre_tipo}','${fk_categoria_pro}')`;
         console.log(sql);
 
         const [rows] = await pool.query(sql);
@@ -36,17 +35,38 @@ export const registroTipo_producto = async (req, res) => {
             "status": "Error interno, intente nuevamente" + error
         })
     }
+}
+export const listarTipoProducto = async (req, res) => {
+    try {
+        const [result] = await pool.query
+            ('SELECT t.id_tipo AS ID, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(401).json({
+                "status": 401,
+                "message": "No se Listo los productos"
+            });
 
+        }
+
+    } catch (e) {
+        res.status(500).json({
+            "status": 500,
+            "menssge": "Error interno en el sevidor " + e
+        });
+    }
 }
 
-export const listarTipo_producto = async (req, res) => {
+/* export const listarTipo_producto = async (req, res) => {
     try {
         const [result] = await pool.query('select * from tipo_productos');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
-            res.status(401).json({ "status": 401, "message": "No se pudo listar los tipos de productos  " });
-
+            res.status(401).json({ 
+                "status": 401,
+                "message": "No se pudo listar los tipos de productos  " });
         }
 
     } catch (err) {
@@ -55,7 +75,7 @@ export const listarTipo_producto = async (req, res) => {
         })
     }
 
-};
+}; */
 export const editarTipo_producto = async (req, res) => {
     try {
         let error = validationResult(req);
@@ -63,9 +83,9 @@ export const editarTipo_producto = async (req, res) => {
             return res.status(400).json(error)
         }
         let id = req.params.id;
-        let { nombre_tipo } = req.body;
+        let { nombre_tipo, fk_categoria_pro } = req.body;
 
-        let sql = `update tipo_productos SET nombre_tipo = '${nombre_tipo},${fk_categoria_pro}',
+        let sql = `update tipo_productos SET nombre_tipo = '${nombre_tipo}', fk_categoria_pro= '${fk_categoria_pro}'
         where id_tipo = ${id} `;
         console.log(sql)
 
