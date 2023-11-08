@@ -7,6 +7,6 @@ const unidadProductivaRouter = Router();
 
 unidadProductivaRouter.post("/registrar",validatorUnidad_productiva, registroUnidadProductiva );
 unidadProductivaRouter.get("/listar", listarUnidadProductiva );
-unidadProductivaRouter.put("/editar/:id",validatorUnidad_productiva, validarToken, editarUnidadProductiva );
+unidadProductivaRouter.put("/editar/:id",/* ,validatorUnidad_productiva, validarToken,  */editarUnidadProductiva );
 
 export default unidadProductivaRouter;
