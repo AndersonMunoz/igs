@@ -1,7 +1,7 @@
 import { pool } from '../database/conexion.js';
 import { validationResult } from 'express-validator';
 
-/* export const guardarMovimiento = async (req, res) => {
+export const guardarMovimiento = async (req, res) => {
 	try {
 		let error = validationResult(req);
 		if (!error.isEmpty()) {
@@ -9,24 +9,66 @@ import { validationResult } from 'express-validator';
 		}
 		let { tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
 			nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor } = req.body;
+
+			let { nombre_tipo } = req.body
+
+			let sql2 = `select * from tipo_productos`
+
+			nombre_tipo = await pool.query(sql2);
+
+			/* console.log(nombre_tipo) */
+
+			let nom = Array[nombre_tipo]
+			console.log(nom)
+
 			
-		let sql = `START TRANSACTION;
+			
+			
+			  
+			  
 
-		INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor)
-		VALUES ('${tipo_movimiento}', '${cantidad_peso_movimiento}', '${unidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', '${fecha_caducidad_producto}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
-		
-		UPDATE productos
-		SET cantidad_peso_producto = 
-			CASE
-				WHEN '${tipo_movimiento}' = 'entrada' THEN cantidad_peso_producto + '${cantidad_peso_movimiento}'
-				WHEN '${tipo_movimiento}' = 'salida' THEN cantidad_peso_producto - '${cantidad_peso_movimiento}'
-			END
-		WHERE id_producto = '${fk_id_producto}';
-		
-		COMMIT;
+	
 
+
+
+			  
+
+	/* 	let sql3 = ``
+
+ */
+
+		let sql = `
+		INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			 nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+		VALUES ('${tipo_movimiento}', '${cantidad_peso_movimiento}', '${unidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}',
+		 '${fecha_caducidad_producto}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
 		
 		`;
+		
+		/* console.log(tipo_movimiento)
+		if (tipo_movimiento == "entrada") {
+			sql = `INSERT INTO productos (p.fecha_caducidad_producto, p.cantidad_peso_producto, p.unidad_peso_producto,
+				 p.descripcion_producto, p.precio_producto,p.fk_id_up,p.fk_id_tipo_producto) VALUES('${fecha_caducidad_producto}','${cantidad_peso_movimiento}',
+				 '${unidad_peso_movimiento}'
+				 ,'${nota_factura}','${precio_movimiento},'${fk_id_producto}','${unidad}' )`
+				 const [rows] = await pool.query(sql);
+				 console.log(sql)
+				 if (rows.affectedRows > 0) {
+					res.status(200).json(
+						{
+							"status": 201,
+							"message": "Se registró el movimiento en productos :D "
+						}
+					)
+				} else {
+					res.status(408).json(
+						{
+							"status": 401,
+							"message": "NO se registró el movimiento :("
+						}
+					)
+				}
+		} */
 
 		//console.log(sql); En caso de no servir la inserción, descomente esto
 		const [rows] = await pool.query(sql);
@@ -49,7 +91,7 @@ import { validationResult } from 'express-validator';
 	} catch (e) {
 		res.status(500).json({ "status": 500, "message": "Error en el servidor" + e });
 	}
-}; */
+};
 
 
 export const listarMovimientos = async (req, res) => {
