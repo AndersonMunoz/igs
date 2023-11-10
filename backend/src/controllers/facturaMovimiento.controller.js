@@ -1,87 +1,128 @@
 import { pool } from '../database/conexion.js';
 import { validationResult } from 'express-validator';
 
-export const guardarMovimiento = async (req,res)=>{
-	try{	
-		let error = validationResult(req);
-        if (!error.isEmpty()){
-            return res.status(400).json(error);
-        }
-			let{tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad_producto,fk_id_producto,fk_id_usuario,fk_id_proveedor} = req.body;
-			let sql=`INSERT INTO factura_movimiento (tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad_producto,fk_id_producto,fk_id_usuario,fk_id_proveedor)
-									VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}','${fecha_caducidad_producto}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}')`;
-			//console.log(sql); En caso de no servir la inserción, descomente esto
-			const [rows] = await pool.query(sql);
-			//console.log(rows);
-			if (rows.affectedRows>0){
-					res.status(200).json(
-							{
-								"status":200,
-								"message":"Se registró el movimiento :D "
-							}
-					)
-			} else {
-					res.status(401).json(
-							{
-									"status":401,
-									"message":"NO se registró el movimiento :("
-							}
-					)
-			}
-			console.log()
-	} catch (e){
-			res.status(500).json({"status":500,"message":"Error en el servidor"+e});
-	}
-};
-/* export const guardarMovimiento = async (req, res) => {
+export const guardarMovimiento = async (req, res) => {
 	try {
 		let error = validationResult(req);
 		if (!error.isEmpty()) {
 			return res.status(400).json(error);
 		}
 		let { tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-			nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor } = req.body;
-			
-		let sql = `START TRANSACTION;
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor } = req.body;
 
-		INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor)
-		VALUES ('${tipo_movimiento}', '${cantidad_peso_movimiento}', '${unidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', '${fecha_caducidad_producto}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
-		
-		UPDATE productos
-		SET cantidad_peso_producto = 
-			CASE
-				WHEN '${tipo_movimiento}' = 'entrada' THEN cantidad_peso_producto + '${cantidad_peso_movimiento}'
-				WHEN '${tipo_movimiento}' = 'salida' THEN cantidad_peso_producto - '${cantidad_peso_movimiento}'
-			END
-		WHERE id_producto = '${fk_id_producto}';
-		
-		COMMIT;
+		let id_productos = fk_id_producto
+
+		let sql2 = `select id_tipo, nombre_tipo from tipo_productos where id_tipo = ${id_productos}`
+
+		let nombre_tipo = await pool.query(sql2);
+
+		const tiposDeProductos = nombre_tipo[0];
+
+		const primerTipoDeProducto = tiposDeProductos[0];
+
+		let idProducto = primerTipoDeProducto.id_tipo
 
 		
+		if (tipo_movimiento === "entrada") {
+
+			let sql = `
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');
 		`;
 
-		//console.log(sql); En caso de no servir la inserción, descomente esto
-		const [rows] = await pool.query(sql);
-		//console.log(rows);
-		if (rows.affectedRows > 0) {
-			res.status(200).json(
-				{
+
+			sql2 = `select id_producto from productos where fk_id_tipo_producto = ${idProducto}`
+
+			let id_producto71 = await pool.query(sql2);
+
+			const id_producto3 = id_producto71[0]
+
+			const idFinal = id_producto3[0]
+
+			let id_producto = idFinal.id_producto
+			console.log(id_producto)
+			console.log(fecha_caducidad)
+			
+
+			let sql3 = `
+                UPDATE productos
+                SET fecha_caducidad_producto = ?,
+                    cantidad_peso_producto = cantidad_peso_producto + ?,
+                    unidad_peso_producto = ?,
+                    precio_producto = ?,
+                    fk_id_tipo_producto = ?
+                WHERE id_producto = ?
+            `;
+
+            const [result1, result2] = await Promise.all([
+                pool.query(sql3, [fecha_caducidad, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, idProducto, id_producto]),
+				pool.query(sql)
+            ]);
+	
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
+				res.status(200).json({
 					"status": 200,
-					"message": "Se registró el movimiento :D "
+					"message": "Se registró el movimiento de entrada :D"
 				}
-			)
-		} else {
-			res.status(401).json(
-				{
+				)
+			} else {
+				res.status(401).json({
 					"status": 401,
-					"message": "NO se registró el movimiento :("
+					"message": "No se registro factura movimientos"
+				});
+			}
+				
+				
+		} else if (tipo_movimiento === "salida") {
+
+			let sql3 = `
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');
+		`;
+
+			sql2 = `select id_producto from productos where fk_id_tipo_producto = ${idProducto}`
+
+			let id_producto71 = await pool.query(sql2);
+
+			const id_producto3 = id_producto71[0]
+
+			const idFinal = id_producto3[0]
+
+			let id_producto = idFinal.id_producto
+			console.log(id_producto)
+
+			let sql = `UPDATE productos SET  cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
+			WHERE id_producto = ${id_producto}`
+
+			const [result1, result2] = await Promise.all([
+				pool.query(sql),
+				pool.query(sql3)
+			]);
+	
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
+				res.status(200).json({
+					"status": 200,
+					"message": "Se registró el movimiento  de salida:D"
 				}
-			)
+				)
+			} else {
+				res.status(401).json({
+					"status": 401,
+					"message": "No se registro factura movimientos"
+				});
+			}
 		}
 	} catch (e) {
-		res.status(500).json({ "status": 500, "message": "Error en el servidor" + e });
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + e
+		});
 	}
-}; */
+};
 
 
 export const listarMovimientos = async (req, res) => {
@@ -90,7 +131,7 @@ export const listarMovimientos = async (req, res) => {
 			(
 				`SELECT us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, f.unidad_peso_movimiento, f.precio_movimiento, f.estado_producto_movimiento,
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
-				f.nota_factura,f.fecha_caducidad_producto, pr.nombre_proveedores
+				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores
 					FROM factura_movimiento f 
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto
@@ -143,9 +184,9 @@ export const buscarMovimiento = async (req, res) => {
 export const actualizarMovimiento = async (req, res) => {
 	try {
 		let id = req.params.id;
-		let { estado_producto_movimiento, nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario } = req.body;
+		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario } = req.body;
 
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad_producto='${fecha_caducidad_producto}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
+		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
 
 		const [rows] = await pool.query(sql);
 
