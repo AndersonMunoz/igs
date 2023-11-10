@@ -70,6 +70,10 @@ export const buscarProducto = async (req,res) =>{
 }
 export const actualizarProducto = async (req,res) =>{
 	try{
+		let error = validationResult(req);
+		if(!error.isEmpty()){
+			return res.status(403).json(error)
+		}
 		let id=req.params.id;
 		let {fecha_caducidad_producto,cantidad_peso_producto,unidad_peso_producto,descripcion_producto,precio_producto,fk_id_categoria,fk_id_up,fk_id_tipo_producto} = req.body;
 		let sql = `UPDATE productos SET fecha_caducidad_producto='${fecha_caducidad_producto}',cantidad_peso_producto='${cantidad_peso_producto}',unidad_peso_producto='${unidad_peso_producto}',descripcion_producto='${descripcion_producto}',precio_producto='${precio_producto}',fk_id_categoria='${fk_id_categoria}',fk_id_up='${fk_id_up}',fk_id_tipo_producto='${fk_id_tipo_producto}' WHERE id_producto=${id}`;
@@ -97,7 +101,3 @@ export const deshabilitarProducto = async (req, res) => {
 			res.status(500).json({ message: 'Error en deshabilitarProducto: ' + e });
 	}
 };
-
-/* export const PrecioTotalProductos = async
-
- */

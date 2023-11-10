@@ -22,7 +22,6 @@ export const guardarMovimiento = async (req, res) => {
 
 		let idProducto = primerTipoDeProducto.id_tipo
 
-		
 		if (tipo_movimiento === "entrada") {
 
 			let sql = `
@@ -31,7 +30,6 @@ export const guardarMovimiento = async (req, res) => {
 			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
 		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');
 		`;
-
 
 			sql2 = `select id_producto from productos where fk_id_tipo_producto = ${idProducto}`
 
@@ -44,7 +42,6 @@ export const guardarMovimiento = async (req, res) => {
 			let id_producto = idFinal.id_producto
 			console.log(id_producto)
 			console.log(fecha_caducidad)
-			
 
 			let sql3 = `
                 UPDATE productos
@@ -56,11 +53,12 @@ export const guardarMovimiento = async (req, res) => {
                 WHERE id_producto = ?
             `;
 
-            const [result1, result2] = await Promise.all([
-                pool.query(sql3, [fecha_caducidad, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, idProducto, id_producto]),
-				pool.query(sql)
-            ]);
-	
+			const [result1, result2] = await Promise.all([
+				pool.query(sql),
+				pool.query(sql3, [fecha_caducidad, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, idProducto, id_producto])
+
+			]);
+
 			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
 				res.status(200).json({
 					"status": 200,
@@ -73,16 +71,7 @@ export const guardarMovimiento = async (req, res) => {
 					"message": "No se registro factura movimientos"
 				});
 			}
-				
-				
 		} else if (tipo_movimiento === "salida") {
-
-			let sql3 = `
-			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
-			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
-		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');
-		`;
 
 			sql2 = `select id_producto from productos where fk_id_tipo_producto = ${idProducto}`
 
@@ -95,25 +84,52 @@ export const guardarMovimiento = async (req, res) => {
 			let id_producto = idFinal.id_producto
 			console.log(id_producto)
 
-			let sql = `UPDATE productos SET  cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
-			WHERE id_producto = ${id_producto}`
+			let sql4 = `select cantidad_peso_producto from productos where id_producto = ${id_producto}`
 
-			const [result1, result2] = await Promise.all([
-				pool.query(sql),
-				pool.query(sql3)
-			]);
-	
-			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
-				res.status(200).json({
-					"status": 200,
-					"message": "Se registró el movimiento  de salida:D"
+			let cantidadPeso = await pool.query(sql4)
+
+			let cantidadPeso2 = cantidadPeso[0]
+
+			let cantidad3 = cantidadPeso2[0]
+
+			let cantidadPesoTotal = cantidad3.cantidad_peso_producto
+
+			console.log(cantidadPesoTotal)
+
+			if (cantidadPesoTotal < cantidad_peso_movimiento) {
+				return res.status(403).json({
+					"status":403,
+					"mensaje":"Ya no hay suficiente stock del producto"
+				})
+			} else if (cantidadPesoTotal >= 0) {
+
+				let sql10 = `
+				INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+				nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+				VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+				'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');`;
+
+				let sql6 = `UPDATE productos SET  cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
+				WHERE id_producto = ${id_producto}`
+
+				const [result3, result4] = await Promise.all([
+					pool.query(sql10),
+					pool.query(sql6)
+
+				]);
+
+				if (result3[0].affectedRows > 0 && result4[0].affectedRows > 0) {
+					res.status(200).json({
+						"status": 200,
+						"message": "Se registró el movimiento  de salida:D"
+					}
+					)
+				}else {
+					res.status(401).json({
+						"status": 401,
+						"message": "No se registro factura movimientos"
+					});
 				}
-				)
-			} else {
-				res.status(401).json({
-					"status": 401,
-					"message": "No se registro factura movimientos"
-				});
 			}
 		}
 	} catch (e) {
