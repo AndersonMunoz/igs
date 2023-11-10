@@ -1,5 +1,4 @@
 -- phpMyAdmin SQL Dump
-<<<<<<< HEAD
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
@@ -7,7 +6,6 @@
 -- Tiempo de generación: 04-10-2023 a las 15:07:49
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
-=======
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
@@ -15,7 +13,6 @@
 -- Tiempo de generación: 20-10-2023 a las 17:50:40
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.1.12
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,11 +47,7 @@ CREATE TABLE `categorias_producto` (
 
 CREATE TABLE `factura_movimiento` (
   `id_factura` int(11) NOT NULL,
-<<<<<<< HEAD
-  `fecha_movimiento` date NOT NULL,
-=======
   `fecha_movimiento` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   `tipo_movimiento` enum('entrada','salida') NOT NULL,
   `cantidad_peso_movimiento` float NOT NULL,
   `unidad_peso_movimiento` enum('kg','lb','gr','lt','ml') NOT NULL,
@@ -75,16 +68,9 @@ CREATE TABLE `factura_movimiento` (
 
 CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
-<<<<<<< HEAD
-  `nuLote_producto` varchar(45) NOT NULL,
-  `fecha_caducidad_producto` enum('kg','lb','gr','lt','ml') NOT NULL,
-  `cantidad_peso_producto` float NOT NULL,
-  `unidad_peso_producto` float NOT NULL,
-=======
   `fecha_caducidad_producto` date NOT NULL,
   `cantidad_peso_producto` float NOT NULL,
   `unidad_peso_producto` enum('kg','lb','gr','lt','ml') NOT NULL,
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   `descripcion_producto` varchar(200) NOT NULL,
   `precio_producto` float NOT NULL,
   `fk_id_categoria` int(11) NOT NULL,
@@ -260,20 +246,9 @@ ALTER TABLE `factura_movimiento`
 -- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
-<<<<<<< HEAD
-  ADD CONSTRAINT `tener3` FOREIGN KEY (`fk_id_categoria`) REFERENCES `categorias_producto` (`id_categoria`),
-  ADD CONSTRAINT `tener4` FOREIGN KEY (`fk_id_tipo_producto`) REFERENCES `tipo_productos` (`id_tipo`);
-
---
--- Filtros para la tabla `unidad_productiva`
---
-ALTER TABLE `unidad_productiva`
-  ADD CONSTRAINT `unidad_productiva_ibfk_1` FOREIGN KEY (`id_up`) REFERENCES `productos` (`fk_id_up`);
-=======
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`fk_id_up`) REFERENCES `unidad_productiva` (`id_up`),
   ADD CONSTRAINT `tener3` FOREIGN KEY (`fk_id_categoria`) REFERENCES `categorias_producto` (`id_categoria`),
   ADD CONSTRAINT `tener4` FOREIGN KEY (`fk_id_tipo_producto`) REFERENCES `tipo_productos` (`id_tipo`);
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

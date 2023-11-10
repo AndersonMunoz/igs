@@ -8,88 +8,119 @@ export const guardarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let { tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-			nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor } = req.body;
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor } = req.body;
 
-			let { nombre_tipo } = req.body
+		let id_productos = fk_id_producto
 
-			let sql2 = `select * from tipo_productos`
+		let sql2 = `select id_tipo, nombre_tipo from tipo_productos where id_tipo = ${id_productos}`
 
-			nombre_tipo = await pool.query(sql2);
+		let nombre_tipo = await pool.query(sql2);
 
-			/* console.log(nombre_tipo) */
+		const tiposDeProductos = nombre_tipo[0];
 
-			let nom = Array[nombre_tipo]
-			console.log(nom)
+		const primerTipoDeProducto = tiposDeProductos[0];
 
-			
-			
-			
-			  
-			  
+		let idProducto = primerTipoDeProducto.id_tipo
 
-	
-
-
-
-			  
-
-	/* 	let sql3 = ``
-
- */
-
-		let sql = `
-		INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-			 nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario, fk_id_proveedor)
-		VALUES ('${tipo_movimiento}', '${cantidad_peso_movimiento}', '${unidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}',
-		 '${fecha_caducidad_producto}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
 		
+		if (tipo_movimiento === "entrada") {
+
+			let sql = `
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');
 		`;
-		
-		/* console.log(tipo_movimiento)
-		if (tipo_movimiento == "entrada") {
-			sql = `INSERT INTO productos (p.fecha_caducidad_producto, p.cantidad_peso_producto, p.unidad_peso_producto,
-				 p.descripcion_producto, p.precio_producto,p.fk_id_up,p.fk_id_tipo_producto) VALUES('${fecha_caducidad_producto}','${cantidad_peso_movimiento}',
-				 '${unidad_peso_movimiento}'
-				 ,'${nota_factura}','${precio_movimiento},'${fk_id_producto}','${unidad}' )`
-				 const [rows] = await pool.query(sql);
-				 console.log(sql)
-				 if (rows.affectedRows > 0) {
-					res.status(200).json(
-						{
-							"status": 201,
-							"message": "Se registró el movimiento en productos :D "
-						}
-					)
-				} else {
-					res.status(408).json(
-						{
-							"status": 401,
-							"message": "NO se registró el movimiento :("
-						}
-					)
-				}
-		} */
 
-		//console.log(sql); En caso de no servir la inserción, descomente esto
-		const [rows] = await pool.query(sql);
-		//console.log(rows);
-		if (rows.affectedRows > 0) {
-			res.status(200).json(
-				{
+
+			sql2 = `select id_producto from productos where fk_id_tipo_producto = ${idProducto}`
+
+			let id_producto71 = await pool.query(sql2);
+
+			const id_producto3 = id_producto71[0]
+
+			const idFinal = id_producto3[0]
+
+			let id_producto = idFinal.id_producto
+			console.log(id_producto)
+			console.log(fecha_caducidad)
+			
+
+			let sql3 = `
+                UPDATE productos
+                SET fecha_caducidad_producto = ?,
+                    cantidad_peso_producto = cantidad_peso_producto + ?,
+                    unidad_peso_producto = ?,
+                    precio_producto = ?,
+                    fk_id_tipo_producto = ?
+                WHERE id_producto = ?
+            `;
+
+            const [result1, result2] = await Promise.all([
+                pool.query(sql3, [fecha_caducidad, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, idProducto, id_producto]),
+				pool.query(sql)
+            ]);
+	
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
+				res.status(200).json({
 					"status": 200,
-					"message": "Se registró el movimiento :D "
+					"message": "Se registró el movimiento de entrada :D"
 				}
-			)
-		} else {
-			res.status(401).json(
-				{
+				)
+			} else {
+				res.status(401).json({
 					"status": 401,
-					"message": "NO se registró el movimiento :("
+					"message": "No se registro factura movimientos"
+				});
+			}
+				
+				
+		} else if (tipo_movimiento === "salida") {
+
+			let sql3 = `
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}');
+		`;
+
+			sql2 = `select id_producto from productos where fk_id_tipo_producto = ${idProducto}`
+
+			let id_producto71 = await pool.query(sql2);
+
+			const id_producto3 = id_producto71[0]
+
+			const idFinal = id_producto3[0]
+
+			let id_producto = idFinal.id_producto
+			console.log(id_producto)
+
+			let sql = `UPDATE productos SET  cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
+			WHERE id_producto = ${id_producto}`
+
+			const [result1, result2] = await Promise.all([
+				pool.query(sql),
+				pool.query(sql3)
+			]);
+	
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
+				res.status(200).json({
+					"status": 200,
+					"message": "Se registró el movimiento  de salida:D"
 				}
-			)
+				)
+			} else {
+				res.status(401).json({
+					"status": 401,
+					"message": "No se registro factura movimientos"
+				});
+			}
 		}
 	} catch (e) {
-		res.status(500).json({ "status": 500, "message": "Error en el servidor" + e });
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + e
+		});
 	}
 };
 
