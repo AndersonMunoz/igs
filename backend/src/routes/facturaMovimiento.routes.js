@@ -6,8 +6,9 @@ import {guardarMovimiento,listarMovimientos,buscarMovimiento,actualizarMovimient
 const facturaMovimientoRoute = Router();
 
 facturaMovimientoRoute.post('/registrar',validarFacturaMovimiento,guardarMovimiento);
-facturaMovimientoRoute.get('/listar',listarMovimientos);
+facturaMovimientoRoute.get('/listar', listarMovimientos);
 facturaMovimientoRoute.get('/buscar/:id',buscarMovimiento);
 facturaMovimientoRoute.put('/actualizar/:id',validarFacturaMovimiento,actualizarMovimiento);
+
 
 export default facturaMovimientoRoute;

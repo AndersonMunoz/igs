@@ -79,9 +79,6 @@
 
 .sidebar .nav-links li:hover {
   background: rgb(141, 206, 108);
-<<<<<<< HEAD
-  border-radius: 0 6px 6px 0;
-=======
   border-radius: 0 0px 0px 0;
 }
 
@@ -89,7 +86,6 @@
   width: 200px;
   height: 300px;
   background-color: aqua;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 }
 
 .sidebar .nav-links li .content-nav {
@@ -120,15 +116,9 @@
   min-width: 60px;
   text-align: center;
   line-height: 60px;
-<<<<<<< HEAD
-  color: #fff;
-  font-size: 33px;
-  font-weight: 300;
-=======
   color: #ffffff;
   font-size: 33px;
   font-weight: 100;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -141,10 +131,6 @@
   display: none;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 .sidebar .nav-links li a {
   display: flex;
   align-items: center;
@@ -236,23 +222,6 @@
 }
 
 .home-section {
-<<<<<<< HEAD
-  position: relative;
-  background: white;
-  left: 260px;
-  width: calc(100% - 260px);
-  transition: all 0.5s ease;
-}
-
-.sidebar.close~.home-section {
-  left: 50px;
-  width: calc(100% - 50px);
-}
-
-.home-section .home-content {
-  background: rgb(57, 169, 0);
-  height: 60px;
-=======
   position: fixed;
   background: rgb(57, 169, 0);
   display: grid;
@@ -282,34 +251,10 @@
 .sena {
   justify-content: center;
   grid-area: sena;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   display: flex;
   align-items: center;
 }
 
-<<<<<<< HEAD
-.bx-menu {
-  color: #fff;
-  font-size: 35px;
-  margin: 0 10px;
-  cursor: pointer;
-}
-
-.home-section .home-content .text {
-  font-size: 1em;
-  font-weight: 600;
-}
-
-.usuario {
-  position: absolute;
-  left: calc(100% - 190px);
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  justify-items: right;
-  width: 130px;
-  height: 60px;
-=======
 .ti-menu-2 {
   color: #ffff;
   font-size: 35px;
@@ -323,7 +268,6 @@
   display: flex;
   width: 100%;
   height: 100%;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   cursor: pointer;
 }
 
@@ -338,11 +282,7 @@
   justify-content: center;
 }
 
-<<<<<<< HEAD
-.home-section .home-content .usuario p {
-=======
 .home-section .usuario p {
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   color: #fff;
   font-size: 1.2em;
   text-decoration: none;
@@ -368,15 +308,9 @@
   top: 65px;
   border-radius: 12px;
   border: 0.5px solid rgba(219, 219, 219, 0.648);
-<<<<<<< HEAD
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
--moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
-=======
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
   -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 }
 
 .modalClose {
@@ -385,11 +319,7 @@ box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.07);
 
 .closeUser {
   color: rgb(126, 121, 121);
-<<<<<<< HEAD
-  top: 67px;
-=======
   top: 69px;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   right: 32px;
   position: fixed;
   font-size: 25px;
@@ -440,56 +370,27 @@ p {
   color: rgb(255, 255, 255);
 }
 
-<<<<<<< HEAD
-.contenido{
-  width: calc(100% - 260px);
-  background-color: rgb(215, 215, 215);
-  left: 260px;
-  height: 679px;
-=======
 .contenido {
   width: calc(100% - 260px);
   background-color: rgb(220, 220, 220);
   left: 260px;
   height: 100vh;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   display: flex;
   position: relative;
   transition: all 0.5s ease;
   align-items: center;
   justify-content: center;
 }
-<<<<<<< HEAD
-/* .paginas{
-  width: 300px;
-  padding: 20px;
-  background-color: red;
-}
- */
-=======
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 
 .sidebar.close~.contenido {
   left: 50px;
   width: calc(100% - 50px);
-<<<<<<< HEAD
-  background-color: rgb(215, 215, 215);
-  height: 679px;
-=======
   background-color: rgb(220, 220, 220);
   height: 100vh;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
   align-items: center;
   justify-content: center;
 }
 
-<<<<<<< HEAD
-.producto{
-  display: none;
-}
-.productoAll{
- display: contents;
-=======
 .producto {
   display: none;
 }
@@ -499,5 +400,4 @@ p {
   justify-content: center;
   align-items: center;
   margin-top: 30px;
->>>>>>> c1e8298d05e346890ac7cf7b88488fefd181ae05
 }

@@ -18,6 +18,7 @@ igs.use(cors());
 
 igs.use(body_parser.json());
 igs.use(body_parser.urlencoded({extended:false}));
+igs.use(cors());
 
 igs.set('view engine','ejs')
 igs.set('views','../igs/backend/src/views');
