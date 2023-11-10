@@ -131,7 +131,7 @@ export const listarMovimientos = async (req, res) => {
 			(
 				`SELECT us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, f.unidad_peso_movimiento, f.precio_movimiento, f.estado_producto_movimiento,
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
-				f.nota_factura,f.fecha_caducidad_producto, pr.nombre_proveedores
+				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores
 					FROM factura_movimiento f 
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto
@@ -184,9 +184,9 @@ export const buscarMovimiento = async (req, res) => {
 export const actualizarMovimiento = async (req, res) => {
 	try {
 		let id = req.params.id;
-		let { estado_producto_movimiento, nota_factura, fecha_caducidad_producto, fk_id_producto, fk_id_usuario } = req.body;
+		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario } = req.body;
 
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad_producto='${fecha_caducidad_producto}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
+		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
 
 		const [rows] = await pool.query(sql);
 
