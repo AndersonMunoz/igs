@@ -40,7 +40,6 @@ export const guardarMovimiento = async (req, res) => {
 			const idFinal = id_producto3[0]
 
 			let id_producto = idFinal.id_producto
-			console.log(id_producto)
 			console.log(fecha_caducidad)
 
 			let sql3 = `
