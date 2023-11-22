@@ -12,15 +12,15 @@ function listarProductos(){
 					row += `
 					<tr>
 						<td>${index + 1}</td>
-						<td>${element.fk_id_tipo_producto}</td>
-						<td>${element.fecha_caducidad_producto}</td>
-						<td>${element.cantidad_peso_producto}</td>
-						<td>${element.unidad_peso_producto}</td>
-						<td>${element.precio_producto}</td>
-						<td>${element.fk_id_categoria }</td>
-						<td>${element.fk_id_up }</td>
-						<td>${element.descripcion_producto}</td>
-						<td>${element.estado}</td>
+						<td>${element.NombreProducto}</td>
+						<td>${element.FechaCaducidad}</td>
+						<td>${element.Peso}</td>
+						<td>${element.Unidad}</td>
+						<td>${element.PrecioIndividual}</td>
+						<td>${element.PrecioTotal}</td>
+						<td>${element.NombreCategoria }</td>
+						<td>${element.UnidadProductiva }</td>
+						<td>${element.Descripcion}</td>
 					</tr>
 					`
 			});

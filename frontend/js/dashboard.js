@@ -14,7 +14,6 @@ sidebarBtn.addEventListener("click", () => {
 
 
 
-
 let modalUser = document.getElementById("userAlert");
 let modal = document.querySelector(".modalClose");
 let closeX = document.getElementById("closeX");
@@ -31,15 +30,29 @@ closeX.addEventListener('click', () => {
 
 
 let producto = document.getElementById("clickProduct")
-let inputP = document.querySelector(".producto");
+let MostrarProducto = document.getElementById("clickMostar")
+
+let inputFrom = document.querySelector(".productoFrom");
+let inputView = document.querySelector(".productoView");
 
 producto.addEventListener('click', () => {
-    if (inputP.classList.contains('producto')) {
-        inputP.classList.remove('producto');
-        inputP.classList.add('productoAll');
+    if (inputFrom.classList.contains('productoFrom')) {
+        inputFrom.classList.remove('productoFrom');
+        inputFrom.classList.add('productoAll');
     } else {
-        inputP.classList.add('producto');
-        inputP.classList.remove('productoAll');
+        inputFrom.classList.add('productoFrom');
+        inputFrom.classList.remove('productoAll');
+    }
+
+})
+
+MostrarProducto.addEventListener('click', () => {
+    if (inputView.classList.contains('productoView')) {
+        inputView.classList.remove('productoView');
+        inputView.classList.add('productoAll2');
+    } else {
+        inputView.classList.add('productoView');
+        inputView.classList.remove('productoAll2');
     }
 
 })
