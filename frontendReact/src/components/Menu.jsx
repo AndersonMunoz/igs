@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {Outlet,Link} from 'react-router-dom';
 import '../style/dashboard.css';
-import { IconUser,IconMenu2,IconChevronDown  } from '@tabler/icons-react';
+import { IconUser,IconMenu2,IconChevronDown,IconApple  } from '@tabler/icons-react';
 
 export const Menu = () =>{
   const [isSidebarClosed, setIsSidebarClosed] = useState(true);
@@ -67,10 +67,10 @@ export const Menu = () =>{
             </li>
             <li>
                 <div className="content-nav">
-                    <a href="#">
-                        <i className="ti ti-apple"></i>
+                    <Link to="/producto">
+                        <IconApple className='ti'/> 
                         <span className="link_name">Productos</span>
-                    </a>
+                    </Link>
                     <i className='flecha ti ti-chevron-down arrow'></i>
                 </div>
                 <ul className="sub-menu">
