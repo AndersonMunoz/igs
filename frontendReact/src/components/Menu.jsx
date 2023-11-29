@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import {Outlet,Link} from 'react-router-dom';
 import '../style/dashboard.css';
+import Producto from './Producto'
 import { IconUser,IconMenu2,IconChevronDown,IconApple  } from '@tabler/icons-react';
 
 export const Menu = () =>{
@@ -33,24 +34,15 @@ export const Menu = () =>{
           modal.classList.remove('modalUser');
           modal.classList.add('modalClose');
         });
-    
-        let producto = document.getElementById("clickProduct")
-        let inputP = document.querySelector(".producto");
-    
-        producto.addEventListener('click', () => {
-          if (inputP.classList.contains('producto')) {
-            inputP.classList.remove('producto');
-            inputP.classList.add('productoAll');
-          } else {
-            inputP.classList.add('producto');
-            inputP.classList.remove('productoAll');
-          }
-        });
+
     
       }, []);
   return (
     <>
-        <div className="sidebar close">
+    <div className='container'>
+
+
+    <div className="sidebar close">
         <div className="logo-details">
             {/* <img className="logo1" src="img/logoigs.jpeg" alt=""> */}
             <span className="logo_name">IGS</span>
@@ -94,18 +86,18 @@ export const Menu = () =>{
                 </ul>
             </li>
             <li>
-                <div className="content-nav">
-                    <a href="#">
-                        <IconApple size={50} className='ti'/>
-                        <span className="link_name">Productos</span>
-                    </a>
-                    <i className='flecha ti ti-chevron-down arrow'></i>
-                </div>
-                <ul className="sub-menu">
-                    <li><a className="link_name" href="#">Productos</a></li>
-                    <li id="clickProduct"><a href="#">Nuevo Producto</a></li>
-                    <li><a href="#">Mostar Productos</a></li>
-                </ul>
+                <Link to="/producto">
+                    <div className="content-nav">
+                        <a href="#">
+                            <i className="ti ti-apple"></i>
+                            <span className="link_name">Productos</span>
+                        </a>
+                        <i className='flecha ti ti-chevron-down arrow'></i>
+                    </div>
+                    <ul className="sub-menu">
+                        <li><a className="link_name" href="#">Productos</a></li>
+                    </ul>
+                </Link>
             </li>
             <li>
                 <div className="content-nav">
@@ -206,6 +198,8 @@ export const Menu = () =>{
             <a className="letraUser ax"><i className="iconModal ti ti-settings"></i>Ajustes</a>
             <a href="../frontend/index.html" className="letraUser az"><i className="iconModal ti ti-user-x"></i>Cerrar sesión</a>
         </div>
+    </div>
+<Outlet/>
     </div>
     </>
   )

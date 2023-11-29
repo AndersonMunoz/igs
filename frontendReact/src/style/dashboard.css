@@ -4,8 +4,6 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -367,7 +365,7 @@ p {
 
 .contenido {
   width: calc(100% - 260px);
-  background-color: rgb(220, 220, 220);
+  background-color: rgb(255, 3, 3);
   left: 260px;
   height: 100vh;
   display: flex;
@@ -376,11 +374,10 @@ p {
   align-items: center;
   justify-content: center;
 }
-
 .sidebar.close~.contenido {
   left: 50px;
   width: calc(100% - 50px);
-  background-color: rgb(220, 220, 220);
+  background-color: rgb(45, 18, 18);
   height: 100vh;
   align-items: center;
   justify-content: center;

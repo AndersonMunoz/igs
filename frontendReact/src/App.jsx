@@ -2,11 +2,13 @@ import React from 'react';
 import { Route, Routes } from "react-router-dom";
 import { Menu } from './components/Menu';
 import Producto from './components/Producto';
+
 const App = () => {
   return (
     <>
+      <Menu />
       <Routes>
-        <Route path="/" element={<Menu />} />
+        <Route path="/" element={<Producto />} />
         <Route path="/producto" element={<Producto />} />
       </Routes>
     </>
@@ -14,6 +16,7 @@ const App = () => {
 };
 
 export default App;
+
           {/* <Route path="/" element={<Dashboard/>}/>
           <Route path="/movimiento" element={<Movimiento/>}>
             <Route path="/entrada" element={<Entrada/>}/>
