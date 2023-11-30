@@ -26,7 +26,7 @@
   align-items: center;
 }
 
-.sidebar .logo-details i {
+.sidebar .logo-details .container-icon {
   height: 50px;
   width: 80px;
   text-align: center;
@@ -57,7 +57,7 @@
 
 .sidebar .nav-links {
   height: 100%;
-  padding: 20px 0 80px 0;
+  padding: 50px 0 80px 0px;
   overflow: auto;
 }
 
@@ -76,15 +76,10 @@
 }
 
 .sidebar .nav-links li:hover {
-  background: rgb(141, 206, 108);
+  background: rgb(108, 113, 206);
   border-radius: 0 0px 0px 0;
 }
 
-.caja1 {
-  width: 200px;
-  height: 300px;
-  background-color: aqua;
-}
 
 .sidebar .nav-links li .content-nav {
   display: flex;
@@ -96,34 +91,41 @@
   display: block;
 }
 
-.sidebar .nav-links li .flecha {
-  height: 500px;
-  min-width: 500px;
-  text-align: center;
-  line-height: 50px;
-  color: #fff;
-  font-weight: 300;
+
+.sidebar .nav-links li .container-icon {
+  height: 55px;
+  min-width: 55px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1em;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
-.sidebar .nav-links li .ti {
-  height: 60px;
-  min-width: 60px;
-  text-align: center;
-
-  color: #7e0000;
+.sidebar .nav-links li .tamañoLateral  {
+  height: 55px;
+  min-width: 55px;
+  color: #ffffff;
+  align-items: center;
+  line-height: 55px;
+  display: flex;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
 }
+.iconosLaterales{
+  width: 30px;
+  height: 30px;
+}
 
-.sidebar .nav-links li.showMenu i.arrow {
+.sidebar .nav-links li.showMenu .iconoA{
   transform: rotate(-180deg);
-  font-size: 20em;
 }
-
-.sidebar.close .nav-links i.arrow {
+.iconoA{
+  pointer-events: none;
+  color: #fff;
+}
+.sidebar.close .nav-links .iconoA {
   display: none;
 }
 
@@ -167,6 +169,7 @@
   opacity: 0.8;
   transition: all 0.3s ease;
   border-radius: 0 6px 6px 0;
+  background-color: aqua;
 }
 
 .sidebar .nav-links li .sub-menu a:hover {
@@ -381,15 +384,4 @@ p {
   height: 100vh;
   align-items: center;
   justify-content: center;
-}
-
-.producto {
-  display: none;
-}
-
-.productoAll {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
 }
