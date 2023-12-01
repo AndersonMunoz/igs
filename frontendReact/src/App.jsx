@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import { Menu } from './components/Menu';
 import Producto from './components/Producto';
 import Movimiento from './components/Movimiento';
+import Proveedor from './components/Proveedor';
+import TipoProducto from './components/TipoProducto';
 
 const App = () => {
   return (
@@ -10,13 +12,9 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Menu/>}>
           <Route path="/producto" element={<Producto />} />
-
-
-
-
-
-
           <Route path="/movimiento" element={<Movimiento/>} />
+          <Route path="/tipoproducto" element={<TipoProducto />} />
+          <Route path="/proveedor" element={<Proveedor />} />
         </Route>
       </Routes>
     </>
