@@ -6,10 +6,10 @@ import Producto from './components/Producto';
 const App = () => {
   return (
     <>
-      <Menu />
       <Routes>
-        <Route path="/" element={<Producto />} />
-        <Route path="/producto" element={<Producto />} />
+        <Route path='/' element={<Menu/>}>
+          <Route path="/producto" element={<Producto />} />
+        </Route>
       </Routes>
     </>
   );

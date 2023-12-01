@@ -8,7 +8,7 @@ import {
   IconMenu2,
   IconChevronDown,
   IconApple,
-  IconHome
+  IconHome,
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -44,6 +44,7 @@ export const Menu = () => {
   }, []);
   return (
     <>
+      <div className="main-container">
         <div className="sidebar close">
           <div className="logo-details">
             <img src={IgsLogo} className="logo1" />
@@ -53,8 +54,8 @@ export const Menu = () => {
             <li>
               <a href="dashboard.html">
                 <div className="tamañoLateral">
-                    <IconHome className="iconosLaterales"/>
-                    </div>
+                  <IconHome className="iconosLaterales" />
+                </div>
                 <span className="link_name">Inicio</span>
               </a>
               <ul className="sub-menu blank">
@@ -68,9 +69,9 @@ export const Menu = () => {
             <li>
               <div className="content-nav">
                 <a href="#">
-                <div className="tamañoLateral">
-                    <IconHome className="iconosLaterales"/>
-                    </div>
+                  <div className="tamañoLateral">
+                    <IconHome className="iconosLaterales" />
+                  </div>
                   <span className="link_name">Movimientos</span>
                 </a>
                 <div className="container-icon">
@@ -94,9 +95,9 @@ export const Menu = () => {
             <li>
               <div className="content-nav">
                 <a href="#">
-                <div className="tamañoLateral">
-                    <IconHome className="iconosLaterales"/>
-                    </div>
+                  <div className="tamañoLateral">
+                    <IconHome className="iconosLaterales" />
+                  </div>
                   <span className="link_name">Inventario</span>
                 </a>
                 <div className="container-icon">
@@ -121,12 +122,11 @@ export const Menu = () => {
               <Link to="/producto">
                 <div className="content-nav">
                   <a href="#">
-                  <div className="tamañoLateral">
-                    <IconHome className="iconosLaterales"/>
+                    <div className="tamañoLateral">
+                      <IconHome className="iconosLaterales" />
                     </div>
                     <span className="link_name">Productos</span>
                   </a>
-                  
                 </div>
                 <ul className="sub-menu">
                   <li>
@@ -140,14 +140,14 @@ export const Menu = () => {
             <li>
               <div className="content-nav">
                 <a href="#">
-                <div className="tamañoLateral">
-                    <IconHome className="iconosLaterales"/>
-                    </div>
+                  <div className="tamañoLateral">
+                    <IconHome className="iconosLaterales" />
+                  </div>
                   <span className="link_name">Categoria</span>
                 </a>
-                <div className='container-icon'>
-                        <IconChevronDown className='iconoA'/>
-                    </div>
+                <div className="container-icon">
+                  <IconChevronDown className="iconoA" />
+                </div>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -166,14 +166,14 @@ export const Menu = () => {
             <li>
               <div className="content-nav">
                 <a href="#">
-                <div className="tamañoLateral">
-                    <IconHome className="iconosLaterales"/>
-                    </div>
+                  <div className="tamañoLateral">
+                    <IconHome className="iconosLaterales" />
+                  </div>
                   <span className="link_name">Proveedores</span>
                 </a>
-                <div className='container-icon'>
-                        <IconChevronDown className='iconoA'/>
-                    </div>
+                <div className="container-icon">
+                  <IconChevronDown className="iconoA" />
+                </div>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -195,9 +195,9 @@ export const Menu = () => {
                   <i className="ti ti-clipboard-text"></i>
                   <span className="link_name">Reportes</span>
                 </a>
-                <div className='container-icon'>
-                        <IconChevronDown className='iconoA'/>
-                    </div>
+                <div className="container-icon">
+                  <IconChevronDown className="iconoA" />
+                </div>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -219,9 +219,9 @@ export const Menu = () => {
                   <i className="ti ti-user"></i>
                   <span className="link_name">Usuarios</span>
                 </a>
-                <div className='container-icon'>
-                        <IconChevronDown className='iconoA'/>
-                    </div>
+                <div className="container-icon">
+                  <IconChevronDown className="iconoA" />
+                </div>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -243,9 +243,9 @@ export const Menu = () => {
                   <i className="ti ti-help-circle"></i>
                   <span className="link_name">Ajustes</span>
                 </a>
-                <div className='container-icon'>
-                        <IconChevronDown className='iconoA'/>
-                    </div>
+                <div className="container-icon">
+                  <IconChevronDown className="iconoA" />
+                </div>
               </div>
               <ul className="sub-menu">
                 <li>
@@ -312,24 +312,23 @@ export const Menu = () => {
             <IconUser className="user1 ti" />
             <p>Administrador</p>
           </div>
-        </div>
-        <div className="modalClose">
-          <div className="userSpace">
-            <i id="closeX" className="closeUser ti ti-x"></i>
-            <a className="letraUser ax">
-              <i className="iconModal ti ti-settings"></i>Ajustes
-            </a>
-            <a href="../frontend/index.html" className="letraUser az">
-              <i className="iconModal ti ti-user-x"></i>Cerrar sesión
-            </a>
+          <div className="modalClose">
+            <div className="userSpace">
+              <i id="closeX" className="closeUser ti ti-x"></i>
+              <a className="letraUser ax">
+                <i className="iconModal ti ti-settings"></i>Ajustes
+              </a>
+              <a href="../frontend/index.html" className="letraUser az">
+                <i className="iconModal ti ti-user-x"></i>Cerrar sesión
+              </a>
+            </div>
           </div>
         </div>
-        <div className="contenido">
-   
-        </div>
-        <Outlet />
-        
 
+        <div className="contenido">
+          <Outlet />
+        </div>
+      </div>
     </>
   );
 };
