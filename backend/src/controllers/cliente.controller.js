@@ -11,9 +11,9 @@ export const registroUsuario = async (req, res) => {
             return res.status(400).json(error)           
         }
 
-        let { documento, email, nombre, contraseña, tipo } = req.body;
+        let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
         let sql = `insert into usuarios (documento_usuario,email_usuario,nombre_usuario, contrasena_usuario, tipo_usuario)
-    values('${documento}','${email}','${nombre}','${contraseña}','${tipo}')`;
+    values('${documento_usuario}','${email_usuario}','${nombre_usuario}','${contrasena_usuario}','${tipo_usuario}')`;
         console.log(sql);
 
         const [rows] = await pool.query(sql);
@@ -83,10 +83,10 @@ export const editarUsuario = async (req ,res) =>{
             return res.status(400).json(error)           
         }
         let id = req.params.id;
-    let {documento, email, nombre, contraseña, tipo } = req.body;
+    let {documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
 
-    let sql=`update usuarios SET documento_usuario = '${documento}',
-    email_usuario = '${email}', nombre_usuario = '${nombre}',contrasena_usuario = '${contraseña}',tipo_usuario = '${tipo}'
+    let sql=`update usuarios SET documento_usuario = '${documento_usuario}',
+    email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',contrasena_usuario = '${contrasena_usuario}',tipo_usuario = '${tipo_usuario}'
     where id_usuario = ${id} `;
     console.log(sql)
 
