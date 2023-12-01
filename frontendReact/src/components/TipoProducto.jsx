@@ -3,7 +3,6 @@ const TipoProducto = () => {
     <>
       <p className="h4 mb-4 p-2 text-center  "> tipo de producto</p>
       <div>
-        {/* Button trigger modal */}
         <button
           type="button"
           className="btn btn-primary"
@@ -12,7 +11,6 @@ const TipoProducto = () => {
         >
           Registrar nuevo tipo
         </button>
-        {/* Modal */}
         <div
           className="modal fade"
           id="staticBackdrop"

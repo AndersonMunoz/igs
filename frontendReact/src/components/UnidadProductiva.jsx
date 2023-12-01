@@ -1,10 +1,10 @@
 import React from "react";
 
 
-const Categoria = () => {
+const UnidadProductiva = () => {
   return (
     <>
-      <p className="h4 mb-4 p-2 text-center  "> Categoria</p>
+      <p className="h4 mb-4 p-2 text-center  "> Unidad Productiva </p>
       <div>
         <button
           type="button"
@@ -12,7 +12,7 @@ const Categoria = () => {
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
         >
-          Registrar nuevo Categoria
+          Registrar nuevo Unidad Productiva
         </button>
         <div
           className="modal fade"
@@ -28,7 +28,7 @@ const Categoria = () => {
               <div className="modal-header">
                 <h1 className="modal-title fs-5" id="staticBackdropLabel">
                   {" "}
-                  Registrar nuevo Categoria
+                  Registrar nuevo Unidad Productiva
                 </h1>
                 <button
                   type="button"
@@ -43,17 +43,17 @@ const Categoria = () => {
                     <div className="col-12">
                       <label
                         className="visually-hidden"
-                        htmlFor="inlineFormInputGroupCategoria"
+                        htmlFor="inlineFormInputGroupUp"
                       >
-                        Categoria
+                       Up
                       </label>
                       <div className="input-group">
                         <div className="input-group-text">  </div>
                         <input
                           type="text"
                           className="form-control"
-                          id="inlineFormInputGroupCategoria"
-                          placeholder="Nombre Categoria "
+                          id="inlineFormInputGroupUp"
+                          placeholder="Nombre Unidad productiva "
                         />
                       </div>
                     </div>
@@ -106,7 +106,7 @@ const Categoria = () => {
         <thead>
           <tr>
             <th className="th-sm">Id</th>
-            <th className="th-sm">Categoria</th>
+            <th className="th-sm">Unidad Productiva</th>
             <th className="th-sm text-center" colSpan={2}> Botones de acción</th>
           </tr>
         </thead>
@@ -129,4 +129,4 @@ const Categoria = () => {
   );
 };
 
-export default Categoria;
+export default UnidadProductiva;

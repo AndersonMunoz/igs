@@ -5,6 +5,8 @@ import Producto from './components/Producto';
 import Movimiento from './components/Movimiento';
 import Proveedor from './components/Proveedor';
 import TipoProducto from './components/TipoProducto';
+import Categoria from './components/Categoria';
+import UnidadProductiva from './components/UnidadProductiva';
 
 const App = () => {
   return (
@@ -14,6 +16,8 @@ const App = () => {
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento/>} />
           <Route path="/tipoproducto" element={<TipoProducto />} />
+          <Route path="/categoria" element={<Categoria />} />
+          <Route path="/up" element={<UnidadProductiva />} />
           <Route path="/proveedor" element={<Proveedor />} />
         </Route>
       </Routes>
