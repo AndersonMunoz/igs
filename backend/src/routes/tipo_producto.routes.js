@@ -7,7 +7,7 @@ const tipo_productoRouter = Router();
 
 tipo_productoRouter.post("/registrar",validarToken, validatorTipo_producto, registroTipo_producto );
 tipo_productoRouter.get("/listar", listarTipoProducto );
-tipo_productoRouter.put("/editar/:id",validatorTipo_producto, validarToken, editarTipo_producto );
+tipo_productoRouter.put("/editar/:id"/*,validatorTipo_producto, validarToken*/, editarTipo_producto );
 
 
 export default tipo_productoRouter;
