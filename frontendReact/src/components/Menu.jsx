@@ -177,7 +177,7 @@ export const Menu = () => {
               </div>
               <ul className="sub-menu">
                 <li>
-                  <a className="link_name" href="#">
+                  <a className="link_name" href="">
                     Proveedores
                   </a>
                 </li>

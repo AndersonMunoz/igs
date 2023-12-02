@@ -1,5 +1,5 @@
 import React from "react";
-import { Form } from "react-bootstrap";
+import '../style/Proveedor.css'
 
 
 const Proveedor = () => {
@@ -7,12 +7,15 @@ const Proveedor = () => {
     <>
       <div>
         <h1 className="text-center">Proveedores</h1>
-        <button type="button" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
-          Registrar nuevo Proveedor
-        </button>
+        <div className="d-flex justify-content-between">
+          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Registrar nuevo Proveedor
+          </button>
+          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#buscarUsuario">
+            Buscar un Proveedor
+          </button>
+        </div>
       </div>
-
-
       <div className="wrapper-editor">
         <table
           id="dtBasicExample"
@@ -40,18 +43,14 @@ const Proveedor = () => {
           </tbody>
         </table>
       </div>
-
-
-      <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
-            <div className="modal-header text-bg-success">
+            <div className="modal-header txt-color">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Proveedor</h1>
-              <button type="button" className="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-
-
+            <div className="modal-body">
               <div className=" d-flex justify-content-center">
                 <form className="text-center border border-light" action="#!">
                   <div className="d-flex form-row mb-4">
@@ -72,21 +71,40 @@ const Proveedor = () => {
                   </div>
                 </form>
               </div>
-
-
             </div>
-            <div class="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-success">Save changes</button>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" className="btn btn-color">Agregar</button>
             </div>
           </div>
         </div>
       </div>
-
-
-
-
-
+      {/* modal para buscar */}
+      <div className="modal fade" id="buscarUsuario" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header txt-color">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Buscar proveedor
+              </h5>
+              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div className="modal-body">
+              <div className="mb-3">
+                <input type="text" className="form-control" id="formGroupExampleInput" placeholder="Ingrese un id o nombre de proveedor" />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                Cerrar
+              </button>
+              <button type="button" className="btn btn-color">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
