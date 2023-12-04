@@ -18,7 +18,6 @@ import {
 	IconX,
 	IconSettings,
 	IconUserOff 
-	 
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -62,7 +61,7 @@ export const Menu = () => {
 					</div>
 					<ul className="nav-links">
 						<li>
-							<a href="dashboard.html">
+							<a href="/">
 								<div className="tamañoLateral">
 									<IconHome className="iconosLaterales" />
 								</div>
@@ -70,7 +69,7 @@ export const Menu = () => {
 							</a>
 							<ul className="sub-menu blank">
 								<li>
-									<a className="link_name" href="#">
+									<a className="link_name" href="/">
 										Inicio
 									</a>
 								</li>
@@ -130,15 +129,13 @@ export const Menu = () => {
 						</li>
 						<li>
 							<Link to="/producto">
-								<div className="content-nav">
 									<a href="#">
 										<div className="tamañoLateral">
 											<IconApple className="iconosLaterales" />
 										</div>
 										<span className="link_name">Productos</span>
 									</a>
-								</div>
-								<ul className="sub-menu">
+								<ul className="sub-menu blank">
 									<li>
 										<a className="link_name" href="#">
 											Productos
@@ -148,40 +145,35 @@ export const Menu = () => {
 							</Link>
 						</li>
 						<li>
-							<div className="content-nav">
-								<a href="#">
+							<Link to="/producto">
+								<a href="/producto">
 									<div className="tamañoLateral">
 										<IconBoxMultiple className="iconosLaterales" />
 									</div>
 									<span className="link_name">Categoria</span>
 								</a>
-								
-							</div>
-							<ul className="sub-menu">
+							<ul className="sub-menu blank">
 								<li>
 									<a className="link_name" href="#">
 										Categoria
 									</a>
 								</li>
-								
 							</ul>
+							</Link>
 						</li>
 						<li>
-							<div className="content-nav">
 								<a href="#">
 									<div className="tamañoLateral">
 										<IconTruckDelivery className="iconosLaterales" />
 									</div>
 									<span className="link_name">Proveedores</span>
 								</a>
-							</div>
-							<ul className="sub-menu">
+							<ul className="sub-menu blank">
 								<li>
 									<a className="link_name" href="#">
 										Proveedores
 									</a>
 								</li>
-								
 							</ul>
 						</li>
 						<li>
@@ -310,17 +302,16 @@ export const Menu = () => {
 						</svg>
 					</div>
 					<div id="userAlert" className="usuario">
-						<IconUser className="user1 ti" />
-						<p>Administrador</p>
+						<span><IconUser className="user1" />Administrador</span>
 					</div>
 					<div className="modalClose">
 						<div className="userSpace">
 							<IconX className="closeUser ti ti-x" id="closeX"/>
 							<a className="letraUser ax">
-								<IconSettings className="iconModal ti ti-settings"/>Ajustes
+								<IconSettings className="iconModal ti-settings"/>Ajustes
 							</a>
 							<a href="../frontend/index.html" className="letraUser az">
-								<IconUserOff className="iconModal ti ti-user-x"/>Cerrar sesión
+								<IconUserOff className="iconModal ti-user-x"/>Cerrar sesión
 							</a>
 						</div>
 					</div>

@@ -9,7 +9,7 @@
   left: 0;
   height: 100%;
   width: 260px;
-  background: rgb(57, 169, 0);
+  background: rgb(0, 173, 0);
   transition: all 0.5s ease;
 }
 
@@ -55,7 +55,7 @@
 
 .sidebar .nav-links {
   height: 100%;
-  padding: 50px 0px 80px 0px;
+  padding: 30px 0px 80px 0px;
   overflow: auto;
 }
 
@@ -72,23 +72,14 @@
   list-style: none;
   transition: all 0.4s ease;
 }
-.sidebar.close .nav-links li {
-  position: relative;
-  list-style: none;
-  transition: all 0.4s ease;
-  width: 55px;
-  height: 55px;
-}
 
 .sidebar .nav-links li:hover {
   background: rgb(108, 206, 119);
   border-radius: 0 0px 0px 0;
 }
 .sidebar.close .nav-links li:hover {
-  width: 55px;
-  height: 55px;
   background: rgb(108, 206, 119);
-  border-radius: 0 0px 0px 0;
+  border-radius: 6px 6px 6px 6px;
 }
 
 .sidebar .nav-links li .content-nav {
@@ -99,12 +90,13 @@
 
 .sidebar.close .nav-links li .content-nav {
   display: block;
+  height: 55px;
+  width: 100%;
 }
 
 .sidebar .nav-links li .container-icon {
   height: 55px;
-  width: 120px;
-  min-width: 55px;
+  width: 55px;
   cursor: pointer;
   transition: all 0.3s ease;
   justify-content: center;
@@ -133,7 +125,7 @@
 }
 .iconoA{
   pointer-events: none;
-  color: #fff;
+  color: #ffffffd1;
 }
 .sidebar.close .nav-links .iconoA {
   display: none;
@@ -162,15 +154,8 @@
 .sidebar .nav-links li .sub-menu {
   padding: 1px 0px 0px 50px;
   margin-top: 0px;
-  background: rgb(0, 169, 56);
+  background: rgb(0, 173, 0);
   display: none;
-}
-.sidebar.close .nav-links li .sub-menu {
-  background: rgb(25, 0, 169);
-  display: block;
-  width: 120px;
-  height: auto;
-  margin-left: 0px;
 }
 
 .sidebar .nav-links li.showMenu .sub-menu {
@@ -186,19 +171,15 @@
   transition: all 0.3s ease;
   border-radius: 0 6px 6px 0;
 }
+
 .sidebar.close .nav-links li .sub-menu a {
   color: #ffffff;
-  z-index: 20;
-  width: 120px;
-  margin-bottom: 20px;
-  height: auto;
-  font-size: 12px;
-  padding: 13px 120px 13px 10px;
+  font-size: 15px;
   white-space: nowrap;
+  padding: 8px 20px 8px 18px;
   opacity: 0.8;
   transition: all 0.3s ease;
   border-radius: 0px 6px 6px 0px;
-  background-color: aqua;
 }
 .sidebar .nav-links li .sub-menu a:hover {
   opacity: 10;
@@ -225,11 +206,11 @@
 
 .sidebar .nav-links li .sub-menu .link_name {
   display: none;
-
 }
 
 .sidebar.close .nav-links li .sub-menu .link_name {
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 600;
   color: rgb(255, 255, 255);
   opacity: 1;
   display: block;
@@ -249,21 +230,12 @@
 }
 
 .home-section {
-  background: rgb(57, 169, 0);
+  background: rgb(0, 173, 0);
   display: grid;
-  width: calc(100%);
   height: 60px;
-  z-index: 2;
-  left: 260px;
   transition: all 0.5s ease;
   grid-template: "empty-1 box-menu-hader sena empty-2 usuario empty-3" 100%/
-    5px 50px 70px 1fr 190px 1.5%;
- 
-}
-
-.sidebar.close~.home-section {
-  left: 60px;
-  width: calc(100%);
+    5px 50px 70px 1fr 190px 2%;
 }
 
 .box-menu-hader {
@@ -284,36 +256,35 @@
 
 .ti-menu-2 {
   color: #ffff;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
 }
 
 .usuario {
   grid-area: usuario;
   display: flex;
+  flex-direction: row;
   justify-content: center;
+  text-align: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
   cursor: pointer;
 }
 
 .usuario:hover {
-  background-color: rgb(141, 206, 108);
+  background-color: rgb(108, 206, 119);
   border-radius: 12px;
 }
 
 .user1 {
-  color: #fff;
-  font-size: 30px;
-  justify-content: center;
+  color: #ffffff;
+  width: 35px;
+  height: 35px;
 }
 
-.home-section .usuario p {
-  color: #fff;
+.home-section .usuario span {
+  color: #ffffff;
   font-size: 1.2em;
-  text-decoration: none;
 }
 
 .logoSena {
@@ -324,13 +295,12 @@
 .modalUser {
   position: absolute;
   z-index: 800;
-  left: calc(100% - 200px);
+  left: calc(100% - 220px);
   background-color: #fff;
-  color: white;
-  width: 200px;
+  width: 189.5px;
   height: 115px;
   display: flex;
-  top: 67px;
+  top: 65px;
   border-radius: 12px;
   border: 0.5px solid rgba(219, 219, 219, 0.648);
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
@@ -345,14 +315,14 @@
 .closeUser {
   color: rgb(126, 121, 121);
   top: 69px;
-  right: 32px;
+  right: 35px;
   position: fixed;
   font-size: 25px;
   cursor: pointer;
 }
 
 .ax {
-  margin-top: 25px;
+  margin-top: 26px;
 }
 
 .az:hover {
@@ -365,9 +335,9 @@
   width: 100%;
   height: 55px;
   color: #5b5b5b;
-  font-size: 1.2em;
+  font-size: 1.195em;
   align-items: center;
-  padding: 4px 10px 4px 10px;
+  padding: 4px 25.5px 4px 9.5px;
   text-decoration: none;
 }
 
@@ -392,9 +362,9 @@ p {
   color: rgb(255, 255, 255);
 }
 .contenido {
- padding: 50px;
- overflow: auto;
- width: 100%;
+  padding: 50px;
+  overflow: auto;
+  width: 100%;
 }
 .main-container{
   height: 100vh;
