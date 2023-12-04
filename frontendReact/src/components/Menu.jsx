@@ -17,7 +17,7 @@ import {
 	IconHelpSquareRounded,
 	IconX,
 	IconSettings,
-	IconUserOff 
+	IconUserOff
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -61,202 +61,200 @@ export const Menu = () => {
 					</div>
 					<ul className="nav-links">
 						<li>
-							<a href="/">
+							<Link to="/">
 								<div className="tamañoLateral">
 									<IconHome className="iconosLaterales" />
 								</div>
 								<span className="link_name">Inicio</span>
-							</a>
+							</Link>
 							<ul className="sub-menu blank">
 								<li>
-									<a className="link_name" href="/">
+									<Link to="/" className="link_name">
 										Inicio
-									</a>
+									</Link>
 								</li>
 							</ul>
 						</li>
 						<li>
 							<div className="content-nav">
-								<a href="#">
+								<Link to="/movimiento">
 									<div className="tamañoLateral">
 										<IconArrowsRandom className="iconosLaterales" />
 									</div>
 									<span className="link_name">Movimientos</span>
-								</a>
+								</Link>
 								<div className="container-icon">
 									<IconChevronDown className="iconoA" />
 								</div>
+
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<a className="link_name" href="#">
+									<Link to="/movimiento" className="link_name">
 										Movimientos
-									</a>
+									</Link>
 								</li>
 								<li>
-									<a href="#">Entadra</a>
+									<a to="#">Entadra</a>
 								</li>
 								<li>
-									<a href="#">Salida</a>
+									<a to="#">Salida</a>
 								</li>
 							</ul>
 						</li>
 						<li>
 							<div className="content-nav">
-								<a href="#">
+								<Link to="#">
 									<div className="tamañoLateral">
 										<IconBuildingStore className="iconosLaterales" />
 									</div>
 									<span className="link_name">Inventario</span>
-								</a>
+								</Link>
 								<div className="container-icon">
 									<IconChevronDown className="iconoA" />
 								</div>
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<a className="link_name" href="#">
+									<Link className="link_name" to="#">
 										Inventario
-									</a>
+									</Link>
 								</li>
 								<li>
-									<a href="#">Kardes</a>
+									<a to="#">Kardes</a>
 								</li>
 								<li>
-									<a href="#">Catalogo</a>
+									<a to="#">Catalogo</a>
 								</li>
 							</ul>
 						</li>
 						<li>
 							<Link to="/producto">
-									<a href="#">
-										<div className="tamañoLateral">
-											<IconApple className="iconosLaterales" />
-										</div>
-										<span className="link_name">Productos</span>
-									</a>
+									<div className="tamañoLateral">
+										<IconApple className="iconosLaterales" />
+									</div>
+									<span className="link_name">Productos</span>
+								</Link>
 								<ul className="sub-menu blank">
 									<li>
-										<a className="link_name" href="#">
+										<Link className="link_name" to="/producto">
 											Productos
-										</a>
+										</Link>
 									</li>
 								</ul>
-							</Link>
+							
 						</li>
 						<li>
-							<Link to="/producto">
-								<a href="/producto">
+							<Link to="/categoria">
 									<div className="tamañoLateral">
 										<IconBoxMultiple className="iconosLaterales" />
 									</div>
 									<span className="link_name">Categoria</span>
-								</a>
-							<ul className="sub-menu blank">
-								<li>
-									<a className="link_name" href="#">
-										Categoria
-									</a>
-								</li>
-							</ul>
-							</Link>
+								</Link>
+								<ul className="sub-menu blank">
+									<li>
+										<Link className="link_name" to="/categoria">
+											Categoria
+										</Link>
+									</li>
+								</ul>
 						</li>
 						<li>
-								<a href="#">
+								<Link to="/proveedor">
 									<div className="tamañoLateral">
 										<IconTruckDelivery className="iconosLaterales" />
 									</div>
 									<span className="link_name">Proveedores</span>
-								</a>
-							<ul className="sub-menu blank">
-								<li>
-									<a className="link_name" href="#">
-										Proveedores
-									</a>
-								</li>
-							</ul>
+								</Link>
+								<ul className="sub-menu blank">
+									<li>
+										<Link className="link_name" to="/proveedor">
+											Proveedores
+										</Link>
+									</li>
+								</ul>
 						</li>
 						<li>
 							<div className="content-nav">
-								<a href="#">
-								<div className="tamañoLateral">
+								<Link to="#">
+									<div className="tamañoLateral">
 										<IconClipboardText className="iconosLaterales" />
 									</div>
 									<span className="link_name">Reportes</span>
-								</a>
+								</Link>
 								<div className="container-icon">
 									<IconChevronDown className="iconoA" />
 								</div>
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<a className="link_name" href="#">
+									<Link className="link_name" to="#">
 										Reportes
-									</a>
+									</Link>
 								</li>
 								<li>
-									<a href="#">Historial</a>
+									<Link to="#">Historial</Link>
 								</li>
 								<li>
-									<a href="#">Productos a Caducar</a>
+									<Link to="#">Productos a Caducar</Link>
 								</li>
 							</ul>
 						</li>
 						<li>
 							<div className="content-nav">
-								<a href="formularioSanti.html">
-								<div className="tamañoLateral">
+								<Link to="/usuario">
+									<div className="tamañoLateral">
 										<IconUser className="iconosLaterales" />
 									</div>
 									<span className="link_name">Usuarios</span>
-								</a>
+								</Link>
 								<div className="container-icon">
 									<IconChevronDown className="iconoA" />
 								</div>
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<a className="link_name" href="#">
+									<Link className="link_name" to="/usuario">
 										Usuarios
-									</a>
+									</Link>
 								</li>
 								<li>
-									<a href="#">Nuevo Usuario</a>
+									<Link to="#">Nuevo Usuario</Link>
 								</li>
 								<li>
-									<a href="#">Mostar Usuarios</a>
+									<Link to="#">Mostar Usuarios</Link>
 								</li>
 							</ul>
 						</li>
 						<li>
 							<div className="content-nav">
-								<a href="#">
-								<div className="tamañoLateral">
+								<Link to="#">
+									<div className="tamañoLateral">
 										<IconHelpSquareRounded className="iconosLaterales" />
 									</div>
 									<span className="link_name">Ajustes</span>
-								</a>
+								</Link>
 								<div className="container-icon">
 									<IconChevronDown className="iconoA" />
 								</div>
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<a className="link_name" href="#">
+									<Link className="link_name" to="#">
 										Ajustes
-									</a>
+									</Link>
 								</li>
 								<li>
-									<a href="#">Perfil</a>
+									<Link to="#">Perfil</Link>
 								</li>
 								<li>
-									<a href="#">Ayuda</a>
+									<Link to="#">Ayuda</Link>
 								</li>
 								<li>
-									<a href="#">Manual de Usuario</a>
+									<Link to="#">Manual de Usuario</Link>
 								</li>
 								<li>
-									<a href="#">Comentarios</a>
+									<Link to="#">Comentarios</Link>
 								</li>
 							</ul>
 						</li>
@@ -264,7 +262,7 @@ export const Menu = () => {
 				</div>
 				<div className="home-section">
 					<div className="box-menu-hader">
-						<IconMenu2 className="ti ti-menu-2" />
+						<IconMenu2 className="ti-menu-2" />
 					</div>
 					<div className="sena">
 						<svg
@@ -306,13 +304,13 @@ export const Menu = () => {
 					</div>
 					<div className="modalClose">
 						<div className="userSpace">
-							<IconX className="closeUser ti ti-x" id="closeX"/>
-							<a className="letraUser ax">
-								<IconSettings className="iconModal ti-settings"/>Ajustes
-							</a>
-							<a href="../frontend/index.html" className="letraUser az">
-								<IconUserOff className="iconModal ti-user-x"/>Cerrar sesión
-							</a>
+							<IconX className="closeUser ti-x" id="closeX" />
+							<Link className="letraUser ax">
+								<IconSettings className="iconModal ti-settings" />Ajustes
+							</Link>
+							<Link to="../frontend/index.html" className="letraUser az">
+								<IconUserOff className="iconModal ti-user-x" />Cerrar sesión
+							</Link>
 						</div>
 					</div>
 				</div>
