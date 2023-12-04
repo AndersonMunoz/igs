@@ -391,11 +391,23 @@ p {
   justify-content: center;
 }
 
-.producto {
+.productoFrom {
   display: none;
 }
 
 .productoAll {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.productoView {
+  display: none;
+}
+
+.productoAll2 {
+  background-color: aqua;
   display: flex;
   justify-content: center;
   align-items: center;
