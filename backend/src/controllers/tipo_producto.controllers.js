@@ -39,7 +39,7 @@ export const registroTipo_producto = async (req, res) => {
 export const listarTipoProducto = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT t.id_tipo AS ID, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria');
+            ('SELECT t.id_tipo AS id, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
