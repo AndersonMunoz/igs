@@ -43,7 +43,7 @@ const Movimiento = () => {
       <td className="p-2 text-center">Nada que comentar</td>
       <td className="p-2 text-center">2024-01-23</td>
       <td className="p-2 text-center">Camilo</td>
-      <td><button type="button" class="btn btn-warning">Editar</button></td>
+      <td><button type="button" className="btn btn-warning">Editar</button></td>
     </tr>
     {/* Puedes agregar más filas según sea necesario */}
   </tbody>
@@ -74,7 +74,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example2">Producti</label>
-                      <select class="form-select" id="form6Example2" aria-label="Default select example">
+                      <select className="form-select" id="form6Example2" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Pechuga de pollo</option>
                         <option value="salida">Costillas de cerdo</option>
@@ -83,8 +83,8 @@ const Movimiento = () => {
                   </div>
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
-                      <select class="form-select" id="form6Example3" aria-label="Default select example">
+                      <label className="form-label" htmlFor="form6Example3">Tipo de movimeinto</label>
+                      <select className="form-select" id="form6Example3" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
@@ -102,7 +102,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example5">Unidad</label>
-                      <select class="form-select" id="form6Example5" aria-label="Default select example">
+                      <select className="form-select" id="form6Example5" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             <option value="kg">Kilo (Kg)</option>
                             <option value="lb">Libra (Lb)</option>
