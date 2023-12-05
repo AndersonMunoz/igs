@@ -86,10 +86,10 @@ const Movimiento = () => {
     </tr>
   </thead>
   <tbody id="tableMovimiento">
-    <tr>
-      
-    </tr>
-  </tbody>
+      <tr>
+        
+      </tr>
+    </tbody>
 </table>
 
     <div className="d-flex justify-content-center align-items-center w-full h-full">
