@@ -8,6 +8,12 @@ const Movimiento = () => {
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
+
+  const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
+
+  const handleCheckboxChange2 = () => {
+    setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
+  };
   return (
    <>
   <div>
@@ -224,22 +230,22 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <p>¿Aplica fecha de caducidad?</p>
+                      <p>¿Deseas editar la fecha de caducidad?</p>
                       <div className="form-check">
                         <input
                           className="form-check-input"
                           type="checkbox"
-                          value={aplicaFechaCaducidad}
-                          id="flexCheckDefault"
-                          onChange={handleCheckboxChange}
+                          value={aplicaFechaCaducidad2}
+                          id="flexCheckDefault2"
+                          onChange={handleCheckboxChange2}
                         />
-                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                        <label className="form-check-label" htmlFor="flexCheckDefault2">
                           Si
                         </label>
                       </div>
                     </div>
                   </div>
-                  {aplicaFechaCaducidad && (
+                  {aplicaFechaCaducidad2 && (
                     <div className="col">
                       <label className="form-label" htmlFor="form6Example7">
                         Fecha caducidad
