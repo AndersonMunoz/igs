@@ -1,18 +1,18 @@
 import React from "react";
 import "../style/producto.css";
-import { IconSearch  } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 
 const Producto = () => {
   return (
     <div>
-    <div className="d-flex justify-content-between mb-4">
-      <button type="button" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Registrar Nuevo Producto
-      </button>
-      <div className="d-flex align-items-center">
-        <input type="text" placeholder="Buscar Producto" className="input-buscar" />
-        <IconSearch className="iconSearch"/>
-      </div>
+      <div className="d-flex justify-content-between mb-4">
+        <button type="button" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Registrar Nuevo Producto
+        </button>
+        <div className="d-flex align-items-center">
+          <input type="text" placeholder="Buscar Producto" className="input-buscar" />
+          <IconSearch className="iconSearch" />
+        </div>
       </div>
       <div className="wrapper-editor">
         <table
@@ -55,7 +55,7 @@ const Producto = () => {
             </div>
             <div className="modal-body">
               <div className="d-flex justify-content-center">
-              <form className="text-center border border-light p-5">
+                <form className="text-center border border-light p-5">
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <label htmlFor="categoria" className="label-bold">
