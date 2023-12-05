@@ -37,23 +37,10 @@ const Movimiento = () => {
       <th className="p-2 text-center">Editar</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="tableMovimiento">
     <tr>
-      <td className="p-2 text-center">Lomo de cerdo</td>
-      <td className="p-2 text-center">2023-11-22</td>
-      <td className="p-2 text-center">Salida</td>
-      <td className="p-2 text-center">14</td>
-      <td className="p-2 text-center">kg</td>
-      <td className="p-2 text-center">4500</td>
-      <td className="p-2 text-center">Bueno</td>
-      <td className="p-2 text-center">Nada que comentar</td>
-      <td className="p-2 text-center">2024-01-23</td>
-      <td className="p-2 text-center">Camilo</td>
-      <td><button type="button" className="btn btn-primary bg-warning w-60 hover:bg-warning-subtle" data-bs-toggle="modal" data-bs-target="#exampleModal2">Editar movimiento
-    </button></td>
-      <td><button type="button" className="btn btn-warning">Editar</button></td>
+      
     </tr>
-    {/* Puedes agregar más filas según sea necesario */}
   </tbody>
 </table>
 
