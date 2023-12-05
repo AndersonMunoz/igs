@@ -18,7 +18,7 @@ import {
 	IconX,
 	IconSettings,
 	IconUserOff,
-	IconBuildingWarehouse 
+	IconBuildingWarehouse
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -131,64 +131,64 @@ export const Menu = () => {
 						</li>
 						<li>
 							<Link to="/producto">
-									<div className="tamañoLateral">
-										<IconApple className="iconosLaterales" />
-									</div>
-									<span className="link_name">Productos</span>
-								</Link>
-								<ul className="sub-menu blank">
-									<li>
-										<Link className="link_name" to="/producto">
-											Productos
-										</Link>
-									</li>
-								</ul>
-							
+								<div className="tamañoLateral">
+									<IconApple className="iconosLaterales" />
+								</div>
+								<span className="link_name">Productos</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/producto">
+										Productos
+									</Link>
+								</li>
+							</ul>
+
 						</li>
 						<li>
 							<Link to="/categoria">
-									<div className="tamañoLateral">
-										<IconBoxMultiple className="iconosLaterales" />
-									</div>
-									<span className="link_name">Categoria</span>
-								</Link>
-								<ul className="sub-menu blank">
-									<li>
-										<Link className="link_name" to="/categoria">
-											Categoria
-										</Link>
-									</li>
-								</ul>
+								<div className="tamañoLateral">
+									<IconBoxMultiple className="iconosLaterales" />
+								</div>
+								<span className="link_name">Categoria</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/categoria">
+										Categoria
+									</Link>
+								</li>
+							</ul>
 						</li>
 						<li>
-								<Link to="/proveedor">
-									<div className="tamañoLateral">
-										<IconTruckDelivery className="iconosLaterales" />
-									</div>
-									<span className="link_name">Proveedores</span>
-								</Link>
-								<ul className="sub-menu blank">
-									<li>
-										<Link className="link_name" to="/proveedor">
-											Proveedores
-										</Link>
-									</li>
-								</ul>
+							<Link to="/proveedor">
+								<div className="tamañoLateral">
+									<IconTruckDelivery className="iconosLaterales" />
+								</div>
+								<span className="link_name">Proveedores</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/proveedor">
+										Proveedores
+									</Link>
+								</li>
+							</ul>
 						</li>
 						<li>
-								<Link to="/up">
-									<div className="tamañoLateral">
-										<IconBuildingWarehouse className="iconosLaterales" />
-									</div>
-									<span className="link_name">Almacen</span>
-								</Link>
-								<ul className="sub-menu blank">
-									<li>
-										<Link className="link_name" to="/up">
-											Almacen
-										</Link>
-									</li>
-								</ul>
+							<Link to="/up">
+								<div className="tamañoLateral">
+									<IconBuildingWarehouse className="iconosLaterales" />
+								</div>
+								<span className="link_name">Almacen</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/up">
+										Almacen
+									</Link>
+								</li>
+							</ul>
 						</li>
 						<li>
 							<div className="content-nav">
@@ -217,29 +217,20 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
-							<div className="content-nav">
-								<Link to="/usuario">
-									<div className="tamañoLateral">
-										<IconUser className="iconosLaterales" />
-									</div>
-									<span className="link_name">Usuarios</span>
-								</Link>
-								<div className="container-icon">
-									<IconChevronDown className="iconoA" />
+							<Link to="/usuario">
+								<div className="tamañoLateral">
+									<IconUser className="iconosLaterales" />
 								</div>
-							</div>
-							<ul className="sub-menu">
+								<span className="link_name">Usuarios</span>
+							</Link>
+
+							<ul className="sub-menu blank">
 								<li>
 									<Link className="link_name" to="/usuario">
 										Usuarios
 									</Link>
 								</li>
-								<li>
-									<Link to="#">Nuevo Usuario</Link>
-								</li>
-								<li>
-									<Link to="#">Mostar Usuarios</Link>
-								</li>
+
 							</ul>
 						</li>
 						<li>
