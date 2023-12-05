@@ -1,7 +1,38 @@
-import React from "react";
-import '../services/categoria'
+import React, { useEffect } from "react";
+
 
 const Categoria = () => {
+
+  useEffect(() => {
+    listarCategorias();
+  }, []);
+
+  function listarCategorias() {
+    fetch("http://localhost:3000/categoria/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(data=>{
+        console.log(data);
+        let row = '';
+        data.forEach(element => {
+          row += `<tr>
+                <td>${element.id_categoria}</td>        
+                <td>${element.nombre_categoria}</td>        
+                <td><a href="javaScript:editarCategoria(${element.id_categoria})">Editar</a></td>           
+                <td><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
+              </tr>`
+          document.getElementById('tableCatategoria').innerHTML = row;
+    });
+  })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
   return (
     <>
       <p className="h4 mb-4 p-2 text-center  "> Categoria</p>

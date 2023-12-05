@@ -1,8 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
 
 const Producto = () => {
+useEffect(() => {
+  listarProducto();
+}, []); //Aqui van todas las funciones
+
+function listarProducto() {
+  fetch("http://localhost:3000/producto/listar", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      let rows = '';
+      data.forEach((element) => {
+        rows += `<tr key=${element.id_producto}>
+                    <td>${element.id_producto}</td>
+                    <td>${element.fk_id_tipo_producto}</td>
+                    <td>${element.fk_id_up}</td>
+                    <td>${element.fecha_caducidad_producto}</td>
+                    <td>${element.cantidad_peso_producto}</td>
+                    <td>${element.unidad_peso_producto}</td>
+                    <td>${element.precio_producto}</td>
+                    <td>${element.descripcion_producto}</td>
+                  </tr>`;
+      });
+      document.getElementById('tableProducto').innerHTML = rows;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
@@ -23,6 +56,7 @@ const Producto = () => {
         >
           <thead>
             <tr>
+              <th className="th-sm">ID</th>
               <th className="th-sm">Producto</th>
               <th className="th-sm">Unidad Productiva</th>
               <th className="th-sm">Fecha de Caducidad</th>
@@ -32,16 +66,8 @@ const Producto = () => {
               <th className="th-sm">Descipcion</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+          <tbody id="tableProducto">
+
           </tbody>
         </table>
       </div>
