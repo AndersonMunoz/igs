@@ -1,6 +1,5 @@
 
-import React, { useState } from "react";
-
+import React, { useState ,useEffect } from "react";
 
 const Movimiento = () => {
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
@@ -14,6 +13,55 @@ const Movimiento = () => {
   const handleCheckboxChange2 = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
+
+  useEffect(() => {
+    listarMovimiento();
+  }, []);
+
+  function listarMovimiento() {
+    fetch("http://localhost:3000/facturamovimiento/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(data=>{
+        console.log(data);
+        let row = '';
+        data.forEach(element => {
+            let fechaCaducidad = new Date(element.fecha_caducidad);
+            let fechaFormatoISO = fechaCaducidad.toISOString();
+            let fechaSolo = fechaFormatoISO.split('T')[0];
+            let partesFecha = fechaSolo.split('-');
+            let fechaFinalCaducidad = partesFecha[2] + '-' + partesFecha[1] + '-' + partesFecha[0];
+    
+            let fechaMovimiento = new Date(element.fecha_movimiento);
+            fechaFormatoISO = fechaMovimiento.toISOString();
+            fechaSolo = fechaFormatoISO.split('T')[0];
+            partesFecha = fechaSolo.split('-');
+            let fechaFinalMovimiento = partesFecha[2] + '-' + partesFecha[1] + '-' + partesFecha[0];
+    
+            row += `<tr>
+                <td class="p-2 text-center">${element.nombre_tipo}</td>        
+                <td class="p-2 text-center">${fechaFinalMovimiento}</td>        
+                <td class="p-2 text-center">${element.tipo_movimiento}</td>        
+                <td class="p-2 text-center">${element.cantidad_peso_movimiento}</td>        
+                <td class="p-2 text-center">${element.unidad_peso_movimiento}</td>        
+                <td class="p-2 text-center">${element.precio_movimiento}</td>        
+                <td class="p-2 text-center">${element.estado_producto_movimiento}</td>        
+                <td class="p-2 text-center">${element.nota_factura}</td>        
+                <td class="p-2 text-center">${fechaFinalCaducidad}</td>
+                <td class="p-2 text-center">${element.nombre_usuario}</td>             
+                <td class="p-2 text-center"><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
+            </tr>`
+        });
+        document.getElementById('tableMovimiento').innerHTML = row;
+    })    
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
    <>
   <div>
@@ -78,7 +126,6 @@ const Movimiento = () => {
                   </div>
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
                       <label className="form-label" htmlFor="form6Example3">Tipo de movimeinto</label>
                       <select className="form-select" id="form6Example3" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
