@@ -1,45 +1,29 @@
-import React from "react";
 
+import React, { useEffect } from "react";
+import { IconSearch } from "@tabler/icons-react";
 
 const UnidadProductiva = () => {
   return (
     <>
-      <p className="h4 mb-4 p-2 text-center  "> Unidad Productiva </p>
-      <div>
-        <button
-          type="button"
-          className="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-        >
-          Registrar nuevo Unidad Productiva
-        </button>
-        <div
-          className="modal fade"
-          id="staticBackdrop"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabIndex={-1}
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                  {" "}
-                  Registrar nuevo Unidad Productiva
-                </h1>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                />
-              </div>
-              <div className="modal-body">
-                <div className="container w-100 h-100 d-flex justify-content-center ">
-                  <form className="row row-cols-lg-auto g-3 align-items-center">
+      <div className="d-flex justify-content-between">
+          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Registrar nuevo Proveedor
+          </button>
+          <div className="d-flex align-items-center">
+          <input type="text" placeholder="Buscar Producto" className="input-buscar" />
+          <IconSearch className="iconSearch" />
+        </div>
+        </div> 
+     <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered ">
+          <div className="modal-content">
+            <div className="modal-header txt-color">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Proveedor</h1>
+              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <div className=" d-flex justify-content-center">
+              <form className="row row-cols-lg-auto g-3 align-items-center">
                     <div className="col-12">
                       <label
                         className="visually-hidden"
@@ -64,35 +48,13 @@ const UnidadProductiva = () => {
                       >
                         Preference
                       </label>
-                      {/* <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option selected>seleciona una opcion </option>
-                        <option value={1}>carnes 🥩</option>
-                        <option value={2}>arros 🍚</option>
-                        <option value={3}>vegetales🥦</option>
-                      </select> */}
                     </div>
                   </form>
-                </div>
               </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button
-                  data-mdb-ripple-init
-                  type="submit"
-                  className="btn btn-success"
-                >
-                  Enviar
-                </button>
-              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" className="btn btn-color">Agregar</button>
             </div>
           </div>
         </div>
@@ -114,14 +76,14 @@ const UnidadProductiva = () => {
           <tr>
             <td>carnes</td>
             <td>res</td>
-            <td ><button className="btn btn-primary" type="button">actualizar</button></td>
-            <td><button className="btn btn-danger" type="button">eliminar</button></td>
+            <td ></td>
+            <td></td>
           </tr>
           <tr>
             <td>Garrett Winters</td>
             <td>Accountant</td>
-            <td ><button className="btn btn-primary" type="button">actualizar</button></td>
-            <td><button className="btn btn-danger" type="button">eliminar</button></td>
+            <td ></td>
+            <td></td>
           </tr>
         </tbody>
       </table>
