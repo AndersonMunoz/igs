@@ -51,6 +51,7 @@ const Movimiento = () => {
       <td className="p-2 text-center">Camilo</td>
       <td><button type="button" className="btn btn-primary bg-warning w-60 hover:bg-warning-subtle" data-bs-toggle="modal" data-bs-target="#exampleModal2">Editar movimiento
     </button></td>
+      <td><button type="button" className="btn btn-warning">Editar</button></td>
     </tr>
     {/* Puedes agregar más filas según sea necesario */}
   </tbody>
@@ -91,6 +92,7 @@ const Movimiento = () => {
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
+                      <label className="form-label" htmlFor="form6Example3">Tipo de movimeinto</label>
                       <select className="form-select" id="form6Example3" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>

@@ -17,7 +17,8 @@ import {
 	IconHelpSquareRounded,
 	IconX,
 	IconSettings,
-	IconUserOff
+	IconUserOff,
+	IconBuildingWarehouse 
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -170,6 +171,21 @@ export const Menu = () => {
 									<li>
 										<Link className="link_name" to="/proveedor">
 											Proveedores
+										</Link>
+									</li>
+								</ul>
+						</li>
+						<li>
+								<Link to="/up">
+									<div className="tamañoLateral">
+										<IconBuildingWarehouse className="iconosLaterales" />
+									</div>
+									<span className="link_name">Almacen</span>
+								</Link>
+								<ul className="sub-menu blank">
+									<li>
+										<Link className="link_name" to="/up">
+											Almacen
 										</Link>
 									</li>
 								</ul>
