@@ -1,42 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../style/usuario.css";
-import '../services/usuario';
-
 import { IconSearch } from "@tabler/icons-react";
 
 const Usuario = () => {
-	async function listarUsuario() {
-		try {
-			const response = await fetch('http://localhost:3000/usuario/listar', {
-				method: "get",
-				headers: {
-					"content-type": "application/json"
-				}
-			});
-	
-			if (!response.ok) {
-				throw new Error(`Error en la solicitud: ${response.status}`);
+
+	useEffect(() => {
+		listarUsuario();
+	}, []);
+
+	function listarUsuario() {
+		fetch("http://localhost:3000/usuario/listar", {
+			method: "get",
+			headers: {
+				"content-type": "application/json"
 			}
-	
-			const data = await response.json();
-			console.log(data);
-	
-			const row = data.map(generarFilaUsuario).join('');
-			document.getElementById('listarUsuario').innerHTML = row;
-		} catch (error) {
-			console.error('Error al realizar la solicitud:', error);
-		}
+		})
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+				let row = '';
+				data.forEach(element => {
+					row += `<tr>
+									<td>${element.id_usuario}</td>        
+									<td>${element.nombre_usuario}</td>        
+									<td>${element.documento_usuario}</td>        
+									<td>${element.email_usuario}</td>        
+									<td>${element.tipo_usuario}</td>        
+								</tr>`
+					document.getElementById('listarUsuario').innerHTML = row;
+				});
+			})
+			.catch(e => { console.log(e); })
 	}
-	
-	function generarFilaUsuario(usuario) {
-		return `<tr>
-							<td>${usuario.id_usuario}</td>        
-							<td>${usuario.nombre_usuario}</td>        
-							<td>${usuario.documento_usuario}</td>        
-							<td>${usuario.email_usuario}</td>        
-							<td>${usuario.tipo_usuario}</td>        
-						</tr>`;
-	}
+
+
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
@@ -65,7 +62,7 @@ const Usuario = () => {
 						</tr>
 					</thead>
 					<tbody id="listarUsuario">
-
+						
 					</tbody>
 				</table>
 			</div>
