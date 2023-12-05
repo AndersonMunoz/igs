@@ -43,7 +43,8 @@ const Movimiento = () => {
       <td className="p-2 text-center">Nada que comentar</td>
       <td className="p-2 text-center">2024-01-23</td>
       <td className="p-2 text-center">Camilo</td>
-      <td><button type="button" class="btn btn-warning">Editar</button></td>
+      <td><button type="button" className="btn btn-primary bg-warning w-60 hover:bg-warning-subtle" data-bs-toggle="modal" data-bs-target="#exampleModal2">Editar movimiento
+    </button></td>
     </tr>
     {/* Puedes agregar más filas según sea necesario */}
   </tbody>
@@ -63,7 +64,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example1">Categoria</label>
-                      <select class="form-select" id="form6Example1" aria-label="Default select example">
+                      <select className="form-select" id="form6Example1" aria-label="Default select example">
                         <option selected>Seleccione una opción</option>
                         <option value="1">Vegetal</option>
                         <option value="2">Carne</option>
@@ -74,7 +75,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example2">Producti</label>
-                      <select class="form-select" id="form6Example2" aria-label="Default select example">
+                      <select className="form-select" id="form6Example2" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Pechuga de pollo</option>
                         <option value="salida">Costillas de cerdo</option>
@@ -84,7 +85,7 @@ const Movimiento = () => {
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
-                      <select class="form-select" id="form6Example3" aria-label="Default select example">
+                      <select className="form-select" id="form6Example3" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
@@ -102,7 +103,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example5">Unidad</label>
-                      <select class="form-select" id="form6Example5" aria-label="Default select example">
+                      <select className="form-select" id="form6Example5" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             <option value="kg">Kilo (Kg)</option>
                             <option value="lb">Libra (Lb)</option>
@@ -123,7 +124,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example6">Estado</label>
-                        <select class="form-select" id="form6Example6" aria-label="Default select example">
+                        <select className="form-select" id="form6Example6" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
                           <option value="regular">Regular</option>
@@ -176,6 +177,86 @@ const Movimiento = () => {
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
               <button type="button" className="btn btn-primary bg-success bg-gradient">Registrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel2">Editar de movimiento</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <div className="row mb-4">
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="form6Example6">Estado</label>
+                        <select className="form-select" id="form6Example6" aria-label="Default select example">
+                          <option value="">Seleccione una opción</option>
+                          <option value="bueno">Bueno</option>
+                          <option value="regular">Regular</option>
+                          <option value="malo">Malo</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div className="col">
+                  <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
+                      <select className="form-select" id="form6Example3" aria-label="Default select example">
+                        <option value="">Seleccione una opción</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="row mb-4">
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="form6Example6">Nota</label>
+                      <input type="text" id="form6Example6" className="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div className="row mb-4">
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <p>¿Aplica fecha de caducidad?</p>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value={aplicaFechaCaducidad}
+                          id="flexCheckDefault"
+                          onChange={handleCheckboxChange}
+                        />
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                          Si
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  {aplicaFechaCaducidad && (
+                    <div className="col">
+                      <label className="form-label" htmlFor="form6Example7">
+                        Fecha caducidad
+                      </label>
+                      <input
+                        type="date"
+                        id="form6Example7"
+                        className="width: 20% form-control"
+                      />
+                    </div>
+                  )}
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" className="btn btn-primary bg-success bg-gradient">Actualizar</button>
             </div>
           </div>
         </div>
