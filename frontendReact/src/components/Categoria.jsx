@@ -41,7 +41,7 @@ const Categoria = () => {
     <>
      <div className="d-flex justify-content-between">
           <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Registrar nuevo Proveedor
+            Registrar nueva Categoria
           </button>
           <div className="d-flex align-items-center">
           <input type="text" placeholder="Buscar Producto" className="input-buscar" />
@@ -52,7 +52,7 @@ const Categoria = () => {
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Proveedor</h1>
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Categoria </h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">

@@ -1,11 +1,43 @@
 import React, { useEffect } from "react";
 import { IconSearch } from "@tabler/icons-react";
 const TipoProducto = () => {
+
+  useEffect(() => {
+    listarTipoProducto();
+  }, []);
+
+  function listarTipoProducto() {
+    fetch("http://localhost:3000/tipo/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(data=>{
+        console.log(data);
+        let row = '';
+        data.forEach(element => {
+          row += `<tr>
+                <td>${element.id }</td>        
+                <td>${element.NombreProducto}</td>        
+                <td>${element.Categoría}</td>        
+                <td><a href="javaScript:editarTipoProducto(${element.id_tipo})">Editar</a></td>           
+                <td><a href="javaScript:eliminarTipoProducto(${element.id_tipo})">Eliminar</a></td>           
+              </tr>`
+          document.getElementById('tableTipo').innerHTML = row;
+    });
+  })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
   return (
     <>
       <div className="d-flex justify-content-between">
           <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Registrar nuevo Proveedor
+            Registrar Tipo Producto
           </button>
           <div className="d-flex align-items-center">
           <input type="text" placeholder="Buscar Producto" className="input-buscar" />
@@ -16,7 +48,7 @@ const TipoProducto = () => {
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Proveedor</h1>
+              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Tipo Producto</h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -66,33 +98,16 @@ const TipoProducto = () => {
           </div>
         </div>
       </div>
-      <table
-        id="dtBasicExample"
-        className="table table-striped table-bordered"
-        cellSpacing={0}
-        width="100%"
-      >
+      <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
         <thead>
           <tr>
             <th className="th-sm">Id</th>
-            <th className="th-sm">Tipo de producto</th>
+            <th className="th-sm">nombre</th>
+            <th className="th-sm">Categoria</th>
             <th className="th-sm text-center" colSpan={2}> Botones de acción</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td ></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Garrett Winters</td>
-            <td>Accountant</td>
-            <td ></td>
-            <td></td>
-          </tr>
-          
+        <tbody id="tableTipo"> 
         </tbody>
       </table>
     </>
