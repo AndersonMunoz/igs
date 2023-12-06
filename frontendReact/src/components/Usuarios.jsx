@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import "../style/usuario.css";
 import { IconSearch } from "@tabler/icons-react";
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import {  } from 'sweetalert2-react-content'
 
 const Usuario = () => {
 
 	useEffect(() => {
 		listarUsuario()
-		/* eliminarUsuario() */
+		eliminarUsuario()
 		registrarUsuario();
 	}, []);
 	///listar usuario
@@ -38,15 +38,13 @@ const Usuario = () => {
 			.catch(e => { console.log(e); })
 	}
 	///registrar
-	let formControl = document.querySelectorAll(".form-control");
-	/* let invalidFeedback = document.querySelectorAll(".invalid-feedback"); */
+/* 	let formControl = document.querySelectorAll(".form-control");
+	let invalidFeedback = document.querySelectorAll(".invalid-feedback");
 
-	let modalUsuario = new bootstrap.Modal(document.getElementById('modalUsuario'), {
-    keyboard: false
-})
-const MySwal = withReactContent(Swal)
 
-	function registrarUsuario() {
+const MySwal = withReactContent(Swal) /* */
+
+	 function registrarUsuario() {
     let datos = new URLSearchParams();
     datos.append('nombre_usuario', document.getElementById('nombre_usuario').value)
     datos.append('email_usuario', document.getElementById('email_usuario').value)
@@ -117,9 +115,9 @@ const MySwal = withReactContent(Swal)
 
         })
 
-}
+} 
 	///eliminar
-/* 	function eliminarUsuario(id_usuario) {
+	function eliminarUsuario(id_usuario) {
 		fetch(`http://localhost:3000/usuario/eliminar/${id_usuario}`, {
 			method: 'patch',
 			headers: {
@@ -159,17 +157,17 @@ const MySwal = withReactContent(Swal)
 
 			})
 
-	} */
+	}
 
 
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
-				<button type="button" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+				<button type="button" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#modalUsuario">
 					Registrar Usuario
 				</button>
 				<div className="d-flex align-items-center">
-					<input type="text" placeholder="Buscar Usuario" className="from-control" />
+					<input type="text" placeholder="Buscar Usuario" className="input-buscar from-control" />
 					<IconSearch className="iconSearch" />
 				</div>
 			</div>
@@ -295,7 +293,7 @@ const MySwal = withReactContent(Swal)
 							>
 								Cerrar
 							</button>
-							<button type="button" className="btn btn-color" onclick="registrarUsuario()" >
+							<button type="button" className="btn btn-color" onClick="registrarUsuario" >
 								Registrar
 							</button>
 						</div>
