@@ -1,6 +1,5 @@
 
-import React, { useState } from "react";
-
+import React, { useState ,useEffect } from "react";
 
 const Movimiento = () => {
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
@@ -8,6 +7,61 @@ const Movimiento = () => {
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
+
+  const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
+
+  const handleCheckboxChange2 = () => {
+    setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
+  };
+
+  useEffect(() => {
+    listarMovimiento();
+  }, []);
+
+  function listarMovimiento() {
+    fetch("http://localhost:3000/facturamovimiento/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(data=>{
+        console.log(data);
+        let row = '';
+        data.forEach(element => {
+            let fechaCaducidad = new Date(element.fecha_caducidad);
+            let fechaFormatoISO = fechaCaducidad.toISOString();
+            let fechaSolo = fechaFormatoISO.split('T')[0];
+            let partesFecha = fechaSolo.split('-');
+            let fechaFinalCaducidad = partesFecha[2] + '-' + partesFecha[1] + '-' + partesFecha[0];
+    
+            let fechaMovimiento = new Date(element.fecha_movimiento);
+            fechaFormatoISO = fechaMovimiento.toISOString();
+            fechaSolo = fechaFormatoISO.split('T')[0];
+            partesFecha = fechaSolo.split('-');
+            let fechaFinalMovimiento = partesFecha[2] + '-' + partesFecha[1] + '-' + partesFecha[0];
+    
+            row += `<tr>
+                <td class="p-2 text-center">${element.nombre_tipo}</td>        
+                <td class="p-2 text-center">${fechaFinalMovimiento}</td>        
+                <td class="p-2 text-center">${element.tipo_movimiento}</td>        
+                <td class="p-2 text-center">${element.cantidad_peso_movimiento}</td>        
+                <td class="p-2 text-center">${element.unidad_peso_movimiento}</td>        
+                <td class="p-2 text-center">${element.precio_movimiento}</td>        
+                <td class="p-2 text-center">${element.estado_producto_movimiento}</td>        
+                <td class="p-2 text-center">${element.nota_factura}</td>        
+                <td class="p-2 text-center">${fechaFinalCaducidad}</td>
+                <td class="p-2 text-center">${element.nombre_usuario}</td>             
+                <td class="p-2 text-center"><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
+            </tr>`
+        });
+        document.getElementById('tableMovimiento').innerHTML = row;
+    })    
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
    <>
   <div>
@@ -31,22 +85,11 @@ const Movimiento = () => {
       <th className="p-2 text-center">Editar</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <td className="p-2 text-center">Lomo de cerdo</td>
-      <td className="p-2 text-center">2023-11-22</td>
-      <td className="p-2 text-center">Salida</td>
-      <td className="p-2 text-center">14</td>
-      <td className="p-2 text-center">kg</td>
-      <td className="p-2 text-center">4500</td>
-      <td className="p-2 text-center">Bueno</td>
-      <td className="p-2 text-center">Nada que comentar</td>
-      <td className="p-2 text-center">2024-01-23</td>
-      <td className="p-2 text-center">Camilo</td>
-      <td><button type="button" className="btn btn-warning">Editar</button></td>
-    </tr>
-    {/* Puedes agregar más filas según sea necesario */}
-  </tbody>
+  <tbody id="tableMovimiento">
+      <tr>
+        
+      </tr>
+    </tbody>
 </table>
 
     <div className="d-flex justify-content-center align-items-center w-full h-full">
@@ -63,7 +106,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example1">Categoria</label>
-                      <select class="form-select" id="form6Example1" aria-label="Default select example">
+                      <select className="form-select" id="form6Example1" aria-label="Default select example">
                         <option selected>Seleccione una opción</option>
                         <option value="1">Vegetal</option>
                         <option value="2">Carne</option>
@@ -123,7 +166,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" for="form6Example6">Estado</label>
-                        <select class="form-select" id="form6Example6" aria-label="Default select example">
+                        <select className="form-select" id="form6Example6" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
                           <option value="regular">Regular</option>
@@ -176,6 +219,86 @@ const Movimiento = () => {
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
               <button type="button" className="btn btn-primary bg-success bg-gradient">Registrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel2">Editar de movimiento</h1>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <div className="row mb-4">
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="form6Example6">Estado</label>
+                        <select className="form-select" id="form6Example6" aria-label="Default select example">
+                          <option value="">Seleccione una opción</option>
+                          <option value="bueno">Bueno</option>
+                          <option value="regular">Regular</option>
+                          <option value="malo">Malo</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div className="col">
+                  <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
+                      <select className="form-select" id="form6Example3" aria-label="Default select example">
+                        <option value="">Seleccione una opción</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="row mb-4">
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="form6Example6">Nota</label>
+                      <input type="text" id="form6Example6" className="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div className="row mb-4">
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <p>¿Deseas editar la fecha de caducidad?</p>
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          value={aplicaFechaCaducidad2}
+                          id="flexCheckDefault2"
+                          onChange={handleCheckboxChange2}
+                        />
+                        <label className="form-check-label" htmlFor="flexCheckDefault2">
+                          Si
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  {aplicaFechaCaducidad2 && (
+                    <div className="col">
+                      <label className="form-label" htmlFor="form6Example7">
+                        Fecha caducidad
+                      </label>
+                      <input
+                        type="date"
+                        id="form6Example7"
+                        className="width: 20% form-control"
+                      />
+                    </div>
+                  )}
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" className="btn btn-primary bg-success bg-gradient">Actualizar</button>
             </div>
           </div>
         </div>
