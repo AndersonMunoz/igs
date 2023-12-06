@@ -15,19 +15,19 @@ const Categoria = () => {
       },
     })
       .then((res) => res.json())
-      .then(data=>{
+      .then(data => {
         console.log(data);
         let row = '';
         data.forEach(element => {
           row += `<tr>
-                <td>${element.id_categoria}</td>        
+                <td>${element.id_proveedores }</td>        
                 <td>${element.nombre_categoria}</td>        
                 <td><a href="javaScript:editarCategoria(${element.id_categoria})">Editar</a></td>           
                 <td><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
               </tr>`
           document.getElementById('tableCatategoria').innerHTML = row;
-    });
-  })
+        });
+      })
       .catch((e) => {
         console.log(e);
       });
@@ -48,7 +48,7 @@ const Categoria = () => {
                   {" "}
                   Registrar nuevo Categoria
                 </h1>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
               </div>
               <div className="modal-body">
                 <div className="container w-100 h-100 d-flex justify-content-center ">
@@ -62,7 +62,7 @@ const Categoria = () => {
                       </label>
                       <div className="input-group">
                         <div className="input-group-text">  </div>
-                        <input type="text" className="form-control" id="inlineFormInputGroupCategoria" placeholder="Nombre Categoria "/>
+                        <input type="text" className="form-control" id="inlineFormInputGroupCategoria" placeholder="Nombre Categoria " />
                       </div>
                     </div>
                     <div className="col-12">
@@ -94,7 +94,7 @@ const Categoria = () => {
           </tr>
         </thead>
         <tbody id="tableCatategoria">
-          
+
         </tbody>
       </table>
     </>
