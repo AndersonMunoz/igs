@@ -3,16 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-10-2023 a las 15:07:49
+-- Tiempo de generación: 06-12-2023 a las 16:08:22
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
--- version 5.2.0
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 20-10-2023 a las 17:50:40
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -54,7 +47,7 @@ CREATE TABLE `factura_movimiento` (
   `precio_movimiento` float NOT NULL,
   `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
-  `fecha_caducidad_producto` date NOT NULL,
+  `fecha_caducidad` date NOT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) NOT NULL
@@ -68,12 +61,11 @@ CREATE TABLE `factura_movimiento` (
 
 CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
-  `fecha_caducidad_producto` date NOT NULL,
-  `cantidad_peso_producto` float NOT NULL,
-  `unidad_peso_producto` enum('kg','lb','gr','lt','ml') NOT NULL,
+  `fecha_caducidad_producto` date DEFAULT '2010-01-03',
+  `cantidad_peso_producto` float DEFAULT 0,
+  `unidad_peso_producto` enum('kg','lb','gr','lt','ml') DEFAULT 'kg',
   `descripcion_producto` varchar(200) NOT NULL,
   `precio_producto` float NOT NULL,
-  `fk_id_categoria` int(11) NOT NULL,
   `fk_id_up` int(11) NOT NULL,
   `fk_id_tipo_producto` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
@@ -102,7 +94,8 @@ CREATE TABLE `proveedores` (
 
 CREATE TABLE `tipo_productos` (
   `id_tipo` int(11) NOT NULL,
-  `nombre_tipo` varchar(45) NOT NULL
+  `nombre_tipo` varchar(45) NOT NULL,
+  `fk_categoria_pro` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -157,7 +150,6 @@ ALTER TABLE `factura_movimiento`
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id_producto`),
   ADD KEY `tener2` (`fk_id_up`),
-  ADD KEY `tener3` (`fk_id_categoria`),
   ADD KEY `tener4` (`fk_id_tipo_producto`);
 
 --
@@ -170,7 +162,8 @@ ALTER TABLE `proveedores`
 -- Indices de la tabla `tipo_productos`
 --
 ALTER TABLE `tipo_productos`
-  ADD PRIMARY KEY (`id_tipo`);
+  ADD PRIMARY KEY (`id_tipo`),
+  ADD KEY `nada` (`fk_categoria_pro`);
 
 --
 -- Indices de la tabla `unidad_productiva`
@@ -247,8 +240,13 @@ ALTER TABLE `factura_movimiento`
 --
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`fk_id_up`) REFERENCES `unidad_productiva` (`id_up`),
-  ADD CONSTRAINT `tener3` FOREIGN KEY (`fk_id_categoria`) REFERENCES `categorias_producto` (`id_categoria`),
   ADD CONSTRAINT `tener4` FOREIGN KEY (`fk_id_tipo_producto`) REFERENCES `tipo_productos` (`id_tipo`);
+
+--
+-- Filtros para la tabla `tipo_productos`
+--
+ALTER TABLE `tipo_productos`
+  ADD CONSTRAINT `nada` FOREIGN KEY (`fk_categoria_pro`) REFERENCES `categorias_producto` (`id_categoria`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
