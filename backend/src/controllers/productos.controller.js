@@ -16,7 +16,8 @@ export const guardarProducto = async (req, res) => {
       fk_id_up,
       fk_id_tipo_producto,
     } = req.body;
-    let sql = `INSERT INTO productos (fecha_caducidad_producto, cantidad_peso_producto, unidad_peso_producto, descripcion_producto, precio_producto) VALUES ('${fecha_caducidad_producto}', '${cantidad_peso_producto}', '${unidad_peso_producto}','${descripcion_producto}','${precio_producto}')`;
+    let sql = `INSERT INTO productos (fecha_caducidad_producto, cantidad_peso_producto, unidad_peso_producto, descripcion_producto, precio_producto,fk_id_up,fk_id_tipo_producto) VALUES ('${fecha_caducidad_producto}', '${cantidad_peso_producto}', '${unidad_peso_producto}',
+    '${descripcion_producto}','${precio_producto}','${fk_id_up}','${fk_id_tipo_producto}')`;
     const [rows] = await pool.query(sql);
     if (rows.affectedRows > 0) {
       res
