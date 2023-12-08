@@ -3,20 +3,18 @@ import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
 
 const Producto = () => {
-useEffect(() => {
-  listarProducto();
-}, []); //Aqui van todas las funciones
-
-function listarProducto() {
-  fetch("http://localhost:3000/producto/listar", {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
-  })
+  useEffect(() => {
+    listarProducto();
+  }, []); 
+  function listarProducto() {
+    fetch("http://localhost:3000/producto/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       let rows = '';
       data.forEach((element) => {
         rows += `<tr key=${element.id_producto}>
@@ -28,6 +26,7 @@ function listarProducto() {
                     <td>${element.unidad_peso_producto}</td>
                     <td>${element.precio_producto}</td>
                     <td>${element.descripcion_producto}</td>
+                    <td><a href='#' onclick='eliminarProducto(${element.id_producto}); return false;'>Eliminar</a></td>
                   </tr>`;
       });
       document.getElementById('tableProducto').innerHTML = rows;
@@ -35,11 +34,45 @@ function listarProducto() {
     .catch((e) => {
       console.log(e);
     });
-}
+  }
+  function eliminarProducto(id){
+    fetch(`http://localhost:3000/producto/deshabilitar/${id}`,{
+      method: 'patch',
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      console.log(data);
+      listarProducto();
+    })
+  }
+
+      function registrarProducto() {
+        let datos = new FormData(document.getElementById('formuProducto'));
+        // let datos = new URLSearchParams();
+        // datos.append('fk_id_tipo_producto', document.getElementById('fk_id_tipo_producto').value);
+        // datos.append('fk_id_up', document.getElementById('fk_id_up').value);
+        // datos.append('fecha_caducidad_producto', document.getElementById('fecha_caducidad_producto').value);
+        // datos.append('cantidad_peso_producto', document.getElementById('cantidad_peso_producto').value);
+        // datos.append('unidad_peso_producto', document.getElementById('unidad_peso_producto').value);
+        // datos.append('precio_producto', document.getElementById('precio_producto').value);
+        // datos.append('descripcion_producto', document.getElementById('descripcion_producto').value);
+        
+        fetch('http://localhost:3000/producto/registrar', {
+          method: 'POST',
+          body: datos,
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" >
           Registrar Nuevo Producto
         </button>
         <div className="d-flex align-items-center">
@@ -48,12 +81,7 @@ function listarProducto() {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table
-          id="dtBasicExample"
-          className="table table-striped table-bordered"
-          cellSpacing={0}
-          width="100%"
-        >
+        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
           <thead>
             <tr>
               <th className="th-sm">ID</th>
@@ -64,6 +92,7 @@ function listarProducto() {
               <th className="th-sm">Unidad de Peso</th>
               <th className="th-sm">Precio</th>
               <th className="th-sm">Descipcion</th>
+              <th className="th-sm"></th>
             </tr>
           </thead>
           <tbody id="tableProducto">
@@ -71,8 +100,7 @@ function listarProducto() {
           </tbody>
         </table>
       </div>
-      <div
-        className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="exampleModal" tabIndex="-1"aria-labelledby="exampleModalLabel" aria-hidden="false">
         <div className="modal-dialog modal-lg">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -81,15 +109,14 @@ function listarProducto() {
             </div>
             <div className="modal-body">
               <div className="d-flex justify-content-center">
-                <form className="text-center border border-light p-5">
+                <form className="text-center border border-light p-5" id="formuProducto">
                   <div className="row mb-3">
                     <div className="col-md-6">
-                      <label htmlFor="categoria" className="label-bold">
+                      <label htmlFor="fk_id_tipo_producto" className="label-bold">
                         Categoría
                       </label>
-                      <select
-                        className="form-select" id="categoria" name="fk_id_tipo_producto">
-                        <option value="" disabled selected>
+                      <select className="form-select" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                        <option value="">
                           Selecciona una Categoría
                         </option>
                         <option value="1">Categoría 1</option>
@@ -102,12 +129,8 @@ function listarProducto() {
                       <label htmlFor="unidadPeso" className="label-bold">
                         U.P
                       </label>
-                      <select
-                        className="form-select"
-                        id="unidadPeso"
-                        name="unidad_peso_producto"
-                      >
-                        <option value="" disabled selected>
+                      <select className="form-select" id="unidadPeso" name="unidad_peso_producto" defaultValue="">
+                        <option value="">
                           Selectione una UP
                         </option>
                         <option value="">U.P1</option>
@@ -133,13 +156,7 @@ function listarProducto() {
                       <label htmlFor="cantidadProducto" className="label-bold">
                         Cantidad del Producto
                       </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="cantidadProducto"
-                        name="cantidad_peso_producto"
-                        placeholder="Cantidad del Producto"
-                      />
+                      <input type="text" className="form-control" id="cantidadProducto" name="cantidad_peso_producto" placeholder="Cantidad del Producto"/>
                     </div>
                   </div>
 
@@ -148,25 +165,15 @@ function listarProducto() {
                       <label htmlFor="precioProducto" className="label-bold">
                         Precio del Producto
                       </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="precioProducto"
-                        name="precio_producto"
-                        placeholder="Precio del Producto"
-                      />
+                      <input type="text" className="form-control" id="precioProducto" name="precio_producto" placeholder="Precio del Producto"/>
                     </div>
 
                     <div className="col-md-6">
                       <label htmlFor="unidadMedida" className="label-bold">
                         Unidad de Medida
                       </label>
-                      <select
-                        className="form-select"
-                        id="unidadMedida"
-                        name="unidad_peso_producto"
-                      >
-                        <option value="" disabled selected>
+                      <select className="form-select" id="unidadMedida" name="unidad_peso_producto" defaultValue="">
+                        <option value="">
                           Selecciona una unidad de medida
                         </option>
                         <option value="kg">Kilogramo</option>
@@ -179,26 +186,16 @@ function listarProducto() {
                     <label htmlFor="descripcionProducto" className="label-bold">
                       Descripción
                     </label>
-                    <textarea
-                      className="form-control"
-                      id="descripcionProducto"
-                      placeholder="Descripción del Producto"
-                      name="descripcion_producto"
-                      rows="4"
-                    ></textarea>
+                    <textarea className="form-control" id="descripcionProducto" placeholder="Descripción del Producto" name="descripcion_producto" rows="4"></textarea>
                   </div>
                 </form>
               </div>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cerrar
               </button>
-              <button type="button" className="btn btn-color">
+              <button type="button" className="btn btn-color" onClick={registrarProducto}>
                 Registrar
               </button>
             </div>
