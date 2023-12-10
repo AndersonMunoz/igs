@@ -50,7 +50,7 @@ const Categoria = () => {
         console.log("Categoría registrada:", data);
         listarCategorias();
         setCategoriaInput('');
-        const myModal = new Modal(modalRef.current); // Accede directamente a la clase Modal de Bootstrap
+        const myModal = new Modal(modalRef.current); 
         myModal.hide();
       })
       .catch((error) => {
