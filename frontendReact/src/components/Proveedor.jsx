@@ -4,27 +4,39 @@ import { IconSearch } from "@tabler/icons-react";
 
 
 const Proveedor = () => {
+
   useEffect(() => {
     listarProveedor();
-    
   }, []);
 
   function registrarProveedor() {
-    let datos = new URLSearchParams();
-    datos.append('nombres', document.getElementById('nombresProveedor').value)
-    datos.append('direccion', document.getElementById('direccionProveedor').value)
-    datos.append('contrato', document.getElementById('contratoProveedor').value)
-    datos.append('telefono', document.getElementById('telefonoProveedor').value)
-    console.log(datos);
-    fetch('http://localhost:3000/proveedor/registrar', {
-      method: 'POST',
-      body: datos
+    const nombre_proveedores = document.getElementById('nombresProveedor').value;
+    const telefono_proveedores = document.getElementById('telefonoProveedor').value;
+    const direccion_proveedores = document.getElementById('direccionProveedor').value;
+    const contrato_proveedores = document.getElementById('contratoProveedor').value;
+
+    const requestBody = {
+      telefono_proveedores,
+      direccion_proveedores,
+      contrato_proveedores,
+      nombre_proveedores,
+    };
+
+    fetch("http://localhost:3000/proveedor/registrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
         listarProveedor();
-        console.log();
       })
+      .catch((error) => {
+        console.error("Error al registrar el proveedor:", error);
+      });
   }
 
   function listarProveedor() {
@@ -35,20 +47,21 @@ const Proveedor = () => {
       },
     })
       .then((res) => res.json())
-      .then(data => {
+      .then((data) => {
         console.log(data);
         let row = '';
-        data.forEach(element => {
+        data.forEach((element) => {
           row += `<tr>
-                <td>${element.id_proveedores}</td>        
-                <td>${element.nombre_proveedores}</td>        
-                <td>${element.telefono_proveedores}</td>        
-                <td>${element.direccion_proveedores}</td>        
-                <td>${element.contrato_proveedores}</td>        
-                <td>${element.estado}</td>        
-                <td><a href="javaScript:editarCategoria(${element.id_categoria})">Editar</a></td>           
-                <td><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
-              </tr>`
+              <td>${element.id_proveedores}</td>
+              <td>${element.nombre_proveedores}</td>
+              <td>${element.telefono_proveedores}</td>
+              <td>${element.direccion_proveedores}</td>
+              <td>${element.contrato_proveedores}</td>
+              <td>${element.estado}</td>
+              <td>
+                <a href="javaScript:editarProveedor(${element.id_proveedores})">Editar</a>
+                <a href="javascript:void(0);" onclick="eliminarProveedor(${element.id_proveedores})">Eliminar</a>              </td>
+            </tr>`;
           document.getElementById('tableProveedores').innerHTML = row;
         });
       })
@@ -56,6 +69,33 @@ const Proveedor = () => {
         console.log(e);
       });
   }
+  function eliminarProveedor(id) {
+    // Puedes construir la URL con el ID y realizar la solicitud DELETE
+    const url = `http://localhost:3000/proveedor/eliminar/${id}`;
+    fetch(url, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        listarProveedor();
+      })
+      .catch((error) => {
+        console.error("Error al eliminar el proveedor:", error);
+      });
+  }
+
+
+
+  // Agrega una función para editarProveedor si no la tienes ya definida
+  function editarProveedor(id) {
+    console.log('Editar proveedor con ID:', id);
+  }
+
+
 
 
 
@@ -63,6 +103,8 @@ const Proveedor = () => {
     <>
       <div>
         <h1 className="text-center">Proveedores</h1>
+
+
         <div className="d-flex justify-content-between">
           <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
             Registrar nuevo Proveedor
