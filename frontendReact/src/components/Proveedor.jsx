@@ -1,9 +1,13 @@
-import React, { useEffect, usuEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import '../style/Proveedor.css'
 import { IconSearch } from "@tabler/icons-react";
 
 
 const Proveedor = () => {
+  const [Proveedores, setProveedor] = useState([]);
+  const sortedProveedores = [...Proveedores].sort((a, b) => a.id_proveedores - b.id_proveedores);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [selectedProveedorData, setSelectedProveedorData] = useState(null);
 
   useEffect(() => {
     listarProveedor();
@@ -14,6 +18,8 @@ const Proveedor = () => {
     const telefono_proveedores = document.getElementById('telefonoProveedor').value;
     const direccion_proveedores = document.getElementById('direccionProveedor').value;
     const contrato_proveedores = document.getElementById('contratoProveedor').value;
+    document.getElementById('btnAgregar').classList.remove('d-none');
+    document.getElementById('btnActualizar').classList.add('d-none');
 
     const requestBody = {
       telefono_proveedores,
@@ -38,7 +44,6 @@ const Proveedor = () => {
         console.error("Error al registrar el proveedor:", error);
       });
   }
-
   function listarProveedor() {
     fetch("http://localhost:3000/proveedor/listar", {
       method: "GET",
@@ -48,29 +53,13 @@ const Proveedor = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        let row = '';
-        data.forEach((element) => {
-          row += `<tr>
-              <td>${element.id_proveedores}</td>
-              <td>${element.nombre_proveedores}</td>
-              <td>${element.telefono_proveedores}</td>
-              <td>${element.direccion_proveedores}</td>
-              <td>${element.contrato_proveedores}</td>
-              <td>${element.estado}</td>
-              <td>
-                <a href="javaScript:editarProveedor(${element.id_proveedores})">Editar</a>
-                <a href="javascript:void(0);" onclick="eliminarProveedor(${element.id_proveedores})">Eliminar</a>              </td>
-            </tr>`;
-          document.getElementById('tableProveedores').innerHTML = row;
-        });
+        setProveedor(data)
       })
       .catch((e) => {
         console.log(e);
       });
   }
   function eliminarProveedor(id) {
-    // Puedes construir la URL con el ID y realizar la solicitud DELETE
     const url = `http://localhost:3000/proveedor/eliminar/${id}`;
     fetch(url, {
       method: "put",
@@ -88,12 +77,72 @@ const Proveedor = () => {
       });
   }
 
-
-
-  // Agrega una función para editarProveedor si no la tienes ya definida
   function editarProveedor(id) {
-    console.log('Editar proveedor con ID:', id);
+    buscarProveedor(id)
+      .then((data) => {
+        if (data.length > 0) {
+          setSelectedProveedorData(data[0]);
+          document.getElementById('nombresProveedor').value = data[0].nombre_proveedores;
+          document.getElementById('direccionProveedor').value = data[0].direccion_proveedores;
+          document.getElementById('contratoProveedor').value = data[0].contrato_proveedores;
+          document.getElementById('telefonoProveedor').value = data[0].telefono_proveedores;
+          document.getElementById('btnAgregar').classList.add('d-none');
+          document.getElementById('btnActualizar').classList.remove('d-none');
+        } else {
+          console.log('No hay datos para el ID:', id);
+        }
+      })
+      .catch((error) => {
+        console.error('Error al buscar el proveedor:', error);
+      });
   }
+
+
+
+  function buscarProveedor(id) {
+    const url = `http://localhost:3000/proveedor/buscar/${id}`;
+    return fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .catch((error) => {
+        console.error('Error al buscar el proveedor:', error);
+        throw error;
+      });
+  }
+
+  function actualizarProveedor(id) {
+    const nombre_proveedores = document.getElementById('nombresProveedor').value;
+    const telefono_proveedores = document.getElementById('telefonoProveedor').value;
+    const direccion_proveedores = document.getElementById('direccionProveedor').value;
+    const contrato_proveedores = document.getElementById('contratoProveedor').value;
+    const requestBody = {
+      telefono_proveedores,
+      direccion_proveedores,
+      contrato_proveedores,
+      nombre_proveedores,
+    };
+
+    fetch(`http://localhost:3000/proveedor/actualizar/${id}`, {
+      method: "Put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        listarProveedor();
+      })
+      .catch((error) => {
+        console.error("Error al registrar el proveedor:", error);
+      });
+  }
+
 
 
 
@@ -133,12 +182,27 @@ const Proveedor = () => {
               <th className="th'sm"   >acciones</th>
             </tr>
           </thead>
-          <tbody id="tableProveedores">
-
+          <tbody id="tableProveedores" className="text-center">
+            {sortedProveedores.map((element, index) => (
+              <tr key={element.id_proveedores}>
+                <td>{element.id_proveedores}</td>
+                <td>{element.nombre_proveedores}</td>
+                <td>{element.telefono_proveedores}</td>
+                <td>{element.direccion_proveedores}</td>
+                <td>{element.contrato_proveedores}</td>
+                <td>{element.estado}</td>
+                <td>
+                  <button type="button" className="btn-color btn " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
+                    editar
+                  </button>
+                  <button className="btn btn-danger" type="button" onClick={() => eliminarProveedor(element.id_proveedores)}> eliminar</button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: updateModal ? "block" : "none" }}>
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -169,7 +233,8 @@ const Proveedor = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" className="btn btn-color" onClick={registrarProveedor}>Agregar</button>
+              <button id="btnAgregar" type="button" className="btn btn-color" onClick={registrarProveedor}>Agregar</button>
+              <button id="btnActualizar" type="button" className="btn btn-color d-none" onClick={()=> actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
             </div>
           </div>
         </div>

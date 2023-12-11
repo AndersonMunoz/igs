@@ -10,6 +10,6 @@ provedorRouter.get('/listar', listarProvedor);
 provedorRouter.get('/buscar/:id',buscarProvedor);
 provedorRouter.post('/registrar', /* validarProvedor,validarToken , */registrarProvedor);
 provedorRouter.put('/eliminar/:id' ,/* validarToken , */ eliminarProvedor);
-provedorRouter.put('/actualizar/:id',validarProvedor,validarToken,actualizarProvedor);
+provedorRouter.put('/actualizar/:id'/* ,validarProvedor,validarToken */,actualizarProvedor);
 
 export default provedorRouter;
