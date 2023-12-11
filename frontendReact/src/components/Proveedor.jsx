@@ -2,11 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import '../style/Proveedor.css'
 import { IconSearch } from "@tabler/icons-react";
 
-
 const Proveedor = () => {
   const [Proveedores, setProveedor] = useState([]);
   const sortedProveedores = [...Proveedores].sort((a, b) => a.id_proveedores - b.id_proveedores);
-  const [updateModal, setUpdateModal] = useState(false);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
 
   useEffect(() => {
@@ -18,8 +16,6 @@ const Proveedor = () => {
     const telefono_proveedores = document.getElementById('telefonoProveedor').value;
     const direccion_proveedores = document.getElementById('direccionProveedor').value;
     const contrato_proveedores = document.getElementById('contratoProveedor').value;
-    document.getElementById('btnAgregar').classList.remove('d-none');
-    document.getElementById('btnActualizar').classList.add('d-none');
 
     const requestBody = {
       telefono_proveedores,
@@ -37,7 +33,6 @@ const Proveedor = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         listarProveedor();
       })
       .catch((error) => {
@@ -59,6 +54,7 @@ const Proveedor = () => {
         console.log(e);
       });
   }
+
   function eliminarProveedor(id) {
     const url = `http://localhost:3000/proveedor/eliminar/${id}`;
     fetch(url, {
@@ -77,8 +73,33 @@ const Proveedor = () => {
       });
   }
 
+  function activarProveedor(id) {
+    const url = `http://localhost:3000/proveedor/activar/${id}`;
+    fetch(url, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        listarProveedor();
+      })
+      .catch((error) => {
+        console.error("Error al activar el proveedor:", error);
+      });
+  }
+
   function editarProveedor(id) {
-    buscarProveedor(id)
+    const url = `http://localhost:3000/proveedor/buscar/${id}`;
+    return fetch(url, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
       .then((data) => {
         if (data.length > 0) {
           setSelectedProveedorData(data[0]);
@@ -87,7 +108,9 @@ const Proveedor = () => {
           document.getElementById('contratoProveedor').value = data[0].contrato_proveedores;
           document.getElementById('telefonoProveedor').value = data[0].telefono_proveedores;
           document.getElementById('btnAgregar').classList.add('d-none');
+          document.getElementById('exampleModalLabel').classList.add('d-none');
           document.getElementById('btnActualizar').classList.remove('d-none');
+          document.getElementById('titleSctualizar').classList.remove('d-none');
         } else {
           console.log('No hay datos para el ID:', id);
         }
@@ -96,8 +119,6 @@ const Proveedor = () => {
         console.error('Error al buscar el proveedor:', error);
       });
   }
-
-
 
   function buscarProveedor(id) {
     const url = `http://localhost:3000/proveedor/buscar/${id}`;
@@ -108,6 +129,10 @@ const Proveedor = () => {
       },
     })
       .then((res) => res.json())
+      .then((data) => {
+        setProveedor(data)
+        document.getElementById('btnActivar').classList.remove('d-none');
+      })
       .catch((error) => {
         console.error('Error al buscar el proveedor:', error);
         throw error;
@@ -134,19 +159,23 @@ const Proveedor = () => {
       body: JSON.stringify(requestBody),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        listarProveedor();
-      })
+
       .catch((error) => {
         console.error("Error al registrar el proveedor:", error);
       });
   }
 
+  function limpiarModal() {
+    document.getElementById('nombresProveedor').value = '';
+    document.getElementById('direccionProveedor').value = '';
+    document.getElementById('contratoProveedor').value = '';
+    document.getElementById('telefonoProveedor').value = '';
 
-
-
-
+    document.getElementById('btnAgregar').classList.remove('d-none');
+    document.getElementById('exampleModalLabel').classList.remove('d-none');
+    document.getElementById('btnActualizar').classList.add('d-none');
+    document.getElementById('titleSctualizar').classList.add('d-none');
+  }
 
   return (
     <>
@@ -155,12 +184,12 @@ const Proveedor = () => {
 
 
         <div className="d-flex justify-content-between">
-          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={limpiarModal}>
             Registrar nuevo Proveedor
           </button>
           <div className="d-flex align-items-center">
-            <input type="text" placeholder="Buscar Producto" className="input-buscar" />
-            <IconSearch className="iconSearch" />
+            <input id="buscarProveedorId" type="text" placeholder="Buscar un proveedor" className="input-buscar" />
+            <IconSearch className="iconSearch" onClick={() => buscarProveedor(document.getElementById('buscarProveedorId').value)} />
           </div>
         </div>
       </div>
@@ -171,7 +200,7 @@ const Proveedor = () => {
           cellSpacing={0}
           width="100%"
         >
-          <thead>
+          <thead className="text-center">
             <tr>
               <th className="th-sm">Id</th>
               <th className="th-sm">Nombre</th>
@@ -190,23 +219,53 @@ const Proveedor = () => {
                 <td>{element.telefono_proveedores}</td>
                 <td>{element.direccion_proveedores}</td>
                 <td>{element.contrato_proveedores}</td>
-                <td>{element.estado}</td>
                 <td>
-                  <button type="button" className="btn-color btn " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
-                    editar
-                  </button>
-                  <button className="btn btn-danger" type="button" onClick={() => eliminarProveedor(element.id_proveedores)}> eliminar</button>
+                  {element.estado === 1 ? 'Activo' : 'Inhabilitado'}
+                </td>
+                <td>
+                  {element.estado !== 1 ?
+                    <>
+                      <button
+                        id="btnActivar"
+                        className="btn bg-info "
+                        type="button"
+                        onClick={() => activarProveedor(element.id_proveedores)}
+                      >
+                        Habilitar
+                      </button>
+                    </> : (
+                      <>
+                        <button
+                          type="button"
+                          className="btn-color btn"
+                          data-bs-toggle="modal"
+                          data-bs-target="#exampleModal"
+                          onClick={() => editarProveedor(element.id_proveedores)}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          type="button"
+                          onClick={() => eliminarProveedor(element.id_proveedores)}
+                        >
+                          Inhabilitar
+                        </button>
+
+                      </>
+                    )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: updateModal ? "block" : "none" }}>
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Proveedor</h1>
+              <h1 className="modal-title fs-5 d-none" id="titleSctualizar">Actualizar proveedor</h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -233,8 +292,8 @@ const Proveedor = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button id="btnAgregar" type="button" className="btn btn-color" onClick={registrarProveedor}>Agregar</button>
-              <button id="btnActualizar" type="button" className="btn btn-color d-none" onClick={()=> actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
+              <button id="btnAgregar" type="button" className="btn btn-color" data-bs-dismiss="modal" onClick={registrarProveedor}>Agregar</button>
+              <button id="btnActualizar" type="button" data-bs-dismiss="modal" className="btn btn-color d-none" onClick={() => actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
             </div>
           </div>
         </div>
