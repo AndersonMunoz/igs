@@ -1,25 +1,25 @@
 import { check } from "express-validator";
 
 export const validatorUsuario = [
-    check('documento', 'El documento debe ser un número de 10  dígitos')
+    check('documento_usuario', 'El documento debe ser un número de 10  dígitos')
         .exists()
         .not()
         .isEmpty()
-        .matches(/^\d{10}$/), // Validar que el documento tenga exactamente 10 dígitos
+        .matches(/^\d{10}$/),
 
-    check('email', 'El correo electrónico es inválido')
+    check('email_usuario', 'El correo electrónico es inválido')
         .exists()
         .not()
         .isEmpty()
-        .isEmail(), // Utilizar la función isEmail() para validar correos electrónicos
+        .isEmail(),
 
-    check('nombre', 'El nombre solo debe contener letras, espacios y apóstrofes')
+    check('nombre_usuario', 'El nombre solo debe contener letras, espacios y apóstrofes')
         .exists()
         .not()
         .isEmpty()
         .matches(/^[A-Za-z\s']+$/),
 
-    check('contraseña', 'La contraseña debe cumplir los siguientes requisitos:')
+    check('contrasena_usuario', 'La contraseña debe cumplir los siguientes requisitos:')
         .exists()
         .not()
         .isEmpty()
@@ -29,7 +29,7 @@ export const validatorUsuario = [
         .matches(/\d/).withMessage('Debe contener al menos un número.'),
         
 
-    check('tipo', 'el tipo de usuario es requerido o !!!')
+    check('tipo_usuario', 'el tipo de usuario es requerido o !!!')
         .not()
         .isEmpty()
         .isIn(['administrador','coadministrador'])

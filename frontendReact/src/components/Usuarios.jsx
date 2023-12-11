@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import "../style/usuario.css";
 import { IconSearch } from "@tabler/icons-react";
-import Swal from 'sweetalert2'
-import {  } from 'sweetalert2-react-content'
+import Sweet from '../helpers/Sweet';
+import Validate from '../helpers/Validate';
 
 const Usuario = () => {
 
@@ -11,6 +11,7 @@ const Usuario = () => {
 		eliminarUsuario()
 		registrarUsuario();
 	}, []);
+
 	///listar usuario
 	function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
@@ -30,19 +31,15 @@ const Usuario = () => {
 									<td>${element.email_usuario}</td>        
 									<td>${element.tipo_usuario}</td>        
 									<td>${element.estado}</td>        
-									<td><a class="btn btn-danger" href='javaScript:eliminarUsuario(${element.id_usuario})'>Eliminar</a></td>        
+									<td class='mx-2'><a class='btn btn-danger' href='javaScript:eliminarUsuario(${element.id_usuario})'>Eliminar</a></td> 
+									<td class='mx-2'><div class='btn btn-primary' onclick='modalAct(${element.id})'>Actualizar</div></td>       
 								</tr>`
 					document.getElementById('listarUsuario').innerHTML = row;
 				});
 			})
 			.catch(e => { console.log(e); })
 	}
-	///registrar
-/* 	let formControl = document.querySelectorAll(".form-control");
-	let invalidFeedback = document.querySelectorAll(".invalid-feedback");
 
-
-const MySwal = withReactContent(Swal) /* */
 
 	 function registrarUsuario() {
     let datos = new URLSearchParams();
@@ -52,63 +49,33 @@ const MySwal = withReactContent(Swal) /* */
     datos.append('documento_usuario', document.getElementById('documento_usuario').value)
     datos.append('tipo_usuario', document.getElementById('tipo_usuario').value)
 
+	const validacionExitosa = Validate.validarCampos('.form-empty');
+
     fetch('http://localhost:3000/usuario/registrar', {
         method: 'POST',
         body: datos
     })
         .then(rep => rep.json())
         .then(data => {
-            if (data.errors) {
-                let keys = [
-                    "nombre_usuario",
-                    "email_usuario",
-                    "contrasena_usuario",
-                    "documento_usuario",
-                    "tipo_usuario"
-                ]
-                console.log(data.errors.path)
-                for (let x = 0; x < keys.length; x++) {
-                    for (let u = 0; u < data.errors.length; u++) {
-
-                        for (let i = 0; i < keys.length; i++) {
-                            console.log(data.errors[u].path, [keys[x]])
-                            if (data.errors[u].path == [keys[x]]) {
-                                formControl[x].classList.add("is-invalid")
-                                formControl[x].classList.remove("is-valid")
-
-                            }
-                        }
-                    }
-
-                }
-            }
+			if(!validacionExitosa){
+				
+				Sweet.actualizacionFallido();
+				return;
+			  }
+            
             if (data.status == 200) {
                 
-							MySwal.fire({
-                    title: 'Mensaje',
-                    icon: 'success',
-                    text: data.menssge,
-                    ConfirmButtonText: 'Cerrar',
-                })
+				Sweet.registroExitoso();
             }
             if (data.status == 401) {
                 
-							MySwal.fire({
-                    title: 'Mensaje',
-                    icon: 'warning',
-                    text: data.menssge,
-                    ConfirmButtonText: 'Cerrar',
-                })
+				Sweet.registroFallido();
             }
             if (data.status == 500) {
-                
-							MySwal.fire({
-                    title: 'Mensaje',
-                    icon: 'warning',
-                    text: data.menssge,
-                    ConfirmButtonText: 'Cerrar',
-                })
+
+                Sweet.registroFallido();
             }
+
             console.log(data, "xd")
             
             modalUsuario.hide()
@@ -178,7 +145,7 @@ const MySwal = withReactContent(Swal) /* */
 					cellSpacing={0}
 					width="100%"
 				>
-					<thead>
+					<thead className="text-center text-justify">
 						<tr>
 							<th className="th-sm">#</th>
 							<th className="th-sm">Nombre</th>
@@ -186,10 +153,10 @@ const MySwal = withReactContent(Swal) /* */
 							<th className="th-sm">Correo Electronico</th>
 							<th className="th-sm">Cargo</th>
 							<th className="th-sm">Estado</th>
-							<th className="th-sm">Eliminar</th>
+							<th className="th-sm" colSpan={2}>Acciones</th>
 						</tr>
 					</thead>
-					<tbody id="listarUsuario">
+					<tbody id="listarUsuario" className="text-center">
 
 					</tbody>
 				</table>
@@ -211,7 +178,7 @@ const MySwal = withReactContent(Swal) /* */
 											</label>
 											<input
 												type="text"
-												className="form-control"
+												className="form-control form-empty"
 												id="nombre_usuario"
 												name="nombre_usuario"
 												placeholder="Ingrese su nombre"
@@ -226,7 +193,7 @@ const MySwal = withReactContent(Swal) /* */
 											</label>
 											<input
 												type="number"
-												className="form-control"
+												className="form-control form-empty"
 												id="documento_usuario"
 												name="documento_usuario"
 												placeholder="Ingrese su documento"
@@ -241,7 +208,7 @@ const MySwal = withReactContent(Swal) /* */
 											</label>
 											<input
 												type="email_usuario"
-												className="form-control"
+												className="form-control form-empty"
 												id="email_usuario"
 												name="email_usuario"
 												placeholder="Ingrese su email"
@@ -255,7 +222,7 @@ const MySwal = withReactContent(Swal) /* */
 												Cargo
 											</label>
 											<select
-												className="form-select"
+												className="form-select form-empty"
 												id="tipo_usuario"
 												name="tipo_usuario"
 											>
@@ -272,7 +239,7 @@ const MySwal = withReactContent(Swal) /* */
 											</label>
 											<input
 												type="password"
-												className="form-control"
+												className="form-control form-empty"
 												id="contrasena_usuario"
 												name="contrasena_usuario"
 												placeholder="Ingrese una contraseña"
@@ -293,7 +260,7 @@ const MySwal = withReactContent(Swal) /* */
 							>
 								Cerrar
 							</button>
-							<button type="button" className="btn btn-color" onClick="registrarUsuario" >
+							<button type="button" data-bs-dismiss="modal" className="btn btn-color" onClick={registrarUsuario} >
 								Registrar
 							</button>
 						</div>
