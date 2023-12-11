@@ -5,7 +5,7 @@ import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 
 const Producto = () => {
-
+  const [search, setSeach] = useState('');
   const [productos, setProductos] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [up, setUp] = useState([]);
@@ -14,8 +14,6 @@ const Producto = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
-
-  
 
   useEffect(() => {
     listarProducto();
@@ -29,13 +27,7 @@ const Producto = () => {
       modalBackdrop.remove();
     }
   }
-  function formatFecha(fecha) {
-    const fechaObj = new Date(fecha);
-    const year = fechaObj.getFullYear();
-    const month = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
-    const day = fechaObj.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+
   function listarProducto() {
     fetch("http://localhost:3000/producto/listar", {
       method: "GET",
@@ -116,6 +108,7 @@ const Producto = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
+        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -196,12 +189,10 @@ const Producto = () => {
     })
   }
 
-  const [search, setSeach] = useState('');
-
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setShowModal(true)}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true)}}>
           Registrar Nuevo Producto
         </button>
         <div className="d-flex align-items-center">
@@ -232,7 +223,7 @@ const Producto = () => {
                 <td>{element.id_producto}</td>
                 <td>{element.NombreProducto}</td>
                 <td>{element.NombreCategoria}</td>
-                <td>{formatFecha(element.FechaCaducidad)}</td>
+                <td>{Validate.formatFecha(element.FechaCaducidad)}</td>
                 <td>{element.Peso}</td>
                 <td>{element.Unidad}</td>
                 <td>{element.PrecioIndividual}</td>
@@ -264,7 +255,7 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="precioProducto" className="label-bold mb-2">Precio del Producto</label>
-                    <input type="text" className="form-control form-empty" id="precio_producto" name="precio_producto" placeholder="Precio del Producto" />
+                    <input type="text" className="form-control form-empty limpiar" id="precio_producto" name="precio_producto" placeholder="Precio del Producto" />
                     <div className="invalid-feedback is-invalid">
                       Por favor, ingrese el precio del producto.
                     </div>
@@ -273,7 +264,7 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-control form-empty" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
                       <option value="">Selecciona un Tipo</option>
                       {tipos.map((element) => (
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
@@ -286,7 +277,7 @@ const Producto = () => {
 
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
-                    <select className="form-select form-control form-empty" id="fk_id_up" name="fk_id_up" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
                       <option value="">Selecciona una UP</option>
                       {up.map((element) => (
                         <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
@@ -299,7 +290,7 @@ const Producto = () => {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="descripcionProducto" className="label-bold mb-2">Descripción</label>
-                  <textarea className="form-control form-empty" id="descripcion_producto" placeholder="Descripción del Producto" name="descripcion_producto" rows="4"></textarea>
+                  <textarea className="form-control form-empty limpiar" id="descripcion_producto" placeholder="Descripción del Producto" name="descripcion_producto" rows="4"></textarea>
                   <div className="invalid-feedback is-invalid">
                     Por favor, ingrese una descripción del producto.
                   </div>
