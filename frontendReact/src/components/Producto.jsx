@@ -50,7 +50,9 @@ const Producto = () => {
     })
     .then((res)=>res.json())
     .then((data)=>{
-      setTipo(data)
+      if(Array.isArray(data)) {
+        setTipo(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -65,9 +67,7 @@ const Producto = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      if(data.status == 401){
-        Sweet.registroFallido();
-      }else if(Array.isArray(data)) {
+      if(Array.isArray(data)) {
         setUp(data);
       }
     })
@@ -245,7 +245,7 @@ const Producto = () => {
           </tbody>
         </table>
       </div>
-      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -279,7 +279,7 @@ const Producto = () => {
 
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="" onClick={listarUp}>
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue=""onClick={listarUp}>
                       <option value="">Selecciona una UP</option>
                       {up.map((element) => (
                         <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
