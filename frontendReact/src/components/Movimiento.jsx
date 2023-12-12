@@ -12,6 +12,9 @@ const Movimiento = () => {
   const [proveedor_list, setProveedor] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [usuario_list, setUsuario] = useState([]);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
+  const modalUpdateRef = useRef(null);
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
@@ -23,10 +26,16 @@ const Movimiento = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
 
+  function removeModalBackdrop() {
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    if (modalBackdrop) {
+      modalBackdrop.remove();
+    }
+  }
+
   useEffect(() => {
     listarMovimiento();
     listarCategoria();
-    //listarProducto();
     listarTipo();
     listarProveedor();
     listarUsuario();
@@ -46,22 +55,6 @@ const Movimiento = () => {
       console.log(e);
     });
   }
-
- /*  function listarProducto() {
-    fetch("http://localhost:3000/producto/listar", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      setProductos(data);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-  } */
   function listarTipo(){
     fetch("http://localhost:3000/tipo/listar",{
       method: "GET",
@@ -91,6 +84,54 @@ const Movimiento = () => {
       .catch((e) => {
         console.log(e);
       });
+  }
+  function editarMovimiento(id) {
+    fetch(`http://localhost:3000/facturamovimiento/buscar/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setMovimientoSeleccionado(data[0]);
+        setUpdateModal(true);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+  function actualizarMovimiento(id){
+    const validacionExitosa = Validate.validarCampos('.form-update');
+    fetch(`http://localhost:3000/facturamovimiento/actualizar/${id}`,{
+      method: 'PUT',
+      headers:{
+        'Content-type':'application/json'
+      },
+       body: JSON.stringify(movimientoSeleccionado),
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+      if(!validacionExitosa){
+        Sweet.actualizacionFallido();
+        return;
+      }
+      if(data.status == 200){
+        Sweet.actualizacionExitoso();
+      }
+      if(data.status == 401){
+        Sweet.actualizacionFallido();
+      }
+      console.log(data);
+      listarMovimiento();
+      setUpdateModal(false);
+      removeModalBackdrop();
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+        modalBackdrop.remove();
+      }
+    })
   }
   function registrarMovimiento() {
     
@@ -156,6 +197,7 @@ const Movimiento = () => {
 			})
 			.catch(e => { console.log(e); })
 	}
+  
 
   function listarMovimiento() {
       fetch("http://localhost:3000/facturamovimiento/listar", {
@@ -183,7 +225,7 @@ const Movimiento = () => {
     <table className="table table-striped table-hover w-80">
   <thead>
     <tr>
-      <th className="p-2 text-center ">Nombre producto</th>
+      <th className="p-2 text-center">Nombre producto</th>
       <th className="p-2 text-center">Fecha del movimiento</th>
       <th className="p-2 text-center">Tipo de movimiento</th>
       <th className="p-2 text-center">Cantidad</th>
@@ -200,18 +242,18 @@ const Movimiento = () => {
   <tbody id="tableMovimiento">
       {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.nombre_tipo.toLowerCase().includes(search)}).map((element) => (
           <tr key={element.id_factura}>
-            <td>{element.nombre_tipo}</td>
-            <td>{Validate.formatFecha(element.fecha_movimiento)}</td>
-            <td>{element.tipo_movimiento}</td>
-            <td>{element.cantidad_peso_movimiento}</td>
-            <td>{element.unidad_peso_movimiento}</td>
-            <td>{element.precio_movimiento}</td>
-            <td>{element.estado_producto_movimiento}</td>
-            <td>{element.nota_factura}</td>
-            <td>{Validate.formatFecha(element.fecha_caducidad)}</td>
-            <td>{element.nombre_usuario}</td>
-            <td>{element.nombre_proveedores}</td>
-            <td className="mx-2"onClick={() => {setUpdateModal(true);editarProducto(element.id_producto);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+            <td className="p-2 text-center">{element.nombre_tipo}</td>
+            <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
+            <td className="p-2 text-center">{element.tipo_movimiento}</td>
+            <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+            <td className="p-2 text-center">{element.unidad_peso_movimiento}</td>
+            <td className="p-2 text-center">{element.precio_movimiento}</td>
+            <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
+            <td className="p-2 text-center">{element.nota_factura}</td>
+            <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+            <td className="p-2 text-center">{element.nombre_usuario}</td>
+            <td className="p-2 text-center">{element.nombre_proveedores}</td>
+            <td className="mx-2"onClick={() => {setUpdateModal(true);editarMovimiento(element.id_factura);}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
               <button className="btn btn-color">
                 Editar
               </button>
@@ -389,7 +431,7 @@ const Movimiento = () => {
           </div>
         </div>
       </div>
-      <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+      <div className="modal fade" id="movimientoEditarModal" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -408,16 +450,6 @@ const Movimiento = () => {
                           <option value="regular">Regular</option>
                           <option value="malo">Malo</option>
                         </select>
-                    </div>
-                  </div>
-                  <div className="col">
-                  <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" htmlFor="form6Example3">Tipo de movimeinto</label>
-                      <select className="form-select" id="form6Example3" aria-label="Default select example">
-                        <option value="">Seleccione una opción</option>
-                        <option value="entrada">Entrada</option>
-                        <option value="salida">Salida</option>
-                      </select>
                     </div>
                   </div>
                 </div>
@@ -464,7 +496,7 @@ const Movimiento = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" className="btn btn-primary bg-success bg-gradient">Actualizar</button>
+              <button type="button" className="btn btn-color" onClick={() => {actualizarMovimiento(movimientoSeleccionado.id_factura);}}>Actualizar</button>
             </div>
           </div>
         </div>
