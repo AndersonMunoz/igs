@@ -34,7 +34,9 @@ const Categoria = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      setcategorias_producto(data);
+      if(Array.isArray(data)){
+        setcategorias_producto(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -73,6 +75,7 @@ const Categoria = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
+        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -183,7 +186,7 @@ const Categoria = () => {
                         <div className="input-group-text">  </div>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control limpiar "
                           id="nombreCategoria"
                           placeholder="Nombre Categoria "
                         />
