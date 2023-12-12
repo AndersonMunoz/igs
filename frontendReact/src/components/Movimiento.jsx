@@ -183,6 +183,7 @@ const Movimiento = () => {
       .catch(error => {
         console.error('Error:', error);
       });
+      //console.log(document.getElementById('fecha_caducidad'));
   }
   function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
