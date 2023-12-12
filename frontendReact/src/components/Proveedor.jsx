@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import '../style/Proveedor.css'
 import { IconSearch } from "@tabler/icons-react";
+import Validate from '../helpers/Validate';
+import Sweet from '../helpers/Sweet';
+import { Result } from "express-validator";
 
 const Proveedor = () => {
   const [Proveedores, setProveedor] = useState([]);
   const sortedProveedores = [...Proveedores].sort((a, b) => a.id_proveedores - b.id_proveedores);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
-
+  let validacionExitosa='';
+ 
   useEffect(() => {
     listarProveedor();
   }, []);
@@ -16,6 +20,8 @@ const Proveedor = () => {
     const telefono_proveedores = document.getElementById('telefonoProveedor').value;
     const direccion_proveedores = document.getElementById('direccionProveedor').value;
     const contrato_proveedores = document.getElementById('contratoProveedor').value;
+
+     validacionExitosa= Validate.validarCampos('.form-empty')
 
     const requestBody = {
       telefono_proveedores,
@@ -34,6 +40,15 @@ const Proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         listarProveedor();
+        if (!validacionExitosa) {
+          Sweet.registroFallido
+          return;
+        }
+        if (data.status == 200) {
+          Sweet.registroExitoso()
+        } else {
+          Sweet.registroFallido()
+        }
       })
       .catch((error) => {
         console.error("Error al registrar el proveedor:", error);
@@ -56,39 +71,30 @@ const Proveedor = () => {
   }
 
   function eliminarProveedor(id) {
-    const url = `http://localhost:3000/proveedor/eliminar/${id}`;
-    fetch(url, {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    Sweet.confirmacion().then((result) => {
+      if (result.isConfirmed) {
+        const url = `http://localhost:3000/proveedor/eliminar/${id}`;
+        fetch(url, {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === 200) {
+              Sweet.deshabilitadoExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.deshabilitadoFallido();
+            }
+            listarProveedor();
+          })
+          .catch((error) => {
+            console.error("Error al eliminar el proveedor:", error);
+          });
+      }
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        listarProveedor();
-      })
-      .catch((error) => {
-        console.error("Error al eliminar el proveedor:", error);
-      });
-  }
-
-  function activarProveedor(id) {
-    const url = `http://localhost:3000/proveedor/activar/${id}`;
-    fetch(url, {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        listarProveedor();
-      })
-      .catch((error) => {
-        console.error("Error al activar el proveedor:", error);
-      });
   }
 
   function editarProveedor(id) {
@@ -119,7 +125,6 @@ const Proveedor = () => {
         console.error('Error al buscar el proveedor:', error);
       });
   }
-
   function buscarProveedor(id) {
     const url = `http://localhost:3000/proveedor/buscar/${id}`;
     return fetch(url, {
@@ -138,7 +143,6 @@ const Proveedor = () => {
         throw error;
       });
   }
-
   function actualizarProveedor(id) {
     const nombre_proveedores = document.getElementById('nombresProveedor').value;
     const telefono_proveedores = document.getElementById('telefonoProveedor').value;
@@ -150,7 +154,6 @@ const Proveedor = () => {
       contrato_proveedores,
       nombre_proveedores,
     };
-
     fetch(`http://localhost:3000/proveedor/actualizar/${id}`, {
       method: "Put",
       headers: {
@@ -159,18 +162,21 @@ const Proveedor = () => {
       body: JSON.stringify(requestBody),
     })
       .then((res) => res.json())
-
+      .then((data) => {
+        console.log(data);
+        if (data.status == 200) {
+          Sweet.actualizacionExitoso()
+        } else {
+          Sweet.actualizacionFallido()
+        }
+      })
       .catch((error) => {
-        console.error("Error al registrar el proveedor:", error);
+        console.error("Error al actualizar el proveedor:", error);
       });
   }
 
   function limpiarModal() {
-    document.getElementById('nombresProveedor').value = '';
-    document.getElementById('direccionProveedor').value = '';
-    document.getElementById('contratoProveedor').value = '';
-    document.getElementById('telefonoProveedor').value = '';
-
+    Validate.limpiar('.limpiar')
     document.getElementById('btnAgregar').classList.remove('d-none');
     document.getElementById('exampleModalLabel').classList.remove('d-none');
     document.getElementById('btnActualizar').classList.add('d-none');
@@ -194,12 +200,7 @@ const Proveedor = () => {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table
-          id="dtBasicExample"
-          className="table table-striped table-bordered"
-          cellSpacing={0}
-          width="100%"
-        >
+        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
           <thead className="text-center">
             <tr>
               <th className="th-sm">Id</th>
@@ -208,7 +209,7 @@ const Proveedor = () => {
               <th className="th-sm">Direccion</th>
               <th className="th-sm">Contrato</th>
               <th className="th-sm">Estado</th>
-              <th className="th'sm"   >acciones</th>
+              <th className="th'sm">acciones</th>
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -220,40 +221,20 @@ const Proveedor = () => {
                 <td>{element.direccion_proveedores}</td>
                 <td>{element.contrato_proveedores}</td>
                 <td>
-                  {element.estado === 1 ? 'Activo' : 'Inhabilitado'}
+                  {element.estado === 1 ? 'Activo' : 'Deshabilitado'}
                 </td>
                 <td>
-                  {element.estado !== 1 ?
+                  {element.estado !== 1 ? 'NO DISPONIBLES' : (
                     <>
-                      <button
-                        id="btnActivar"
-                        className="btn bg-info "
-                        type="button"
-                        onClick={() => activarProveedor(element.id_proveedores)}
-                      >
-                        Habilitar
+                      <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
+                        Editar
                       </button>
-                    </> : (
-                      <>
-                        <button
-                          type="button"
-                          className="btn-color btn"
-                          data-bs-toggle="modal"
-                          data-bs-target="#exampleModal"
-                          onClick={() => editarProveedor(element.id_proveedores)}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="btn btn-danger"
-                          type="button"
-                          onClick={() => eliminarProveedor(element.id_proveedores)}
-                        >
-                          Inhabilitar
-                        </button>
+                      <button className="btn btn-danger" type="button" onClick={() => eliminarProveedor(element.id_proveedores)}>
+                        Deshabilitar
+                      </button>
 
-                      </>
-                    )}
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
@@ -273,18 +254,34 @@ const Proveedor = () => {
                 <form className="text-center border border-light" action="#!">
                   <div className="d-flex form-row mb-4">
                     <div className="col">
-                      <input type="text" id="nombresProveedor" className="form-control" placeholder="Nombres"></input>
+                      <h2 className="fs-5">Nombres</h2>
+                      <input type="text" id="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required></input>
+                      <div className="invalid-feedback is-invalid">
+                        Por favor, ingrese un nombre valido
+                      </div>
                     </div>
                     <div className="col ms-3">
-                      <input type="text" id="direccionProveedor" className="form-control" placeholder="Direccion"></input>
+                      <h2 className="fs-5">Direccion</h2>
+                      <input type="text" id="direccionProveedor" className="form-control form-empty limpiar" placeholder="Direccion"></input>
+                      <div className="invalid-feedback is-invalid">
+                        Error en la direccion.
+                      </div>
                     </div>
                   </div>
                   <div className="d-flex form-row mb-1">
                     <div className="col">
-                      <input type="text" id="contratoProveedor" className="form-control mb-4" placeholder="Contrato"></input>
+                      <h2 className="fs-5">Contrato</h2>
+                      <input type="text" id="contratoProveedor" className="form-control form-empty mb-4 limpiar" placeholder="N° de contrato"></input>
+                      <div className="invalid-feedback is-invalid">
+                        Por favor, Verifique el N° de contrato
+                      </div>
                     </div>
                     <div className="col ms-3">
-                      <input type="text" id="telefonoProveedor" className="form-control" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <h2 className="fs-5">Telefono</h2>
+                      <input type="text" id="telefonoProveedor" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <div className="invalid-feedback is-invalid">
+                        Por favor, Ingrese un telefono valido.
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -292,7 +289,7 @@ const Proveedor = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button id="btnAgregar" type="button" className="btn btn-color" data-bs-dismiss="modal" onClick={registrarProveedor}>Agregar</button>
+              <button id="btnAgregar" type="button" className="btn btn-color" data-bs-dismiss={validacionExitosa ? "modal" : undefined} onClick={registrarProveedor}>Agregar</button>
               <button id="btnActualizar" type="button" data-bs-dismiss="modal" className="btn btn-color d-none" onClick={() => actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
             </div>
           </div>
