@@ -1,116 +1,289 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
-const TipoProducto = () => {
+import Sweet from '../helpers/Sweet';
+import Validate from '../helpers/Validate';
+
+const Tipo = () => {
+
+  const [tipos, settipo] = useState([]);
+  const [categoria, setCategoria] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const modalProductoRef = useRef(null);
+  const [updateModal, setUpdateModal] = useState(false);
+  const modalUpdateRef = useRef(null);
+  const [tiposeleccionado, setTiposeleccionado] = useState({});
+
+  
 
   useEffect(() => {
-    listarTipoProducto();
-  }, []);
+    listarTipo();
+    listarcategoria();
+  }, []); 
 
-  function listarTipoProducto() {
+  function removeModalBackdrop() {
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    if (modalBackdrop) {
+      modalBackdrop.remove();
+    }
+  }
+  
+  function listarTipo() {
     fetch("http://localhost:3000/tipo/listar", {
       method: "GET",
       headers: {
-        "content-type": "application/json",
+        "Content-type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      settipo(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+  function listarcategoria(){
+    fetch("http://localhost:3000/categoria/listar",{
+      method: "GET",
+      headers:{
+        "Content-type": "application/json",
+      },
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+      setCategoria(data)
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+  
+  function registrarTipo() {
+    let nombre_tipo = document.getElementById('nombre_tipo').value; 
+    let fk_categoria_pro = document.getElementById('fk_categoria_pro').value;
+
+    const validacionExitosa = Validate.validarCampos('.form-empty');
+
+    fetch('http://localhost:3000/tipo/registrar', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nombre_tipo, fk_categoria_pro}),
+    })
+      .then((res) => res.json())
+      .then(data => {
+        if (!validacionExitosa) {
+          Sweet.registroFallido();
+          return;
+        }
+        if(data.status == 200){
+          Sweet.registroExitoso();
+        }
+        if(data.status == 401){
+          Sweet.registroFallido();
+        }
+        console.log(data);
+        listarTipo();
+        setShowModal(false);
+        removeModalBackdrop();
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  
+  
+  function editarTipo(id) {
+    fetch(`http://localhost:3000/tipo/buscar/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
       },
     })
       .then((res) => res.json())
-      .then(data=>{
+      .then((data) => {
         console.log(data);
-        let row = '';
-        data.forEach(element => {
-          row += `<tr>
-                <td>${element.id }</td>        
-                <td>${element.NombreProducto}</td>        
-                <td>${element.Categoría}</td>        
-                <td><a href="javaScript:editarTipoProducto(${element.id_tipo})">Editar</a></td>           
-                <td><a href="javaScript:eliminarTipoProducto(${element.id_tipo})">Eliminar</a></td>           
-              </tr>`
-          document.getElementById('tableTipo').innerHTML = row;
-    });
-  })
-      .catch((e) => {
-        console.log(e);
+        setTiposeleccionado(data[0]);
+        setUpdateModal(true);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
       });
   }
+  function actualizarTipo(id){
+    const validacionExitosa = Validate.validarCampos('.form-update');
+    fetch(`http://localhost:3000/tipo/editar/${id}`,{
+      method: 'PUT',
+      headers:{
+        'Content-type':'application/json'
+      },
+       body: JSON.stringify(tiposeleccionado),
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+      if(!validacionExitosa){
+        Sweet.actualizacionFallido();
+        return;
+      }
+      if(data.status == 200){
+        Sweet.actualizacionExitoso();
+      }
+      if(data.status == 401){
+        Sweet.actualizacionFallido();
+      }
+      console.log(data);
+      listarTipo();
+      setUpdateModal(false);
+      removeModalBackdrop();
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+        modalBackdrop.remove();
+      }
+    })
+  }
+
+  const [search, setSeach] = useState('');
 
   return (
-    <>
-      <div className="d-flex justify-content-between">
-          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Registrar Tipo Producto
-          </button>
-          <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Producto" className="input-buscar" />
+    <div>
+      <div className="d-flex justify-content-between mb-4">
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setShowModal(true)}>
+          Registrar Nuevo tipo de producto 
+        </button>
+        <div className="d-flex align-items-center">
+          <input type="text" placeholder="Buscar Producto" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
           <IconSearch className="iconSearch" />
         </div>
-        </div> 
-     <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered ">
+      </div>
+      <div className="wrapper-editor">
+        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
+          <thead className="text-center text-justify">
+            <tr>
+              <th className="th-sm">N°</th>
+              <th className="th-sm">NombreTipo</th>
+              <th className="th-sm">NombreCategoria</th>
+              <th className="th-sm" colSpan={2}>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tableCategoria" className="text-center">
+  {tipos.filter((item) => {
+    return search.toLowerCase() === '' ? item : item.Nombre_tipo.toLowerCase().includes(search);
+  }).map((element) => (
+    <tr key={element.id_tipo}>
+      <td>{element.id_tipo}</td>
+      <td>{element.nombre_tipo}</td>
+      <td>{element.NombreCategoria}</td>
+      <td className="mx-2" onClick={() => { setUpdateModal(true); editarTipo(element.id_tipo); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+        <button className="btn btn-color">
+          Editar
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+        </table>
+      </div>
+      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }}>
+        <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
-            <div className="modal-header txt-color">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Tipo Producto</h1>
-              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal-header bg txt-color">
+              <h1 className="modal-title fs-5">Registrar  tipo de producto</h1>
+                <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body">
-              <div className=" d-flex justify-content-center">
-              <form className="row row-cols-lg-auto g-3 align-items-center">
-                    <div className="col-12">
-                      <label
-                        className="visually-hidden"
-                        htmlFor="inlineFormInputGroupTipo"
-                      >
-                        Tipo
-                      </label>
-                      <div className="input-group">
-                        <div className="input-group-text">  </div>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="inlineFormInputGroupTipo"
-                          placeholder="Nombre Producto "
-                        />
-                      </div>
+              <form>
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                    <label htmlFor="tipo" className="label-bold mb-2"> tipo</label>
+                    <input type="text" className="form-control form-empty" id="	nombretipo" name="	nombre_tipo" placeholder="nombre de tipo de producto " />
+                    <div className="invalid-feedback is-invalid">
+                      Por favor,  el nombre  
                     </div>
-                    <div className="col-12">
-                      <label
-                        className="visually-hidden"
-                        htmlFor="inlineFormSelectPref"
-                      >
-                        Preference
-                      </label>
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                      >
-                        <option selected>seleciona una opcion </option>
-                        <option value={1}>carnes 🥩</option>
-                        <option value={2}>arros 🍚</option>
-                        <option value={3}>vegetales🥦</option>
-                      </select>
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-6">
+                    <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Tipo Producto</label>
+                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })}>
+                      <option value="">Selecciona un Tipo</option>
+                      {categoria.map((element) => (
+                        <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
+                      ))}
+                    </select>
+                    <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un tipo de producto.
                     </div>
-                  </form>
-              </div>
+                  </div>
+                </div>
+              </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" className="btn btn-color">Agregar</button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                Cerrar
+              </button>
+              <button type="button" className="btn btn-color" onClick={registrarTipo}>
+                Registrar
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
-        <thead>
-          <tr>
-            <th className="th-sm">Id</th>
-            <th className="th-sm">nombre</th>
-            <th className="th-sm">Categoria</th>
-            <th className="th-sm text-center" colSpan={2}> Botones de acción</th>
-          </tr>
-        </thead>
-        <tbody id="tableTipo"> 
-        </tbody>
-      </table>
-    </>
+
+      <div className="modal fade" id="actualizarModal" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+        <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+          <div className="modal-content">
+            <div className="modal-header bg text-white">
+              <h1 className="modal-title fs-5" id="actualizarModalLabel">Actualizar tipo de producto </h1>
+              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                    <label htmlFor="nombre " className="label-bold mb-2">nombre </label>
+                    <input type="hidden" value={tiposeleccionado.id_tipo || ''} onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, id_tipo: e.target.value })} disabled/>
+                    <input type="text" className="form-control form-update" placeholder="tipo" value={tiposeleccionado.	nombre_tipo || ''} name="	nombre_tipo" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, 	nombre_tipo: e.target.value })}/>
+                    <div className="invalid-feedback is-invalid">
+                      Por favor, ingrese el nombre 
+                    </div>
+                   </div>
+                </div>
+
+                <div className="row mb-3">
+                  <div className="col-md-6">
+                    <label htmlFor="fk_categoria_pro" className="label-bold mb-2">categoria </label>
+                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })}>
+                      <option value="">Selecciona un Tipo</option>
+                      {categoria.map((element) => (
+                        <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
+                      ))}
+                    </select>
+                    <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un tipo de producto.
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-color"   onClick={() => {actualizarTipo(tiposeleccionado.id_tipo);}}>
+                Actualizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   );
 };
-export default TipoProducto;
+
+export default Tipo;

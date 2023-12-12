@@ -1,5 +1,5 @@
 const Validate = {
-  validarCampos: (formSelector) => {
+  validarCampos: (formSelector) => {// function para validar si los campos se mandan vacios
     const formControl = document.querySelectorAll(`${formSelector}`);
   
     const camposVacios = [];
@@ -19,6 +19,19 @@ const Validate = {
     }
   
     return true; 
+  },
+  formatFecha:(fecha)=> {//funcion para convertir la fecha, de año-mes-dia
+    const fechaObj = new Date(fecha);
+    const year = fechaObj.getFullYear();
+    const month = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
+    const day = fechaObj.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  },
+  limpiar: (limpiar) => {//funcion para limpiar los campos del formulario
+    let limpiarElemento = document.querySelectorAll(`${limpiar}`);
+    limpiarElemento.forEach((element) => {
+      element.value = '';
+    });
   }
 };
 
