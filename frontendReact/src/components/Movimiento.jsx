@@ -24,7 +24,7 @@ const Movimiento = () => {
   useEffect(() => {
     listarMovimiento();
     listarCategoria();
-    listarProducto();
+    //listarProducto();
     listarTipo();
     listarProveedor();
     listarUsuario();
@@ -45,7 +45,7 @@ const Movimiento = () => {
     });
   }
 
-  function listarProducto() {
+ /*  function listarProducto() {
     fetch("http://localhost:3000/producto/listar", {
       method: "GET",
       headers: {
@@ -59,7 +59,7 @@ const Movimiento = () => {
     .catch((e) => {
       console.log(e);
     });
-  }
+  } */
   function listarTipo(){
     fetch("http://localhost:3000/tipo/listar",{
       method: "GET",
@@ -147,20 +147,6 @@ const Movimiento = () => {
 		}).then(resp => resp.json())
 			.then(data => {
         setUsuario(data);
-				console.log(data);
-				let row = '';
-				data.forEach(element => {
-					row += `<tr>
-									<td>${element.id_usuario}</td>        
-									<td>${element.nombre_usuario}</td>        
-									<td>${element.documento_usuario}</td>        
-									<td>${element.email_usuario}</td>        
-									<td>${element.tipo_usuario}</td>        
-									<td>${element.estado}</td>        
-									<td><a class="btn btn-danger" href='javaScript:eliminarUsuario(${element.id_usuario})'>Eliminar</a></td>        
-								</tr>`
-					document.getElementById('listarUsuario').innerHTML = row;
-				});
 			})
 			.catch(e => { console.log(e); })
 	}
@@ -242,7 +228,7 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="categoria">Categoria</label>
+                      <label className="form-label" htmlFor="categoria">Categoria</label>
                       <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
                       <option value="">Selecciona una categoria</option>
                         {categoria_list.map((element) => (
@@ -253,7 +239,7 @@ const Movimiento = () => {
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="fk_id_producto">Producto</label>
+                      <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                       <select className="form-select" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         {tipos.map((element) => (
@@ -276,7 +262,7 @@ const Movimiento = () => {
                 <div className="row mb-4">
                 <div className="col">
                 <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="fk_id_proveedor">Proveedor</label>
+                      <label className="form-label" htmlFor="fk_id_proveedor">Proveedor</label>
                       <select className="form-select" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         {proveedor_list.map((element) => (
@@ -287,13 +273,13 @@ const Movimiento = () => {
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="cantidad_peso_movimiento">Cantidad</label>
+                      <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
                       <input type="text" id="fcantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="	unidad_peso_movimiento">Unidad</label>
+                      <label className="form-label" htmlFor="	unidad_peso_movimiento">Unidad</label>
                       <select className="form-select" id="	unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             <option value="kg">Kilo (Kg)</option>
@@ -308,13 +294,13 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="precio_movimiento">Precio total del producto:</label>
+                      <label className="form-label" htmlFor="precio_movimiento">Precio total del producto:</label>
                       <input type="number" id="precio_movimiento" name="precio_movimiento"className="form-control" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="estado_producto_movimiento">Estado</label>
+                      <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
                         <select className="form-select" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
@@ -327,13 +313,13 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="nota_factura">Nota</label>
+                      <label className="form-label" htmlFor="nota_factura">Nota</label>
                       <input type="text" id="nota_factura" name="nota_factura"className="form-control" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="categoria">Usuario</label>
+                      <label className="form-label" htmlFor="categoria">Usuario</label>
                       <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
                       <option value="">Selecciona una usuario</option>
                         {usuario_list.map((element) => (
@@ -396,7 +382,7 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example6">Estado</label>
+                      <label className="form-label" htmlFor="form6Example6">Estado</label>
                         <select className="form-select" id="form6Example6" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
@@ -407,7 +393,7 @@ const Movimiento = () => {
                   </div>
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example3">Tipo de movimeinto</label>
+                      <label className="form-label" htmlFor="form6Example3">Tipo de movimeinto</label>
                       <select className="form-select" id="form6Example3" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>
@@ -419,7 +405,7 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example6">Nota</label>
+                      <label className="form-label" htmlFor="form6Example6">Nota</label>
                       <input type="text" id="form6Example6" className="form-control" />
                     </div>
                   </div>
