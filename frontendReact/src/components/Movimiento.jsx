@@ -218,9 +218,15 @@ const Movimiento = () => {
    <>
   <div>
     <h1 className="text-center modal-title fs-5">Registro de movimiento</h1>
+    <div className="d-flex justify-content-between mb-4">
     <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" >
     Registrar nuevo movimiento
     </button>
+    <div className="d-flex align-items-center">
+          <input type="text" placeholder="Buscar Producto" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
+          <IconSearch className="iconSearch" />
+        </div>
+        </div>
     <table className="table table-striped table-hover w-80">
   <thead>
     <tr>
@@ -278,7 +284,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="categoria">Categoria</label>
-                      <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
+                      <select className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
                       <option defaultValue="">Selecciona una categoria</option>
                         {categoria_list.map((element) => (
                           <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
@@ -289,7 +295,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_producto">Producto</label>
-                      <select defaultValue="" className="form-select" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
+                      <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                         <option defaultValue="">Seleccione una opción</option>
                         {tipos.map((element) => (
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
@@ -300,7 +306,7 @@ const Movimiento = () => {
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="tipo_movimiento">Tipo de movimeinto</label>
-                      <select defaultValue="" className="form-select" id="tipo_movimiento" name="tipo_movimiento" aria-label="Default select example">
+                      <select defaultValue="" className="form-select form-empty limpiar" id="tipo_movimiento" name="tipo_movimiento" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
@@ -312,7 +318,7 @@ const Movimiento = () => {
                 <div className="col">
                 <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_proveedor">Proveedor</label>
-                      <select defaultValue=""  className="form-select" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
+                      <select defaultValue=""  className="form-select form-empty limpiar" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         {proveedor_list.map((element) => (
                         <option key={element.id_proveedores} value={element.id_proveedores}>{element.nombre_proveedores}</option>
@@ -323,13 +329,13 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                      <input  type="text" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
+                      <input  type="text" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control form-empty limpiar" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="	unidad_peso_movimiento">Unidad</label>
-                      <select defaultValue=""  className="form-select" id="unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
+                      <select defaultValue=""  className="form-select form-empty limpiar" id="unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             <option value="kg">Kilo (Kg)</option>
                             <option value="lb">Libra (Lb)</option>
@@ -344,13 +350,13 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="precio_movimiento">Precio total del producto:</label>
-                      <input  type="number" id="precio_movimiento" name="precio_movimiento"className="form-control" />
+                      <input  type="number" id="precio_movimiento" name="precio_movimiento"className="form-control form-empty limpiar" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
-                        <select defaultValue="" className="form-select" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
+                        <select defaultValue="" className="form-select form-empty limpiar" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
                           <option value="regular">Regular</option>
@@ -363,14 +369,14 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="nota_factura">Nota</label>
-                      <input type="text" id="nota_factura" name="nota_factura"className="form-control" />
+                      <input type="text" id="nota_factura" name="nota_factura"className="form-control form-empty limpiar" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_usuario'">Usuario</label>
                       <select
-                        className="form-select"
+                        className="form-select form-empty limpiar"
                         id="fk_id_usuario"
                         name="fk_id_usuario"
                         aria-label="Default select example"
@@ -394,7 +400,7 @@ const Movimiento = () => {
                       <p>¿Aplica fecha de caducidad?</p>
                       <div className="form-check">
                         <input
-                          className="form-check-input"
+                          className="form-check-input form-empty limpiar"
                           type="checkbox"
                           value={aplicaFechaCaducidad}
                           id="flexCheckDefault"
@@ -416,7 +422,7 @@ const Movimiento = () => {
                           type="date"
                           id="fecha_caducidad"
                           name="fecha_caducidad"
-                          className="width: 20% form-control"
+                          className="width: 20% form-control form-empty limpiar"
                         />
                       </div>
                     </div>
@@ -487,8 +493,8 @@ const Movimiento = () => {
                       <input
                         type="date"
                         id="fecha_caducidad"
-                        name="fecha_caducidad"
                         className="width: 20% form-control"
+                        value={movimientoSeleccionado.fecha_caducidad || ''} name="fecha_caducidad" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value })}
                       />
                     </div>
                   )}
