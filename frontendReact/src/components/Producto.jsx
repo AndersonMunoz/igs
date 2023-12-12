@@ -105,7 +105,7 @@ const Producto = () => {
         if(data.status == 200){
           Sweet.registroExitoso();
         }
-        if(data.status == 401){
+        if(data.status === 401){
           Sweet.registroFallido();
         }
         console.log(data);
@@ -171,7 +171,7 @@ const Producto = () => {
       headers:{
         'Content-type':'application/json'
       },
-       body: JSON.stringify(productoSeleccionado),
+      body: JSON.stringify(productoSeleccionado),
     })
     .then((res)=>res.json())
     .then((data)=>{
