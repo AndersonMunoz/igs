@@ -243,7 +243,7 @@ const Movimiento = () => {
                       <select className="form-select" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         {tipos.map((element) => (
-                        <option key={element.id_producto} value={element.id_producto}>{element.NombreProducto}</option>
+                        <option key={element.id} value={element.id}>{element.NombreProducto}</option>
                       ))}
                       </select>
                     </div>
