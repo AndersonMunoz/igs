@@ -19,7 +19,7 @@ const Sweet = {
   },
   confirmacion: () => {
     return Swal.fire({
-      title: "¿Seguro Quieres Eliminar Este Producto?",
+      title: "¿Seguro Quieres Desabilitarlo?",
       text: "No se Podrá Revertir!",
       icon: "warning",
       showCancelButton: true,
@@ -32,7 +32,7 @@ const Sweet = {
   deshabilitadoExitoso: () => {
     Swal.fire({
       title: 'Mensaje',
-      icon: 'warning',
+      icon: 'success',
       text: 'Eliminación Exitosa',
       confirmButtonText: 'Cerrar',
     });
