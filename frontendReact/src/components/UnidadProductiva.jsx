@@ -16,7 +16,7 @@ const Up= () => {
   
 
   useEffect(() => {
-    listarUp();
+   listarUp()
   }, []); 
 
   function removeModalBackdrop() {
@@ -35,7 +35,10 @@ const Up= () => {
     })
     .then((res) => res.json())
     .then((data) => {
+    if(Array.isArray(data)){
       setunidad_productiva(data);
+    }
+    
     })
     .catch((e) => {
       console.log(e);
@@ -66,13 +69,14 @@ const Up= () => {
           Sweet.registroFallido();
         }
         console.log(data);
-        listarUp();
+        listarUp()
         setShowModal(false);
         removeModalBackdrop();
         const modalBackdrop = document.querySelector('.modal-backdrop');
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
+        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -135,7 +139,7 @@ const Up= () => {
         <button type="button" id="modalCategoria" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setShowModal(true)}>
           Registrar Nueva Unidad productiva        </button>
         <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Categoria" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
+          <input type="text" placeholder="Buscar Categoria" className="input-buscar limpiar" onChange={(e)=>setSeach(e.target.value)}/>
           <IconSearch className="iconSearch" />
         </div>
       </div>
@@ -183,7 +187,7 @@ const Up= () => {
                         <div className="input-group-text">  </div>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control limpiar"
                           id="nombreUp"
                           placeholder="Nombre Up "
                         />

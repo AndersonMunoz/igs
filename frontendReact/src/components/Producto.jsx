@@ -17,8 +17,6 @@ const Producto = () => {
 
   useEffect(() => {
     listarProducto();
-    listarUp();
-    listarTipo();
   }, []); 
 
   function removeModalBackdrop() {
@@ -52,7 +50,9 @@ const Producto = () => {
     })
     .then((res)=>res.json())
     .then((data)=>{
-      setTipo(data)
+      if(Array.isArray(data)) {
+        setTipo(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -65,9 +65,11 @@ const Producto = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res)=>res.json())
-    .then((data)=>{
-      setUp(data)
+    .then((res) => res.json())
+    .then((data) => {
+      if(Array.isArray(data)) {
+        setUp(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -243,7 +245,7 @@ const Producto = () => {
           </tbody>
         </table>
       </div>
-      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -264,7 +266,7 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto"  onClick={listarTipo} defaultValue="">
                       <option value="">Selecciona un Tipo</option>
                       {tipos.map((element) => (
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
@@ -277,7 +279,7 @@ const Producto = () => {
 
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue=""onClick={listarUp}>
                       <option value="">Selecciona una UP</option>
                       {up.map((element) => (
                         <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
