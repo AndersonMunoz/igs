@@ -1,9 +1,8 @@
-
-import React, { useState ,useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
-import '../style/movimiento.css'
-import { IconSearch } from "@tabler/icons-react";
+import '../style/movimiento.css';
+import { IconSearch } from "@tabler/icons-react"; 
 
 const Movimiento = () => {
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
@@ -14,6 +13,7 @@ const Movimiento = () => {
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
+  const fkIdUsuarioRef = useRef(null);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
 
@@ -91,16 +91,20 @@ const Movimiento = () => {
       });
   }
   function registrarMovimiento() {
+    
+    let fk_id_usuario = fkIdUsuarioRef.current.value;
     let tipo_movimiento = document.getElementById('tipo_movimiento').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let unidad_peso_movimiento = document.getElementById('unidad_peso_movimiento').value;
     let precio_movimiento= document.getElementById('precio_movimiento').value;
     let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
     let nota_factura = document.getElementById('nota_factura').value;
-    let fecha_caducidad = document.getElementById('fecha_caducidad').value;
+    let fecha_caducidad = null;
     let fk_id_producto = document.getElementById('fk_id_producto').value;
-    let fk_id_usuario = document.getElementById('fk_id_usuario').value;
     let fk_id_proveedor  = document.getElementById('fk_id_proveedor').value;
+    if (aplicaFechaCaducidad) {
+      fecha_caducidad = document.getElementById('fecha_caducidad').value;
+    }
 
     const validacionExitosa = Validate.validarCampos('.form-empty');
 
@@ -136,6 +140,7 @@ const Movimiento = () => {
       .catch(error => {
         console.error('Error:', error);
       });
+      //console.log(document.getElementById('fecha_caducidad'));
   }
   function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
@@ -221,9 +226,11 @@ const Movimiento = () => {
           <div className="modal-content">
             <div className="modal-header txt-color">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Registro de movimiento</h1>
+              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <form>
+                
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
@@ -319,10 +326,20 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_usuario'">Usuario</label>
-                      <select className="form-select" id="fk_id_usuario'" name="fk_id_usuario'" aria-label="Default select example">
-                      <option defaultValue="" value="">Selecciona una usuario</option>
+                      <select
+                        className="form-select"
+                        id="fk_id_usuario"
+                        name="fk_id_usuario"
+                        aria-label="Default select example"
+                        ref={fkIdUsuarioRef}
+                      >
+                        <option defaultValue="" value="">
+                          Selecciona un usuario
+                        </option>
                         {usuario_list.map((element) => (
-                          <option key={element.id_usuario} value={element.id_usuario}>{element.nombre_usuario}</option>
+                          <option key={element.id_usuario} value={element.id_usuario}>
+                            {element.nombre_usuario}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -348,17 +365,19 @@ const Movimiento = () => {
                   </div>
                   {aplicaFechaCaducidad && (
                     <div className="col">
-                      <label className="form-label" htmlFor="fecha_caducidad">
-                        Fecha caducidad
-                      </label>
-                      <input
-                        type="date"
-                        id="fecha_caducidad"
-                        name="fecha_caducidad"
-                        className="width: 20% form-control"
-                      />
+                      <div data-mdb-input-init className="form-outline">
+                        <label className="form-label" htmlFor="fecha_caducidad">
+                          Fecha caducidad
+                        </label>
+                        <input
+                          type="date"
+                          id="fecha_caducidad"
+                          name="fecha_caducidad"
+                          className="width: 20% form-control"
+                        />
+                      </div>
                     </div>
-                  )}
+                  )};
                 </div>
               </form>
             </div>
