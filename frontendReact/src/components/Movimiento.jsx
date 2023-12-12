@@ -229,7 +229,7 @@ const Movimiento = () => {
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="categoria">Categoria</label>
                       <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
-                      <option value="">Selecciona una categoria</option>
+                      <option defaultValue="">Selecciona una categoria</option>
                         {categoria_list.map((element) => (
                           <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
                         ))}
@@ -239,8 +239,8 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_producto">Producto</label>
-                      <select className="form-select" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
-                        <option value="">Seleccione una opción</option>
+                      <select defaultValue="" className="form-select" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
+                        <option defaultValue="">Seleccione una opción</option>
                         {tipos.map((element) => (
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
                       ))}
@@ -250,7 +250,7 @@ const Movimiento = () => {
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="tipo_movimiento">Tipo de movimeinto</label>
-                      <select className="form-select" id="tipo_movimiento" name="tipo_movimiento" aria-label="Default select example">
+                      <select defaultValue="" className="form-select" id="tipo_movimiento" name="tipo_movimiento" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
@@ -262,7 +262,7 @@ const Movimiento = () => {
                 <div className="col">
                 <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_proveedor">Proveedor</label>
-                      <select className="form-select" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
+                      <select defaultValue=""  className="form-select" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         {proveedor_list.map((element) => (
                         <option key={element.id_proveedores} value={element.id_proveedores}>{element.nombre_proveedores}</option>
@@ -273,13 +273,13 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                      <input type="text" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
+                      <input  type="text" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="	unidad_peso_movimiento">Unidad</label>
-                      <select className="form-select" id="	unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
+                      <select defaultValue=""  className="form-select" id="unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             <option value="kg">Kilo (Kg)</option>
                             <option value="lb">Libra (Lb)</option>
@@ -294,13 +294,13 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="precio_movimiento">Precio total del producto:</label>
-                      <input type="number" id="precio_movimiento" name="precio_movimiento"className="form-control" />
+                      <input  type="number" id="precio_movimiento" name="precio_movimiento"className="form-control" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
-                        <select className="form-select" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
+                        <select defaultValue="" className="form-select" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
                           <option value="regular">Regular</option>
@@ -318,9 +318,9 @@ const Movimiento = () => {
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" htmlFor="categoria">Usuario</label>
-                      <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
-                      <option value="">Selecciona una usuario</option>
+                      <label className="form-label" htmlFor="fk_id_usuario'">Usuario</label>
+                      <select className="form-select" id="fk_id_usuario'" name="fk_id_usuario'" aria-label="Default select example">
+                      <option defaultValue="" value="">Selecciona una usuario</option>
                         {usuario_list.map((element) => (
                           <option key={element.id_usuario} value={element.id_usuario}>{element.nombre_usuario}</option>
                         ))}

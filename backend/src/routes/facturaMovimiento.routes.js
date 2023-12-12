@@ -6,7 +6,7 @@ import { validarToken } from "../controllers/autentificacion.controller.js";
 
 const facturaMovimientoRoute = Router();
 
-facturaMovimientoRoute.post('/registrar'/* validarToken */, validarFacturaMovimiento,guardarMovimiento);
+facturaMovimientoRoute.post('/registrar'/* validarToken , validarFacturaMovimiento,*/,guardarMovimiento);
 facturaMovimientoRoute.get('/listar', listarMovimientos);
 facturaMovimientoRoute.get('/buscar/:id',buscarMovimiento);
 facturaMovimientoRoute.put('/actualizar/:id', validarToken, validarFacturaMovimiento,actualizarMovimiento);
