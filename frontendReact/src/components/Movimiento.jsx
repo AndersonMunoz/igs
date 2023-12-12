@@ -183,7 +183,6 @@ const Movimiento = () => {
       .catch(error => {
         console.error('Error:', error);
       });
-      //console.log(document.getElementById('fecha_caducidad'));
   }
   function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
@@ -254,9 +253,10 @@ const Movimiento = () => {
             <td className="p-2 text-center">{element.nombre_usuario}</td>
             <td className="p-2 text-center">{element.nombre_proveedores}</td>
             <td className="mx-2"onClick={() => {setUpdateModal(true);editarMovimiento(element.id_factura);}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
-              <button className="btn btn-color">
+              <button className="btn btn-color" >
                 Editar
               </button>
+              
             </td>
           </tr>
         ))}
@@ -435,7 +435,7 @@ const Movimiento = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel2">Editar de movimiento</h1>
+              <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -443,8 +443,8 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" htmlFor="form6Example6">Estado</label>
-                        <select className="form-select" id="form6Example6" aria-label="Default select example">
+                      <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
+                      <select className="form-select form-update" value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
                           <option value="regular">Regular</option>
@@ -456,8 +456,8 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" htmlFor="form6Example6">Nota</label>
-                      <input type="text" id="form6Example6" className="form-control" />
+                      <label className="form-label" htmlFor="nota_factura">Nota</label>
+                      <input type="text" className="form-control form-update" placeholder="Precio del Producto" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })}/>
                     </div>
                   </div>
                 </div>
@@ -481,12 +481,13 @@ const Movimiento = () => {
                   </div>
                   {aplicaFechaCaducidad2 && (
                     <div className="col">
-                      <label className="form-label" htmlFor="form6Example7">
+                      <label className="form-label" htmlFor="fecha_caducidad">
                         Fecha caducidad
                       </label>
                       <input
                         type="date"
-                        id="form6Example7"
+                        id="fecha_caducidad"
+                        name="fecha_caducidad"
                         className="width: 20% form-control"
                       />
                     </div>
