@@ -190,6 +190,21 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
+							<Link to="/tipoproducto">
+								<div className="tamañoLateral">
+									<IconBuildingWarehouse className="iconosLaterales" />
+								</div>
+								<span className="link_name">Tipo Producto</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/up">
+										Tipo Producto
+									</Link>
+								</li>
+							</ul>
+						</li>
+						<li>
 							<div className="content-nav">
 								<Link to="#">
 									<div className="tamañoLateral">
