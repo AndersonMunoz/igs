@@ -5,6 +5,8 @@ import '../style/movimiento.css';
 import { IconSearch } from "@tabler/icons-react"; 
 
 const Movimiento = () => {
+  const [movimientos, setMovimientos] = useState([]);
+  const [search, setSeach] = useState('');
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
   const [categoria_list, setcategorias_producto] = useState([]);
   const [proveedor_list, setProveedor] = useState([]);
@@ -156,39 +158,21 @@ const Movimiento = () => {
 	}
 
   function listarMovimiento() {
-    fetch("http://localhost:3000/facturamovimiento/listar", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then(data=>{
-        //console.log(data);
-        let row = '';
-        data.forEach(element => {
-    
-            row += `<tr>
-                <td class="p-2 text-center">${element.nombre_tipo}</td>        
-                <td class="p-2 text-center">${Validate.formatFecha(element.fecha_movimiento)}</td>        
-                <td class="p-2 text-center">${element.tipo_movimiento}</td>        
-                <td class="p-2 text-center">${element.cantidad_peso_movimiento}</td>        
-                <td class="p-2 text-center">${element.unidad_peso_movimiento}</td>        
-                <td class="p-2 text-center">${element.precio_movimiento}</td>        
-                <td class="p-2 text-center">${element.estado_producto_movimiento}</td>        
-                <td class="p-2 text-center">${element.nota_factura}</td>        
-                <td class="p-2 text-center">${Validate.formatFecha(element.fecha_caducidad)}</td>
-                <td class="p-2 text-center">${element.nombre_usuario}</td>          
-                <td class="p-2 text-center">${element.nombre_proveedores}</td>        
-                <td class="p-2 text-center"><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
-            </tr>`
-        });
-        document.getElementById('tableMovimiento').innerHTML = row;
-    })    
+      fetch("http://localhost:3000/facturamovimiento/listar", {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+        },
+      }).then((res) => res.json())
+      .then((data) => {
+        if(Array.isArray(data)){
+          setMovimientos(data);
+        }
+      })
       .catch((e) => {
         console.log(e);
       });
-  }
+    }
   return (
    <>
   <div>
@@ -214,9 +198,26 @@ const Movimiento = () => {
     </tr>
   </thead>
   <tbody id="tableMovimiento">
-      <tr>
-        
-      </tr>
+      {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.nombre_tipo.toLowerCase().includes(search)}).map((element) => (
+          <tr key={element.id_factura}>
+            <td>{element.nombre_tipo}</td>
+            <td>{Validate.formatFecha(element.fecha_movimiento)}</td>
+            <td>{element.tipo_movimiento}</td>
+            <td>{element.cantidad_peso_movimiento}</td>
+            <td>{element.unidad_peso_movimiento}</td>
+            <td>{element.precio_movimiento}</td>
+            <td>{element.estado_producto_movimiento}</td>
+            <td>{element.nota_factura}</td>
+            <td>{Validate.formatFecha(element.fecha_caducidad)}</td>
+            <td>{element.nombre_usuario}</td>
+            <td>{element.nombre_proveedores}</td>
+            <td className="mx-2"onClick={() => {setUpdateModal(true);editarProducto(element.id_producto);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+              <button className="btn btn-color">
+                Editar
+              </button>
+            </td>
+          </tr>
+        ))}
     </tbody>
 </table>
 
