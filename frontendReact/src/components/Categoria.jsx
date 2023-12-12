@@ -23,14 +23,14 @@ const Categoria = () => {
         let row = '';
         data.forEach(element => {
           row += `<tr>
-                <td>${element.id_categoria}</td>        
+                <td>${element.id_proveedores }</td>        
                 <td>${element.nombre_categoria}</td>        
                 <td><a href="javaScript:editarCategoria(${element.id_categoria})">Editar</a></td>           
                 <td><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
               </tr>`
           document.getElementById('tableCatategoria').innerHTML = row;
-    });
-  })
+        });
+      })
       .catch((e) => {
         console.log(e);
       });
@@ -50,7 +50,7 @@ const Categoria = () => {
         console.log("Categoría registrada:", data);
         listarCategorias();
         setCategoriaInput('');
-        const myModal = new Modal(modalRef.current); // Accede directamente a la clase Modal de Bootstrap
+        const myModal = new Modal(modalRef.current); 
         myModal.hide();
       })
       .catch((error) => {
