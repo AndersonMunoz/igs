@@ -91,7 +91,6 @@ const Movimiento = () => {
       });
   }
   function registrarMovimiento() {
-    let fecha_movimiento = document.getElementById('fecha_movimiento').value;
     let tipo_movimiento = document.getElementById('tipo_movimiento').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let unidad_peso_movimiento = document.getElementById('unidad_peso_movimiento').value;
@@ -110,7 +109,7 @@ const Movimiento = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ fecha_movimiento, tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad,fk_id_producto,fk_id_usuario,fk_id_proveedor}),
+      body: JSON.stringify({tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad,fk_id_producto,fk_id_usuario,fk_id_proveedor}),
     })
       .then((res) => res.json())
       .then(data => {
@@ -160,7 +159,7 @@ const Movimiento = () => {
     })
       .then((res) => res.json())
       .then(data=>{
-        console.log(data);
+        //console.log(data);
         let row = '';
         data.forEach(element => {
     
@@ -274,7 +273,7 @@ const Movimiento = () => {
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                      <input type="text" id="fcantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
+                      <input type="text" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
                     </div>
                   </div>
                   <div className="col">
