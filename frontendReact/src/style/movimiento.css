@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.txt-color {
+  background-color: rgb(57, 169, 0);
+  color: white;
+}
+
+.btn-color:hover {
+  background-color: rgb(59, 141, 0) !important;
+}
+
+.btn-color {
+  background-color: rgb(57, 169, 0) !important;
+  color: #fff !important;
+  /* Otros estilos */
+}
+.none {
+  display: none;
+}

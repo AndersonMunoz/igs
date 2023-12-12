@@ -1,9 +1,16 @@
 
 import React, { useState ,useEffect } from "react";
+import Sweet from '../helpers/Sweet';
+import Validate from '../helpers/Validate';
+import '../style/movimiento.css'
+import { IconSearch } from "@tabler/icons-react";
 
 const Movimiento = () => {
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
-
+  const [categoria_list, setcategorias_producto] = useState([]);
+  const [proveedor_list, setProveedor] = useState([]);
+  const [tipos, setTipo] = useState([]);
+  const [usuario_list, setUsuario] = useState([]);
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
@@ -16,7 +23,147 @@ const Movimiento = () => {
 
   useEffect(() => {
     listarMovimiento();
+    listarCategoria();
+    listarProducto();
+    listarTipo();
+    listarProveedor();
+    listarUsuario();
   }, []);
+  function listarCategoria() {
+    fetch("http://localhost:3000/categoria/listar", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setcategorias_producto(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+
+  function listarProducto() {
+    fetch("http://localhost:3000/producto/listar", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setProductos(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+  function listarTipo(){
+    fetch("http://localhost:3000/tipo/listar",{
+      method: "GET",
+      headers:{
+        "Content-type": "application/json",
+      },
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+      setTipo(data)
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+  function listarProveedor() {
+    fetch("http://localhost:3000/proveedor/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setProveedor(data)
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function registrarMovimiento() {
+    let fecha_movimiento = document.getElementById('fecha_movimiento').value;
+    let tipo_movimiento = document.getElementById('tipo_movimiento').value;
+    let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
+    let unidad_peso_movimiento = document.getElementById('unidad_peso_movimiento').value;
+    let precio_movimiento= document.getElementById('precio_movimiento').value;
+    let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
+    let nota_factura = document.getElementById('nota_factura').value;
+    let fecha_caducidad = document.getElementById('fecha_caducidad').value;
+    let fk_id_producto = document.getElementById('fk_id_producto').value;
+    let fk_id_usuario = document.getElementById('fk_id_usuario').value;
+    let fk_id_proveedor  = document.getElementById('fk_id_proveedor').value;
+
+    const validacionExitosa = Validate.validarCampos('.form-empty');
+
+    fetch('http://localhost:3000/facturamovimiento/registrar', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fecha_movimiento, tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad,fk_id_producto,fk_id_usuario,fk_id_proveedor}),
+    })
+      .then((res) => res.json())
+      .then(data => {
+        if (!validacionExitosa) {
+          Sweet.registroFallido();
+          return;
+        }
+        if(data.status == 200){
+          Sweet.registroExitoso();
+        }
+        if(data.status == 401){
+          Sweet.registroFallido();
+        }
+        console.log(data);
+        listarMovimiento();
+        setShowModal(false);
+        removeModalBackdrop();
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+        Validate.limpiar('.limpiar');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  function listarUsuario() {
+		fetch("http://localhost:3000/usuario/listar", {
+			method: "get",
+			headers: {
+				"content-type": "application/json"
+			}
+		}).then(resp => resp.json())
+			.then(data => {
+        setUsuario(data);
+				console.log(data);
+				let row = '';
+				data.forEach(element => {
+					row += `<tr>
+									<td>${element.id_usuario}</td>        
+									<td>${element.nombre_usuario}</td>        
+									<td>${element.documento_usuario}</td>        
+									<td>${element.email_usuario}</td>        
+									<td>${element.tipo_usuario}</td>        
+									<td>${element.estado}</td>        
+									<td><a class="btn btn-danger" href='javaScript:eliminarUsuario(${element.id_usuario})'>Eliminar</a></td>        
+								</tr>`
+					document.getElementById('listarUsuario').innerHTML = row;
+				});
+			})
+			.catch(e => { console.log(e); })
+	}
 
   function listarMovimiento() {
     fetch("http://localhost:3000/facturamovimiento/listar", {
@@ -30,29 +177,19 @@ const Movimiento = () => {
         console.log(data);
         let row = '';
         data.forEach(element => {
-            let fechaCaducidad = new Date(element.fecha_caducidad);
-            let fechaFormatoISO = fechaCaducidad.toISOString();
-            let fechaSolo = fechaFormatoISO.split('T')[0];
-            let partesFecha = fechaSolo.split('-');
-            let fechaFinalCaducidad = partesFecha[2] + '-' + partesFecha[1] + '-' + partesFecha[0];
-    
-            let fechaMovimiento = new Date(element.fecha_movimiento);
-            fechaFormatoISO = fechaMovimiento.toISOString();
-            fechaSolo = fechaFormatoISO.split('T')[0];
-            partesFecha = fechaSolo.split('-');
-            let fechaFinalMovimiento = partesFecha[2] + '-' + partesFecha[1] + '-' + partesFecha[0];
     
             row += `<tr>
                 <td class="p-2 text-center">${element.nombre_tipo}</td>        
-                <td class="p-2 text-center">${fechaFinalMovimiento}</td>        
+                <td class="p-2 text-center">${Validate.formatFecha(element.fecha_movimiento)}</td>        
                 <td class="p-2 text-center">${element.tipo_movimiento}</td>        
                 <td class="p-2 text-center">${element.cantidad_peso_movimiento}</td>        
                 <td class="p-2 text-center">${element.unidad_peso_movimiento}</td>        
                 <td class="p-2 text-center">${element.precio_movimiento}</td>        
                 <td class="p-2 text-center">${element.estado_producto_movimiento}</td>        
                 <td class="p-2 text-center">${element.nota_factura}</td>        
-                <td class="p-2 text-center">${fechaFinalCaducidad}</td>
-                <td class="p-2 text-center">${element.nombre_usuario}</td>             
+                <td class="p-2 text-center">${Validate.formatFecha(element.fecha_caducidad)}</td>
+                <td class="p-2 text-center">${element.nombre_usuario}</td>          
+                <td class="p-2 text-center">${element.nombre_proveedores}</td>        
                 <td class="p-2 text-center"><a href="javaScript:eliminarCategoria(${element.id_categoria})">Eliminar</a></td>           
             </tr>`
         });
@@ -65,8 +202,8 @@ const Movimiento = () => {
   return (
    <>
   <div>
-    <h1 className="text-center">Registro de movimiento</h1>
-    <button type="button" className="btn btn-primary bg-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <h1 className="text-center modal-title fs-5">Registro de movimiento</h1>
+    <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" >
     Registrar nuevo movimiento
     </button>
     <table className="table table-striped table-hover w-80">
@@ -82,6 +219,7 @@ const Movimiento = () => {
       <th className="p-2 text-center">Nota</th>
       <th className="p-2 text-center">Fecha de caducidad</th>
       <th className="p-2 text-center">Usuario que hizo movimiento</th>
+      <th className="p-2 text-center">Proveedor</th>
       <th className="p-2 text-center">Editar</th>
     </tr>
   </thead>
@@ -96,38 +234,38 @@ const Movimiento = () => {
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
+            <div className="modal-header txt-color">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Registro de movimiento</h1>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
               <form>
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example1">Categoria</label>
-                      <select className="form-select" id="form6Example1" aria-label="Default select example">
-                        <option selected>Seleccione una opción</option>
-                        <option value="1">Vegetal</option>
-                        <option value="2">Carne</option>
-                        <option value="3">Granos</option>
+                      <label className="form-label" for="categoria">Categoria</label>
+                      <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
+                      <option value="">Selecciona una categoria</option>
+                        {categoria_list.map((element) => (
+                          <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example2">Producti</label>
-                      <select className="form-select" id="form6Example2" aria-label="Default select example">
+                      <label className="form-label" for="fk_id_producto">Producto</label>
+                      <select className="form-select" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
-                        <option value="entrada">Pechuga de pollo</option>
-                        <option value="salida">Costillas de cerdo</option>
+                        {tipos.map((element) => (
+                        <option key={element.id_producto} value={element.id_producto}>{element.NombreProducto}</option>
+                      ))}
                       </select>
                     </div>
                   </div>
                   <div className="col">
                   <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" htmlFor="form6Example3">Tipo de movimeinto</label>
-                      <select className="form-select" id="form6Example3" aria-label="Default select example">
+                      <label className="form-label" htmlFor="tipo_movimiento">Tipo de movimeinto</label>
+                      <select className="form-select" id="tipo_movimiento" name="tipo_movimiento" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
@@ -136,16 +274,27 @@ const Movimiento = () => {
                   </div>
                 </div>
                 <div className="row mb-4">
-                  <div className="col">
-                    <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" for="form6Example4">Cantidad</label>
-                        <input type="text" id="form6Example4" className="form-control" />
-                      </div>
+                <div className="col">
+                <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="fk_id_proveedor">Proveedor</label>
+                      <select className="form-select" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
+                        <option value="">Seleccione una opción</option>
+                        {proveedor_list.map((element) => (
+                        <option key={element.id_proveedores} value={element.id_proveedores}>{element.nombre_proveedores}</option>
+                      ))}
+                      </select>
                     </div>
+                  </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example5">Unidad</label>
-                      <select className="form-select" id="form6Example5" aria-label="Default select example">
+                      <label className="form-label" for="cantidad_peso_movimiento">Cantidad</label>
+                      <input type="text" id="fcantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control" />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="	unidad_peso_movimiento">Unidad</label>
+                      <select className="form-select" id="	unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             <option value="kg">Kilo (Kg)</option>
                             <option value="lb">Libra (Lb)</option>
@@ -159,14 +308,14 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example4">Precio total del producto:</label>
-                      <input type="number" id="form6Example4" className="form-control" />
+                      <label className="form-label" for="precio_movimiento">Precio total del producto:</label>
+                      <input type="number" id="precio_movimiento" name="precio_movimiento"className="form-control" />
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example6">Estado</label>
-                        <select className="form-select" id="form6Example6" aria-label="Default select example">
+                      <label className="form-label" for="estado_producto_movimiento">Estado</label>
+                        <select className="form-select" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
                           <option value="">Seleccione una opción</option>
                           <option value="bueno">Bueno</option>
                           <option value="regular">Regular</option>
@@ -178,8 +327,19 @@ const Movimiento = () => {
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
-                      <label className="form-label" for="form6Example6">Nota</label>
-                      <input type="text" id="form6Example6" className="form-control" />
+                      <label className="form-label" for="nota_factura">Nota</label>
+                      <input type="text" id="nota_factura" name="nota_factura"className="form-control" />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" for="categoria">Usuario</label>
+                      <select className="form-select" id="categoria" name="categoria" aria-label="Default select example">
+                      <option value="">Selecciona una usuario</option>
+                        {usuario_list.map((element) => (
+                          <option key={element.id_usuario} value={element.id_usuario}>{element.nombre_usuario}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -203,12 +363,13 @@ const Movimiento = () => {
                   </div>
                   {aplicaFechaCaducidad && (
                     <div className="col">
-                      <label className="form-label" htmlFor="form6Example7">
+                      <label className="form-label" htmlFor="fecha_caducidad">
                         Fecha caducidad
                       </label>
                       <input
                         type="date"
-                        id="form6Example7"
+                        id="fecha_caducidad"
+                        name="fecha_caducidad"
                         className="width: 20% form-control"
                       />
                     </div>
@@ -218,7 +379,7 @@ const Movimiento = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" className="btn btn-primary bg-success bg-gradient">Registrar</button>
+              <button type="button" className="btn-color btn" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={registrarMovimiento}>Registrar</button>
             </div>
           </div>
         </div>
