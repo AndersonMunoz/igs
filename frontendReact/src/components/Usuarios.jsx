@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/usuario.css";
+import "../style/usuario.css"
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
@@ -8,8 +8,6 @@ const Usuario = () => {
 
 	useEffect(() => {
 		listarUsuario()
-		/* eliminarUsuario() */
-		registrarUsuario();
 	}, []);
 
 	///listar usuario
