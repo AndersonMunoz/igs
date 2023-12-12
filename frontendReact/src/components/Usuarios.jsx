@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../style/usuario.css";
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
@@ -8,7 +8,7 @@ const Usuario = () => {
 
 	useEffect(() => {
 		listarUsuario()
-		eliminarUsuario()
+		/* eliminarUsuario() */
 		registrarUsuario();
 	}, []);
 
@@ -32,99 +32,84 @@ const Usuario = () => {
 									<td>${element.tipo_usuario}</td>        
 									<td>${element.estado}</td>        
 									<td class='mx-2'><a class='btn btn-danger' href='javaScript:eliminarUsuario(${element.id_usuario})'>Eliminar</a></td> 
-									<td class='mx-2'><div class='btn btn-primary' onclick='modalAct(${element.id})'>Actualizar</div></td>       
+									<td class='mx-2'><div class='btn btn-primary' '>Actualizar</div></td>       
 								</tr>`
-					document.getElementById('listarUsuario').innerHTML = row;
+					document.getElementById('listarUsuario').innerHTML = row;/* onclick='modalAct(${element.id}) */
 				});
 			})
 			.catch(e => { console.log(e); })
 	}
 
+	function registrarUsuario() {
 
-	 function registrarUsuario() {
-    let datos = new URLSearchParams();
-    datos.append('nombre_usuario', document.getElementById('nombre_usuario').value)
-    datos.append('email_usuario', document.getElementById('email_usuario').value)
-    datos.append('contrasena_usuario', document.getElementById('contrasena_usuario').value)
-    datos.append('documento_usuario', document.getElementById('documento_usuario').value)
-    datos.append('tipo_usuario', document.getElementById('tipo_usuario').value)
+		let nombre_usuario = document.getElementById('nombre_usuario').value
+		let email_usuario = document.getElementById('email_usuario').value
+		let contrasena_usuario = document.getElementById('contrasena_usuario').value
+		let documento_usuario = document.getElementById('documento_usuario').value
+		let tipo_usuario = document.getElementById('tipo_usuario').value
 
-	const validacionExitosa = Validate.validarCampos('.form-empty');
+		const validacionExitosa = Validate.validarCampos('.form-empty');
 
-    fetch('http://localhost:3000/usuario/registrar', {
-        method: 'POST',
-        body: datos
-    })
-        .then(rep => rep.json())
-        .then(data => {
-			if(!validacionExitosa){
-				
-				Sweet.actualizacionFallido();
-				return;
-			  }
-            
-            if (data.status == 200) {
-                
-				Sweet.registroExitoso();
-            }
-            if (data.status == 401) {
-                
-				Sweet.registroFallido();
-            }
-            if (data.status == 500) {
-
-                Sweet.registroFallido();
-            }
-
-            console.log(data, "xd")
-            
-            modalUsuario.hide()
-
-        })
-
-} 
-	///eliminar
-	function eliminarUsuario(id_usuario) {
-		fetch(`http://localhost:3000/usuario/eliminar/${id_usuario}`, {
-			method: 'patch',
+		fetch('http://localhost:3000/usuario/registrar', {
+			method: 'POST',
 			headers: {
-				"content-type": "application/json"
-			}
-
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ nombre_usuario, email_usuario, contrasena_usuario, documento_usuario, tipo_usuario })
 		})
-			.then(rep => rep.json())
+			.then((res) => res.json())
 			.then(data => {
+				if (!validacionExitosa) {
+					Sweet.registroFallido();
+					return;
+				}
 				if (data.status == 200) {
-					listarUsuario()
-					Swal.fire({
-						title: 'Mensaje',
-						icon: 'warnig',
-						text: data.menssge,
-						ConfirmButtonText: 'Cerrar',
-					})
+					Sweet.registroExitoso();
 				}
 				if (data.status == 401) {
-					listarUsuario()
-					Swal.fire({
-						title: 'Mensaje',
-						icon: 'success',
-						text: data.menssge,
-						ConfirmButtonText: 'Cerrar',
-					})
+					Sweet.registroFallido();
 				}
-				if (data.status == 500) {
-					listarUsuario()
-					Swal.fire({
-						title: 'Mensaje',
-						icon: 'error',
-						text: data.menssge,
-						ConfirmButtonText: 'Cerrar',
-					})
-				}
-
-			})
+				listarUsuario()
+				console.log(data, "xd")
+			}).catch(error => {
+				console.error('Error:', error);
+			});
 
 	}
+	///eliminar
+	/* 	function eliminarUsuario(id_usuario) {
+			fetch(`http://localhost:3000/usuario/eliminar/${id_usuario}`, {
+				method: 'patch',
+				headers: {
+					"content-type": "application/json"
+				}
+	
+			})
+				.then(rep => rep.json())
+				.then(data => {
+					if (data.status == 200) {
+						listarUsuario()
+						Swal.fire({
+							title: 'Mensaje',
+							icon: 'warnig',
+							text: data.menssge,
+							ConfirmButtonText: 'Cerrar',
+						})
+					}
+					if (data.status == 401) {
+						listarUsuario()
+						Swal.fire({
+							title: 'Mensaje',
+							icon: 'success',
+							text: data.menssge,
+							ConfirmButtonText: 'Cerrar',
+						})
+					}
+					
+	
+				})
+	
+		} */
 
 
 	return (
@@ -172,7 +157,7 @@ const Usuario = () => {
 							<div className="d-flex justify-content-center">
 								<form className="text-center border border-light ">
 									<div className="mb-3 row">
-										<div className="col-md-12 mb-3">
+										<div className="col-md-12 mb-2">
 											<label htmlFor="nombre_usuario" className="label-bold mb-2">
 												Nombre
 											</label>
@@ -187,8 +172,8 @@ const Usuario = () => {
 												Please choose a username.
 											</div>
 										</div>
-										<div className="col-md-12 mb-3">
-											<label htmlFor="documento_usuario" className="label-bold mb-2">
+										<div className="col-md-12 mb-2">
+											<label htmlFor="documento_usuario" className="label-bold mb-1">
 												Documento
 											</label>
 											<input
@@ -202,7 +187,7 @@ const Usuario = () => {
 												Please choose a username.
 											</div>
 										</div>
-										<div className="col-md-12 mb-3">
+										<div className="col-md-12 mb-2">
 											<label htmlFor="email_usuario" className="label-bold mb-2">
 												Correo Electrónico
 											</label>
@@ -217,7 +202,7 @@ const Usuario = () => {
 												Please choose a username.
 											</div>
 										</div>
-										<div className="col-md-12 mb-3">
+										<div className="col-md-12 mb-2">
 											<label htmlFor="tipo_usuario" className="label-bold mb-2">
 												Cargo
 											</label>
@@ -233,7 +218,7 @@ const Usuario = () => {
 												<option value="co-administrador">Co-Administrador</option>
 											</select>
 										</div>
-										<div className="col-md-12 mb-3">
+										<div className="col-md-12 mb-2">
 											<label htmlFor="contrasena_usuario" className="label-bold mb-2">
 												Contraseña
 											</label>
@@ -260,7 +245,7 @@ const Usuario = () => {
 							>
 								Cerrar
 							</button>
-							<button type="button" data-bs-dismiss="modal" className="btn btn-color" onClick={registrarUsuario} >
+							<button type="button" className="btn btn-color" onClick={registrarUsuario} >
 								Registrar
 							</button>
 						</div>
