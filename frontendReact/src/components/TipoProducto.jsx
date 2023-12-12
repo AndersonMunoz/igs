@@ -18,7 +18,7 @@ const Tipo = () => {
 
   useEffect(() => {
     listarTipo();
-    listarcategoria();
+    
   }, []); 
 
   function removeModalBackdrop() {
@@ -37,7 +37,9 @@ const Tipo = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      settipo(data);
+      if(Array.isArray(data)){
+        settipo(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -52,7 +54,9 @@ const Tipo = () => {
     })
     .then((res)=>res.json())
     .then((data)=>{
-      setCategoria(data)
+      if(Array.isArray(data)){
+        setCategoria(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -92,6 +96,7 @@ const Tipo = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
+        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -145,6 +150,10 @@ const Tipo = () => {
       if (modalBackdrop) {
         modalBackdrop.remove();
       }
+
+    })
+    .catch(error=>{
+      console.error('Error:',error)
     })
   }
 
@@ -173,7 +182,7 @@ const Tipo = () => {
           </thead>
           <tbody id="tableCategoria" className="text-center">
   {tipos.filter((item) => {
-    return search.toLowerCase() === '' ? item : item.Nombre_tipo.toLowerCase().includes(search);
+    return search.toLowerCase() === '' ? item : item.NombreProducto.toLowerCase().includes(search);
   }).map((element) => (
     <tr key={element.id}>
       <td>{element.id}</td>
@@ -201,7 +210,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="tipo" className="label-bold mb-2"> tipo</label>
-                    <input type="text" className="form-control form-empty" id="nombre_tipo" name="	nombre_tipo" placeholder="nombre de tipo de producto " />
+                    <input type="text" className="form-control form-empty limpiar" id="nombre_tipo" name="	nombre_tipo" placeholder="nombre de tipo de producto " />
                     <div className="invalid-feedback is-invalid">
                       Por favor,  el nombre  
                     </div>
@@ -210,7 +219,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} id="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })}>
+                    <select className="form-select form-control form-empty limpiar" id="fk_categoria_pro" name=" fk_categoria_pro" defaultValue="" onClick={listarcategoria}>
                       <option value="">Selecciona un Tipo</option>
                       {categoria.map((element) => (
                         <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
@@ -258,7 +267,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_categoria_pro" className="label-bold mb-2">categoria </label>
-                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })}>
+                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })} onClick={listarcategoria}>
                       <option value="">Selecciona un Tipo</option>
                       {categoria.map((element) => (
                         <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>

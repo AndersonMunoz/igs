@@ -58,7 +58,7 @@ export const listarTipoProducto = async (req, res) => {
     }
 }
 
-export const buscartipo = async (req, res) => {
+export const buscarTipoProducto = async (req, res) => {
     try {
       let id = req.params.id;
       const [result] = await pool.query(
