@@ -39,6 +39,17 @@ export const registrocategoria_producto = async (req, res) => {
 
 }
 
+export const buscarCategoria = async (req, res) => {
+    try {
+      let id = req.params.id;
+      const [result] = await pool.query(
+        "SELECT * FROM categorias_producto WHERE 	id_categoria=" + id
+      );
+      res.status(200).json(result);
+      }catch(e){
+          res.status(500).json({message: 'Error en  buscar  : '+e})
+      }
+  }
 export const listarcategoria_producto = async (req, res) => {
     try {
         const [result] = await pool.query('select * from categorias_producto');

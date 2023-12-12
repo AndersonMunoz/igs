@@ -54,6 +54,17 @@ export const listarUnidadProductiva = async (req, res) => {
 	}
 
 };
+export const buscarup = async (req, res) => {
+    try {
+      let id = req.params.id;
+      const [result] = await pool.query(
+        "SELECT * FROM unidad_productiva WHERE 	id_up=" + id
+      );
+      res.status(200).json(result);
+      }catch(e){
+          res.status(500).json({message: 'Error en  buscar  : '+e})
+      }
+  }
 export const editarUnidadProductiva = async (req, res) => {
 	try {
 		let error = validationResult(req);
