@@ -60,7 +60,7 @@ const Tipo = () => {
   }
   
   function registrarTipo() {
-    let nombre_tipo = document.getElementById('nombre_tipo').value; 
+    let  nombre_tipo = document.getElementById('nombre_tipo').value; 
     let fk_categoria_pro = document.getElementById('fk_categoria_pro').value;
 
     const validacionExitosa = Validate.validarCampos('.form-empty');
@@ -165,8 +165,8 @@ const Tipo = () => {
         <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
           <thead className="text-center text-justify">
             <tr>
-              <th className="th-sm">N°</th>
-              <th className="th-sm">NombreTipo</th>
+              <th className="th-sm">Id</th>
+              <th className="th-sm">NombreProducto</th>
               <th className="th-sm">NombreCategoria</th>
               <th className="th-sm" colSpan={2}>Acciones</th>
             </tr>
@@ -175,11 +175,11 @@ const Tipo = () => {
   {tipos.filter((item) => {
     return search.toLowerCase() === '' ? item : item.Nombre_tipo.toLowerCase().includes(search);
   }).map((element) => (
-    <tr key={element.id_tipo}>
-      <td>{element.id_tipo}</td>
-      <td>{element.nombre_tipo}</td>
-      <td>{element.NombreCategoria}</td>
-      <td className="mx-2" onClick={() => { setUpdateModal(true); editarTipo(element.id_tipo); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+    <tr key={element.id}>
+      <td>{element.id}</td>
+      <td>{element.NombreProducto}</td>
+      <td>{element.Categoría}</td>
+      <td className="mx-2" onClick={() => { setUpdateModal(true); editarTipo(element.id); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
         <button className="btn btn-color">
           Editar
         </button>
@@ -201,7 +201,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="tipo" className="label-bold mb-2"> tipo</label>
-                    <input type="text" className="form-control form-empty" id="	nombretipo" name="	nombre_tipo" placeholder="nombre de tipo de producto " />
+                    <input type="text" className="form-control form-empty" id="nombre_tipo" name="	nombre_tipo" placeholder="nombre de tipo de producto " />
                     <div className="invalid-feedback is-invalid">
                       Por favor,  el nombre  
                     </div>
@@ -210,7 +210,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })}>
+                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} id="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })}>
                       <option value="">Selecciona un Tipo</option>
                       {categoria.map((element) => (
                         <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
