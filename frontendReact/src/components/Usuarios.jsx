@@ -5,6 +5,10 @@ import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 
 const Usuario = () => {
+	const [showModal, setShowModal] = useState(false);
+	const modalProductoRef = useRef(null);
+	const [updateModal, setUpdateModal] = useState(false);
+	const modalUpdateRef = useRef(null);
 
 	useEffect(() => {
 		listarUsuario()
@@ -29,7 +33,9 @@ const Usuario = () => {
 									<td>${element.email_usuario}</td>        
 									<td>${element.tipo_usuario}</td>        
 									<td>${element.estado}</td>        
-									<td class='mx-2'><a class='btn btn-danger' href='javaScript:eliminarUsuario(${element.id_usuario})'>Eliminar</a></td> 
+									<td class='mx-2'>
+										<button class='btn btn-danger' onClick='${eliminarUsuario(element.id_usuario)}'>Eliminar</button>
+									</td> 
 									<td class='mx-2'><div class='btn btn-primary' '>Actualizar</div></td>       
 								</tr>`
 					document.getElementById('listarUsuario').innerHTML = row;/* onclick='modalAct(${element.id}) */
@@ -63,51 +69,44 @@ const Usuario = () => {
 				}
 				if (data.status == 200) {
 					Sweet.registroExitoso();
+
 				}
 				if (data.status == 401) {
 					Sweet.registroFallido();
 				}
-				listarUsuario()
 				console.log(data, "xd")
+				listarUsuario()
+				Validate.limpiar('.limpiar')
+
 			}).catch(error => {
 				console.error('Error:', error);
 			});
 
 	}
 	///eliminar
-	/* 	function eliminarUsuario(id_usuario) {
-			fetch(`http://localhost:3000/usuario/eliminar/${id_usuario}`, {
-				method: 'patch',
-				headers: {
-					"content-type": "application/json"
+	function eliminarUsuario(id_usuario) {
+		fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
+			method: 'patch',
+			headers: {
+				"content-type": "application/json"
+			}
+		}).then((res) => res.json())
+			.then(data => {
+				if (data.status == 200) {
+					listarUsuario()
+					deshabilitadoExitoso()
+
 				}
-	
-			})
-				.then(rep => rep.json())
-				.then(data => {
-					if (data.status == 200) {
-						listarUsuario()
-						Swal.fire({
-							title: 'Mensaje',
-							icon: 'warnig',
-							text: data.menssge,
-							ConfirmButtonText: 'Cerrar',
-						})
-					}
-					if (data.status == 401) {
-						listarUsuario()
-						Swal.fire({
-							title: 'Mensaje',
-							icon: 'success',
-							text: data.menssge,
-							ConfirmButtonText: 'Cerrar',
-						})
-					}
-					
-	
-				})
-	
-		} */
+				if (data.status == 401) {
+					listarUsuario()
+					deshabilitadoFallido()
+
+				}
+			}).catch(error => {
+				console.error('Error:', error);
+			});
+
+	}
 
 
 	return (
@@ -161,7 +160,7 @@ const Usuario = () => {
 											</label>
 											<input
 												type="text"
-												className="form-control form-empty"
+												className="form-control form-empty limpiar"
 												id="nombre_usuario"
 												name="nombre_usuario"
 												placeholder="Ingrese su nombre"
@@ -176,7 +175,7 @@ const Usuario = () => {
 											</label>
 											<input
 												type="number"
-												className="form-control form-empty"
+												className="form-control form-empty limpiar"
 												id="documento_usuario"
 												name="documento_usuario"
 												placeholder="Ingrese su documento"
@@ -191,7 +190,7 @@ const Usuario = () => {
 											</label>
 											<input
 												type="email_usuario"
-												className="form-control form-empty"
+												className="form-control form-empty limpiar"
 												id="email_usuario"
 												name="email_usuario"
 												placeholder="Ingrese su email"
@@ -205,7 +204,7 @@ const Usuario = () => {
 												Cargo
 											</label>
 											<select
-												className="form-select form-empty"
+												className="form-select form-empty limpiar"
 												id="tipo_usuario"
 												name="tipo_usuario"
 											>
@@ -222,7 +221,7 @@ const Usuario = () => {
 											</label>
 											<input
 												type="password"
-												className="form-control form-empty"
+												className="form-control form-empty limpiar"
 												id="contrasena_usuario"
 												name="contrasena_usuario"
 												placeholder="Ingrese una contraseña"
