@@ -17,8 +17,6 @@ const Producto = () => {
 
   useEffect(() => {
     listarProducto();
-    listarUp();
-    listarTipo();
   }, []); 
 
   function removeModalBackdrop() {
@@ -65,9 +63,13 @@ const Producto = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res)=>res.json())
-    .then((data)=>{
-      setUp(data)
+    .then((res) => res.json())
+    .then((data) => {
+      if(data.status == 401){
+        Sweet.registroFallido();
+      }else if(Array.isArray(data)) {
+        setUp(data);
+      }
     })
     .catch((e) => {
       console.log(e);
@@ -264,7 +266,7 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto"  onClick={listarTipo} defaultValue="">
                       <option value="">Selecciona un Tipo</option>
                       {tipos.map((element) => (
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
@@ -277,7 +279,7 @@ const Producto = () => {
 
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="" onClick={listarUp}>
                       <option value="">Selecciona una UP</option>
                       {up.map((element) => (
                         <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
