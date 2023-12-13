@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/usuario.css"
+import "../style/usuarios.css"
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
@@ -159,12 +159,18 @@ const Usuario = () => {
 					modalBackdrop.remove();
 				}
 			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
 	}
 
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
-				<button type="button" id="modalUsuario" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true) }}>
+				<button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+				onClick={() => { setShowModal(true);
+				Validate.limpiar('.limpiar')
+				}}>
 					Registrar Usuario
 				</button>
 				<div className="d-flex align-items-center">
@@ -175,7 +181,7 @@ const Usuario = () => {
 			<div className="wrapper-editor table-responsive">
 				<table
 					id="dtBasicExample"
-					className="table table-striped table-bordered" 
+					className="table table-striped table-bordered"
 					cellSpacing={0}
 				>
 					<thead className="text-center text-justify ">
@@ -190,9 +196,9 @@ const Usuario = () => {
 						</tr>
 					</thead>
 					<tbody id="listarUsuario" className="text-center cell">
-						{usuarios.filter((item) => { return search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search) }).map((element) => (
+						{usuarios.filter((item) => { return search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search) }).map((element, index) => (
 							<tr key={element.id_usuario}>
-								<td>{element.id_usuario}</td>
+								<td>{index + 1}</td>
 								<td>{element.nombre_usuario}</td>
 								<td>{element.documento_usuario}</td>
 								<td>{element.email_usuario}</td>
@@ -200,21 +206,21 @@ const Usuario = () => {
 								<td>{element.estado}</td>
 								<td className="mx-2 m-1 p-1 flex-shrink-0">
 									<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-										<IconEdit/>
+										<IconEdit />
 									</button>
 								</td>
 								<td className="mx-2 m-0 p-0 flex-shrink-0">
-									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash/></button>
+									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash /></button>
 								</td>
 							</tr>
 						))}
 					</tbody>
 				</table>
 			</div>
-			<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }}>
+			<div className={`modal fade ${showModal ? 'show' : ''}`} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef}>
 				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
 					<div className="modal-content">
-						<div className="modal-header txt-color">
+						<div className="modal-header hg txt-color">
 							<h2 className="modal-title fs-5">Registrar Usuario</h2>
 							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
@@ -233,7 +239,7 @@ const Usuario = () => {
 												name="nombre_usuario"
 												placeholder="Ingrese su nombre"
 											/>
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un nombre valido.
 											</div>
 										</div>
@@ -248,7 +254,7 @@ const Usuario = () => {
 												name="documento_usuario"
 												placeholder="Ingrese su documento"
 											/>
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un documento valido
 											</div>
 										</div>
@@ -257,14 +263,14 @@ const Usuario = () => {
 												Correo Electrónico
 											</label>
 											<input
-												type="email_usuario"
+												type="email"
 												className="form-control form-empty limpiar"
 												id="email_usuario"
 												name="email_usuario"
 												placeholder="Ingrese su email"
 											/>
-											<div class="invalid-feedback is-invalid">
-												Por Favor, Ingresar un correo valido
+											<div className="invalid-feedback is-invalid">
+												Por favor, Ingresar un correo valido
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
@@ -277,12 +283,13 @@ const Usuario = () => {
 												name="tipo_usuario"
 												defaultValue=""
 											>
-												<option value="" disabled selected>
+												<option value="" disabled>
 													Seleccione un Cargo
 												</option>
 												<option value="administrador">Administrador</option>
 												<option value="coadministrador">Co-Administrador</option>
 											</select>
+
 										</div>
 										<div className="col-md-12 mb-2">
 											<label htmlFor="contrasena_usuario" className="label-bold mb-2">
@@ -295,8 +302,8 @@ const Usuario = () => {
 												name="contrasena_usuario"
 												placeholder="Ingrese una contraseña"
 											/>
-											<div class="invalid-feedback is-invalid">
-												Por Favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
+											<div className="invalid-feedback is-invalid">
+												Por favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
 											</div>
 										</div>
 									</div>
@@ -336,7 +343,7 @@ const Usuario = () => {
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
 											<input type="text" className="form-control form-update" placeholder="Ingrese su nombre" value={usuarioSeleccionado.nombre_usuario || ''} name="nombre_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, nombre_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un nombre valido.
 											</div>
 										</div>
@@ -346,7 +353,7 @@ const Usuario = () => {
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
 											<input type="text" className="form-control form-update" placeholder="Ingrese su documento" value={usuarioSeleccionado.documento_usuario || ''} name="documento_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, documento_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un documento valido
 											</div>
 										</div>
@@ -355,8 +362,8 @@ const Usuario = () => {
 												Correo Electrónico
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
-											<input type="text" className="form-control form-update" placeholder="Ingrese su email" value={usuarioSeleccionado.email_usuario || ''} name="email_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, email_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<input type="email" className="form-control form-update" placeholder="Ingrese su email" value={usuarioSeleccionado.email_usuario || ''} name="email_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, email_usuario: e.target.value })} />
+											<div className="invalid-feedback is-invalid">
 												Por Favor, Ingresar un correo valido
 											</div>
 										</div>
@@ -365,9 +372,9 @@ const Usuario = () => {
 												Cargo
 											</label>
 											<select
-											className="form-select form-control form-empty limpiar"
+												className="form-select form-control form-empty limpiar"
 												value={usuarioSeleccionado.tipo_usuario || ''} name="tipo_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, tipo_usuario: e.target.value })}>
-												<option value="" disabled selected>
+												<option value="" disabled>
 													Seleccione un Cargo
 												</option>
 												<option value="administrador">Administrador</option>
@@ -380,7 +387,7 @@ const Usuario = () => {
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
 											<input type="password" className="form-control form-update" placeholder="Ingrese una contraseña" value={usuarioSeleccionado.contrasena_usuario || ''} name="contrasena_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, contrasena_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por Favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
 											</div>
 										</div>
