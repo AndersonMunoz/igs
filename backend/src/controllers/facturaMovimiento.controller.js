@@ -108,7 +108,7 @@ export const listarMovimientos = async (req, res) => {
 	try {
 		const [result] = await pool.query
 			(
-				`SELECT us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, f.unidad_peso_movimiento, f.precio_movimiento, f.estado_producto_movimiento,
+				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, f.unidad_peso_movimiento, f.precio_movimiento, f.estado_producto_movimiento,
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
 				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores
 					FROM factura_movimiento f 
