@@ -255,7 +255,7 @@ const Usuario = () => {
 													Seleccione un Cargo
 												</option>
 												<option value="administrador">Administrador</option>
-												<option value="co-administrador">Co-Administrador</option>
+												<option value="coadministrador">Co-Administrador</option>
 											</select>
 										</div>
 										<div className="col-md-12 mb-2">
