@@ -17,7 +17,8 @@ import {
 	IconX,
 	IconSettings,
 	IconUserOff,
-	IconBuildingWarehouse
+	IconBuildingWarehouse,
+	IconBrandProducthunt
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -76,29 +77,17 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
-							<div className="content-nav">
-								<Link to="/movimiento">
-									<div className="tamañoLateral">
-										<IconArrowsRandom className="iconosLaterales" />
-									</div>
-									<span className="link_name">Movimientos</span>
-								</Link>
-								<div className="container-icon">
-									<IconChevronDown className="iconoA" />
+							<Link to="/movimiento">
+								<div className="tamañoLateral">
+									<IconArrowsRandom className="iconosLaterales" />
 								</div>
-
-							</div>
-							<ul className="sub-menu">
+								<span className="link_name">Movimientos</span>
+							</Link>
+							<ul className="sub-menu blank">
 								<li>
 									<Link to="/movimiento" className="link_name">
 										Movimientos
 									</Link>
-								</li>
-								<li>
-									<a to="#">Entadra</a>
-								</li>
-								<li>
-									<a to="#">Salida</a>
 								</li>
 							</ul>
 						</li>
@@ -131,7 +120,7 @@ export const Menu = () => {
 						<li>
 							<Link to="/producto">
 								<div className="tamañoLateral">
-									<IconApple className="iconosLaterales" />
+									<IconBrandProducthunt className="iconosLaterales" />
 								</div>
 								<span className="link_name">Productos</span>
 							</Link>
@@ -160,21 +149,6 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
-							<Link to="/proveedor">
-								<div className="tamañoLateral">
-									<IconTruckDelivery className="iconosLaterales" />
-								</div>
-								<span className="link_name">Proveedores</span>
-							</Link>
-							<ul className="sub-menu blank">
-								<li>
-									<Link className="link_name" to="/proveedor">
-										Proveedores
-									</Link>
-								</li>
-							</ul>
-						</li>
-						<li>
 							<Link to="/up">
 								<div className="tamañoLateral">
 									<IconBuildingWarehouse className="iconosLaterales" />
@@ -192,7 +166,7 @@ export const Menu = () => {
 						<li>
 							<Link to="/tipoproducto">
 								<div className="tamañoLateral">
-									<IconBuildingWarehouse className="iconosLaterales" />
+									<IconApple className="iconosLaterales" />
 								</div>
 								<span className="link_name">Tipo Producto</span>
 							</Link>
@@ -200,6 +174,21 @@ export const Menu = () => {
 								<li>
 									<Link className="link_name" to="/up">
 										Tipo Producto
+									</Link>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<Link to="/proveedor">
+								<div className="tamañoLateral">
+									<IconTruckDelivery className="iconosLaterales" />
+								</div>
+								<span className="link_name">Proveedores</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/proveedor">
+										Proveedores
 									</Link>
 								</li>
 							</ul>
