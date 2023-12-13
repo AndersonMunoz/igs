@@ -8,7 +8,7 @@ const usuarioRouter = Router();
 usuarioRouter.post("/registrar" ,validatorUsuario, registroUsuario );
 usuarioRouter.get("/listar", listarUsuario );
 usuarioRouter.get("/buscar/:id", buscarUsuario );
-usuarioRouter.put("/editar/:id",validatorUsuario, validarToken, editarUsuario );
+usuarioRouter.put("/editar/:id",validatorUsuario, /* validarToken, */ editarUsuario );
 usuarioRouter.patch("/deshabilitar/:id" /* ,validarToken */ , actualizarEstado );
 usuarioRouter.patch("/activar/:id",/* validarToken , */ activarEstado );
 

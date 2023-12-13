@@ -9,6 +9,9 @@ const Usuario = () => {
 	const [usuarios, setUsuarios] = useState([]);
 	const [showModal, setShowModal] = useState(false);
 	const modalUsuarioRef = useRef(null);
+	const [updateModal, setUpdateModal] = useState(false);
+	const modalUpdateRef = useRef(null);
+	const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
 
 
 	useEffect(() => {
@@ -79,7 +82,7 @@ const Usuario = () => {
 				Validate.limpiar('.limpiar');
 			})
 			.catch(error => {
-				console.error('Error:', error);
+				console.error('Error registro fallido:', error);
 			});
 	}
 	///eliminar
@@ -104,35 +107,59 @@ const Usuario = () => {
 						listarUsuario();
 					})
 					.catch(error => {
-						console.error('Error:', error);
+						console.error('Error usuario no medificado:', error);
 					});
 			}
 		});
 	}
-	/* function eliminarUsuario(id_usuario) {
-		fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
-			method: 'patch',
-			headers: {
-				"content-type": "application/json"
-			}
-		}).then((res) => res.json())
-			.then(data => {
-				if (data.status == 200) {
-					listarUsuario()
-					deshabilitadoExitoso()
-
-				}
-				if (data.status == 401) {
-					listarUsuario()
-					deshabilitadoFallido()
-
-				}
-			}).catch(error => {
-				console.error('Error:', error);
-			});
-
-	} */
-
+	function editarUsuario(id) {
+		fetch(`http://localhost:3000/usuario/buscar/${id}`, {
+		  method: 'GET',
+		  headers: {
+			'Content-type': 'application/json',
+		  },
+		})
+		  .then((res) => res.json())
+		  .then((data) => {
+			console.log(data);
+			setUsuarioSeleccionado(data[0]);
+			setUpdateModal(true);
+		  })
+		  .catch((error) => {
+			console.error('Error:', error);
+		  });
+	  }
+	function actualizarUsuario(id){
+		const validacionExitosa = Validate.validarCampos('.form-update');
+		fetch(`http://localhost:3000/usuario/editar/${id}`,{
+		  method: 'PUT',
+		  headers:{
+			'Content-type':'application/json'
+		  },
+		  body: JSON.stringify(usuarioSeleccionado),
+		})
+		.then((res)=>res.json())
+		.then((data)=>{
+		  if(!validacionExitosa){
+			Sweet.actualizacionFallido();
+			return;
+		  }
+		  if(data.status == 200){
+			Sweet.actualizacionExitoso();
+		  }
+		  if(data.status == 401){
+			Sweet.actualizacionFallido();
+		  }
+		  console.log(data);
+		  listarUsuario();
+		  setUpdateModal(false);
+		  removeModalBackdrop();
+		  const modalBackdrop = document.querySelector('.modal-backdrop');
+		  if (modalBackdrop) {
+			modalBackdrop.remove();
+		  }
+		})
+	  }
 
 	return (
 		<div>
@@ -172,7 +199,7 @@ const Usuario = () => {
 								<td>{element.email_usuario}</td>
 								<td>{element.tipo_usuario}</td>
 								<td>{element.estado}</td>
-								<td className="mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+								<td className="mx-2" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
 									<button className="btn btn-color">
 										Actualizar
 									</button>
@@ -208,7 +235,7 @@ const Usuario = () => {
 												placeholder="Ingrese su nombre"
 											/>
 											<div class="invalid-feedback is-invalid">
-												Please choose a username.
+											Por favor, Ingresar un nombre valido.
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
@@ -223,7 +250,7 @@ const Usuario = () => {
 												placeholder="Ingrese su documento"
 											/>
 											<div class="invalid-feedback is-invalid">
-												Please choose a username.
+												Por favor, Ingresar un documento valido 
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
@@ -238,7 +265,7 @@ const Usuario = () => {
 												placeholder="Ingrese su email"
 											/>
 											<div class="invalid-feedback is-invalid">
-												Please choose a username.
+												Por Favor, Ingresar un correo valido
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
@@ -270,7 +297,7 @@ const Usuario = () => {
 												placeholder="Ingrese una contraseña"
 											/>
 											<div class="invalid-feedback is-invalid">
-												Please choose a username.
+											Por Favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
 											</div>
 										</div>
 									</div>
@@ -286,6 +313,114 @@ const Usuario = () => {
 								Cerrar
 							</button>
 							<button type="button" className="btn btn-color" onClick={registrarUsuario} >
+								Registrar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			{/* modal actualizar */}
+			<div className="modal fade" id="actualizarModal" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+					<div className="modal-content">
+						<div className="modal-header txt-color">
+							<h2 className="modal-title fs-5">Actualizar Usuario</h2>
+							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div className="modal-body">
+							<div className="d-flex justify-content-center">
+								<form className="text-center border border-light ">
+									<div className="mb-3 row">
+										<div className="col-md-12 mb-2">
+											<label htmlFor="nombre_usuario" className="label-bold mb-2">
+												Nombre
+											</label>
+											<input
+												type="text"
+												className="form-control form-empty limpiar"
+												id="nombre_usuario"
+												name="nombre_usuario"
+												placeholder="Ingrese su nombre"
+											/>
+											<div class="invalid-feedback is-invalid">
+											Por favor, Ingresar un nombre valido.
+											</div>
+										</div>
+										<div className="col-md-12 mb-2">
+											<label htmlFor="documento_usuario" className="label-bold mb-1">
+												Documento
+											</label>
+											<input
+												type="number"
+												className="form-control form-empty limpiar"
+												id="documento_usuario"
+												name="documento_usuario"
+												placeholder="Ingrese su documento"
+											/>
+											<div class="invalid-feedback is-invalid">
+												Por favor, Ingresar un documento valido 
+											</div>
+										</div>
+										<div className="col-md-12 mb-2">
+											<label htmlFor="email_usuario" className="label-bold mb-2">
+												Correo Electrónico
+											</label>
+											<input
+												type="email_usuario"
+												className="form-control form-empty limpiar"
+												id="email_usuario"
+												name="email_usuario"
+												placeholder="Ingrese su email"
+											/>
+											<div class="invalid-feedback is-invalid">
+												Por Favor, Ingresar un correo valido
+											</div>
+										</div>
+										<div className="col-md-12 mb-2">
+											<label htmlFor="tipo_usuario" className="label-bold mb-2">
+												Cargo
+											</label>
+											<select
+												className="form-select form-control form-empty limpiar"
+												id="tipo_usuario"
+												name="tipo_usuario"
+												defaultValue=""
+											>
+												<option value="" disabled selected>
+													Seleccione un Cargo
+												</option>
+												<option value="administrador">Administrador</option>
+												<option value="coadministrador">Co-Administrador</option>
+											</select>
+										</div>
+										<div className="col-md-12 mb-2">
+											<label htmlFor="contrasena_usuario" className="label-bold mb-2">
+												Contraseña
+											</label>
+											<input
+												type="password"
+												className="form-control form-empty limpiar"
+												id="contrasena_usuario"
+												name="contrasena_usuario"
+												placeholder="Ingrese una contraseña"
+											/>
+											<div class="invalid-feedback is-invalid">
+											Por Favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div className="modal-footer">
+							<button
+								type="button"
+								className="btn btn-secondary"
+								data-bs-dismiss="modal"
+							>
+								Cerrar
+							</button>
+							<button type="button" className="btn btn-color" onClick={actualizarUsuario} >
 								Registrar
 							</button>
 						</div>
