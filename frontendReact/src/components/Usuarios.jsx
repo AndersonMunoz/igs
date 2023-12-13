@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/usuario.css"
-import { IconSearch } from "@tabler/icons-react";
+import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 
@@ -79,7 +79,7 @@ const Usuario = () => {
 				if (modalBackdrop) {
 					modalBackdrop.remove();
 				}
-				Validate.limpiar('.limpiar')
+				Validate.limpiar('.limpiar');
 			})
 			.catch(error => {
 				console.error('Error registro fallido:', error);
@@ -164,7 +164,7 @@ const Usuario = () => {
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
-				<button type="button" id="modalUsuario" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true);Validate.limpiar('.limpiar')}}>
+				<button type="button" id="modalUsuario" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true) }}>
 					Registrar Usuario
 				</button>
 				<div className="d-flex align-items-center">
@@ -172,14 +172,13 @@ const Usuario = () => {
 					<IconSearch className="iconSearch" />
 				</div>
 			</div>
-			<div className="wrapper-editor">
+			<div className="wrapper-editor table-responsive">
 				<table
 					id="dtBasicExample"
-					className="table table-striped table-bordered"
+					className="table table-striped table-bordered" 
 					cellSpacing={0}
-					width="100%"
 				>
-					<thead className="text-center text-justify">
+					<thead className="text-center text-justify ">
 						<tr>
 							<th className="th-sm">#</th>
 							<th className="th-sm">Nombre</th>
@@ -190,7 +189,7 @@ const Usuario = () => {
 							<th className="th-sm" colSpan={2}>Acciones</th>
 						</tr>
 					</thead>
-					<tbody id="listarUsuario" className="text-center">
+					<tbody id="listarUsuario" className="text-center cell">
 						{usuarios.filter((item) => { return search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search) }).map((element) => (
 							<tr key={element.id_usuario}>
 								<td>{element.id_usuario}</td>
@@ -199,13 +198,13 @@ const Usuario = () => {
 								<td>{element.email_usuario}</td>
 								<td>{element.tipo_usuario}</td>
 								<td>{element.estado}</td>
-								<td className="mx-2" >
+								<td className="mx-2 m-1 p-1 flex-shrink-0">
 									<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-										Actualizar
+										<IconEdit/>
 									</button>
 								</td>
-								<td className="mx-2">
-									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}>Eliminar</button>
+								<td className="mx-2 m-0 p-0 flex-shrink-0">
+									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash/></button>
 								</td>
 							</tr>
 						))}
