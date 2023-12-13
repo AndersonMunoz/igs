@@ -42,7 +42,7 @@ export const registroUsuario = async (req, res) => {
 
 export const listarUsuario = async (req, res) => {
     try {
-        const [result] = await pool.query('select * from usuarios where estado = 1');
+        const [result] = await pool.query('select * from usuarios ORDER BY estado desc');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
