@@ -1,11 +1,11 @@
 import { check } from "express-validator";
 
 export const validatorUsuario = [
-    check('documento_usuario', 'El documento debe ser un número de 10  dígitos')
+    check('documento_usuario', 'El documento debe ser un número de documento válido')
         .exists()
         .not()
         .isEmpty()
-        .matches(/^\d{10}$/),
+        .matches(/^\d{8,12}$/),
 
     check('email_usuario', 'El correo electrónico es inválido')
         .exists()
@@ -27,10 +27,10 @@ export const validatorUsuario = [
         .matches(/[a-z]/).withMessage('Debe contener al menos una letra minúscula.')
         .matches(/[A-Z]/).withMessage('Debe contener al menos una letra mayúscula.')
         .matches(/\d/).withMessage('Debe contener al menos un número.'),
-        
+
 
     check('tipo_usuario', 'el tipo de usuario es requerido o !!!')
         .not()
         .isEmpty()
-        .isIn(['administrador','coadministrador'])
+        .isIn(['administrador', 'coadministrador'])
 ];

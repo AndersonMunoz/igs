@@ -60,6 +60,14 @@ const Sweet = {
       text: 'Actualización Fallido',
       confirmButtonText: 'Cerrar',
     });
+  },
+  datosinsuficientes: () => {
+    Swal.fire({
+      title: 'Mensaje',
+      icon: 'warning',
+      text: 'Datos insuficientes, Intenete Nuevamente',
+      confirmButtonText: 'Cerrar',
+    });
   }
   
 };

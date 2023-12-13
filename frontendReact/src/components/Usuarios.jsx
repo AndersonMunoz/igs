@@ -5,43 +5,38 @@ import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 
 const Usuario = () => {
+	const [search, setSeach] = useState('');
+	const [usuarios, setUsuarios] = useState([]);
 	const [showModal, setShowModal] = useState(false);
-	const modalProductoRef = useRef(null);
-	const [updateModal, setUpdateModal] = useState(false);
-	const modalUpdateRef = useRef(null);
+	const modalUsuarioRef = useRef(null);
+
 
 	useEffect(() => {
 		listarUsuario()
 	}, []);
+
+	function removeModalBackdrop() {
+		const modalBackdrop = document.querySelector('.modal-backdrop');
+		if (modalBackdrop) {
+			modalBackdrop.remove();
+		}
+	}
 
 	///listar usuario
 	function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
 			method: "get",
 			headers: {
-				"content-type": "application/json"
-			}
-		}).then(resp => resp.json())
-			.then(data => {
-				console.log(data);
-				let row = '';
-				data.forEach(element => {
-					row += `<tr>
-									<td>${element.id_usuario}</td>        
-									<td>${element.nombre_usuario}</td>        
-									<td>${element.documento_usuario}</td>        
-									<td>${element.email_usuario}</td>        
-									<td>${element.tipo_usuario}</td>        
-									<td>${element.estado}</td>        
-									<td class='mx-2'>
-										<button class='btn btn-danger' onClick='${eliminarUsuario(element.id_usuario)}'>Eliminar</button>
-									</td> 
-									<td class='mx-2'><div class='btn btn-primary' '>Actualizar</div></td>       
-								</tr>`
-					document.getElementById('listarUsuario').innerHTML = row;/* onclick='modalAct(${element.id}) */
-				});
+				"Content-type": "application/json",
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setUsuarios(data);
 			})
-			.catch(e => { console.log(e); })
+			.catch((e) => {
+				console.log(e);
+			});
 	}
 
 	function registrarUsuario() {
@@ -69,22 +64,52 @@ const Usuario = () => {
 				}
 				if (data.status == 200) {
 					Sweet.registroExitoso();
-
 				}
-				if (data.status == 401) {
+				if (data.status == 403) {
 					Sweet.registroFallido();
 				}
-				console.log(data, "xd")
-				listarUsuario()
-				Validate.limpiar('.limpiar')
-
-			}).catch(error => {
+				console.log(data);
+				listarUsuario();
+				setShowModal(false);
+				removeModalBackdrop();
+				const modalBackdrop = document.querySelector('.modal-backdrop');
+				if (modalBackdrop) {
+					modalBackdrop.remove();
+				}
+				Validate.limpiar('.limpiar');
+			})
+			.catch(error => {
 				console.error('Error:', error);
 			});
-
 	}
 	///eliminar
 	function eliminarUsuario(id_usuario) {
+		Sweet.confirmacion().then((result) => {
+			if (result.isConfirmed) {
+				fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
+					method: 'PATCH',
+					headers: {
+						"Content-type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(data => {
+						console.log(data);
+						if (data.status === 200) {
+							Sweet.deshabilitadoExitoso();
+						}
+						if (data.status === 401) {
+							Sweet.deshabilitadoFallido();
+						}
+						listarUsuario();
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+			}
+		});
+	}
+	/* function eliminarUsuario(id_usuario) {
 		fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
 			method: 'patch',
 			headers: {
@@ -106,17 +131,17 @@ const Usuario = () => {
 				console.error('Error:', error);
 			});
 
-	}
+	} */
 
 
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
-				<button type="button" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+				<button type="button" id="modalUsuario" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true) }}>
 					Registrar Usuario
 				</button>
 				<div className="d-flex align-items-center">
-					<input type="text" placeholder="Buscar Usuario" className="input-buscar from-control" />
+					<input type="text" placeholder="Buscar Usuario" className="input-buscar" onChange={(e) => setSeach(e.target.value)} />
 					<IconSearch className="iconSearch" />
 				</div>
 			</div>
@@ -139,11 +164,28 @@ const Usuario = () => {
 						</tr>
 					</thead>
 					<tbody id="listarUsuario" className="text-center">
-
+						{usuarios.filter((item) => { return search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search) }).map((element) => (
+							<tr key={element.id_usuario}>
+								<td>{element.id_usuario}</td>
+								<td>{element.nombre_usuario}</td>
+								<td>{element.documento_usuario}</td>
+								<td>{element.email_usuario}</td>
+								<td>{element.tipo_usuario}</td>
+								<td>{element.estado}</td>
+								<td className="mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+									<button className="btn btn-color">
+										Actualizar
+									</button>
+								</td>
+								<td className="mx-2">
+									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}>Eliminar</button>
+								</td>
+							</tr>
+						))}
 					</tbody>
 				</table>
 			</div>
-			<div className="modal fade" id="modalUsuario" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }}>
 				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
 					<div className="modal-content">
 						<div className="modal-header txt-color">
@@ -204,9 +246,10 @@ const Usuario = () => {
 												Cargo
 											</label>
 											<select
-												className="form-select form-empty limpiar"
+												className="form-select form-control form-empty limpiar"
 												id="tipo_usuario"
 												name="tipo_usuario"
+												defaultValue=""
 											>
 												<option value="" disabled selected>
 													Seleccione un Cargo
