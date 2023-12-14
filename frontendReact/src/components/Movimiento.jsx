@@ -12,6 +12,7 @@ const Movimiento = () => {
   const [proveedor_list, setProveedor] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [usuario_list, setUsuario] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
   const modalUpdateRef = useRef(null);
@@ -178,7 +179,6 @@ const Movimiento = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
-        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -220,7 +220,7 @@ const Movimiento = () => {
   <div>
     <h1 className="text-center modal-title fs-5">Registro de movimiento</h1>
     <div className="d-flex justify-content-between mb-4">
-    <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" >
+    <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
     Registrar nuevo movimiento
     </button>
     <div className="d-flex align-items-center">
@@ -291,6 +291,9 @@ const Movimiento = () => {
                           <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
                         ))}
                       </select>
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione una categoria.
+                    |</div>
                     </div>
                   </div>
                   <div className="col">
@@ -302,6 +305,9 @@ const Movimiento = () => {
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
                       ))}
                       </select>
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un producto.
+                    |</div>
                     </div>
                   </div>
                   <div className="col">
@@ -312,6 +318,9 @@ const Movimiento = () => {
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
                       </select>
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un tipo de movimiento.
+                    |</div>
                     </div>
                   </div>
                 </div>
@@ -325,12 +334,18 @@ const Movimiento = () => {
                         <option key={element.id_proveedores} value={element.id_proveedores}>{element.nombre_proveedores}</option>
                       ))}
                       </select>
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un proveedor.
+                    |</div>
                     </div>
                   </div>
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                      <input  type="text" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control form-empty limpiar" />
+                      <input  type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control form-empty limpiar" />
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, ingrese una cantidad.
+                    |</div>
                     </div>
                   </div>
                   <div className="col">
@@ -344,6 +359,9 @@ const Movimiento = () => {
                             <option value="lt">Litro (Lt)</option>
                             <option value="ml">Mililitro (Ml)</option>
                           </select>
+                          <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione una unidad de peso.
+                    |</div>
                     </div>
                   </div>
                 </div>
@@ -352,6 +370,9 @@ const Movimiento = () => {
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="precio_movimiento">Precio total del producto:</label>
                       <input  type="number" id="precio_movimiento" name="precio_movimiento"className="form-control form-empty limpiar" />
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, ingrese un peso válido.
+                    |</div>
                     </div>
                   </div>
                   <div className="col">
@@ -363,6 +384,9 @@ const Movimiento = () => {
                           <option value="regular">Regular</option>
                           <option value="malo">Malo</option>
                         </select>
+                        <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un estado.
+                    |</div>
                     </div>
                   </div>
                 </div>
@@ -392,6 +416,9 @@ const Movimiento = () => {
                           </option>
                         ))}
                       </select>
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione el usuario que hizo el movimiento.
+                    |</div>
                     </div>
                   </div>
                 </div>
