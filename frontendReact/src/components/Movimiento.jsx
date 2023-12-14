@@ -246,7 +246,17 @@ const Movimiento = () => {
     </tr>
   </thead>
   <tbody id="tableMovimiento">
-      {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.nombre_tipo.toLowerCase().includes(search)}).map((element) => (
+  {movimientos.length === 0 ? (
+        <tr>
+          <td colSpan={12}>
+            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+              <h2>¡Oops! No hay movimientos registados en este momento😟</h2>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        <>
+      {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.estado_producto_movimiento.toLowerCase().includes(search)}).map((element) => (
           <tr key={element.id_factura}>
             <td className="p-2 text-center">{element.nombre_tipo}</td>
             <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
@@ -266,7 +276,8 @@ const Movimiento = () => {
               
             </td>
           </tr>
-        ))}
+          
+        ))}</>)}
     </tbody>
 </table>
 
