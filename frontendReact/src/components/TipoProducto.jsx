@@ -96,11 +96,65 @@ const Tipo = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
-        Validate.limpiar('.limpiar');
+  
       })
       .catch(error => {
         console.error('Error:', error);
       });
+  }
+
+
+  function deshabilitarTipo(id) {
+    Sweet.confirmacion().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/tipo/deshabilitar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.deshabilitadoExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.deshabilitadoFallido();
+            }
+            listarTipo();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
+  }
+  function activarTipo(id) {
+    Sweet.confirmacionActivar().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/tipo/activar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.actualizacionExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.actualizacionFallido();
+            }
+            listarTipo();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
   }
   
   
@@ -162,7 +216,7 @@ const Tipo = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setShowModal(true)}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nuevo tipo de producto 
         </button>
         <div className="d-flex align-items-center">
@@ -181,20 +235,48 @@ const Tipo = () => {
             </tr>
           </thead>
           <tbody id="tableCategoria" className="text-center">
-  {tipos.filter((item) => {
+          {tipos.length === 0 ? (
+        <tr>
+          <td colSpan={12}>
+            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+              <h2>¡Oops! No hay tipos disponibles en este momento 😟</h2>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        <>
+          {tipos.filter((item) => {
     return search.toLowerCase() === '' ? item : item.NombreProducto.toLowerCase().includes(search);
   }).map((element) => (
     <tr key={element.id}>
       <td>{element.id}</td>
       <td>{element.NombreProducto}</td>
-      <td>{element.Categoría}</td>
-      <td className="mx-2" onClick={() => { setUpdateModal(true); editarTipo(element.id); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-        <button className="btn btn-color">
-          Editar
-        </button>
-      </td>
-    </tr>
-  ))}
+      <td>{element.Categoría }</td>
+              
+      {element.estado === 1 ? (
+                  <>
+                    <td className="mx-2">
+                      <button className="btn btn-color" onClick={() => { setUpdateModal(true); editarTipo(element.id); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+                        Editar  
+                      </button>
+                    </td>
+                    <td className="mx-2">
+                      <button className="btn btn-danger" onClick={() => deshabilitarTipo(element.id)}>Deshabilitar</button>
+                    </td>
+                  </>
+                ): (
+                  <td className="mx-2" colSpan={2}>
+                    <button className="btn btn-primary" onClick={() => activarTipo(element.id)}>Activar</button>
+                  </td>
+                )}
+
+              </tr>
+            ))}
+        </>
+      )}
+
+
+
 </tbody>
         </table>
       </div>
