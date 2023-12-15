@@ -19,8 +19,8 @@ const Sweet = {
   },
   confirmacion: () => {
     return Swal.fire({
-      title: "¿Seguro Quieres Desabilitarlo?",
-      text: "Puede que el dato se pierda!",
+      title: "¿Seguro que quieres desabilitarlo?",
+      text: "¡Puede que el dato se pierda!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -33,7 +33,7 @@ const Sweet = {
     Swal.fire({
       title: 'Mensaje',
       icon: 'success',
-      text: 'Eliminación Exitosa',
+      text: 'Desactivación Exitosa',
       confirmButtonText: 'Cerrar',
     });
   },
@@ -41,13 +41,13 @@ const Sweet = {
     Swal.fire({
       title: 'Mensaje',
       icon: 'warning',
-      text: 'Eliminación Fallido',
+      text: 'Desactivación Fallida',
       confirmButtonText: 'Cerrar',
     });
   },
   confirmacionActivar: () => {
     return Swal.fire({
-      title: "¿Seguro Quieres Activarlo?",
+      title: "¿Seguro que quieres activarlo?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",

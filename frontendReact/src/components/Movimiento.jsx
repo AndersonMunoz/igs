@@ -41,6 +41,7 @@ const Movimiento = () => {
     listarProveedor();
     listarUsuario();
   }, []);
+  
   function listarCategoria() {
     fetch("http://localhost:3000/categoria/listar", {
       method: "GET",
@@ -63,12 +64,20 @@ const Movimiento = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res)=>res.json())
-    .then((data)=>{
-      setTipo(data)
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
+        setTipo(data);
+      }
     })
     .catch((e) => {
-      console.log(e);
+      console.error("Error al procesar la respuesta:", e);
     });
   }
   function listarProveedor() {
@@ -297,7 +306,7 @@ const Movimiento = () => {
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="categoria">Categoria</label>
                       <select className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
-                      <option defaultValue="">Selecciona una categoria</option>
+                      <option value="">Selecciona una categoria</option>
                         {categoria_list.map((element) => (
                           <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
                         ))}
@@ -311,7 +320,7 @@ const Movimiento = () => {
                     <div data-mdb-input-init className="form-outline">
                       <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                       <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
-                        <option defaultValue="">Seleccione una opción</option>
+                        <option value="">Seleccione una opción</option>
                         {tipos.map((element) => (
                         <option key={element.id} value={element.id}>{element.NombreProducto}</option>
                       ))}
