@@ -5,10 +5,10 @@ import { validarToken } from "../controllers/autentificacion.controller.js";
 
 const productoRouter = Router();
 
-productoRouter.post('/registrar',/*  validarToken,validatorProducto, */ guardarProducto);
+productoRouter.post('/registrar',/*  validarToken,*/validatorProducto,  guardarProducto);
 productoRouter.get('/listar', listarProductos);
 productoRouter.get('/buscar/:id',buscarProducto);
-productoRouter.put('/actualizar/:id'/* ,validarToken, validatorProducto */,actualizarProducto);
+productoRouter.put('/actualizar/:id'/* ,validarToken*/, validatorProducto ,actualizarProducto);
 productoRouter.patch('/deshabilitar/:id'/* , validarToken */, deshabilitarProducto);
 productoRouter.patch('/activar/:id', activarProducto);
 

@@ -44,7 +44,7 @@ export const listarUnidadProductiva = async (req, res) => {
 		if (result.length > 0) {
 			res.status(200).json(result);
 		} else {
-			res.status(401).json({ "status": 401, "message": "No se pudo listar las unidades productivas " });
+			res.status(204).json({ "status": 204, "message": "No se pudo listar las unidades productivas " });
 		}
 
 	} catch (err) {

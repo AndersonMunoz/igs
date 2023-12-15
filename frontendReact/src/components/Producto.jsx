@@ -64,29 +64,46 @@ const Producto = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res)=>res.json())
-    .then((data)=>{
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
         setTipo(data);
+      }
     })
     .catch((e) => {
-      console.log(e);
+      console.error("Error al procesar la respuesta:", e);
     });
   }
-  function listarUp(){
-    fetch("http://localhost:3000/up/listar",{
+  function listarUp() {
+    fetch("http://localhost:3000/up/listar", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
       },
     })
-    .then((res) => res.json())
-    .then((data) => {
-        setUp(data);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+      .then((res) => {
+        if (res.status === 204) {
+          console.log("No hay datos disponibles");
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          setUp(data);
+        }
+      })
+      .catch((e) => {
+        console.error("Error al procesar la respuesta:", e);
+      });
   }
+  
   function registrarProducto() {
     let precio_producto = document.getElementById('precio_producto').value;
     let descripcion_producto = document.getElementById('descripcion_producto').value;
@@ -445,7 +462,7 @@ const Producto = () => {
 
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
               <button type="button" className="btn btn-color"   onClick={() => {actualizarProducto(productoSeleccionado.id_producto);}}>
                 Actualizar
               </button>
