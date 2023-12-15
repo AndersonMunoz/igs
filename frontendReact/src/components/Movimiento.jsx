@@ -68,7 +68,6 @@ const Movimiento = () => {
     })
     .then((res) => {
       if (res.status === 204) {
-        console.log("No hay datos disponibles");
         return null;
       }
       return res.json();
@@ -204,7 +203,6 @@ const Movimiento = () => {
 			}
 		}).then((res) => {
       if (res.status === 204) {
-        console.log("No hay datos disponibles");
         return null;
       }
       return res.json();
@@ -224,7 +222,6 @@ const Movimiento = () => {
         },
       }).then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
           return null;
         }
         return res.json();
