@@ -65,10 +65,10 @@ const Usuario = () => {
 					Sweet.registroFallido();
 					return;
 				}
-				if (data.status == 200) {
+				if (data.status === 200) {
 					Sweet.registroExitoso();
 				}
-				if (data.status == 403) {
+				if (data.status === 403) {
 					Sweet.registroFallido();
 				}
 				console.log(data);
@@ -108,6 +108,32 @@ const Usuario = () => {
 					})
 					.catch(error => {
 						console.error('Error usuario no medificado:', error);
+					});
+			}
+		});
+	}
+	function activarUsuario(id_usuario) {
+		Sweet.confirmacionActivar().then((result) => {
+			if (result.isConfirmed) {
+				fetch(`http://localhost:3000/usuario/activar/${id_usuario}`, {
+					method: 'PATCH',
+					headers: {
+						"Content-type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(data => {
+						console.log(data);
+						if (data.status === 200) {
+							Sweet.habilitadoExitoso();
+						}
+						if (data.status === 401) {
+							Sweet.habilitadoFallido();
+						}
+						listarUsuario();
+					})
+					.catch(error => {
+						console.error('Error:', error);
 					});
 			}
 		});
@@ -167,10 +193,11 @@ const Usuario = () => {
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
-				<button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" 
-				onClick={() => { setShowModal(true);
-				Validate.limpiar('.limpiar')
-				}}>
+				<button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal"
+					onClick={() => {
+						setShowModal(true);
+						Validate.limpiar('.limpiar')
+					}}>
 					Registrar Usuario
 				</button>
 				<div className="d-flex align-items-center">
@@ -196,24 +223,44 @@ const Usuario = () => {
 						</tr>
 					</thead>
 					<tbody id="listarUsuario" className="text-center cell">
-						{usuarios.filter((item) => { return search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search) }).map((element, index) => (
-							<tr key={element.id_usuario}>
-								<td>{index + 1}</td>
-								<td>{element.nombre_usuario}</td>
-								<td>{element.documento_usuario}</td>
-								<td>{element.email_usuario}</td>
-								<td>{element.tipo_usuario}</td>
-								<td>{element.estado}</td>
-								<td className="mx-2 m-1 p-1 flex-shrink-0">
-									<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-										<IconEdit />
-									</button>
-								</td>
-								<td className="mx-2 m-0 p-0 flex-shrink-0">
-									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash /></button>
+						{usuarios.length === 0 ? (
+							<tr>
+								<td colSpan={12}>
+									<div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+										<h2>¡Oops! No hay usuarios disponibles en este momento😟</h2>
+									</div>
 								</td>
 							</tr>
-						))}
+						) : (
+							<>
+								{usuarios.filter((item) => search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search)).map((element, index) => (
+									<tr key={element.id_producto}>
+										<td>{index + 1}</td>
+										<td>{element.nombre_usuario}</td>
+										<td>{element.documento_usuario}</td>
+										<td>{element.email_usuario}</td>
+										<td>{element.tipo_usuario}</td>
+										<td>{element.estado}</td>
+										{element.estado === 1 ? (
+											<>
+												<td className="mx-2 m-1 p-1 flex-shrink-0">
+													<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+														<IconEdit />
+													</button>
+												</td>
+												<td className="mx-2 m-0 p-0 flex-shrink-0">
+													<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash /></button>
+												</td>
+											</>
+										) : (
+											<td className="mx-2" colSpan={2}>
+												<button className="btn btn-primary" onClick={() => activarUsuario(element.id_usuario)}>Activar</button>
+											</td>
+										)}
+									</tr>
+								))}
+							</>
+						)}
 					</tbody>
 				</table>
 			</div>
@@ -229,14 +276,14 @@ const Usuario = () => {
 								<form className="text-center border border-light ">
 									<div className="mb-3 row">
 										<div className="col-md-12 mb-2">
-											<label htmlFor="nombre_usuario" className="label-bold mb-2">
+											<label htmlFor="nombreUsuario" className="label-bold mb-2">
 												Nombre
 											</label>
 											<input
 												type="text"
 												className="form-control form-empty limpiar"
 												id="nombre_usuario"
-												name="nombre_usuario"
+												name="nombreUsuario"
 												placeholder="Ingrese su nombre"
 											/>
 											<div className="invalid-feedback is-invalid">
@@ -244,14 +291,14 @@ const Usuario = () => {
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="documento_usuario" className="label-bold mb-1">
+											<label htmlFor="documentoUsuario" className="label-bold mb-1">
 												Documento
 											</label>
 											<input
 												type="number"
 												className="form-control form-empty limpiar"
 												id="documento_usuario"
-												name="documento_usuario"
+												name="documentoUsuario"
 												placeholder="Ingrese su documento"
 											/>
 											<div className="invalid-feedback is-invalid">
@@ -259,14 +306,14 @@ const Usuario = () => {
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="email_usuario" className="label-bold mb-2">
+											<label htmlFor="emailUsuario" className="label-bold mb-2">
 												Correo Electrónico
 											</label>
 											<input
 												type="email"
 												className="form-control form-empty limpiar"
 												id="email_usuario"
-												name="email_usuario"
+												name="emailUsuario"
 												placeholder="Ingrese su email"
 											/>
 											<div className="invalid-feedback is-invalid">
@@ -274,13 +321,13 @@ const Usuario = () => {
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="tipo_usuario" className="label-bold mb-2">
+											<label htmlFor="tipoUsuario" className="label-bold mb-2">
 												Cargo
 											</label>
 											<select
-												className="form-select form-control form-empty limpiar"
+												className="form-control form-empty limpiar"
 												id="tipo_usuario"
-												name="tipo_usuario"
+												name="tipoUsuario"
 												defaultValue=""
 											>
 												<option value="" disabled>
