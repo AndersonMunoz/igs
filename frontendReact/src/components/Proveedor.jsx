@@ -9,8 +9,10 @@ const Proveedor = () => {
   const [Proveedores, setProveedor] = useState([]);
   const sortedProveedores = [...Proveedores].sort((a, b) => a.id_proveedores - b.id_proveedores);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
-  let validacionExitosa='';
- 
+
+  const [validacionExitosa, setValidacionExitosa] = useState('');
+
+
   useEffect(() => {
     listarProveedor();
   }, []);
@@ -21,38 +23,43 @@ const Proveedor = () => {
     const direccion_proveedores = document.getElementById('direccionProveedor').value;
     const contrato_proveedores = document.getElementById('contratoProveedor').value;
 
-     validacionExitosa= Validate.validarCampos('.form-empty')
+    let validacionExitosa =Validate.validarCampos('.form-empty');
+    setValidacionExitosa(validacionExitosa)
+    
 
-    const requestBody = {
-      telefono_proveedores,
-      direccion_proveedores,
-      contrato_proveedores,
-      nombre_proveedores,
-    };
+    console.log(validacionExitosa);
+    if (validacionExitosa == false) {
+      Sweet.registroFallido()
+    } else {
+      const requestBody = {
+        telefono_proveedores,
+        direccion_proveedores,
+        contrato_proveedores,
+        nombre_proveedores,
+      };
 
-    fetch("http://localhost:3000/proveedor/registrar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestBody),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        listarProveedor();
-        if (!validacionExitosa) {
-          Sweet.registroFallido
-          return;
-        }
-        if (data.status == 200) {
-          Sweet.registroExitoso()
-        } else {
-          Sweet.registroFallido()
-        }
+      fetch("http://localhost:3000/proveedor/registrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
       })
-      .catch((error) => {
-        console.error("Error al registrar el proveedor:", error);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          listarProveedor();
+
+          if (data.status == 200) {
+            Sweet.registroExitoso()
+          } else {
+            Sweet.registroFallido()
+          }
+        })
+        .catch((error) => {
+          console.error("Error al registrar el proveedor:", error);
+        });
+    }
+
   }
   function listarProveedor() {
     fetch("http://localhost:3000/proveedor/listar", {
@@ -136,7 +143,6 @@ const Proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         setProveedor(data)
-        document.getElementById('btnActivar').classList.remove('d-none');
       })
       .catch((error) => {
         console.error('Error al buscar el proveedor:', error);
@@ -215,7 +221,8 @@ const Proveedor = () => {
           <tbody id="tableProveedores" className="text-center">
             {sortedProveedores.map((element, index) => (
               <tr key={element.id_proveedores}>
-                <td>{element.id_proveedores}</td>
+
+                <td>{index+1}</td>
                 <td>{element.nombre_proveedores}</td>
                 <td>{element.telefono_proveedores}</td>
                 <td>{element.direccion_proveedores}</td>
@@ -254,15 +261,15 @@ const Proveedor = () => {
                 <form className="text-center border border-light" action="#!">
                   <div className="d-flex form-row mb-4">
                     <div className="col">
-                      <h2 className="fs-5">Nombres</h2>
-                      <input type="text" id="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required></input>
+                      <label htmlFor="nombresProveedor">Nombres</label>
+                      <input type="text" id="nombresProveedor" name="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required></input>
                       <div className="invalid-feedback is-invalid">
                         Por favor, ingrese un nombre valido
                       </div>
                     </div>
                     <div className="col ms-3">
-                      <h2 className="fs-5">Direccion</h2>
-                      <input type="text" id="direccionProveedor" className="form-control form-empty limpiar" placeholder="Direccion"></input>
+                      <label htmlFor="direccionProveedor">Direccion</label>
+                      <input type="text" id="direccionProveedor" name="direccionProveedor" className="form-control form-empty limpiar" placeholder="Direccion"></input>
                       <div className="invalid-feedback is-invalid">
                         Error en la direccion.
                       </div>
@@ -270,15 +277,15 @@ const Proveedor = () => {
                   </div>
                   <div className="d-flex form-row mb-1">
                     <div className="col">
-                      <h2 className="fs-5">Contrato</h2>
-                      <input type="text" id="contratoProveedor" className="form-control form-empty mb-4 limpiar" placeholder="N° de contrato"></input>
+                      <label htmlFor="contratoProveedor">Contrato</label>
+                      <input type="text" name="contratoProveedor"  id="contratoProveedor" className="form-control form-empty mb-4 limpiar" placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Por favor, Verifique el N° de contrato
                       </div>
                     </div>
                     <div className="col ms-3">
-                      <h2 className="fs-5">Telefono</h2>
-                      <input type="text" id="telefonoProveedor" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <label htmlFor="">Telefono</label>
+                      <input type="text" name="telefonoProveedor" id="telefonoProveedor" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Por favor, Ingrese un telefono valido.
                       </div>
@@ -289,7 +296,7 @@ const Proveedor = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button id="btnAgregar" type="button" className="btn btn-color" data-bs-dismiss={validacionExitosa ? "modal" : undefined} onClick={registrarProveedor}>Agregar</button>
+              <button id="btnAgregar" type="button" className="btn btn-color" onClick={registrarProveedor} data-bs-dismiss={validacionExitosa == '' ? 'modal' : ''}>Agregar</button>
               <button id="btnActualizar" type="button" data-bs-dismiss="modal" className="btn btn-color d-none" onClick={() => actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
             </div>
           </div>
