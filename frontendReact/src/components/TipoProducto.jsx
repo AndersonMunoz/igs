@@ -238,8 +238,10 @@ const Tipo = () => {
           {tipos.length === 0 ? (
         <tr>
           <td colSpan={12}>
-            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
-              <h2>¡Oops! No hay tipos disponibles en este momento 😟</h2>
+          <div className="d-flex justify-content-center">
+              <div className=" alert alert-danger text-center mt-4 w-50">
+              <h2> En este momento no contamos con ningún tipo de producto disponible. </h2>
+              </div>
             </div>
           </td>
         </tr>
@@ -284,14 +286,14 @@ const Tipo = () => {
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
-              <h1 className="modal-title fs-5">Registrar  tipo de producto</h1>
+              <h1 className="modal-title fs-5">Registrar  Tipo de producto</h1>
                 <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body">
               <form>
                 <div className="row mb-3">
                   <div className="col-md-12">
-                    <label htmlFor="tipo" className="label-bold mb-2"> tipo</label>
+                    <label htmlFor="tipo" className="label-bold mb-2"> Tipo Producto</label>
                     <input type="text" className="form-control form-empty limpiar" id="nombre_tipo" name="	nombre_tipo" placeholder="nombre de tipo de producto " />
                     <div className="invalid-feedback is-invalid">
                       Por favor,  el nombre  
@@ -300,7 +302,7 @@ const Tipo = () => {
                 </div>
                 <div className="row mb-3">
                   <div className="col-md-6">
-                    <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Tipo Producto</label>
+                    <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Categoria</label>
                     <select className="form-select form-control form-empty limpiar" id="fk_categoria_pro" name=" fk_categoria_pro" defaultValue="" onClick={listarcategoria}>
                       <option value="">Selecciona un Tipo</option>
                       {categoria.map((element) => (
@@ -308,7 +310,7 @@ const Tipo = () => {
                       ))}
                     </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un tipo de producto.
+                      Por favor, seleccione un  categoria
                     </div>
                   </div>
                 </div>

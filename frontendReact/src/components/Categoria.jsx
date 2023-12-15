@@ -188,7 +188,7 @@ const Categoria = () => {
     <div>
       <div className="d-flex justify-content-between mb-4">
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
-          Registrar Nuevo tipo de producto 
+          Registrar Nueva Categoria
         </button>
         <div className="d-flex align-items-center">
           <input type="text" placeholder="Buscar Categoria" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
@@ -199,8 +199,8 @@ const Categoria = () => {
         <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
           <thead className="text-center text-justify">
             <tr>
-              <th className="th-sm">id</th>
-              <th className="th-sm">nombre Categoria</th>
+              <th className="th-sm">Id</th>
+              <th className="th-sm">Nombre Categoria</th>
               <th className="th-sm" colSpan={2}> Botones Acciones</th>
             </tr>
           </thead>
@@ -209,8 +209,12 @@ const Categoria = () => {
           {categorias_producto.length === 0 ? (
         <tr>
           <td colSpan={12}>
-            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
-              <h2>¡Oops! No hay categorias  disponibles en este momento 😟</h2>
+
+
+          <div className="d-flex justify-content-center">
+              <div className=" alert alert-danger text-center mt-4 w-50">
+              <h2> En este momento no contamos con ningúna Categoria disponible. </h2>
+              </div>
             </div>
           </td>
         </tr>

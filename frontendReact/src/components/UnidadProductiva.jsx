@@ -194,7 +194,7 @@ const Up= () => {
           Registrar Nueva unidad Productiva
         </button>
         <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Categoria" className="input-buscar limpiar" onChange={(e)=>setSeach(e.target.value)}/>
+          <input type="text" placeholder="Buscar Unidad productiva" className="input-buscar limpiar" onChange={(e)=>setSeach(e.target.value)}/>
           <IconSearch className="iconSearch" />
         </div>
       </div>
@@ -202,8 +202,8 @@ const Up= () => {
         <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
           <thead className="text-center text-justify">
             <tr>
-              <th className="th-sm">id</th>
-              <th className="th-sm">nombre Up</th>
+              <th className="th-sm">Id</th>
+              <th className="th-sm">Nombre Up</th>
               <th className="th-sm" colSpan={2}> Botones Acciones</th>
             </tr>
           </thead>
@@ -214,7 +214,7 @@ const Up= () => {
           <td colSpan={3} className="">
             <div className="d-flex justify-content-center">
               <div className=" alert alert-danger text-center mt-4 w-50">
-                <h2>¡Oops! No hay Unidad productiva disponible en este momento 😟</h2>
+                <h2> En este momento no contamos con ningúna  Unidad productiva  disponible. </h2>
               </div>
             </div>
           </td>
