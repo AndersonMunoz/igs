@@ -51,7 +51,9 @@ const Movimiento = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      setcategorias_producto(data);
+      if(Array.isArray(data)){
+        setcategorias_producto(data);
+      }
     })
     .catch((e) => {
       console.log(e);
