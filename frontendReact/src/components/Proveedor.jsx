@@ -3,13 +3,11 @@ import '../style/Proveedor.css'
 import { IconSearch } from "@tabler/icons-react";
 import Validate from '../helpers/Validate';
 import Sweet from '../helpers/Sweet';
-import { Result } from "express-validator";
 
 const Proveedor = () => {
   const [Proveedores, setProveedor] = useState([]);
   const sortedProveedores = [...Proveedores].sort((a, b) => a.id_proveedores - b.id_proveedores);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
-
   const [validacionExitosa, setValidacionExitosa] = useState('');
 
 
@@ -18,19 +16,16 @@ const Proveedor = () => {
   }, []);
 
   function registrarProveedor() {
+
+
     const nombre_proveedores = document.getElementById('nombresProveedor').value;
     const telefono_proveedores = document.getElementById('telefonoProveedor').value;
     const direccion_proveedores = document.getElementById('direccionProveedor').value;
     const contrato_proveedores = document.getElementById('contratoProveedor').value;
 
-    let validacionExitosa =Validate.validarCampos('.form-empty');
-    setValidacionExitosa(validacionExitosa)
-    
+    setValidacionExitosa(Validate.validarCampos('.form-empty'))
+    if (validacionExitosa == true) {
 
-    console.log(validacionExitosa);
-    if (validacionExitosa == false) {
-      Sweet.registroFallido()
-    } else {
       const requestBody = {
         telefono_proveedores,
         direccion_proveedores,
@@ -58,7 +53,10 @@ const Proveedor = () => {
         .catch((error) => {
           console.error("Error al registrar el proveedor:", error);
         });
+    } else {
+      Sweet.registroFallido
     }
+
 
   }
   function listarProveedor() {
@@ -187,6 +185,7 @@ const Proveedor = () => {
     document.getElementById('exampleModalLabel').classList.remove('d-none');
     document.getElementById('btnActualizar').classList.add('d-none');
     document.getElementById('titleSctualizar').classList.add('d-none');
+    setValidacionExitosa('')
   }
 
   return (
@@ -218,34 +217,49 @@ const Proveedor = () => {
               <th className="th'sm">acciones</th>
             </tr>
           </thead>
+
           <tbody id="tableProveedores" className="text-center">
-            {sortedProveedores.map((element, index) => (
-              <tr key={element.id_proveedores}>
+            {sortedProveedores.length > 0 ? (
+              sortedProveedores.map((element, index) => (
+                <tr key={element.id_proveedores}>
+                  <td>{element.id_proveedores}</td>
+                  <td>{element.nombre_proveedores}</td>
+                  <td>{element.telefono_proveedores}</td>
+                  <td>{element.direccion_proveedores}</td>
+                  <td>{element.contrato_proveedores}</td>
+                  <td>
+                    {element.estado === 1 ? 'Activo' : 'Deshabilitado'}
+                  </td>
+                  <td>
+                    {element.estado !== 1 ? 'NO DISPONIBLES' : (
+                      <>
+                        <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
+                          Editar
+                        </button>
+                        <button className="btn btn-danger" type="button" onClick={() => eliminarProveedor(element.id_proveedores)}>
+                          Deshabilitar
+                        </button>
 
-                <td>{index+1}</td>
-                <td>{element.nombre_proveedores}</td>
-                <td>{element.telefono_proveedores}</td>
-                <td>{element.direccion_proveedores}</td>
-                <td>{element.contrato_proveedores}</td>
-                <td>
-                  {element.estado === 1 ? 'Activo' : 'Deshabilitado'}
-                </td>
-                <td>
-                  {element.estado !== 1 ? 'NO DISPONIBLES' : (
-                    <>
-                      <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
-                        Editar
-                      </button>
-                      <button className="btn btn-danger" type="button" onClick={() => eliminarProveedor(element.id_proveedores)}>
-                        Deshabilitar
-                      </button>
-
-                    </>
-                  )}
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={7}>
+                  <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+                    <h2>¡Oops! No hay proveedores disponibles en este momento😟</h2>
+                  </div>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
+
+
+
+
+
         </table>
       </div>
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -278,7 +292,7 @@ const Proveedor = () => {
                   <div className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="contratoProveedor">Contrato</label>
-                      <input type="text" name="contratoProveedor"  id="contratoProveedor" className="form-control form-empty mb-4 limpiar" placeholder="N° de contrato"></input>
+                      <input type="text" name="contratoProveedor" id="contratoProveedor" className="form-control form-empty mb-4 limpiar" placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Por favor, Verifique el N° de contrato
                       </div>
@@ -296,7 +310,7 @@ const Proveedor = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button id="btnAgregar" type="button" className="btn btn-color" onClick={registrarProveedor} data-bs-dismiss={validacionExitosa == '' ? 'modal' : ''}>Agregar</button>
+              <button id="btnAgregar" type="button" className="btn btn-color" data-bs-dismiss={!validacionExitosa == '' ? 'modal' : ''} onClick={registrarProveedor} >Agregar</button>
               <button id="btnActualizar" type="button" data-bs-dismiss="modal" className="btn btn-color d-none" onClick={() => actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
             </div>
           </div>

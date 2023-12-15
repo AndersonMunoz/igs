@@ -16,7 +16,7 @@ export const listarProvedor = async (req,res)=>{
 export const buscarProvedor = async (req,res)=>{
     try{
         let id=req.params.id;
-        const [result] = await pool.query('select * from proveedores where 	id_proveedores='+id);
+        const [result] = await pool.query('select * from proveedores where id_proveedores='+id);
         res.status(200).json(result);
     }catch(e){
         res.status(500).json({message: 'Error en buscar proveedor: '+e})
