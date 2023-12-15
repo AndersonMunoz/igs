@@ -33,12 +33,17 @@ const Up= () => {
         "Content-type": "application/json",
       },
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
     .then((data) => {
-    if(Array.isArray(data)){
-      setunidad_productiva(data);
-    }
-    
+      if (data !== null) {
+        setunidad_productiva(data);
+      }
     })
     .catch((e) => {
       console.log(e);

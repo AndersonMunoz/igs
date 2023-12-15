@@ -279,8 +279,10 @@ const Producto = () => {
       {productos.length === 0 ? (
         <tr>
           <td colSpan={12}>
-            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
-              <h2>¡Oops! No hay productos disponibles en este momento😟</h2>
+            <div className="d-flex justify-content-center">
+              <div className="alert alert-danger text-center mt-4 w-50">
+                <h2> En este momento no contamos con ningún producto disponible.😟</h2>
+              </div>
             </div>
           </td>
         </tr>
@@ -470,11 +472,6 @@ const Producto = () => {
           </div>
         </div>
       </div>
-
-      {/* {productos.length === 0 && (
-        <p>No hay productos disponibles en este momento.</p>
-      )} */}
-
     </div>
   );
 };

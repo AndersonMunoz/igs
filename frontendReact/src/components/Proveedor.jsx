@@ -247,11 +247,13 @@ const Proveedor = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={7}>
-                  <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
-                    <h2>¡Oops! No hay proveedores disponibles en este momento😟</h2>
-                  </div>
-                </td>
+                <td colSpan={12}>
+                  <div className="d-flex justify-content-center">
+                      <div className="alert alert-danger text-center mt-4 w-50">
+                        <h2> En este momento no contamos con ningún proveedor disponible.😟</h2>
+                      </div>
+                    </div>
+                  </td>
               </tr>
             )}
           </tbody>

@@ -32,9 +32,15 @@ const Categoria = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
     .then((data) => {
-      if(Array.isArray(data)){
+      if (data !== null) {
         setcategorias_producto(data);
       }
     })

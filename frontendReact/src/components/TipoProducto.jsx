@@ -6,7 +6,7 @@ import Validate from '../helpers/Validate';
 
 const Tipo = () => {
 
-  const [tipos, settipo] = useState([]);
+  const [tipos, setTipo] = useState([]);
   const [categoria, setCategoria] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const modalProductoRef = useRef(null);
@@ -18,7 +18,7 @@ const Tipo = () => {
 
   useEffect(() => {
     listarTipo();
-    
+    listarCategoria();
   }, []); 
 
   function removeModalBackdrop() {
@@ -35,26 +35,38 @@ const Tipo = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
     .then((data) => {
-      if(Array.isArray(data)){
-        settipo(data);
+      if (data !== null) {
+        setTipo(data);
       }
     })
     .catch((e) => {
       console.log(e);
     });
   }
-  function listarcategoria(){
+  function listarCategoria(){
     fetch("http://localhost:3000/categoria/listar",{
       method: "GET",
       headers:{
         "Content-type": "application/json",
       },
     })
-    .then((res)=>res.json())
-    .then((data)=>{
-      if(Array.isArray(data)){
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
         setCategoria(data);
       }
     })
@@ -237,10 +249,10 @@ const Tipo = () => {
           <tbody id="tableCategoria" className="text-center">
           {tipos.length === 0 ? (
         <tr>
-          <td colSpan={12}>
+          <td colSpan={4}>
           <div className="d-flex justify-content-center">
-              <div className=" alert alert-danger text-center mt-4 w-50">
-              <h2> En este momento no contamos con ningún tipo de producto disponible. </h2>
+              <div className="alert alert-danger text-center mt-4 w-50">
+                <h2> En este momento no contamos con ningún tipo de producto disponible. </h2>
               </div>
             </div>
           </td>
@@ -303,11 +315,17 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Categoria</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_categoria_pro" name=" fk_categoria_pro" defaultValue="" onClick={listarcategoria}>
-                      <option value="">Selecciona un Tipo</option>
-                      {categoria.map((element) => (
-                        <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
-                      ))}
+                    <select className="form-select form-control form-empty limpiar" id="fk_categoria_pro" name=" fk_categoria_pro" defaultValue="">
+                    {categoria.length === 0 ? (
+                        <option value="" disabled>No hay Categorias</option>
+                      ) : (
+                        <>
+                          <option value="">Selecciona una categoria</option>
+                            {categoria.map((element) => (
+                          <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
+                          ))}
+                        </>
+                      )}
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un  categoria
@@ -351,7 +369,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_categoria_pro" className="label-bold mb-2">categoria </label>
-                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })} onClick={listarcategoria}>
+                    <select className="form-select form-update" value={tiposeleccionado.fk_categoria_pro || ''} name="fk_categoria_pro" onChange={(e) => setTiposeleccionado({ ...tiposeleccionado, fk_categoria_pro: e.target.value })} onClick={listarCategoria}>
                       <option value="">Selecciona un Tipo</option>
                       {categoria.map((element) => (
                         <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>

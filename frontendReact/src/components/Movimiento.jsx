@@ -49,9 +49,15 @@ const Movimiento = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
     .then((data) => {
-      if(Array.isArray(data)){
+      if (data !== null) {
         setcategorias_producto(data);
       }
     })
@@ -269,8 +275,10 @@ const Movimiento = () => {
   {movimientos.length === 0 ? (
         <tr>
           <td colSpan={12}>
-            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
-              <h2>¡Oops! No hay movimientos registados en este momento😟</h2>
+          <div className="d-flex justify-content-center">
+              <div className="alert alert-danger text-center mt-4 w-50">
+                <h2> En este momento no contamos con ningún movimiento disponible.😟</h2>
+              </div>
             </div>
           </td>
         </tr>
@@ -303,7 +311,7 @@ const Movimiento = () => {
 
     <div className="d-flex justify-content-center align-items-center w-full h-full">
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-xl modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header txt-color">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Registro de movimiento</h1>
@@ -485,7 +493,7 @@ const Movimiento = () => {
                         />
                       </div>
                     </div>
-                  )};
+                  )}
                 </div>
               </form>
             </div>
