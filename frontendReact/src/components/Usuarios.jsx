@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/usuario.css"
+import "../style/usuarios.css"
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
@@ -43,11 +43,10 @@ const Usuario = () => {
 	}
 
 	function registrarUsuario() {
-
-		let nombre_usuario = document.getElementById('nombre_usuario').value
-		let email_usuario = document.getElementById('email_usuario').value
-		let contrasena_usuario = document.getElementById('contrasena_usuario').value
 		let documento_usuario = document.getElementById('documento_usuario').value
+		let email_usuario = document.getElementById('email_usuario').value
+		let nombre_usuario = document.getElementById('nombre_usuario').value
+		let contrasena_usuario = document.getElementById('contrasena_usuario').value
 		let tipo_usuario = document.getElementById('tipo_usuario').value
 
 		const validacionExitosa = Validate.validarCampos('.form-empty');
@@ -57,7 +56,7 @@ const Usuario = () => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ nombre_usuario, email_usuario, contrasena_usuario, documento_usuario, tipo_usuario })
+			body: JSON.stringify({ documento_usuario,  email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario })
 		})
 			.then((res) => res.json())
 			.then(data => {
@@ -65,10 +64,10 @@ const Usuario = () => {
 					Sweet.registroFallido();
 					return;
 				}
-				if (data.status == 200) {
+				if (data.status === 200) {
 					Sweet.registroExitoso();
 				}
-				if (data.status == 403) {
+				if (data.status === 401) {
 					Sweet.registroFallido();
 				}
 				console.log(data);
@@ -108,6 +107,32 @@ const Usuario = () => {
 					})
 					.catch(error => {
 						console.error('Error usuario no medificado:', error);
+					});
+			}
+		});
+	}
+	function activarUsuario(id_usuario) {
+		Sweet.confirmacionActivar().then((result) => {
+			if (result.isConfirmed) {
+				fetch(`http://localhost:3000/usuario/activar/${id_usuario}`, {
+					method: 'PATCH',
+					headers: {
+						"Content-type": "application/json"
+					}
+				})
+					.then(res => res.json())
+					.then(data => {
+						console.log(data);
+						if (data.status === 200) {
+							Sweet.habilitadoExitoso();
+						}
+						if (data.status === 401) {
+							Sweet.habilitadoFallido();
+						}
+						listarUsuario();
+					})
+					.catch(error => {
+						console.error('Error:', error);
 					});
 			}
 		});
@@ -159,12 +184,19 @@ const Usuario = () => {
 					modalBackdrop.remove();
 				}
 			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
 	}
 
 	return (
 		<div>
 			<div className="d-flex justify-content-between mb-4">
-				<button type="button" id="modalUsuario" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true) }}>
+				<button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal"
+					onClick={() => {
+						setShowModal(true);
+						Validate.limpiar('.limpiar')
+					}}>
 					Registrar Usuario
 				</button>
 				<div className="d-flex align-items-center">
@@ -175,7 +207,7 @@ const Usuario = () => {
 			<div className="wrapper-editor table-responsive">
 				<table
 					id="dtBasicExample"
-					className="table table-striped table-bordered" 
+					className="table table-striped table-bordered"
 					cellSpacing={0}
 				>
 					<thead className="text-center text-justify ">
@@ -190,31 +222,51 @@ const Usuario = () => {
 						</tr>
 					</thead>
 					<tbody id="listarUsuario" className="text-center cell">
-						{usuarios.filter((item) => { return search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search) }).map((element) => (
-							<tr key={element.id_usuario}>
-								<td>{element.id_usuario}</td>
-								<td>{element.nombre_usuario}</td>
-								<td>{element.documento_usuario}</td>
-								<td>{element.email_usuario}</td>
-								<td>{element.tipo_usuario}</td>
-								<td>{element.estado}</td>
-								<td className="mx-2 m-1 p-1 flex-shrink-0">
-									<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-										<IconEdit/>
-									</button>
-								</td>
-								<td className="mx-2 m-0 p-0 flex-shrink-0">
-									<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash/></button>
+						{usuarios.length === 0 ? (
+							<tr>
+								<td colSpan={12}>
+									<div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+										<h2>¡Oops! No hay usuarios disponibles en este momento😟</h2>
+									</div>
 								</td>
 							</tr>
-						))}
+						) : (
+							<>
+								{usuarios.filter((item) => search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search)).map((element, index) => (
+									<tr key={element.id_usuario}>
+										<td>{index + 1}</td>
+										<td>{element.nombre_usuario}</td>
+										<td>{element.documento_usuario}</td>
+										<td>{element.email_usuario}</td>
+										<td>{element.tipo_usuario}</td>
+										<td>{element.estado}</td>
+										{element.estado === 1 ? (
+											<>
+												<td className="mx-2 m-1 p-1 flex-shrink-0">
+													<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+														<IconEdit />
+													</button>
+												</td>
+												<td className="mx-2 m-0 p-0 flex-shrink-0">
+													<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash /></button>
+												</td>
+											</>
+										) : (
+											<td className="mx-2" colSpan={2}>
+												<button className="btn btn-primary" onClick={() => activarUsuario(element.id_usuario)}>Activar</button>
+											</td>
+										)}
+									</tr>
+								))}
+							</>
+						)}
 					</tbody>
 				</table>
 			</div>
-			<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }}>
+			<div className={`modal fade ${showModal ? 'show' : ''}`} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef}>
 				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
 					<div className="modal-content">
-						<div className="modal-header txt-color">
+						<div className="modal-header hg txt-color">
 							<h2 className="modal-title fs-5">Registrar Usuario</h2>
 							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
@@ -223,80 +275,82 @@ const Usuario = () => {
 								<form className="text-center border border-light ">
 									<div className="mb-3 row">
 										<div className="col-md-12 mb-2">
-											<label htmlFor="nombre_usuario" className="label-bold mb-2">
+											<label htmlFor="nombreUsuario" className="label-bold mb-2">
 												Nombre
 											</label>
 											<input
 												type="text"
 												className="form-control form-empty limpiar"
 												id="nombre_usuario"
-												name="nombre_usuario"
+												name="nombreUsuario"
 												placeholder="Ingrese su nombre"
 											/>
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un nombre valido.
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="documento_usuario" className="label-bold mb-1">
+											<label htmlFor="documentoUsuario" className="label-bold mb-1">
 												Documento
 											</label>
 											<input
 												type="number"
 												className="form-control form-empty limpiar"
 												id="documento_usuario"
-												name="documento_usuario"
+												name="documentoUsuario"
 												placeholder="Ingrese su documento"
 											/>
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un documento valido
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="email_usuario" className="label-bold mb-2">
+											<label htmlFor="emailUsuario" className="label-bold mb-2">
 												Correo Electrónico
 											</label>
 											<input
-												type="email_usuario"
+												type="email"
 												className="form-control form-empty limpiar"
 												id="email_usuario"
-												name="email_usuario"
+												name="emailUsuario"
 												placeholder="Ingrese su email"
 											/>
-											<div class="invalid-feedback is-invalid">
-												Por Favor, Ingresar un correo valido
+											<div className="invalid-feedback is-invalid">
+												Por favor, Ingresar un correo valido
 											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="tipo_usuario" className="label-bold mb-2">
+											<label htmlFor="tipoUsuario" className="label-bold mb-2">
 												Cargo
 											</label>
 											<select
 												className="form-select form-control form-empty limpiar"
 												id="tipo_usuario"
-												name="tipo_usuario"
+												name="tipoUsuario"
 												defaultValue=""
 											>
-												<option value="" disabled selected>
-													Seleccione un Cargo
+												<option value="">Selecciona un cargo
 												</option>
 												<option value="administrador">Administrador</option>
 												<option value="coadministrador">Co-Administrador</option>
 											</select>
+											<div className="invalid-feedback is-invalid">
+												Por favor, selecciona un cargo
+											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="contrasena_usuario" className="label-bold mb-2">
+											<label htmlFor="contrasenaUsuario" className="label-bold mb-2">
 												Contraseña
 											</label>
 											<input
 												type="password"
 												className="form-control form-empty limpiar"
 												id="contrasena_usuario"
-												name="contrasena_usuario"
+												name="contrasenaUsuario"
 												placeholder="Ingrese una contraseña"
 											/>
-											<div class="invalid-feedback is-invalid">
-												Por Favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
+											<div className="invalid-feedback is-invalid">
+												Por favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
 											</div>
 										</div>
 									</div>
@@ -336,7 +390,7 @@ const Usuario = () => {
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
 											<input type="text" className="form-control form-update" placeholder="Ingrese su nombre" value={usuarioSeleccionado.nombre_usuario || ''} name="nombre_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, nombre_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un nombre valido.
 											</div>
 										</div>
@@ -346,7 +400,7 @@ const Usuario = () => {
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
 											<input type="text" className="form-control form-update" placeholder="Ingrese su documento" value={usuarioSeleccionado.documento_usuario || ''} name="documento_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, documento_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por favor, Ingresar un documento valido
 											</div>
 										</div>
@@ -355,8 +409,8 @@ const Usuario = () => {
 												Correo Electrónico
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
-											<input type="text" className="form-control form-update" placeholder="Ingrese su email" value={usuarioSeleccionado.email_usuario || ''} name="email_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, email_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<input type="email" className="form-control form-update" placeholder="Ingrese su email" value={usuarioSeleccionado.email_usuario || ''} name="email_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, email_usuario: e.target.value })} />
+											<div className="invalid-feedback is-invalid">
 												Por Favor, Ingresar un correo valido
 											</div>
 										</div>
@@ -365,9 +419,9 @@ const Usuario = () => {
 												Cargo
 											</label>
 											<select
-											className="form-select form-control form-empty limpiar"
+												className="form-select form-control limpiar"
 												value={usuarioSeleccionado.tipo_usuario || ''} name="tipo_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, tipo_usuario: e.target.value })}>
-												<option value="" disabled selected>
+												<option value="" disabled>
 													Seleccione un Cargo
 												</option>
 												<option value="administrador">Administrador</option>
@@ -380,7 +434,7 @@ const Usuario = () => {
 											</label>
 											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
 											<input type="password" className="form-control form-update" placeholder="Ingrese una contraseña" value={usuarioSeleccionado.contrasena_usuario || ''} name="contrasena_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, contrasena_usuario: e.target.value })} />
-											<div class="invalid-feedback is-invalid">
+											<div className="invalid-feedback is-invalid">
 												Por Favor, Ingresar una contraseña valida debe tener una mayuscula, minuscula y un numero
 											</div>
 										</div>

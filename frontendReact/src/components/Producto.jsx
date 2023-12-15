@@ -418,7 +418,7 @@ const Producto = () => {
                     <div className="invalid-feedback is-invalid">
                       Por favor, ingrese el precio del producto.
                     </div>
-                   </div>
+                  </div>
                 </div>
 
                 <div className="row mb-3">
