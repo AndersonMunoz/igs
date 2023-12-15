@@ -43,11 +43,10 @@ const Usuario = () => {
 	}
 
 	function registrarUsuario() {
-
-		let nombre_usuario = document.getElementById('nombre_usuario').value
-		let email_usuario = document.getElementById('email_usuario').value
-		let contrasena_usuario = document.getElementById('contrasena_usuario').value
 		let documento_usuario = document.getElementById('documento_usuario').value
+		let email_usuario = document.getElementById('email_usuario').value
+		let nombre_usuario = document.getElementById('nombre_usuario').value
+		let contrasena_usuario = document.getElementById('contrasena_usuario').value
 		let tipo_usuario = document.getElementById('tipo_usuario').value
 
 		const validacionExitosa = Validate.validarCampos('.form-empty');
@@ -57,7 +56,7 @@ const Usuario = () => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ nombre_usuario, email_usuario, contrasena_usuario, documento_usuario, tipo_usuario })
+			body: JSON.stringify({ documento_usuario,  email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario })
 		})
 			.then((res) => res.json())
 			.then(data => {
@@ -68,7 +67,7 @@ const Usuario = () => {
 				if (data.status === 200) {
 					Sweet.registroExitoso();
 				}
-				if (data.status === 403) {
+				if (data.status === 401) {
 					Sweet.registroFallido();
 				}
 				console.log(data);
@@ -234,7 +233,7 @@ const Usuario = () => {
 						) : (
 							<>
 								{usuarios.filter((item) => search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search)).map((element, index) => (
-									<tr key={element.id_producto}>
+									<tr key={element.id_usuario}>
 										<td>{index + 1}</td>
 										<td>{element.nombre_usuario}</td>
 										<td>{element.documento_usuario}</td>
@@ -325,28 +324,29 @@ const Usuario = () => {
 												Cargo
 											</label>
 											<select
-												className="form-control form-empty limpiar"
+												className="form-select form-control form-empty limpiar"
 												id="tipo_usuario"
 												name="tipoUsuario"
 												defaultValue=""
 											>
-												<option value="" disabled>
-													Seleccione un Cargo
+												<option value="">Selecciona un cargo
 												</option>
 												<option value="administrador">Administrador</option>
 												<option value="coadministrador">Co-Administrador</option>
 											</select>
-
+											<div className="invalid-feedback is-invalid">
+												Por favor, selecciona un cargo
+											</div>
 										</div>
 										<div className="col-md-12 mb-2">
-											<label htmlFor="contrasena_usuario" className="label-bold mb-2">
+											<label htmlFor="contrasenaUsuario" className="label-bold mb-2">
 												Contraseña
 											</label>
 											<input
 												type="password"
 												className="form-control form-empty limpiar"
 												id="contrasena_usuario"
-												name="contrasena_usuario"
+												name="contrasenaUsuario"
 												placeholder="Ingrese una contraseña"
 											/>
 											<div className="invalid-feedback is-invalid">
@@ -419,7 +419,7 @@ const Usuario = () => {
 												Cargo
 											</label>
 											<select
-												className="form-select form-control form-empty limpiar"
+												className="form-select form-control limpiar"
 												value={usuarioSeleccionado.tipo_usuario || ''} name="tipo_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, tipo_usuario: e.target.value })}>
 												<option value="" disabled>
 													Seleccione un Cargo
