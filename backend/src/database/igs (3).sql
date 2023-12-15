@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-12-2023 a las 16:08:22
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 14-12-2023 a las 17:28:08
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `categorias_producto` (
   `id_categoria` int(11) NOT NULL,
-  `nombre_categoria` varchar(45) DEFAULT NULL
+  `nombre_categoria` varchar(45) DEFAULT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -95,7 +96,8 @@ CREATE TABLE `proveedores` (
 CREATE TABLE `tipo_productos` (
   `id_tipo` int(11) NOT NULL,
   `nombre_tipo` varchar(45) NOT NULL,
-  `fk_categoria_pro` int(11) DEFAULT NULL
+  `fk_categoria_pro` int(11) DEFAULT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -106,7 +108,8 @@ CREATE TABLE `tipo_productos` (
 
 CREATE TABLE `unidad_productiva` (
   `id_up` int(11) NOT NULL,
-  `nombre_up` varchar(45) NOT NULL
+  `nombre_up` varchar(45) NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

@@ -95,3 +95,41 @@ export const editarcategoria_producto = async (req, res) => {
         });
     }
 }
+
+export const deshabilitarCategoria = async (req, res) => {
+	try {
+		let id = req.params.id;
+		let sql = `UPDATE categorias_producto SET estado = 0 WHERE id_categoria  = ${id}`;
+		const [rows] = await pool.query(sql);
+		if (rows.affectedRows > 0) {
+			res
+				.status(200)
+				.json({ status: 200, message: "Se deshabilitó con éxito la cetegoria " });
+		} else {
+			res
+				.status(401)
+				.json({ status: 401, message: "No se deshabilitó la cetegoria" });
+		}
+	} catch (e) {
+		res.status(500).json({ message: "Error en deshabilitartipo la la cetegoria: " + e });
+	}
+};
+
+export const activarCategoria = async (req, res) => {
+	try {
+		let id = req.params.id;
+		let sql = `UPDATE categorias_producto SET estado = 1 WHERE id_categoria  = ${id}`;
+		const [rows] = await pool.query(sql);
+		if (rows.affectedRows > 0) {
+			res
+				.status(200)
+				.json({ status: 200, message: "Se activo  con éxito  la cetegoria" });
+		} else {
+			res
+				.status(401)
+				.json({ status: 401, message: "No se activo  cetegoria " });
+		}
+	} catch (e) {
+		res.status(500).json({ message: "Error en activarCategoria" + e });
+	}
+};

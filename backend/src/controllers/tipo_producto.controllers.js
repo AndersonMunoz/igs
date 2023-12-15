@@ -39,7 +39,7 @@ export const registroTipo_producto = async (req, res) => {
 export const listarTipoProducto = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT t.id_tipo AS id, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria');
+            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria ORDER BY t.estado DESC');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
@@ -117,3 +117,42 @@ export const editarTipo_producto = async (req, res) => {
         });
     }
 }
+
+
+export const deshabilitarTipo = async (req, res) => {
+    try {
+      let id = req.params.id;
+      let sql = `UPDATE tipo_productos SET estado = 0 WHERE id_tipo  = ${id}`;
+      const [rows] = await pool.query(sql);
+      if (rows.affectedRows > 0) {
+        res
+          .status(200)
+          .json({ status: 200, message: "Se deshabilitó con éxito el tipo de producto " });
+      } else {
+        res
+          .status(401)
+          .json({ status: 401, message: "No se deshabilitó el tipo de producto" });
+      }
+    } catch (e) {
+      res.status(500).json({ message: "Error en deshabilitartipo de producto: " + e });
+    }
+  };
+
+  export const activarTipo = async (req, res) => {
+    try {
+      let id = req.params.id;
+      let sql = `UPDATE tipo_productos SET estado = 1 WHERE id_tipo  = ${id}`;
+      const [rows] = await pool.query(sql);
+      if (rows.affectedRows > 0) {
+        res
+          .status(200)
+          .json({ status: 200, message: "Se activo  con éxito el tipo de producto " });
+      } else {
+        res
+          .status(401)
+          .json({ status: 401, message: "No se activo  el tipo de producto" });
+      }
+    } catch (e) {
+      res.status(500).json({ message: "Error en activarTipo de producto: " + e });
+    }
+  };

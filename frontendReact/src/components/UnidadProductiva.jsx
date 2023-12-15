@@ -76,12 +76,66 @@ const Up= () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
-        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
       });
   }
+
+
+  function deshabilitarUp(id) {
+    Sweet.confirmacion().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/up/deshabilitar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.deshabilitadoExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.deshabilitadoFallido();
+            }
+            listarUp();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
+  }
+  function activarUp(id) {
+    Sweet.confirmacionActivar().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/up/activar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.actualizacionExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.actualizacionFallido();
+            }
+            listarUp();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
+  }
+  
   function editarUp(id) {
     fetch(`http://localhost:3000/up/buscar/${id}`, {
       method: 'GET',
@@ -136,8 +190,9 @@ const Up= () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalCategoria" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setShowModal(true)}>
-          Registrar Nueva Unidad productiva        </button>
+      <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
+          Registrar Nueva unidad Productiva
+        </button>
         <div className="d-flex align-items-center">
           <input type="text" placeholder="Buscar Categoria" className="input-buscar limpiar" onChange={(e)=>setSeach(e.target.value)}/>
           <IconSearch className="iconSearch" />
@@ -153,17 +208,45 @@ const Up= () => {
             </tr>
           </thead>
           <tbody id="tableunidadProductiva" className="text-center">
-            {unidad_productiva.filter((item)=>{return search.toLowerCase()=== '' ? item : item.nombre_up.toLowerCase().includes(search)}).map((element) => (
+
+          {unidad_productiva.length === 0 ? (
+        <tr>
+          <td colSpan={3} className="">
+            <div className="d-flex justify-content-center">
+              <div className=" alert alert-danger text-center mt-4 w-50">
+                <h2>¡Oops! No hay Unidad productiva disponible en este momento 😟</h2>
+              </div>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        <>
+       {unidad_productiva.filter((item)=>{return search.toLowerCase()=== '' ? item : item.nombre_up.toLowerCase().includes(search)}).map((element) => (
               <tr key={element.id_up}>
                 <td>{element.id_up}</td>
                 <td>{element.nombre_up}</td>
-                <td className="mx-2"onClick={() => {setUpdateModal(true);editarUp(element.id_up);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+                {element.estado === 1 ? (
+                  <>
+                  <td className="mx-2"onClick={() => {setUpdateModal(true);editarUp(element.id_up);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
                   <button className="btn btn-color">
                     Editar
                   </button>
-                </td>
+                    </td>
+                    <td className="mx-2">
+                      <button className="btn btn-danger" onClick={() => deshabilitarUp(element.id_up)}>Deshabilitar</button>
+                    </td>
+                  </>
+                ): (
+                  <td className="mx-2" colSpan={2}>
+                    <button className="btn btn-primary" onClick={() => activarUp(element.id_up)}>Activar</button>
+                  </td>
+                )}
+
               </tr>
             ))}
+        </>
+      )}
+  
           </tbody>
         </table>
       </div>

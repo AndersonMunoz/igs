@@ -75,11 +75,63 @@ const Categoria = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
-        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
       });
+  }
+
+  function deshabilitarCategoria(id) {
+    Sweet.confirmacion().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/categoria/deshabilitar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.deshabilitadoExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.deshabilitadoFallido();
+            }
+            listarCategoria();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
+  }
+  function activarCategoria(id) {
+    Sweet.confirmacionActivar().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/categoria/activar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.actualizacionExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.actualizacionFallido();
+            }
+            listarCategoria();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
   }
   function editarCategoria(id) {
     fetch(`http://localhost:3000/categoria/buscar/${id}`, {
@@ -135,8 +187,9 @@ const Categoria = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalCategoria" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => setShowModal(true)}>
-          Registrar Nueva Categoria         </button>
+      <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
+          Registrar Nuevo tipo de producto 
+        </button>
         <div className="d-flex align-items-center">
           <input type="text" placeholder="Buscar Categoria" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
           <IconSearch className="iconSearch" />
@@ -152,17 +205,44 @@ const Categoria = () => {
             </tr>
           </thead>
           <tbody id="tableCategoria" className="text-center">
-            {categorias_producto.filter((item)=>{return search.toLowerCase()=== '' ? item : item.nombre_categoria.toLowerCase().includes(search)}).map((element) => (
-              <tr key={element.id_categoria}>
-                <td>{element.id_categoria}</td>
-                <td>{element.nombre_categoria}</td>
-                <td className="mx-2"onClick={() => {setUpdateModal(true);editarCategoria(element.id_categoria);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+
+          {categorias_producto.length === 0 ? (
+        <tr>
+          <td colSpan={12}>
+            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+              <h2>¡Oops! No hay categorias  disponibles en este momento 😟</h2>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        <>
+          {categorias_producto.filter((item) => {
+    return search.toLowerCase() === '' ? item : item.nombre_categoria.toLowerCase().includes(search);
+  }).map((element) => (
+    <tr key={element.id_categoria}>
+      <td>{element.id_categoria}</td>
+      <td>{element.nombre_categoria}</td>  
+      {element.estado === 1 ? (
+                  <>
+                  <td className="mx-2"onClick={() => {setUpdateModal(true);editarCategoria(element.id_categoria);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
                   <button className="btn btn-color">
                     Editar
                   </button>
-                </td>
+                    </td>
+                    <td className="mx-2">
+                      <button className="btn btn-danger" onClick={() => deshabilitarCategoria(element.id_categoria)}>Deshabilitar</button>
+                    </td>
+                  </>
+                ): (
+                  <td className="mx-2" colSpan={2}>
+                    <button className="btn btn-primary" onClick={() => activarCategoria(element.id_categoria)}>Activar</button>
+                  </td>
+                )}
+
               </tr>
             ))}
+        </>
+      )}
           </tbody>
         </table>
       </div>

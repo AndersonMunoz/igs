@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registroUnidadProductiva, listarUnidadProductiva, editarUnidadProductiva, buscarup } from '../controllers/unidadProductiva.controllers.js';
+import { registroUnidadProductiva, listarUnidadProductiva, editarUnidadProductiva, buscarup, activarUp, deshabilitarUp } from '../controllers/unidadProductiva.controllers.js';
 import { validarToken } from "../controllers/autentificacion.controller.js";
 import { validatorUnidad_productiva } from "../validation/unidad_productiva.validator.js";
 
@@ -8,6 +8,8 @@ const unidadProductivaRouter = Router();
 unidadProductivaRouter.post("/registrar", /* validarToken, validatorUnidad_productiva */ registroUnidadProductiva);
 unidadProductivaRouter.get("/listar", listarUnidadProductiva);
 unidadProductivaRouter.get('/buscar/:id', buscarup);
+unidadProductivaRouter.patch('/activar/:id', activarUp);
+unidadProductivaRouter.patch('/deshabilitar/:id', deshabilitarUp);
 unidadProductivaRouter.put("/editar/:id"/* , validatorUnidad_productiva, validarToken */, editarUnidadProductiva);
 
 export default unidadProductivaRouter;

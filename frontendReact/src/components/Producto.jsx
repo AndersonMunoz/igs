@@ -16,8 +16,24 @@ const Producto = () => {
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
 
   useEffect(() => {
-    listarProducto();
+      listarProducto();
+      listarUp();
+      listarTipo();
   }, []); 
+  
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (modalUpdateRef.current && !modalUpdateRef.current.contains(event.target)) {
+  //       listarUp();
+  //       listarTipo();
+  //     }
+  //   };
+  //   document.addEventListener('click', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('click', handleClickOutside);
+  //   };
+  // }, [updateModal, modalUpdateRef]);
+
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -50,9 +66,7 @@ const Producto = () => {
     })
     .then((res)=>res.json())
     .then((data)=>{
-      if(Array.isArray(data)) {
         setTipo(data);
-      }
     })
     .catch((e) => {
       console.log(e);
@@ -67,9 +81,7 @@ const Producto = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      if(Array.isArray(data)) {
         setUp(data);
-      }
     })
     .catch((e) => {
       console.log(e);
@@ -110,7 +122,6 @@ const Producto = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
-        Validate.limpiar('.limpiar');
       })
       .catch(error => {
         console.error('Error:', error);
@@ -191,10 +202,37 @@ const Producto = () => {
     })
   }
 
+  function activarProducto(id) {
+    Sweet.confirmacionActivar().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/producto/activar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.status === 200) {
+            Sweet.habilitadoExitoso();
+          }
+          if (data.status === 401) {
+            Sweet.habilitadoFallido();
+          }
+          listarProducto();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+    });
+  }
+
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true)}}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nuevo Producto
         </button>
         <div className="d-flex align-items-center">
@@ -203,26 +241,37 @@ const Producto = () => {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
-          <thead className="text-center text-justify">
-            <tr>
-              <th className="th-sm">N°</th>
-              <th className="th-sm">NombreProducto</th>
-              <th className="th-sm">NombreCategoria</th>
-              <th className="th-sm">FechaCaducidad</th>
-              <th className="th-sm">Peso</th>
-              <th className="th-sm">Unidad</th>
-              <th className="th-sm">PrecioIndividual</th>
-              <th className="th-sm">UnidadProductiva</th>
-              <th className="th-sm">Descripcion</th>
-              <th className="th-sm">PrecioTotal</th>
-              <th className="th-sm" colSpan={2}>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tableProducto" className="text-center">
-            {productos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.NombreProducto.toLowerCase().includes(search)}).map((element) => (
+  <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
+    <thead className="text-center text-justify">
+      <tr>
+        <th className="th-sm">N°</th>
+        <th className="th-sm">NombreProducto</th>
+        <th className="th-sm">NombreCategoria</th>
+        <th className="th-sm">FechaCaducidad</th>
+        <th className="th-sm">Peso</th>
+        <th className="th-sm">Unidad</th>
+        <th className="th-sm">PrecioIndividual</th>
+        <th className="th-sm">UnidadProductiva</th>
+        <th className="th-sm">Descripcion</th>
+        <th className="th-sm">PrecioTotal</th>
+        <th className="th-sm">Estado</th>
+        <th className="th-sm" colSpan={2}>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tableProducto" className="text-center">
+      {productos.length === 0 ? (
+        <tr>
+          <td colSpan={12}>
+            <div className="d-flex justify-content-center alert alert-danger text-center mt-4 w-100">
+              <h2>¡Oops! No hay productos disponibles en este momento😟</h2>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        <>
+          {productos.filter((item) => search.toLowerCase() === '' ? item : item.NombreProducto.toLowerCase().includes(search)).map((element,index) => (
               <tr key={element.id_producto}>
-                <td>{element.id_producto}</td>
+                <td>{index + 1}</td>
                 <td>{element.NombreProducto}</td>
                 <td>{element.NombreCategoria}</td>
                 <td>{Validate.formatFecha(element.FechaCaducidad)}</td>
@@ -232,19 +281,32 @@ const Producto = () => {
                 <td>{element.UnidadProductiva}</td>
                 <td>{element.Descripcion}</td>
                 <td>{element.PrecioTotal}</td>
-                <td className="mx-2"onClick={() => {setUpdateModal(true);editarProducto(element.id_producto);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                  <button className="btn btn-color">
-                    Editar
-                  </button>
-                </td>
-                <td className="mx-2">
-                  <button className="btn btn-danger" onClick={()=>deshabilitarProducto(element.id_producto)}>Eliminar</button>
-                </td>
+                <td>{element.estado}</td>
+                {element.estado === 1 ? (
+                  <>
+                    <td className="mx-2">
+                      <button className="btn btn-color" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+                        Editar  
+                      </button>
+                    </td>
+                    <td className="mx-2">
+                      <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}>Eliminar</button>
+                    </td>
+                  </>
+                ): (
+                  <td className="mx-2" colSpan={2}>
+                    <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
+                  </td>
+                )}
+
               </tr>
             ))}
-          </tbody>
-        </table>
-      </div>
+        </>
+      )}
+    </tbody>
+  </table>
+</div>
+
       <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
@@ -266,24 +328,35 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto"  onClick={listarTipo} defaultValue="">
-                      <option value="">Selecciona un Tipo</option>
-                      {tipos.map((element) => (
-                        <option key={element.id} value={element.id}>{element.NombreProducto}</option>
-                      ))}
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                      {tipos.length === 0 ? (
+                        <option value="" disabled>No hay tipos disponibles</option>
+                      ) : (
+                        <>
+                          <option value="">Selecciona un Tipo</option>
+                            {tipos.map((element) => (
+                          <option key={element.id} value={element.id}>{element.NombreProducto}</option>
+                          ))}
+                        </>
+                      )}
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
                     </div>
                   </div>
-
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue=""onClick={listarUp}>
-                      <option value="">Selecciona una UP</option>
-                      {up.map((element) => (
-                        <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
-                      ))}
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
+                      {up.length === 0 ? (
+                          <option value="" disabled>No hay tipos disponibles</option>
+                      ) : (
+                        <>
+                          <option value="">Selecciona una UP</option>
+                            {up.map((element) => (
+                          <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
+                          ))}
+                        </>
+                      )}
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una unidad de peso.
@@ -311,7 +384,7 @@ const Producto = () => {
         </div>
       </div>
 
-      <div className="modal fade" id="actualizarModal" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="actualizarModal"tabIndex="-1"aria-labelledby="actualizarModalLabel"aria-hidden="true"ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
@@ -347,7 +420,7 @@ const Producto = () => {
 
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
-                    <select className="form-select form-update" value={productoSeleccionado.fk_id_up || ''} name="fk_id_up" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })}>
+                    <select className="form-select form-update" value={productoSeleccionado.fk_id_up || ''} name="fk_id_up" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} >
                       <option value="">Selecciona una UP</option>
                       {up.map((element) => (
                         <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
@@ -357,6 +430,7 @@ const Producto = () => {
                       Por favor, seleccione una unidad de peso.
                     </div>
                   </div>
+
                 </div>
 
                 <div className="mb-3">
@@ -379,6 +453,10 @@ const Producto = () => {
           </div>
         </div>
       </div>
+
+      {/* {productos.length === 0 && (
+        <p>No hay productos disponibles en este momento.</p>
+      )} */}
 
     </div>
   );

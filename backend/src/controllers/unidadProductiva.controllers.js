@@ -94,3 +94,41 @@ export const editarUnidadProductiva = async (req, res) => {
 		});
 	}
 }
+
+export const deshabilitarUp = async (req, res) => {
+	try {
+		let id = req.params.id;
+		let sql = `UPDATE unidad_productiva SET estado = 0 WHERE id_up  = ${id}`;
+		const [rows] = await pool.query(sql);
+		if (rows.affectedRows > 0) {
+			res
+				.status(200)
+				.json({ status: 200, message: "Se deshabilitó con éxito la unidad productiva " });
+		} else {
+			res
+				.status(401)
+				.json({ status: 401, message: "No se deshabilitó la unidad productiva" });
+		}
+	} catch (e) {
+		res.status(500).json({ message: "Error en deshabilitartipo la unidad productiva: " + e });
+	}
+};
+
+export const activarUp = async (req, res) => {
+	try {
+		let id = req.params.id;
+		let sql = `UPDATE unidad_productiva SET estado = 1 WHERE id_up  = ${id}`;
+		const [rows] = await pool.query(sql);
+		if (rows.affectedRows > 0) {
+			res
+				.status(200)
+				.json({ status: 200, message: "Se activo  con éxito la unidad productiva" });
+		} else {
+			res
+				.status(401)
+				.json({ status: 401, message: "No se activo  unidad productiva " });
+		}
+	} catch (e) {
+		res.status(500).json({ message: "Error en activarTipo unidad productiva: " + e });
+	}
+};

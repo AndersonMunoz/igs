@@ -20,7 +20,7 @@ const Sweet = {
   confirmacion: () => {
     return Swal.fire({
       title: "¿Seguro Quieres Desabilitarlo?",
-      text: "No se Podrá Revertir!",
+      text: "Puede que el dato se pierda!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -42,6 +42,33 @@ const Sweet = {
       title: 'Mensaje',
       icon: 'warning',
       text: 'Eliminación Fallido',
+      confirmButtonText: 'Cerrar',
+    });
+  },
+  confirmacionActivar: () => {
+    return Swal.fire({
+      title: "¿Seguro Quieres Activarlo?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si",
+      cancelButtonText: "Cancelar"
+    });
+  },
+  habilitadoExitoso: () => {
+    Swal.fire({
+      title: 'Mensaje',
+      icon: 'success',
+      text: 'Habilitado Exitosa',
+      confirmButtonText: 'Cerrar',
+    });
+  },
+  habilitadoFallido: () => {
+    Swal.fire({
+      title: 'Mensaje',
+      icon: 'warning',
+      text: 'Habilitado Fallido',
       confirmButtonText: 'Cerrar',
     });
   },

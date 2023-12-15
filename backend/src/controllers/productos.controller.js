@@ -34,12 +34,12 @@ export const listarProductos = async (req, res) => {
       `SELECT p.id_producto, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS NombreCategoria,
 	p.fecha_caducidad_producto AS FechaCaducidad, p.cantidad_peso_producto AS Peso, 
 	p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
-	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva 
+	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
 	FROM productos p 
 	JOIN unidad_productiva u ON p.fk_id_up = u.id_up
 	JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
 	JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-	WHERE p.estado = 1`
+	ORDER BY p.estado DESC`
     );
     res.status(200).json(result);
   } catch (er) {
@@ -94,3 +94,18 @@ export const deshabilitarProducto = async (req, res) => {
     res.status(500).json({ message: "Error en deshabilitarProducto: " + e });
   }
 };
+export const activarProducto = async (req, res) => {
+  try {
+    let id = req.params.id; 
+    let sql = `UPDATE productos SET estado = 1 WHERE id_producto = ${id}`;
+    const [rows] = await pool.query(sql);
+    if (rows.affectedRows > 0) {
+      res.status(200).json({ status: 200, message: "Se habilitó con éxito el producto" });
+    } else {
+      res.status(404).json({ status: 404, message: "No se encontró el producto para habilitar" });
+    }
+  } catch (e) {
+    res.status(500).json({ message: "Error en activar: " + e });
+  }
+};
+
