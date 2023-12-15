@@ -122,8 +122,8 @@ export const listarMovimientos = async (req, res) => {
 		if (result.length > 0) {
 			res.status(200).json(result);
 		} else {
-			res.status(401).json({
-				"status": 401,
+			res.status(204).json({
+				"status": 204,
 				"message": "No se lista factura movimientos"
 			});
 		}
