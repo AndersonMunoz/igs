@@ -1,214 +1,166 @@
-import React, { useEffect, useState, useRef } from "react";
-import '../style/Proveedor.css'
+import React, { useEffect, useRef, useState } from "react";
+import "../style/proveedor.css";
 import { IconSearch } from "@tabler/icons-react";
-import Validate from '../helpers/Validate';
-import Sweet from '../helpers/Sweet';
+import Sweet from "../helpers/Sweet2";
+import Validate from "../helpers/Validate";
 
-const Proveedor = () => {
-  const [Proveedores, setProveedor] = useState([]);
-  const sortedProveedores = [...Proveedores].sort((a, b) => a.id_proveedores - b.id_proveedores);
+const proveedor = () => {
+  const [proveedor, setProveedor] = useState([]);
+  const [search, setSeach] = useState('');
+  const [modal, setModal] = useState(false);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
-  const [validacionExitosa, setValidacionExitosa] = useState('');
 
+  function removeFond() {
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    if (modalBackdrop) {
+      modalBackdrop.remove();
+      setModal(false);
+    }
+  }
 
   useEffect(() => {
     listarProveedor();
   }, []);
 
-  function registrarProveedor() {
-
-
-    const nombre_proveedores = document.getElementById('nombresProveedor').value;
-    const telefono_proveedores = document.getElementById('telefonoProveedor').value;
-    const direccion_proveedores = document.getElementById('direccionProveedor').value;
-    const contrato_proveedores = document.getElementById('contratoProveedor').value;
-
-    setValidacionExitosa(Validate.validarCampos('.form-empty'))
-    if (validacionExitosa == true) {
-
-      const requestBody = {
-        telefono_proveedores,
-        direccion_proveedores,
-        contrato_proveedores,
-        nombre_proveedores,
-      };
-
-      fetch("http://localhost:3000/proveedor/registrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          listarProveedor();
-
-          if (data.status == 200) {
-            Sweet.registroExitoso()
-          } else {
-            Sweet.registroFallido()
-          }
-        })
-        .catch((error) => {
-          console.error("Error al registrar el proveedor:", error);
-        });
-    } else {
-      Sweet.registroFallido
-    }
-
-
-  }
   function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listar", {
-      method: "GET",
+    fetch('http://localhost:3000/proveedor/listar', {
+      method: 'get',
       headers: {
-        "content-type": "application/json",
+        "Content-type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((data) => {
         setProveedor(data)
+        if (data.status===500) {
+          Sweet.error(data.status,data.message)
+        }
       })
       .catch((e) => {
         console.log(e);
-      });
+      })
   }
 
-  function eliminarProveedor(id) {
-    Sweet.confirmacion().then((result) => {
-      if (result.isConfirmed) {
-        const url = `http://localhost:3000/proveedor/eliminar/${id}`;
-        fetch(url, {
-          method: "put",
+  function registrarProveedor() {
+    let nombre_proveedores = document.getElementById('nombresProveedor').value;
+    let direccion_proveedores = document.getElementById('direccionProveedor').value;
+    let contrato_proveedores = document.getElementById('contratoProveedor').value;
+    let telefono_proveedores = document.getElementById('telefonoProveedor').value;
+
+    fetch('http://localhost:3000/proveedor/registrar', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nombre_proveedores, direccion_proveedores, contrato_proveedores, telefono_proveedores }),
+    })
+      .then((res) => res.json())
+      .then(data => {
+        if (data.status === 200) {
+          Sweet.exito(data.status, data.message);
+          listarProveedor();
+          removeFond();
+        } else {
+          if (data.status === 403) {
+            Sweet.error(data.status, data.error.errors[0].msg)
+          } else {
+            Sweet.error(data.status, data.message)
+          }
+        }
+      })
+  }
+  function deshabilitarProveedor(id) {
+    Sweet.confirmacion().then((res) => {
+      if (res.isConfirmed) {
+        fetch(`http://localhost:3000/proveedor/eliminar/${id}`, {
+          method: 'put',
           headers: {
-            "Content-Type": "application/json",
-          },
+            "Content-type": "application/json"
+          }
         })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
+          .then(res => res.json())
+          .then(data => {
+            listarProveedor()
+            if (data.status===200) {
+              Sweet.exito(data.status, data.message)
+            } else {
+              Sweet.error(data.status, data.message)
             }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
-            }
-            listarProveedor();
           })
-          .catch((error) => {
-            console.error("Error al eliminar el proveedor:", error);
-          });
       }
     })
   }
 
   function editarProveedor(id) {
-    const url = `http://localhost:3000/proveedor/buscar/${id}`;
-    return fetch(url, {
+    document.getElementById('titleSctualizar').classList.remove('d-none');
+    document.getElementById('titleRegistro').classList.add('d-none');
+    document.getElementById('btnAgregar').classList.add('d-none');
+    document.getElementById('btnActualizar').classList.remove('d-none');
+    fetch(`http://localhost:3000/proveedor/buscar/${id}`, {
       method: 'get',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        "Content-type": "application/json"
+      }
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(data => {
         if (data.length > 0) {
           setSelectedProveedorData(data[0]);
           document.getElementById('nombresProveedor').value = data[0].nombre_proveedores;
           document.getElementById('direccionProveedor').value = data[0].direccion_proveedores;
           document.getElementById('contratoProveedor').value = data[0].contrato_proveedores;
           document.getElementById('telefonoProveedor').value = data[0].telefono_proveedores;
-          document.getElementById('btnAgregar').classList.add('d-none');
-          document.getElementById('exampleModalLabel').classList.add('d-none');
-          document.getElementById('btnActualizar').classList.remove('d-none');
-          document.getElementById('titleSctualizar').classList.remove('d-none');
-        } else {
-          console.log('No hay datos para el ID:', id);
+        }else{
+          listarProveedor()
         }
       })
-      .catch((error) => {
-        console.error('Error al buscar el proveedor:', error);
-      });
   }
-  function buscarProveedor(id) {
-    const url = `http://localhost:3000/proveedor/buscar/${id}`;
-    return fetch(url, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setProveedor(data)
-      })
-      .catch((error) => {
-        console.error('Error al buscar el proveedor:', error);
-        throw error;
-      });
-  }
+
   function actualizarProveedor(id) {
-    const nombre_proveedores = document.getElementById('nombresProveedor').value;
-    const telefono_proveedores = document.getElementById('telefonoProveedor').value;
-    const direccion_proveedores = document.getElementById('direccionProveedor').value;
-    const contrato_proveedores = document.getElementById('contratoProveedor').value;
-    const requestBody = {
-      telefono_proveedores,
-      direccion_proveedores,
-      contrato_proveedores,
-      nombre_proveedores,
-    };
+    let nombre_proveedores = document.getElementById('nombresProveedor').value;
+    let direccion_proveedores = document.getElementById('direccionProveedor').value;
+    let contrato_proveedores = document.getElementById('contratoProveedor').value;
+    let telefono_proveedores = document.getElementById('telefonoProveedor').value;
+
     fetch(`http://localhost:3000/proveedor/actualizar/${id}`, {
-      method: "Put",
+      method: 'PUT',
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({ nombre_proveedores, direccion_proveedores, contrato_proveedores, telefono_proveedores }),
     })
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.status == 200) {
-          Sweet.actualizacionExitoso()
+      .then(data => {
+        if (data.status === 200) {
+          Sweet.exito(data.status, data.message);
+          listarProveedor();
+          removeFond();
         } else {
-          Sweet.actualizacionFallido()
+          if (data.status === 403) {
+            Sweet.error(data.status, data.error.errors[0].msg)
+          } else {
+            Sweet.error(data.status, data.message)
+          }
         }
       })
-      .catch((error) => {
-        console.error("Error al actualizar el proveedor:", error);
-      });
-  }
-
-  function limpiarModal() {
-    Validate.limpiar('.limpiar')
-    document.getElementById('btnAgregar').classList.remove('d-none');
-    document.getElementById('exampleModalLabel').classList.remove('d-none');
-    document.getElementById('btnActualizar').classList.add('d-none');
-    document.getElementById('titleSctualizar').classList.add('d-none');
-    setValidacionExitosa('')
   }
 
   return (
-    <>
-      <div>
-        <h1 className="text-center">Proveedores</h1>
-
-
-        <div className="d-flex justify-content-between">
-          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={limpiarModal}>
-            Registrar nuevo Proveedor
-          </button>
-          <div className="d-flex align-items-center">
-            <input id="buscarProveedorId" type="text" placeholder="Buscar un proveedor" className="input-buscar" />
-            <IconSearch className="iconSearch" onClick={() => buscarProveedor(document.getElementById('buscarProveedorId').value)} />
-          </div>
+    <div>
+      <div className="d-flex justify-content-between mb-4">
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setModal(true); Validate.limpiar('.limpiar'); }}>
+          Registrar Nuevo Proveedor
+        </button>
+        <div className="d-flex align-items-center">
+          <input type="text" placeholder="Buscar Producto" className="input-buscar" onChange={(e) => setSeach(e.target.value)} />
+          <IconSearch className="iconSearch" />
         </div>
       </div>
       <div className="wrapper-editor">
         <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
           <thead className="text-center">
             <tr>
-              <th className="th-sm">Id</th>
+              <th className="th-sm">N°</th>
               <th className="th-sm">Nombre</th>
               <th className="th-sm">Telefono</th>
               <th className="th-sm">Direccion</th>
@@ -217,58 +169,52 @@ const Proveedor = () => {
               <th className="th'sm">acciones</th>
             </tr>
           </thead>
-
           <tbody id="tableProveedores" className="text-center">
-            {sortedProveedores.length > 0 ? (
-              sortedProveedores.map((element, index) => (
-                <tr key={element.id_proveedores}>
-                  <td>{element.id_proveedores}</td>
-                  <td>{element.nombre_proveedores}</td>
-                  <td>{element.telefono_proveedores}</td>
-                  <td>{element.direccion_proveedores}</td>
-                  <td>{element.contrato_proveedores}</td>
-                  <td>
-                    {element.estado === 1 ? 'Activo' : 'Deshabilitado'}
-                  </td>
-                  <td>
-                    {element.estado !== 1 ? 'NO DISPONIBLES' : (
-                      <>
-                        <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
-                          Editar
-                        </button>
-                        <button className="btn btn-danger" type="button" onClick={() => eliminarProveedor(element.id_proveedores)}>
-                          Deshabilitar
-                        </button>
-
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))
+            {proveedor.length > 0 ? (
+              <>
+                {proveedor.filter((item) => search.toLowerCase() === '' ? item : item.nombre_proveedores.toLowerCase().includes(search)).map((element, index) => (
+                  <tr key={element.id_proveedores}>
+                    <td>{index + 1}</td>
+                    <td>{element.nombre_proveedores}</td>
+                    <td>{element.telefono_proveedores}</td>
+                    <td>{element.direccion_proveedores}</td>
+                    <td>{element.contrato_proveedores}</td>
+                    <td>{element.estado === 1 ? 'Activo' : 'Deshabilitado'}</td>
+                    <td>
+                      {element.estado !== 1 ? 'NO DISPONIBLES' : (
+                        <>
+                          <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
+                            Editar
+                          </button>
+                          <button className="btn btn-danger" type="button" onClick={() => deshabilitarProveedor(element.id_proveedores)}>
+                            Deshabilitar
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </>
             ) : (
               <tr>
                 <td colSpan={12}>
                   <div className="d-flex justify-content-center">
-                      <div className="alert alert-danger text-center mt-4 w-50">
-                        <h2> En este momento no contamos con ningún proveedor disponible.😟</h2>
-                      </div>
+                    <div className="alert alert-danger text-center mt-4 w-50">
+                      <h2> En este momento no contamos con ningún proveedor disponible.😟</h2>
                     </div>
-                  </td>
+                  </div>
+                </td>
               </tr>
             )}
           </tbody>
-
-
-
-
-
         </table>
       </div>
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      {/* desde aqui el modal */}
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: modal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">Registro Proveedor</h1>
+              <h1 className="modal-title fs-5" id="titleRegistro">Registro Proveedor</h1>
               <h1 className="modal-title fs-5 d-none" id="titleSctualizar">Actualizar proveedor</h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -312,14 +258,13 @@ const Proveedor = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button id="btnAgregar" type="button" className="btn btn-color" data-bs-dismiss={!validacionExitosa == '' ? 'modal' : ''} onClick={registrarProveedor} >Agregar</button>
-              <button id="btnActualizar" type="button" data-bs-dismiss="modal" className="btn btn-color d-none" onClick={() => actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
+              <button id="btnAgregar" type="button" className="btn btn-color" onClick={registrarProveedor} >Agregar</button>
+              <button id="btnActualizar" type="button" className="btn btn-color d-none" onClick={() => actualizarProveedor(selectedProveedorData.id_proveedores)}>Actualizar</button>
             </div>
           </div>
         </div>
       </div>
-    </>
-  );
+    </div>
+  )
 };
-
-export default Proveedor;
+export default proveedor;
