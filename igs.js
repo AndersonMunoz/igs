@@ -18,7 +18,22 @@ igs.use(cors());
 
 igs.use(body_parser.json());
 igs.use(body_parser.urlencoded({extended:false}));
-igs.use(cors());
+
+
+igs.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
+
+    // Permitir credenciales (si es necesario)
+    res.setHeader("Access-Control-Allow-Credentials", true);
+
+    // Establecer la edad máxima para la caché de preflights en segundos (1 hora en este caso)
+    res.setHeader("Access-Control-Max-Age", 3600);
+
+    next();
+});
+
 
 igs.set('view engine','ejs')
 igs.set('views','../igs/backend/src/views');

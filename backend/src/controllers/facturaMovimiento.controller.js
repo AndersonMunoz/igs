@@ -115,7 +115,7 @@ export const listarMovimientos = async (req, res) => {
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto
 					JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
-					JOIN unidad_productiva u ON p.fk_id_up = u.id_up	
+					JOIN bodega u ON p.fk_id_up = u.id_up	
 					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
 					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria`
 			);

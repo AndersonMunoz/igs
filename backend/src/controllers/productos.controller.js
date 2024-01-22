@@ -36,7 +36,7 @@ export const listarProductos = async (req, res) => {
 	p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
 	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
 	FROM productos p 
-	JOIN unidad_productiva u ON p.fk_id_up = u.id_up
+	JOIN bodega u ON p.fk_id_up = u.id_up
 	JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
 	JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
 	ORDER BY p.estado DESC`
