@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../style/proveedor.css";
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet2";
@@ -15,6 +15,7 @@ const proveedor = () => {
     if (modalBackdrop) {
       modalBackdrop.remove();
       setModal(false);
+      console.log(modal);
     }
   }
 
@@ -32,8 +33,8 @@ const proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         setProveedor(data)
-        if (data.status===500) {
-          Sweet.error(data.status,data.message)
+        if (data.status === 500) {
+          Sweet.error(data.status, data.message)
         }
       })
       .catch((e) => {
@@ -42,32 +43,36 @@ const proveedor = () => {
   }
 
   function registrarProveedor() {
+    const validacionExitosa = Validate.validarCampos('.form-empty');
     let nombre_proveedores = document.getElementById('nombresProveedor').value;
     let direccion_proveedores = document.getElementById('direccionProveedor').value;
     let contrato_proveedores = document.getElementById('contratoProveedor').value;
     let telefono_proveedores = document.getElementById('telefonoProveedor').value;
 
-    fetch('http://localhost:3000/proveedor/registrar', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ nombre_proveedores, direccion_proveedores, contrato_proveedores, telefono_proveedores }),
-    })
-      .then((res) => res.json())
-      .then(data => {
-        if (data.status === 200) {
-          Sweet.exito(data.status, data.message);
-          listarProveedor();
-          removeFond();
-        } else {
-          if (data.status === 403) {
-            Sweet.error(data.status, data.error.errors[0].msg)
-          } else {
-            Sweet.error(data.status, data.message)
-          }
-        }
+    if (validacionExitosa) {
+      fetch('http://localhost:3000/proveedor/registrar', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre_proveedores, direccion_proveedores, contrato_proveedores, telefono_proveedores }),
       })
+        .then((res) => res.json())
+        .then(data => {
+
+          if (data.status === 200) {
+            Sweet.exito(data.status, data.message);
+            listarProveedor();
+            removeFond();
+          } else {
+            if (data.status === 403) {
+              Sweet.error(data.status, data.error.errors[0].msg)
+            } else {
+              Sweet.error(data.status, data.message)
+            }
+          }
+        })
+    }
   }
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
@@ -81,7 +86,7 @@ const proveedor = () => {
           .then(res => res.json())
           .then(data => {
             listarProveedor()
-            if (data.status===200) {
+            if (data.status === 200) {
               Sweet.exito(data.status, data.message)
             } else {
               Sweet.error(data.status, data.message)
@@ -110,7 +115,7 @@ const proveedor = () => {
           document.getElementById('direccionProveedor').value = data[0].direccion_proveedores;
           document.getElementById('contratoProveedor').value = data[0].contrato_proveedores;
           document.getElementById('telefonoProveedor').value = data[0].telefono_proveedores;
-        }else{
+        } else {
           listarProveedor()
         }
       })
@@ -148,7 +153,13 @@ const proveedor = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setModal(true); Validate.limpiar('.limpiar'); }}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {
+          setModal(true); Validate.limpiar('.limpiar');
+          document.getElementById('titleSctualizar').classList.add('d-none');
+          document.getElementById('titleRegistro').classList.remove('d-none');
+          document.getElementById('btnAgregar').classList.remove('d-none');
+          document.getElementById('btnActualizar').classList.add('d-none');
+        }}>
           Registrar Nuevo Proveedor
         </button>
         <div className="d-flex align-items-center">
@@ -183,7 +194,7 @@ const proveedor = () => {
                     <td>
                       {element.estado !== 1 ? 'NO DISPONIBLES' : (
                         <>
-                          <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => editarProveedor(element.id_proveedores)}>
+                          <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setModal(true); editarProveedor(element.id_proveedores) }}>
                             Editar
                           </button>
                           <button className="btn btn-danger" type="button" onClick={() => deshabilitarProveedor(element.id_proveedores)}>
@@ -210,7 +221,7 @@ const proveedor = () => {
         </table>
       </div>
       {/* desde aqui el modal */}
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: modal ? 'block' : 'none' }}>
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: modal == true ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -226,30 +237,30 @@ const proveedor = () => {
                       <label htmlFor="nombresProveedor">Nombres</label>
                       <input type="text" id="nombresProveedor" name="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required></input>
                       <div className="invalid-feedback is-invalid">
-                        Por favor, ingrese un nombre valido
+                        Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="direccionProveedor">Direccion</label>
                       <input type="text" id="direccionProveedor" name="direccionProveedor" className="form-control form-empty limpiar" placeholder="Direccion"></input>
                       <div className="invalid-feedback is-invalid">
-                        Error en la direccion.
+                        Este campo es obligatorio.
                       </div>
                     </div>
                   </div>
                   <div className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="contratoProveedor">Contrato</label>
-                      <input type="text" name="contratoProveedor" id="contratoProveedor" className="form-control form-empty mb-4 limpiar" placeholder="N° de contrato"></input>
+                      <input type="text" name="contratoProveedor" id="contratoProveedor" className="form-control form-empty  limpiar" placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
-                        Por favor, Verifique el N° de contrato
+                        Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="">Telefono</label>
                       <input type="text" name="telefonoProveedor" id="telefonoProveedor" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
-                        Por favor, Ingrese un telefono valido.
+                        Este campo es obligatorio.
                       </div>
                     </div>
                   </div>
