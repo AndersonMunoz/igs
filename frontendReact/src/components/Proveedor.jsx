@@ -34,7 +34,7 @@ const proveedor = () => {
       .then((data) => {
         setProveedor(data)
         if (data.status === 500) {
-          Sweet.error(data.status, data.message)
+          Sweet.error(  data.message)
         }
       })
       .catch((e) => {
@@ -61,14 +61,14 @@ const proveedor = () => {
         .then(data => {
 
           if (data.status === 200) {
-            Sweet.exito(data.status, data.message);
+            Sweet.exito(  data.message);
             listarProveedor();
             removeFond();
           } else {
             if (data.status === 403) {
-              Sweet.error(data.status, data.error.errors[0].msg)
+              Sweet.error(  data.error.errors[0].msg)
             } else {
-              Sweet.error(data.status, data.message)
+              Sweet.error(  data.message)
             }
           }
         })
@@ -87,9 +87,9 @@ const proveedor = () => {
           .then(data => {
             listarProveedor()
             if (data.status === 200) {
-              Sweet.exito(data.status, data.message)
+              Sweet.exito(  data.message)
             } else {
-              Sweet.error(data.status, data.message)
+              Sweet.error(  data.message)
             }
           })
       }
@@ -137,14 +137,14 @@ const proveedor = () => {
       .then((res) => res.json())
       .then(data => {
         if (data.status === 200) {
-          Sweet.exito(data.status, data.message);
+          Sweet.exito(  data.message);
           listarProveedor();
           removeFond();
         } else {
           if (data.status === 403) {
-            Sweet.error(data.status, data.error.errors[0].msg)
+            Sweet.error(  data.error.errors[0].msg)
           } else {
-            Sweet.error(data.status, data.message)
+            Sweet.error(  data.message)
           }
         }
       })

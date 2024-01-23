@@ -1,19 +1,17 @@
 import Swal from 'sweetalert2';
 
 const Sweet = {
-  exito: (estado,mensaje) => {
+  exito: (mensaje) => {
     Swal.fire({
-      title: `Estado: ${estado}`,
       icon: 'success',
-      text: `${mensaje}`,
+      title: `${mensaje}`,
       confirmButtonText: 'Cerrar',
     });
   },
-  error: (estado,mensaje) => {
+  error: (mensaje) => {
     Swal.fire({
-      title: `Estado: ${estado}`,
       icon: 'warning',
-      text: `${mensaje}`,
+      title: `${mensaje}`,
       confirmButtonText: 'Cerrar',
     });
   },
