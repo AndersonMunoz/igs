@@ -24,7 +24,8 @@ igs.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
-
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    
     // Permitir credenciales (si es necesario)
     res.setHeader("Access-Control-Allow-Credentials", true);
 
