@@ -154,6 +154,7 @@ const Movimiento = () => {
     
     let fk_id_usuario = fkIdUsuarioRef.current.value;
     let tipo_movimiento = document.getElementById('tipo_movimiento').value;
+    let num_lote = document.getElementById('num_lote').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let unidad_peso_movimiento = document.getElementById('unidad_peso_movimiento').value;
     let precio_movimiento= document.getElementById('precio_movimiento').value;
@@ -173,7 +174,7 @@ const Movimiento = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad,fk_id_producto,fk_id_usuario,fk_id_proveedor}),
+      body: JSON.stringify({tipo_movimiento,cantidad_peso_movimiento,unidad_peso_movimiento,precio_movimiento,estado_producto_movimiento,nota_factura,fecha_caducidad,fk_id_producto,fk_id_usuario,fk_id_proveedor,num_lote}),
     })
       .then((res) => res.json())
       .then(data => {
@@ -258,6 +259,7 @@ const Movimiento = () => {
   <thead>
     <tr>
       <th className="p-2 text-center">Nombre producto</th>
+      <th className="p-2 text-center"># Lote</th>
       <th className="p-2 text-center">Fecha del movimiento</th>
       <th className="p-2 text-center">Tipo de movimiento</th>
       <th className="p-2 text-center">Cantidad</th>
@@ -287,6 +289,7 @@ const Movimiento = () => {
       {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.estado_producto_movimiento.toLowerCase().includes(search)}).map((element) => (
           <tr key={element.id_factura}>
             <td className="p-2 text-center">{element.nombre_tipo}</td>
+            <td className="p-2 text-center">{element.num_lote}</td>
             <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
             <td className="p-2 text-center">{element.tipo_movimiento}</td>
             <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
@@ -297,6 +300,7 @@ const Movimiento = () => {
             <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
             <td className="p-2 text-center">{element.nombre_usuario}</td>
             <td className="p-2 text-center">{element.nombre_proveedores}</td>
+            
             <td className="mx-2"onClick={() => {setUpdateModal(true);editarMovimiento(element.id_factura);}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
               <button className="btn btn-color" >
                 Editar
@@ -428,6 +432,15 @@ const Movimiento = () => {
                     |</div>
                     </div>
                   </div>
+                  <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" htmlFor="num_lote">Número de Lote</label>
+                      <input  type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, ingrese una cantidad.
+                    |</div>
+                    </div>
+                  </div>
                 </div>
                 <div className="row mb-4">
                   <div className="col">
@@ -534,6 +547,15 @@ const Movimiento = () => {
                     </div>
                   </div>
                 </div>
+                <div className="col">
+                    <div data-mdb-input-init className="form-outline">
+                      <label className="form-label" htmlFor="num_lote">Número lote</label>
+                      <input  type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" value={movimientoSeleccionado.num_lote || ''} onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
+                      <div className="invalid-feedback is-invalid">
+                      Por favor, ingrese una cantidad.
+                    |</div>
+                    </div>
+                  </div>
                 <div className="row mb-4">
                   <div className="col">
                     <div data-mdb-input-init className="form-outline">
