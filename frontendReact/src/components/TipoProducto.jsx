@@ -313,7 +313,7 @@ const Tipo = () => {
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <div className="col-md-6">
+                  <div className="col-md-7">
                     <label htmlFor="fk_categoria_pro" className="label-bold mb-2">Categoria</label>
                     <select className="form-select form-control form-empty limpiar" id="fk_categoria_pro" name=" fk_categoria_pro" defaultValue="">
                     {categoria.length === 0 ? (
