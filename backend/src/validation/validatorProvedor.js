@@ -8,19 +8,22 @@ export const validarProvedor = [
     .matches(/^[A-Za-z\s']+$/)
     .isLength({ min: 5, max: 45 }),
 
-check('telefono_proveedores', '¡Error! Un número de teléfono debe estar formado por 10 números. ')
+    check('telefono_proveedores', '¡Error! Un número de teléfono debe estar formado por 10 números positivos. ')
     .not()
     .isEmpty()
     .isNumeric()
-    .isLength({ min: 10, max: 10 }),
+    .isLength({ min: 10, max: 10 })
+    .custom(value => value >= 0), 
 
-check('direccion_proveedores', 'Error en la dirección.')
+
+    check('direccion_proveedores', 'Error en la dirección. limite: 50 caracteres')
     .not()
     .isEmpty()
     .isLength({ max: 50 }),
 
-check('contrato_proveedores', '¡Error! el contrato solo puede ser numérico.')
+    check('contrato_proveedores', '¡Error! el contrato solo puede ser numérico positivo.')
     .not()
     .isEmpty()
-    .isNumeric(),
+    .isNumeric()
+    .custom(value => value >= 0), 
 ];
