@@ -196,10 +196,10 @@ const Up= () => {
     <div>
       <div className="d-flex justify-content-between mb-4">
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
-          Registrar Nueva unidad Productiva
+          Registrar nueva bodega
         </button>
         <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Unidad productiva" className="input-buscar limpiar" onChange={(e)=>setSeach(e.target.value)}/>
+          <input type="text" placeholder="Buscar bodega" className="input-buscar limpiar" onChange={(e)=>setSeach(e.target.value)}/>
           <IconSearch className="iconSearch" />
         </div>
       </div>
@@ -208,7 +208,7 @@ const Up= () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre Up</th>
+              <th className="th-sm">Nombre bodega</th>
               <th className="th-sm" colSpan={2}> Botones Acciones</th>
             </tr>
           </thead>
@@ -219,7 +219,7 @@ const Up= () => {
           <td colSpan={3} className="">
             <div className="d-flex justify-content-center">
               <div className=" alert alert-danger text-center mt-4 w-50">
-                <h2> En este momento no contamos con ningúna  Unidad productiva  disponible. </h2>
+                <h2> En este momento no contamos con ningúna  bodega  disponible. </h2>
               </div>
             </div>
           </td>
@@ -259,7 +259,7 @@ const Up= () => {
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
-              <h1 className="modal-title fs-5">Registrar Unidad productiva </h1>
+              <h1 className="modal-title fs-5">Registrar  bodega </h1>
                 <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body">
@@ -277,7 +277,7 @@ const Up= () => {
                           type="text"
                           className="form-control limpiar"
                           id="nombreUp"
-                          placeholder="Nombre Up "
+                          placeholder="Nombre bodega "
                         />
                       </div>
                     </div>
@@ -307,7 +307,7 @@ const Up= () => {
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
-              <h1 className="modal-title fs-5" id="actualizarModalLabel">Actualizar Unidad productiva </h1>
+              <h1 className="modal-title fs-5" id="actualizarModalLabel">Actualizar bodega </h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -320,7 +320,7 @@ const Up= () => {
                        Up
                       </label>
                       <div className="col-md-12">
-                    <label htmlFor="nombre_up" className="label-bold mb-2">nombre unidad productiva </label>
+                    <label htmlFor="nombre_up" className="label-bold mb-2">nombre bodega </label>
                     <input type="hidden" value={upSeleccionada.nombre_up || ''} onChange={(e) => setupSeleccionada({ ...upSeleccionada, nombre_up: e.target.value })} disabled/>
                     <input type="text" className="form-control form-update" placeholder="nombre up" value={upSeleccionada.nombre_up || ''} name="nombre_up" onChange={(e) => setupSeleccionada({ ...upSeleccionada, nombre_up: e.target.value })}/>
                     <div className="invalid-feedback is-invalid">
