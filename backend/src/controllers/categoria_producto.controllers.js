@@ -5,9 +5,9 @@ export const registrocategoria_producto = async (req, res) => {
 
     try {
 
-        let error = validationResult(req);
+       let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error)
+           return res.status(403).json({"status": 403 ,error})
         }
 
         let { nombre_categoria } = req.body;
@@ -62,7 +62,8 @@ export const listarcategoria_producto = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({
-            massage: 'error en servidor:' + err
+            "status": 500, "message": "Error en el servidor   "+err
+        
         })
     }
 
@@ -72,7 +73,7 @@ export const editarcategoria_producto = async (req, res) => {
         let error = validationResult(req);
         if (!error.isEmpty()) {
             return res.status(400).json(error)
-        }
+        }   
         let id = req.params.id;
         let { nombre_categoria } = req.body;
 
@@ -85,8 +86,8 @@ export const editarcategoria_producto = async (req, res) => {
             res.status(200).json(
                 { "status": 200, "menssge": "Se actualizo con exito la categoria  de producto   " });
         } else {
-            res.status(401).json(
-                { "status": 401, "menssge": "No se actualizo la  categoria de producto  " });
+            res.status(403).json(
+                { "status": 403, "menssge": "No se actualizo la  categoria de producto  " });
         }
     } catch (e) {
         res.status(500).json({
