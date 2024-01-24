@@ -180,15 +180,11 @@ const Movimiento = () => {
       .then((res) => res.json())
       .then(data => {
         if (data.status === 200) {
-          Sweet.exito(  data.message);
-          listarProveedor();
-          removeFond();
-        } else {
-          if (data.status === 403) {
-            Sweet.error(  data.error.errors[0].msg)
-          } else {
-            Sweet.error(  data.message)
-          }
+          Sweet.exito(data.message);
+        }
+        if (data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
+          return;
         }
         console.log(data);
         listarMovimiento();
