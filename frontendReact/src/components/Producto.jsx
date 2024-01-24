@@ -20,20 +20,6 @@ const Producto = () => {
       listarUp();
       listarTipo();
   }, []); 
-  
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (modalUpdateRef.current && !modalUpdateRef.current.contains(event.target)) {
-  //       listarUp();
-  //       listarTipo();
-  //     }
-  //   };
-  //   document.addEventListener('click', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('click', handleClickOutside);
-  //   };
-  // }, [updateModal, modalUpdateRef]);
-
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -125,12 +111,16 @@ const Producto = () => {
           Sweet.registroFallido();
           return;
         }
-        if(data.status == 200){
-          Sweet.registroExitoso();
+
+        if (data.status === 200) {
+          Sweet.exito(data.message);
         }
-        if(data.status === 401){
-          Sweet.registroFallido();
+        if (data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
+          return;
         }
+     
+
         console.log(data);
         listarProducto();
         setShowModal(false);
@@ -202,11 +192,12 @@ const Producto = () => {
         Sweet.actualizacionFallido();
         return;
       }
-      if(data.status == 200){
-        Sweet.actualizacionExitoso();
+      if (data.status === 200) {
+        Sweet.exito(data.message);
       }
-      if(data.status == 401){
-        Sweet.actualizacionFallido();
+      if (data.status === 403) {
+        Sweet.error(data.error.errors[0].msg);
+        return;
       }
       console.log(data);
       listarProducto();
@@ -364,7 +355,7 @@ const Producto = () => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
+                    <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
                     <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
                       {up.length === 0 ? (
                           <option value="" disabled>No hay tipos disponibles</option>
@@ -438,7 +429,7 @@ const Producto = () => {
                   </div>
 
                   <div className="col-md-6">
-                    <label htmlFor="unidadPeso" className="label-bold mb-2">U.P</label>
+                    <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
                     <select className="form-select form-update" value={productoSeleccionado.fk_id_up || ''} name="fk_id_up" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} >
                       <option value="">Selecciona una UP</option>
                       {up.map((element) => (
