@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Sweet from '../helpers/Sweet2';
+import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
 import { IconSearch } from "@tabler/icons-react"; 
@@ -16,6 +16,7 @@ const Movimiento = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
   const modalUpdateRef = useRef(null);
+  const modalProductoRef = useRef(null);
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
@@ -312,8 +313,8 @@ const Movimiento = () => {
     </tbody>
 </table>
 
-    <div className="d-flex justify-content-center align-items-center w-full h-full">
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div className="d-flex justify-content-center align-items-center w-full h-full">
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-xl modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header txt-color">
