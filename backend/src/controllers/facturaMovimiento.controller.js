@@ -4,9 +4,9 @@ import { validationResult } from 'express-validator';
 export const guardarMovimiento = async (req, res) => {
 	try {
 		let error = validationResult(req);
-		if (!error.isEmpty()) {
-			return res.status(400).json(error);
-		}
+        if (!error.isEmpty()) {
+           return res.status(403).json({"status": 403 ,error})
+        }
 		let { tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
 			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote } = req.body;
 
@@ -105,6 +105,10 @@ export const guardarMovimiento = async (req, res) => {
 
 export const listarMovimientos = async (req, res) => {
 	try {
+		let error = validationResult(req);
+        if (!error.isEmpty()) {
+           return res.status(403).json({"status": 403 ,error})
+        }
 		const [result] = await pool.query
 			(
 				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, f.unidad_peso_movimiento, f.precio_movimiento, f.estado_producto_movimiento,
@@ -180,5 +184,4 @@ export const actualizarMovimiento = async (req, res) => {
 		});
 	}
 };
-
 
