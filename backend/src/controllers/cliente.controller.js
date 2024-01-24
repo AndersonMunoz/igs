@@ -6,9 +6,9 @@ export const registroUsuario = async (req, res) => {
 
     try {
 
-        let error= validationResult(req);
+        let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error)           
+           return res.status(403).json({"status": 403 ,error})
         }
 
         let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
@@ -25,9 +25,9 @@ export const registroUsuario = async (req, res) => {
                 "menssage": "Usuario registrado con exito"
             })
         } else {
-            res.status(403).json({
-                "status": 403,
-                "menssage": "Usuario no fue registrado, datos isuficientes"
+            res.status(401).json({
+                "status": 401,
+                "menssage": "Usuario no fue registrado, datos insuficientes"
             })
 
         }
