@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet';
+import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
 
 const Tipo = () => {
@@ -94,11 +94,13 @@ const Tipo = () => {
           Sweet.registroFallido();
           return;
         }
-        if(data.status == 200){
-          Sweet.registroExitoso();
+        if (data.status === 200) {
+          Sweet.exito(data.menssage);
+      
         }
-        if(data.status == 401){
-          Sweet.registroFallido();
+        if (data.status === 403) {
+          Sweet.error(data.errors.errors[0].msg);
+      
         }
         console.log(data);
         listarTipo();
@@ -129,11 +131,14 @@ const Tipo = () => {
           .then(data => {
             console.log(data);
             if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
+              Sweet.exito(data.message);
+          
             }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
+            else  {
+              Sweet.error(data.menssage);
+          
             }
+
             listarTipo();
           })
           .catch(error => {
@@ -202,11 +207,13 @@ const Tipo = () => {
         Sweet.actualizacionFallido();
         return;
       }
-      if(data.status == 200){
-        Sweet.actualizacionExitoso();
+      if (data.status === 200) {
+        Sweet.exito(data.menssge);
+    
       }
-      if(data.status == 401){
-        Sweet.actualizacionFallido();
+      else {
+        Sweet.error(data.errors[0].msg);
+    
       }
       console.log(data);
       listarTipo();

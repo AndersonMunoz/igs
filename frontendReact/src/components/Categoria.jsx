@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IconSearch } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet';
+import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
 
 const Categoria = () => {
@@ -32,17 +32,18 @@ const Categoria = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res) => {
-      if (res.status === 204) {
-        console.log("No hay datos disponibles");
-        return null;
-      }
-      return res.json();
-    })
+    .then((res) => res.json())
     .then((data) => {
+      if (data.status == 500) {
+        Sweet.error(data.message)
+        }
+        if (data.status == 204) {
+          Sweet.error(data.message)
+          }
       if (data !== null) {
         setcategorias_producto(data);
       }
+      console.log(data)
     })
     .catch((e) => {
       console.log(e);
@@ -62,16 +63,18 @@ const Categoria = () => {
       body: JSON.stringify({ nombre_categoria}),
     })
       .then((res) => res.json())
-      .then(data => {
+      .then((data) => {
         if (!validacionExitosa) {
           Sweet.registroFallido();
           return;
         }
-        if(data.status == 200){
-          Sweet.registroExitoso();
+        if (data.status === 200) {
+          Sweet.exito(data.menssage);
+      
         }
-        if(data.status == 401){
-          Sweet.registroFallido();
+        if (data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
+      
         }
         console.log(data);
         listarCategoria();
@@ -100,10 +103,12 @@ const Categoria = () => {
           .then(data => {
             console.log(data);
             if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
+              Sweet.exito(data.message);
+          
             }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
+            else  {
+              Sweet.error(data.menssage);
+          
             }
             listarCategoria();
           })
@@ -171,11 +176,13 @@ const Categoria = () => {
         Sweet.actualizacionFallido();
         return;
       }
-      if(data.status == 200){
-        Sweet.actualizacionExitoso();
+      if (data.status === 200) {
+        Sweet.exito(data.menssge);
+    
       }
-      if(data.status == 401){
-        Sweet.actualizacionFallido();
+      else {
+        Sweet.error(data.errors[0].msg);
+    
       }
       console.log(data);
       listarCategoria();

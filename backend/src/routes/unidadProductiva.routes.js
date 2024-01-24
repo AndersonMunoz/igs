@@ -5,11 +5,11 @@ import { validatorUnidad_productiva } from "../validation/unidad_productiva.vali
 
 const unidadProductivaRouter = Router();
 
-unidadProductivaRouter.post("/registrar", /* validarToken, validatorUnidad_productiva */ registroUnidadProductiva);
+unidadProductivaRouter.post("/registrar", validatorUnidad_productiva , registroUnidadProductiva);
 unidadProductivaRouter.get("/listar", listarUnidadProductiva);
 unidadProductivaRouter.get('/buscar/:id', buscarup);
 unidadProductivaRouter.patch('/activar/:id', activarUp);
 unidadProductivaRouter.patch('/deshabilitar/:id', deshabilitarUp);
-unidadProductivaRouter.put("/editar/:id"/* , validatorUnidad_productiva, validarToken */, editarUnidadProductiva);
+unidadProductivaRouter.put("/editar/:id", validatorUnidad_productiva, editarUnidadProductiva);
 
 export default unidadProductivaRouter;
