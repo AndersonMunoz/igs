@@ -27,6 +27,14 @@ const Sweet = {
       cancelButtonText: "Cancelar"
     });
   },
+  registroFallido: () => {
+    Swal.fire({
+      title: 'Mensaje',
+      icon: 'warning',
+      text: 'Registro Fallido',
+      confirmButtonText: 'Cerrar',
+    });
+  },
   deshabilitadoExitoso: () => {
     Swal.fire({
       title: 'Mensaje',
