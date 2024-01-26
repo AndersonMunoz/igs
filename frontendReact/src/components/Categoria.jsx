@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IconSearch } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet';
+import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
 
 const Categoria = () => {
@@ -62,16 +62,16 @@ const Categoria = () => {
       body: JSON.stringify({ nombre_categoria}),
     })
       .then((res) => res.json())
-      .then(data => {
+      .then((data) => {
         if (!validacionExitosa) {
           Sweet.registroFallido();
           return;
         }
         if(data.status == 200){
-          Sweet.registroExitoso();
+          Sweet.exito(data.menssage);
         }
         if(data.status == 401){
-          Sweet.registroFallido();
+          Sweet.error(data.error.errors[0].msg);
         }
         console.log(data);
         listarCategoria();

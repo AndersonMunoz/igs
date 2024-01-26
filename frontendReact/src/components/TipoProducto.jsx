@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet';
+import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
 
 const Tipo = () => {
@@ -89,16 +89,15 @@ const Tipo = () => {
       body: JSON.stringify({ nombre_tipo, fk_categoria_pro}),
     })
       .then((res) => res.json())
-      .then(data => {
+      .then((data) => {
         if (!validacionExitosa) {
           Sweet.registroFallido();
-          return;
         }
         if(data.status == 200){
-          Sweet.registroExitoso();
+          Sweet.exito(data.menssage);
         }
-        if(data.status == 401){
-          Sweet.registroFallido();
+        if(data.status != 200){
+          Sweet.error(data.errors[0].msg);
         }
         console.log(data);
         listarTipo();
@@ -126,14 +125,15 @@ const Tipo = () => {
           }
         })
           .then(res => res.json())
-          .then(data => {
+          .then((data) => {
             console.log(data);
             if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
+              Sweet.exito(data.message)
             }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
+            if (data.status != 200) {
+              Sweet.error();
             }
+            console.log(data);
             listarTipo();
           })
           .catch(error => {
@@ -152,13 +152,13 @@ const Tipo = () => {
           }
         })
           .then(res => res.json())
-          .then(data => {
+          .then((data) => {
             console.log(data);
             if (data.status === 200) {
-              Sweet.actualizacionExitoso();
+              Sweet.exito(data.message  );
             }
-            if (data.status === 401) {
-              Sweet.actualizacionFallido();
+            if (data.status !== 200) {
+              Sweet.error(data.message);
             }
             listarTipo();
           })
@@ -203,12 +203,12 @@ const Tipo = () => {
         return;
       }
       if(data.status == 200){
-        Sweet.actualizacionExitoso();
+        Sweet.exito(data.menssge);
       }
-      if(data.status == 401){
-        Sweet.actualizacionFallido();
+      if(data.status !== 200){
+        Sweet.error(data.errors[0].msg);
       }
-      console.log(data);
+      console.log(data.errors[0].msg);
       listarTipo();
       setUpdateModal(false);
       removeModalBackdrop();
@@ -218,9 +218,9 @@ const Tipo = () => {
       }
 
     })
-    .catch(error=>{
-      console.error('Error:',error)
-    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }
 
   const [search, setSeach] = useState('');
