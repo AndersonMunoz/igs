@@ -32,17 +32,18 @@ const Categoria = () => {
         "Content-type": "application/json",
       },
     })
-    .then((res) => {
-      if (res.status === 204) {
-        console.log("No hay datos disponibles");
-        return null;
-      }
-      return res.json();
-    })
+    .then((res) => res.json())
     .then((data) => {
+      if (data.status == 500) {
+        Sweet.error(data.message)
+        }
+        if (data.status == 204) {
+          Sweet.error(data.message)
+          }
       if (data !== null) {
         setcategorias_producto(data);
       }
+      console.log(data)
     })
     .catch((e) => {
       console.log(e);
@@ -68,10 +69,10 @@ const Categoria = () => {
           return;
         }
         if(data.status == 200){
-          Sweet.exito(data.menssage);
+          Sweet.registroExitoso();
         }
         if(data.status == 401){
-          Sweet.error(data.error.errors[0].msg);
+          Sweet.registroFallido();
         }
         console.log(data);
         listarCategoria();
@@ -100,10 +101,12 @@ const Categoria = () => {
           .then(data => {
             console.log(data);
             if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
+              Sweet.exito(data.message);
+          
             }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
+            else  {
+              Sweet.error(data.menssage);
+          
             }
             listarCategoria();
           })
@@ -171,11 +174,13 @@ const Categoria = () => {
         Sweet.actualizacionFallido();
         return;
       }
-      if(data.status == 200){
-        Sweet.actualizacionExitoso();
+      if (data.status === 200) {
+        Sweet.exito(data.menssge);
+    
       }
-      if(data.status == 401){
-        Sweet.actualizacionFallido();
+      else {
+        Sweet.error(data.errors[0].msg);
+    
       }
       console.log(data);
       listarCategoria();

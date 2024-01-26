@@ -19,14 +19,14 @@ export const validatorUsuario = [
         .isEmpty()
         .matches(/^[A-Za-z\s']+$/),
 
-    check('contrasena_usuario', 'La contraseña debe cumplir los siguientes requisitos:')
+    check('contrasena_usuario', 'La contraseña debe tener: un numero, mayusculas, minusculas y ser mayor de 6 caracteres')
         .exists()
         .not()
         .isEmpty()
-        .isLength({ min: 6 }).withMessage('Debe tener al menos 6 caracteres.')
-        .matches(/[a-z]/).withMessage('Debe contener al menos una letra minúscula.')
-        .matches(/[A-Z]/).withMessage('Debe contener al menos una letra mayúscula.')
-        .matches(/\d/).withMessage('Debe contener al menos un número.'),
+        .isLength({ min: 6 })
+        .matches(/[a-z]/)
+        .matches(/[A-Z]/)
+        .matches(/\d/),
 
 
     check('tipo_usuario', 'el tipo de usuario es requerido o !!!')

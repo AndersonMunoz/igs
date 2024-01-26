@@ -5,7 +5,7 @@ export const guardarProducto = async (req, res) => {
   try {
     let error = validationResult(req);
     if (!error.isEmpty()) {
-      return res.status(403).json(error);
+       return res.status(403).json({"status": 403 ,error})
     }
     let {
       descripcion_producto,
@@ -32,7 +32,7 @@ export const listarProductos = async (req, res) => {
   try {
     const [result] = await pool.query(
       `SELECT p.id_producto, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS NombreCategoria,
-	p.fecha_caducidad_producto AS FechaCaducidad, p.cantidad_peso_producto AS Peso, 
+	     p.cantidad_peso_producto AS Peso, 
 	p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
 	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
 	FROM productos p 
@@ -63,6 +63,10 @@ export const buscarProducto = async (req, res) => {
 }
 export const actualizarProducto = async (req,res) =>{
 	try{
+    let error = validationResult(req);
+    if (!error.isEmpty()) {
+       return res.status(403).json({"status": 403 ,error})
+    }
 		let id=req.params.id;
 		let {descripcion_producto,precio_producto,fk_id_up,fk_id_tipo_producto} = req.body;
 		let sql = `UPDATE productos SET descripcion_producto='${descripcion_producto}',precio_producto='${precio_producto}',fk_id_up='${fk_id_up}',fk_id_tipo_producto='${fk_id_tipo_producto}' WHERE id_producto=${id}`;

@@ -99,7 +99,7 @@ const Tipo = () => {
         if(data.status != 200){
           Sweet.error(data.errors[0].msg);
         }
-        console.log(data);
+        console.log(data.errors[0].msg);
         listarTipo();
         setShowModal(false);
         removeModalBackdrop();
@@ -128,12 +128,11 @@ const Tipo = () => {
           .then((data) => {
             console.log(data);
             if (data.status === 200) {
-              Sweet.exito(data.message)
+              Sweet.exito(data.message);
             }
-            if (data.status != 200) {
-              Sweet.error();
+            if (data.status !=200) {
+              Sweet.error(data.message);
             }
-            console.log(data);
             listarTipo();
           })
           .catch(error => {
@@ -203,12 +202,12 @@ const Tipo = () => {
         return;
       }
       if(data.status == 200){
-        Sweet.exito(data.menssge);
-      }
-      if(data.status !== 200){
-        Sweet.error(data.errors[0].msg);
-      }
-      console.log(data.errors[0].msg);
+          Sweet.exito(data.menssge);
+        }
+        if(data.status != 200){
+          Sweet.error(data.errors[0].msg);
+        }
+        console.log(data);
       listarTipo();
       setUpdateModal(false);
       removeModalBackdrop();

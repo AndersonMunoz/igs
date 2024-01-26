@@ -16,6 +16,7 @@ const Movimiento = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
   const modalUpdateRef = useRef(null);
+  const modalProductoRef = useRef(null);
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
@@ -100,7 +101,8 @@ const Movimiento = () => {
       })
       .catch((e) => {
         console.log(e);
-      });
+      })
+      ;
   }
   function editarMovimiento(id) {
     fetch(`http://localhost:3000/facturamovimiento/buscar/${id}`, {
@@ -178,15 +180,12 @@ const Movimiento = () => {
     })
       .then((res) => res.json())
       .then(data => {
-        if (!validacionExitosa) {
-          Sweet.registroFallido();
+        if (data.status === 200) {
+          Sweet.exito(data.message);
+        }
+        if (data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
           return;
-        }
-        if(data.status == 200){
-          Sweet.registroExitoso();
-        }
-        if(data.status == 401){
-          Sweet.registroFallido();
         }
         console.log(data);
         listarMovimiento();
@@ -196,6 +195,7 @@ const Movimiento = () => {
         if (modalBackdrop) {
           modalBackdrop.remove();
         }
+        
       })
       .catch(error => {
         console.error('Error:', error);
@@ -313,8 +313,8 @@ const Movimiento = () => {
     </tbody>
 </table>
 
-    <div className="d-flex justify-content-center align-items-center w-full h-full">
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div className="d-flex justify-content-center align-items-center w-full h-full">
+      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-xl modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -336,7 +336,7 @@ const Movimiento = () => {
                       </select>
                       <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una categoria.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
@@ -350,7 +350,7 @@ const Movimiento = () => {
                       </select>
                       <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un producto.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
@@ -363,7 +363,7 @@ const Movimiento = () => {
                       </select>
                       <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de movimiento.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -379,7 +379,7 @@ const Movimiento = () => {
                       </select>
                       <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un proveedor.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
@@ -388,7 +388,7 @@ const Movimiento = () => {
                       <input  type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control form-empty limpiar" />
                       <div className="invalid-feedback is-invalid">
                       Por favor, ingrese una cantidad.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
@@ -404,7 +404,7 @@ const Movimiento = () => {
                           </select>
                           <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una unidad de peso.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -415,7 +415,7 @@ const Movimiento = () => {
                       <input  type="number" id="precio_movimiento" name="precio_movimiento"className="form-control form-empty limpiar" />
                       <div className="invalid-feedback is-invalid">
                       Por favor, ingrese un peso válido.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
@@ -429,7 +429,7 @@ const Movimiento = () => {
                         </select>
                         <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un estado.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                   <div className="col">
@@ -438,7 +438,7 @@ const Movimiento = () => {
                       <input  type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
                       <div className="invalid-feedback is-invalid">
                       Por favor, ingrese una cantidad.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -470,7 +470,7 @@ const Movimiento = () => {
                       </select>
                       <div className="invalid-feedback is-invalid">
                       Por favor, seleccione el usuario que hizo el movimiento.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -512,7 +512,7 @@ const Movimiento = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" className="btn-color btn" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={registrarMovimiento}>Registrar</button>
+              <button type="button" className="btn-color btn" onClick={registrarMovimiento}>Registrar</button>
             </div>
           </div>
         </div>
@@ -553,7 +553,7 @@ const Movimiento = () => {
                       <input  type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" value={movimientoSeleccionado.num_lote || ''} onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
                       <div className="invalid-feedback is-invalid">
                       Por favor, ingrese una cantidad.
-                    |</div>
+                      </div>
                     </div>
                   </div>
                 <div className="row mb-4">

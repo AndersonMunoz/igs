@@ -5,10 +5,11 @@ export const registroUnidadProductiva = async (req, res) => {
 
 	try {
 
-		let error = validationResult(req);
-		if (!error.isEmpty()) {
-			return res.status(400).json(error)
-		}
+	let error = validationResult(req);
+        if (!error.isEmpty()) {
+           return res.status(403).json({"status": 403 ,error})
+        }
+
 
 		let { nombre_up } = req.body;
 		let sql = `insert into bodega (nombre_up)
@@ -48,10 +49,11 @@ export const listarUnidadProductiva = async (req, res) => {
 		}
 
 	} catch (err) {
-		res.status(500).json({
-			massage: 'error en servidor:' + err
-		})
-	}
+        res.status(500).json({
+            "status": 500, "message": "Error en el servidor   "+err
+        
+        })
+    }
 
 };
 export const buscarup = async (req, res) => {

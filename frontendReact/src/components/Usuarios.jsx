@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/usuarios.css"
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet';
+import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
 
 const Usuario = () => {
@@ -21,10 +21,9 @@ const Usuario = () => {
 	function removeModalBackdrop() {
 		const modalBackdrop = document.querySelector('.modal-backdrop');
 		if (modalBackdrop) {
-			modalBackdrop.remove();
+		  modalBackdrop.remove();
 		}
-	}
-
+	  }
 	///listar usuario
 	function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
@@ -56,7 +55,7 @@ const Usuario = () => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ documento_usuario,  email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario })
+			body: JSON.stringify({ documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario })
 		})
 			.then((res) => res.json())
 			.then(data => {
@@ -65,10 +64,10 @@ const Usuario = () => {
 					return;
 				}
 				if (data.status === 200) {
-					Sweet.registroExitoso();
+					Sweet.exito(data.menssage);
 				}
-				if (data.status === 401) {
-					Sweet.registroFallido();
+				if (data.status === 403) {
+					Sweet.error(data.error.errors[0].msg);
 				}
 				console.log(data);
 				listarUsuario();
@@ -78,7 +77,6 @@ const Usuario = () => {
 				if (modalBackdrop) {
 					modalBackdrop.remove();
 				}
-				Validate.limpiar('.limpiar');
 			})
 			.catch(error => {
 				console.error('Error registro fallido:', error);
@@ -229,7 +227,7 @@ const Usuario = () => {
 										<div className="alert alert-danger text-center mt-4 w-50">
 											<h2> En este momento no contamos con ningún usuario disponible.😟</h2>
 										</div>
-										</div>
+									</div>
 								</td>
 							</tr>
 						) : (
@@ -265,10 +263,10 @@ const Usuario = () => {
 					</tbody>
 				</table>
 			</div>
-			<div className={`modal fade ${showModal ? 'show' : ''}`} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef}>
-				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
-					<div className="modal-content">
-						<div className="modal-header hg txt-color">
+			<div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }} >
+        <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+          <div className="modal-content">
+            <div className="modal-header bg txt-color">
 							<h2 className="modal-title fs-5">Registrar Usuario</h2>
 							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
