@@ -9,6 +9,7 @@ import Categoria from './components/Categoria';
 import UnidadProductiva from './components/UnidadProductiva';
 import Usuario from './components/Usuarios';
 
+
 const App = () => {
   return (
     <>
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/up" element={<UnidadProductiva />} />
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
+          
         </Route>
       </Routes>
     </>
