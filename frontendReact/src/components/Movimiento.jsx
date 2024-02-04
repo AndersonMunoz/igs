@@ -36,6 +36,7 @@ const Movimiento = () => {
   };
   useEffect(() => {
     if (movimientos.length > 0) {
+      
       // Destruir la instancia DataTables antes de volver a inicializar
       if ($.fn.DataTable.isDataTable(tableRef.current)) {
         $(tableRef.current).DataTable().destroy();
