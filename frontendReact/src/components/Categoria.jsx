@@ -2,16 +2,30 @@ import React, { useEffect, useRef, useState } from "react";
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
+import $ from 'jquery';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
 
 const Categoria = () => {
-
+  const tableRef = useRef();
   const [categorias_producto, setcategorias_producto] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const modalCategoriaRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [categoriaSeleccionada, setcategoriaSeleccionada] = useState({});
+ 
 
+  useEffect(() => {
+    if (categorias_producto.length > 0) {
+
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+
+      $(tableRef.current).DataTable();
+    }
+  }, [categorias_producto]);
   
 
   useEffect(() => {
@@ -209,7 +223,7 @@ const Categoria = () => {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
+        <table id="dtBasicExample" className="table table-striped table-bordered" ref={tableRef} cellSpacing={0} width="100%">
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
