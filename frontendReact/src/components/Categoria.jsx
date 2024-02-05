@@ -223,15 +223,21 @@ const Categoria = () => {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table id="dtBasicExample" className="table table-striped table-bordered" ref={tableRef} cellSpacing={0} width="100%">
-          <thead className="text-center text-justify">
-            <tr>
-              <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre Categoria</th>
-              <th className="th-sm" colSpan={2}> Botones Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tableCategoria" className="text-center">
+      <table
+        id="dtBasicExample"
+        className="table table-striped table-bordered"
+        ref={tableRef}
+        cellSpacing={0}
+        width="100%"
+      >
+        <thead className="text-center text-justify">
+          <tr>
+            <th className="th-sm">Id</th>
+            <th className="th-sm">Nombre Categoria</th>
+            <th className="th-sm">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableCategoria" className="text-center">
 
           {categorias_producto.length === 0 ? (
         <tr>
@@ -247,32 +253,55 @@ const Categoria = () => {
         </tr>
       ) : (
         <>
-          {categorias_producto.filter((item) => {
-    return search.toLowerCase() === '' ? item : item.nombre_categoria.toLowerCase().includes(search);
-  }).map((element) => (
-    <tr key={element.id_categoria}>
-      <td>{element.id_categoria}</td>
-      <td>{element.nombre_categoria}</td>  
-      {element.estado === 1 ? (
-                  <>
-                  <td className="mx-2"onClick={() => {setUpdateModal(true);editarCategoria(element.id_categoria);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                  <button className="btn btn-color">
-                    Editar
-                  </button>
-                    </td>
-                    <td className="mx-2">
-                      <button className="btn btn-danger" onClick={() => deshabilitarCategoria(element.id_categoria)}>Deshabilitar</button>
-                    </td>
-                  </>
-                ): (
-                  <td className="mx-2" colSpan={2}>
-                    <button className="btn btn-primary" onClick={() => activarCategoria(element.id_categoria)}>Activar</button>
-                  </td>
-                )}
 
-              </tr>
-            ))}
-        </>
+        {categorias_producto
+          .filter((item) => {
+            return (
+              search.toLowerCase() === '' ||
+              item.nombre_categoria.toLowerCase().includes(search)
+            );
+          })
+          .map((element) => (
+            <tr key={element.id_categoria}>
+              <td>{element.id_categoria}</td>
+              <td>{element.nombre_categoria}</td>
+              <td>
+                {element.estado === 1 ? (
+                  <>
+                    <button
+                      className="btn btn-color mx-2"
+                      onClick={() => {
+                        setUpdateModal(true);
+                        editarCategoria(element.id_categoria);
+                      }}
+                      data-bs-toggle="modal"
+                      data-bs-target="#actualizarModal"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-danger mx-2"
+                      onClick={() =>
+                        deshabilitarCategoria(element.id_categoria)
+                      }
+                    >
+                      Deshabilitar
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="btn btn-primary mx-2"
+                    onClick={() =>
+                      activarCategoria(element.id_categoria)
+                    }
+                  >
+                    Activar
+                  </button>
+                )}
+              </td>
+            </tr>
+      ))}
+  </>
       )}
           </tbody>
         </table>
