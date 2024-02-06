@@ -3,6 +3,9 @@ import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
+import $ from 'jquery';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
 
 const Tipo = () => {
 
@@ -13,8 +16,19 @@ const Tipo = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [tiposeleccionado, setTiposeleccionado] = useState({});
+  const tableRef = useRef();
 
-  
+  useEffect(() => {
+    if (tipos.length > 0) {
+
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+
+      $(tableRef.current).DataTable();
+    }
+  }, [tipos]);
+
 
   useEffect(() => {
     listarTipo();
@@ -236,13 +250,13 @@ const Tipo = () => {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
+        <table id="dtBasicExample" className="table table-striped table-bordered"   ref={tableRef} cellSpacing={0} width="100%">
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
               <th className="th-sm">NombreProducto</th>
               <th className="th-sm">NombreCategoria</th>
-              <th className="th-sm" colSpan={2}>Acciones</th>
+              <th className="th-sm" >Acciones</th>
             </tr>
           </thead>
           <tbody id="tableCategoria" className="text-center">
@@ -265,24 +279,24 @@ const Tipo = () => {
       <td>{element.id}</td>
       <td>{element.NombreProducto}</td>
       <td>{element.Categoría }</td>
-              
+              <td>
       {element.estado === 1 ? (
                   <>
-                    <td className="mx-2">
-                      <button className="btn btn-color" onClick={() => { setUpdateModal(true); editarTipo(element.id); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+                   
+                      <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarTipo(element.id); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
                         Editar  
                       </button>
-                    </td>
-                    <td className="mx-2">
+               
+                    
                       <button className="btn btn-danger" onClick={() => deshabilitarTipo(element.id)}>Deshabilitar</button>
-                    </td>
+                  
                   </>
                 ): (
-                  <td className="mx-2" colSpan={2}>
+                
                     <button className="btn btn-primary" onClick={() => activarTipo(element.id)}>Activar</button>
-                  </td>
+              
                 )}
-
+</td>
               </tr>
             ))}
         </>
