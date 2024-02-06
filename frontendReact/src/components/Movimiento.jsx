@@ -3,6 +3,10 @@ import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
 import { IconSearch } from "@tabler/icons-react"; 
+import $ from 'jquery';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
+
 
 const Movimiento = () => {
   const [movimientos, setMovimientos] = useState([]);
@@ -12,6 +16,7 @@ const Movimiento = () => {
   const [proveedor_list, setProveedor] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [usuario_list, setUsuario] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
@@ -19,14 +24,31 @@ const Movimiento = () => {
   const modalProductoRef = useRef(null);
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
+    
   };
+  const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
 
   const handleCheckboxChange2 = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
+  useEffect(() => {
+    if (movimientos.length > 0) {
+      
+      // Destruir la instancia DataTables antes de volver a inicializar
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+
+      // Inicializar DataTables después de actualizar los datos de movimiento
+      $(tableRef.current).DataTable();
+    }
+  }, [movimientos]); // Asegúrate de que se ejecute después de actualizar los datos de movimiento
+
+  
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -41,6 +63,7 @@ const Movimiento = () => {
     listarTipo();
     listarProveedor();
     listarUsuario();
+    listarProducto()
   }, []);
   
   function listarCategoria() {
@@ -103,6 +126,22 @@ const Movimiento = () => {
         console.log(e);
       })
       ;
+  }
+
+  function listarProducto() {
+    fetch("http://localhost:3000/producto/listar", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setProductos(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
   }
   function editarMovimiento(id) {
     fetch(`http://localhost:3000/facturamovimiento/buscar/${id}`, {
@@ -220,28 +259,28 @@ const Movimiento = () => {
 			.catch(e => { console.log(e); })
 	}
   
-
   function listarMovimiento() {
-      fetch("http://localhost:3000/facturamovimiento/listar", {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-        },
-      }).then((res) => {
-        if (res.status === 204) {
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if(Array.isArray(data)){
-          setMovimientos(data);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    }
+    fetch("http://localhost:3000/facturamovimiento/listar", {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status === 204) {
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setMovimientos(data);
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+  
   return (
    <>
   <div>
@@ -255,64 +294,65 @@ const Movimiento = () => {
           <IconSearch className="iconSearch" />
         </div>
         </div>
-    <table className="table table-striped table-hover w-80">
-  <thead>
-    <tr>
-      <th className="p-2 text-center">Nombre producto</th>
-      <th className="p-2 text-center"># Lote</th>
-      <th className="p-2 text-center">Fecha del movimiento</th>
-      <th className="p-2 text-center">Tipo de movimiento</th>
-      <th className="p-2 text-center">Cantidad</th>
-      <th className="p-2 text-center">Unidad Peso</th>
-      <th className="p-2 text-center">Precio movimiento</th>
-      <th className="p-2 text-center">Estado producto</th>
-      <th className="p-2 text-center">Nota</th>
-      <th className="p-2 text-center">Fecha de caducidad</th>
-      <th className="p-2 text-center">Usuario que hizo movimiento</th>
-      <th className="p-2 text-center">Proveedor</th>
-      <th className="p-2 text-center">Editar</th>
-    </tr>
-  </thead>
-  <tbody id="tableMovimiento">
-  {movimientos.length === 0 ? (
-        <tr>
-          <td colSpan={12}>
-          <div className="d-flex justify-content-center">
-              <div className="alert alert-danger text-center mt-4 w-50">
-                <h2> En este momento no contamos con ningún movimiento disponible.😟</h2>
-              </div>
-            </div>
-          </td>
-        </tr>
-      ) : (
-        <>
-      {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.estado_producto_movimiento.toLowerCase().includes(search)}).map((element) => (
-          <tr key={element.id_factura}>
-            <td className="p-2 text-center">{element.nombre_tipo}</td>
-            <td className="p-2 text-center">{element.num_lote}</td>
-            <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
-            <td className="p-2 text-center">{element.tipo_movimiento}</td>
-            <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
-            <td className="p-2 text-center">{element.unidad_peso_movimiento}</td>
-            <td className="p-2 text-center">{element.precio_movimiento}</td>
-            <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
-            <td className="p-2 text-center">{element.nota_factura}</td>
-            <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
-            <td className="p-2 text-center">{element.nombre_usuario}</td>
-            <td className="p-2 text-center">{element.nombre_proveedores}</td>
-            
-            <td className="mx-2"onClick={() => {setUpdateModal(true);editarMovimiento(element.id_factura);}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
-              <button className="btn btn-color" >
-                Editar
-              </button>
-              
-            </td>
-          </tr>
-          
-        ))}</>)}
-    </tbody>
-</table>
-
+        <div className="w-100">
+        <table ref={tableRef} className="table table-striped table-hover w-100">
+          <thead>
+            <tr>
+              <th className="p-2 text-center">Nombre producto</th>
+              <th className="p-2 text-center"># Lote</th>
+              <th className="p-2 text-center">Fecha del movimiento</th>
+              <th className="p-2 text-center">Tipo de movimiento</th>
+              <th className="p-2 text-center">Cantidad</th>
+              <th className="p-2 text-center">Unidad Peso</th>
+              <th className="p-2 text-center">Precio movimiento</th>
+              <th className="p-2 text-center">Estado producto</th>
+              <th className="p-2 text-center">Nota</th>
+              <th className="p-2 text-center">Fecha de caducidad</th>
+              <th className="p-2 text-center">Usuario que hizo movimiento</th>
+              <th className="p-2 text-center">Proveedor</th>
+              <th className="p-2 text-center">Editar</th>
+            </tr>
+          </thead>
+          <tbody id="tableMovimiento">
+          {movimientos.length === 0 ? (
+                <tr>
+                  <td colSpan={12}>
+                  <div className="d-flex justify-content-center">
+                      <div className="alert alert-danger text-center mt-4 w-50">
+                        <h2> En este momento no contamos con ningún movimiento disponible.😟</h2>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                <>
+              {movimientos.filter((item)=>{return search.toLowerCase()=== '' ? item : item.estado_producto_movimiento.toLowerCase().includes(search)}).map((element) => (
+                  <tr key={element.id_factura}>
+                    <td className="p-2 text-center">{element.nombre_tipo}</td>
+                    <td className="p-2 text-center">{element.num_lote}</td>
+                    <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
+                    <td className="p-2 text-center">{element.tipo_movimiento}</td>
+                    <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                    <td className="p-2 text-center">{element.unidad_peso_movimiento}</td>
+                    <td className="p-2 text-center">{element.precio_movimiento}</td>
+                    <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
+                    <td className="p-2 text-center">{element.nota_factura}</td>
+                    <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+                    <td className="p-2 text-center">{element.nombre_usuario}</td>
+                    <td className="p-2 text-center">{element.nombre_proveedores}</td>
+                    
+                    <td className="mx-2"onClick={() => {setUpdateModal(true);editarMovimiento(element.id_factura);}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                      <button className="btn btn-color" >
+                        Editar
+                      </button>
+                      
+                    </td>
+                  </tr>
+                  
+                ))}</>)}
+            </tbody>
+        </table>
+        </div>
 <div className="d-flex justify-content-center align-items-center w-full h-full">
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-xl modal-dialog-centered">
@@ -344,8 +384,8 @@ const Movimiento = () => {
                       <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                       <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
-                        {tipos.map((element) => (
-                        <option key={element.id} value={element.id}>{element.NombreProducto}</option>
+                        {productos.map((element) => (
+                        <option key={element.fk_id_tipo_producto} value={element.id_producto}>{element.NombreProducto}</option>
                       ))}
                       </select>
                       <div className="invalid-feedback is-invalid">

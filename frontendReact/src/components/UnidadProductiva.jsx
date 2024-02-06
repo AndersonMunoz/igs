@@ -3,6 +3,9 @@ import "../style/producto.css";
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
+import $ from 'jquery';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
 
 const Up= () => {
 
@@ -13,7 +16,19 @@ const Up= () => {
   const modalUpdateRef = useRef(null);
   const [upSeleccionada, setupSeleccionada] = useState({});
 
-  
+  const tableRef = useRef();
+
+
+  useEffect(() => {
+    if (unidad_productiva.length > 0) {
+
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+
+      $(tableRef.current).DataTable();
+    }
+  }, [unidad_productiva]);
 
   useEffect(() => {
    listarUp()
@@ -210,19 +225,19 @@ const Up= () => {
         </div>
       </div>
       <div className="wrapper-editor">
-        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
+        <table id="dtBasicExample" className="table table-striped table-bordered"   ref={tableRef} cellSpacing={0} width="100%">
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
               <th className="th-sm">Nombre bodega</th>
-              <th className="th-sm" colSpan={2}> Botones Acciones</th>
+              <th className="th-sm" > Botones Acciones</th>
             </tr>
           </thead>
           <tbody id="tableunidadProductiva" className="text-center">
 
           {unidad_productiva.length === 0 ? (
         <tr>
-          <td colSpan={3} className="">
+       <td  colSpan={3}>
             <div className="d-flex justify-content-center">
               <div className=" alert alert-danger text-center mt-4 w-50">
                 <h2> En este momento no contamos con ningúna  bodega  disponible. </h2>
@@ -236,23 +251,19 @@ const Up= () => {
               <tr key={element.id_up}>
                 <td>{element.id_up}</td>
                 <td>{element.nombre_up}</td>
+                <td>
                 {element.estado === 1 ? (
                   <>
-                  <td className="mx-2"onClick={() => {setUpdateModal(true);editarUp(element.id_up);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                  <button className="btn btn-color">
+
+                  <button className="btn btn-color mx-2" onClick={() => {setUpdateModal(true);editarUp(element.id_up);}} data-bs-toggle="modal" data-bs-target="#actualizarModal">
                     Editar
                   </button>
-                    </td>
-                    <td className="mx-2">
                       <button className="btn btn-danger" onClick={() => deshabilitarUp(element.id_up)}>Deshabilitar</button>
-                    </td>
                   </>
                 ): (
-                  <td className="mx-2" colSpan={2}>
                     <button className="btn btn-primary" onClick={() => activarUp(element.id_up)}>Activar</button>
-                  </td>
                 )}
-
+                </td>
               </tr>
             ))}
         </>
