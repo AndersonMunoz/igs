@@ -1,10 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/usuarios.css"
+import "../style/usuarios.css"; // Importar tus estilos personalizados
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
+import $ from 'jquery';
+import 'bootstrap'; // Importar Bootstrap JS
+import 'datatables.net'; // Importar DataTables principal
+import 'datatables.net-bs5'; // Importar DataTables para Bootstrap 5
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'; // Importar estilos CSS de DataTables para Bootstrap 5
+import 'datatables.net-responsive'; // Importar la extensión Responsive
+import 'datatables.net-responsive-bs5'; // Importar estilos CSS de la extensión Responsive para Bootstrap 5
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; // Importar estilos CSS de la extensión Responsive para Bootstrap 5
+
+
+
 
 const Usuario = () => {
+	const tableRef = useRef();
 	const [search, setSeach] = useState('');
 	const [usuarios, setUsuarios] = useState([]);
 	const [showModal, setShowModal] = useState(false);
@@ -14,6 +26,21 @@ const Usuario = () => {
 	const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
 
 
+	
+
+  useEffect(() => {
+	if (usuarios.length > 0) {
+
+	  if ($.fn.DataTable.isDataTable(tableRef.current)) {
+		 $(tableRef.current).DataTable().destroy();
+	  }
+
+	  $(tableRef.current).DataTable();
+	}
+ }, [usuarios]);
+  
+
+
 	useEffect(() => {
 		listarUsuario()
 	}, []);
@@ -21,9 +48,9 @@ const Usuario = () => {
 	function removeModalBackdrop() {
 		const modalBackdrop = document.querySelector('.modal-backdrop');
 		if (modalBackdrop) {
-		  modalBackdrop.remove();
+			modalBackdrop.remove();
 		}
-	  }
+	}
 	///listar usuario
 	function listarUsuario() {
 		fetch("http://localhost:3000/usuario/listar", {
@@ -65,12 +92,13 @@ const Usuario = () => {
 				}
 				if (data.status === 200) {
 					Sweet.exito(data.menssage);
+					listarUsuario();
 				}
 				if (data.status === 403) {
 					Sweet.error(data.error.errors[0].msg);
 				}
 				console.log(data);
-				listarUsuario();
+
 				setShowModal(false);
 				removeModalBackdrop();
 				const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -205,18 +233,19 @@ const Usuario = () => {
 			<div className="wrapper-editor table-responsive">
 				<table
 					id="dtBasicExample"
-					className="table table-striped table-bordered"
-					cellSpacing={0}
+					ref={tableRef}
+					className="table table-striped table-bordered border border-success-subtle"
+
 				>
-					<thead className="text-center text-justify ">
+					<thead className="text-center text-justify">
 						<tr>
 							<th className="th-sm">#</th>
 							<th className="th-sm">Nombre</th>
 							<th className="th-sm">Documento</th>
-							<th className="th-sm">Correo Electronico</th>
+							<th className="th-sm">Correo Electrónico</th>
 							<th className="th-sm">Cargo</th>
-							<th className="th-sm">Estado</th>
-							<th className="th-sm" colSpan={2}>Acciones</th>
+							<th className="th-sm" style={{ width: '10%' }}>Estado</th> {/* Ajustar el ancho aquí */}
+							<th className="th-sm">Acciones</th>
 						</tr>
 					</thead>
 					<tbody id="listarUsuario" className="text-center cell">
@@ -240,33 +269,31 @@ const Usuario = () => {
 										<td>{element.email_usuario}</td>
 										<td>{element.tipo_usuario}</td>
 										<td>{element.estado}</td>
-										{element.estado === 1 ? (
-											<>
-												<td className="mx-2 m-1 p-1 flex-shrink-0">
-													<button className="btn btn-color" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+										<td className="p-0">
+											{element.estado === 1 ? (
+												<>
+													<button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
 														<IconEdit />
 													</button>
-												</td>
-												<td className="mx-2 m-0 p-0 flex-shrink-0">
 													<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash /></button>
-												</td>
-											</>
-										) : (
-											<td className="mx-2" colSpan={2}>
+												</>
+											) : (
 												<button className="btn btn-primary" onClick={() => activarUsuario(element.id_usuario)}>Activar</button>
-											</td>
-										)}
+											)}
+										</td>
 									</tr>
 								))}
 							</>
 						)}
+
 					</tbody>
 				</table>
 			</div>
-			<div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }} >
-        <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
-          <div className="modal-content">
-            <div className="modal-header bg txt-color">
+
+			<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }} >
+				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+					<div className="modal-content">
+						<div className="modal-header bg txt-color">
 							<h2 className="modal-title fs-5">Registrar Usuario</h2>
 							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
