@@ -16,6 +16,7 @@ const Movimiento = () => {
   const [proveedor_list, setProveedor] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [usuario_list, setUsuario] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
@@ -62,6 +63,7 @@ const Movimiento = () => {
     listarTipo();
     listarProveedor();
     listarUsuario();
+    listarProducto()
   }, []);
   
   function listarCategoria() {
@@ -124,6 +126,22 @@ const Movimiento = () => {
         console.log(e);
       })
       ;
+  }
+
+  function listarProducto() {
+    fetch("http://localhost:3000/producto/listar", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setProductos(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
   }
   function editarMovimiento(id) {
     fetch(`http://localhost:3000/facturamovimiento/buscar/${id}`, {
@@ -366,8 +384,8 @@ const Movimiento = () => {
                       <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                       <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                         <option value="">Seleccione una opción</option>
-                        {tipos.map((element) => (
-                        <option key={element.id} value={element.id}>{element.NombreProducto}</option>
+                        {productos.map((element) => (
+                        <option key={element.fk_id_tipo_producto} value={element.id_producto}>{element.NombreProducto}</option>
                       ))}
                       </select>
                       <div className="invalid-feedback is-invalid">
