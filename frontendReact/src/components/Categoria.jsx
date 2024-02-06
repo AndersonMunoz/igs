@@ -83,7 +83,7 @@ const Categoria = () => {
           return;
         }
         if(data.status == 200){
-          Sweet.registroExitoso();
+          Sweet.exito(data.menssage)
         }
         if(data.status == 401){
           Sweet.registroFallido();
