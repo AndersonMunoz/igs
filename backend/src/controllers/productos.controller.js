@@ -31,16 +31,17 @@ export const guardarProducto = async (req, res) => {
 export const listarProductos = async (req, res) => {
   try {
     const [result] = await pool.query(
-      `SELECT p.id_producto, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS NombreCategoria,
+      `SELECT p.id_producto, t.nombre_tipo AS NombreProducto, fc.fecha_caducidad AS FechaCaducidad c.nombre_categoria AS NombreCategoria,
 	     p.cantidad_peso_producto AS Peso, 
-	p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
-	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
-	FROM productos p 
-	JOIN bodega u ON p.fk_id_up = u.id_up
-	JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-	JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-	ORDER BY p.estado DESC`
-    );
+      p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
+      p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
+      FROM productos p 
+      JOIN bodega u ON p.fk_id_up = u.id_up
+      JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+      JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+      JOIN factura_movimiento fc ON t.fk_id_producto = c.id_producto
+      ORDER BY p.estado, p.id_producto DESC`
+        );
     res.status(200).json(result);
   } catch (er) {
     res.status(500).json({
