@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../style/proveedor.css";
 import { IconSearch } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet2";
 import Validate from "../helpers/Validate";
+import $ from 'jquery';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
+
 
 const proveedor = () => {
+  const tableRef = useRef();
   const [proveedor, setProveedor] = useState([]);
   const [search, setSeach] = useState('');
   const [modal, setModal] = useState(false);
@@ -18,6 +23,17 @@ const proveedor = () => {
       console.log(modal);
     }
   }
+
+  useEffect(() => {
+    if (proveedor.length > 0) {
+
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+
+      $(tableRef.current).DataTable();
+    }
+  }, [proveedor]);
 
   useEffect(() => {
     listarProveedor();
@@ -162,13 +178,9 @@ const proveedor = () => {
         }}>
           Registrar Nuevo Proveedor
         </button>
-        <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Producto" className="input-buscar" onChange={(e) => setSeach(e.target.value)} />
-          <IconSearch className="iconSearch" />
-        </div>
       </div>
       <div className="wrapper-editor">
-        <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
+        <table id="dtBasicExample" className="table table-striped table-bordered" ref={tableRef} cellSpacing={0}>
           <thead className="text-center">
             <tr>
               <th className="th-sm">N°</th>
