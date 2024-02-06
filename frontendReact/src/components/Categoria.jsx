@@ -82,11 +82,18 @@ const Categoria = () => {
           Sweet.registroFallido();
           return;
         }
-        if(data.status == 200){
-          Sweet.exito(data.menssage)
+
+        if (data.status === 200) {
+          Sweet.exito(data.menssage);
+          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable().destroy();
+            
+          }
+          listarCategoria();
         }
-        if(data.status == 401){
-          Sweet.registroFallido();
+        if (data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
+      
         }
         console.log(data);
         listarCategoria();
