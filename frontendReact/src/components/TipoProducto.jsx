@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
 import { IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
-import Sweet from "../helpers/Sweet2";
+import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
 import $ from "jquery";
@@ -100,6 +100,7 @@ const Tipo = () => {
   function registrarTipo() {
     let nombre_tipo = document.getElementById("nombre_tipo").value;
     let fk_categoria_pro = document.getElementById("fk_categoria_pro").value;
+    let unidad_peso = document.getElementById("unidad_peso").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
 
@@ -108,7 +109,7 @@ const Tipo = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nombre_tipo, fk_categoria_pro }),
+      body: JSON.stringify({ nombre_tipo, fk_categoria_pro,unidad_peso }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -298,13 +299,14 @@ const Tipo = () => {
               <th className="th-sm">Id</th>
               <th className="th-sm">NombreProducto</th>
               <th className="th-sm">NombreCategoria</th>
+              <th className="th-sm">Unidad Peso</th>
               <th className="th-sm">Acciones</th>
             </tr>
           </thead>
-          <tbody id="tableCategoria" className="text-center">
+          <tbody id="tableTipo" className="text-center">
             {tipos.length === 0 ? (
               <tr>
-                <td colSpan={4}>
+                <td colSpan={5}>
                   <div className="d-flex justify-content-center">
                     <div className="alert alert-danger text-center mt-4 w-50">
                       <h2>
@@ -329,6 +331,7 @@ const Tipo = () => {
                       <td>{element.id}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.Categoría}</td>
+                      <td>{element.UnidadPeso}</td>
                       <td>
                         {element.estado === 1 ? (
                           <>
@@ -440,6 +443,28 @@ const Tipo = () => {
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un categoria
+                    </div>
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                  <label
+                      htmlFor="unidad_peso"
+                      className="label-bold mb-2"
+                    >
+                    Unidad de peso 
+                    </label>
+          
+                   <select name="unidad_peso" id="unidad_peso" className="form-select form-control form-empty limpiar">
+                   <option value="">Seleccione una opción</option>
+                            <option value="kg">Kilo (Kg)</option>
+                            <option value="lb">Libra (Lb)</option>
+                            <option value="gr">Gramo (Gr)</option>
+                            <option value="lt">Litro (Lt)</option>
+                            <option value="ml">Mililitro (Ml)</option>
+                   </select>
+                    <div className="invalid-feedback is-invalid">
+                      Por favor, la unidad de peso 
                     </div>
                   </div>
                 </div>
@@ -556,6 +581,35 @@ const Tipo = () => {
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row mb-3">
+                  <div className="col-md-12">
+                    <label htmlFor="unidad_peso " className="label-bold mb-2">
+                      unidad{" "}
+                    </label>
+                    <select
+                      className="form-select form-update"
+                      value={tiposeleccionado.unidad_peso || ""}
+                      name="unidad_peso"
+                      onChange={(e) =>
+                        setTiposeleccionado({
+                          ...tiposeleccionado,
+                          unidad_peso: e.target.value,
+                        })
+                      }
+        
+                    > <option value="">Seleccione una opción</option>
+                    <option value="kg">Kilo (Kg)</option>
+                    <option value="lb">Libra (Lb)</option>
+                    <option value="gr">Gramo (Gr)</option>
+                    <option value="lt">Litro (Lt)</option>
+                    <option value="ml">Mililitro (Ml)</option>
+           </select>
+                    <div className="invalid-feedback is-invalid">
+                      Por favor,  unidad de peso 
                     </div>
                   </div>
                 </div>

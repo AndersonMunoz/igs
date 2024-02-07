@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IconEdit,  IconFileSpreadsheet , IconTrash, } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet2';
+import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from '../languages/es-ES.json';
 import $ from 'jquery';
