@@ -13,7 +13,6 @@ export const registrocategoria_producto = async (req, res) => {
         let { nombre_categoria } = req.body;
         let sql = `insert into categorias_producto (nombre_categoria)
   values('${nombre_categoria}')`;
-        console.log(sql);
 
         const [rows] = await pool.query(sql);
 
@@ -79,7 +78,7 @@ export const editarcategoria_producto = async (req, res) => {
 
         let sql = `UPDATE categorias_producto SET nombre_categoria = '${nombre_categoria}'
         WHERE id_categoria = ${id}`;
-        console.log(sql)
+        
 
         const [rows] = await pool.query(sql);
         if (rows.affectedRows > 0) {
