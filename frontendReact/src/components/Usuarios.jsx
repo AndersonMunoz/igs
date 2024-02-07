@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/usuarios.css"; // Importar tus estilos personalizados
+import "../style/usuarios.css";
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
+import esES from '../languages/es-ES.json';
 import $ from 'jquery';
-import 'bootstrap'; // Importar Bootstrap JS
-import 'datatables.net'; // Importar DataTables principal
-import 'datatables.net-bs5'; // Importar DataTables para Bootstrap 5
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'; // Importar estilos CSS de DataTables para Bootstrap 5
-import 'datatables.net-responsive'; // Importar la extensión Responsive
-import 'datatables.net-responsive-bs5'; // Importar estilos CSS de la extensión Responsive para Bootstrap 5
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; // Importar estilos CSS de la extensión Responsive para Bootstrap 5
-
-
-
+import 'bootstrap';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-responsive';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 
 const Usuario = () => {
 	const tableRef = useRef();
-	const [search, setSeach] = useState('');
+	const [search, setSearch] = useState('');
 	const [usuarios, setUsuarios] = useState([]);
 	const [showModal, setShowModal] = useState(false);
 	const modalUsuarioRef = useRef(null);
@@ -25,20 +23,19 @@ const Usuario = () => {
 	const modalUpdateRef = useRef(null);
 	const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
 
+	useEffect(() => {
+		if (usuarios.length > 0) {
+			if ($.fn.DataTable.isDataTable(tableRef.current)) {
+				$(tableRef.current).DataTable().destroy();
+			}
+			$(tableRef.current).DataTable({
+				responsive: true,
+				language: esES,
+				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+			});
+		}
+	}, [usuarios]);
 
-	
-
-  useEffect(() => {
-	if (usuarios.length > 0) {
-
-	  if ($.fn.DataTable.isDataTable(tableRef.current)) {
-		 $(tableRef.current).DataTable().destroy();
-	  }
-
-	  $(tableRef.current).DataTable();
-	}
- }, [usuarios]);
-  
 
 
 	useEffect(() => {
@@ -92,13 +89,14 @@ const Usuario = () => {
 				}
 				if (data.status === 200) {
 					Sweet.exito(data.menssage);
-					listarUsuario();
+
+
 				}
 				if (data.status === 403) {
 					Sweet.error(data.error.errors[0].msg);
 				}
 				console.log(data);
-
+				listarUsuario();
 				setShowModal(false);
 				removeModalBackdrop();
 				const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -216,8 +214,8 @@ const Usuario = () => {
 	}
 
 	return (
-		<div>
-			<div className="d-flex justify-content-between mb-4">
+		<div className="container-fluid">
+			<div className="container-fluid d-flex justify-content-between mb-4">
 				<button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal"
 					onClick={() => {
 						setShowModal(true);
@@ -230,12 +228,11 @@ const Usuario = () => {
 					<IconSearch className="iconSearch" />
 				</div>
 			</div>
-			<div className="wrapper-editor table-responsive">
+			<div className="container-fluid w-full">
 				<table
 					id="dtBasicExample"
 					ref={tableRef}
-					className="table table-striped table-bordered border border-success-subtle"
-
+					className="table table-striped table-bordered border display responsive nowrap"
 				>
 					<thead className="text-center text-justify">
 						<tr>
@@ -244,7 +241,6 @@ const Usuario = () => {
 							<th className="th-sm">Documento</th>
 							<th className="th-sm">Correo Electrónico</th>
 							<th className="th-sm">Cargo</th>
-							<th className="th-sm" style={{ width: '10%' }}>Estado</th> {/* Ajustar el ancho aquí */}
 							<th className="th-sm">Acciones</th>
 						</tr>
 					</thead>
@@ -268,7 +264,6 @@ const Usuario = () => {
 										<td>{element.documento_usuario}</td>
 										<td>{element.email_usuario}</td>
 										<td>{element.tipo_usuario}</td>
-										<td>{element.estado}</td>
 										<td className="p-0">
 											{element.estado === 1 ? (
 												<>

@@ -324,9 +324,11 @@ export const Menu = () => {
 						</div>
 					</div>
 				</div>
-
 				<div className="contenido">
-					<Outlet />
+					<div className="contSeg">
+						<Outlet />
+					</div>
+					
 				</div>
 			</div>
 		</>
