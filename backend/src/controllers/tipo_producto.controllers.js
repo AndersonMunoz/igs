@@ -12,7 +12,7 @@ export const registroTipo_producto = async (req, res) => {
 
         let { nombre_tipo, fk_categoria_pro } = req.body;
         let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro) values('${nombre_tipo}','${fk_categoria_pro}')`;
-        console.log(sql);
+      
 
         const [rows] = await pool.query(sql);
 

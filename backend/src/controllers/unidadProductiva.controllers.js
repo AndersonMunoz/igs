@@ -14,7 +14,6 @@ export const registroUnidadProductiva = async (req, res) => {
 		let { nombre_up } = req.body;
 		let sql = `insert into bodega (nombre_up)
         values('${nombre_up}')`;
-		console.log(sql);
 
 		const [rows] = await pool.query(sql);
 
@@ -78,7 +77,7 @@ export const editarUnidadProductiva = async (req, res) => {
 
 		let sql = `update bodega SET nombre_up = '${nombre_up}'
         where id_up = ${id} `;
-		console.log(sql)
+		
 
 		const [rows] = await pool.query(sql);
 		if (rows.affectedRows > 0) {

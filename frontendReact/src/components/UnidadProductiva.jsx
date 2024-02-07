@@ -84,7 +84,10 @@ const Up= () => {
         }
         if (data.status === 200) {
           Sweet.exito(data.menssage);
-      
+          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable().destroy();
+            
+          }
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);

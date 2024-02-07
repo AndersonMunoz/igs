@@ -6,9 +6,11 @@ import { IconSearch } from "@tabler/icons-react";
 import $ from 'jquery';
 import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
 import 'datatables.net-bs4';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const Movimiento = () => {
+  
   const [movimientos, setMovimientos] = useState([]);
   const [search, setSeach] = useState('');
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
@@ -221,6 +223,10 @@ const Movimiento = () => {
       .then(data => {
         if (data.status === 200) {
           Sweet.exito(data.message);
+          if($.fn.DataTable.isDataTable(tableRef.current)){
+            $(tableRef.current).DataTable().destroy();
+          }
+          listarMovimiento();
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
@@ -289,28 +295,24 @@ const Movimiento = () => {
     <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
     Registrar nuevo movimiento
     </button>
-    <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Producto" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
-          <IconSearch className="iconSearch" />
         </div>
-        </div>
-        <div className="w-100">
-        <table ref={tableRef} className="table table-striped table-hover w-100">
+        <div className="table-responsive">
+        <table id="tabla" ref={tableRef} className="table table-striped nowrap w-100">
           <thead>
             <tr>
-              <th className="p-2 text-center">Nombre producto</th>
-              <th className="p-2 text-center"># Lote</th>
-              <th className="p-2 text-center">Fecha del movimiento</th>
-              <th className="p-2 text-center">Tipo de movimiento</th>
-              <th className="p-2 text-center">Cantidad</th>
-              <th className="p-2 text-center">Unidad Peso</th>
-              <th className="p-2 text-center">Precio movimiento</th>
-              <th className="p-2 text-center">Estado producto</th>
-              <th className="p-2 text-center">Nota</th>
-              <th className="p-2 text-center">Fecha de caducidad</th>
-              <th className="p-2 text-center">Usuario que hizo movimiento</th>
-              <th className="p-2 text-center">Proveedor</th>
-              <th className="p-2 text-center">Editar</th>
+              <th className="p-2 text-center w-1fr">Nombre producto</th>
+              <th className="p-2 text-center w-1fr"># Lote</th>
+              <th className="p-2 text-center w-1fr">Fecha del movimiento</th>
+              <th className="p-2 text-center w-1fr">Tipo de movimiento</th>
+              <th className="p-2 text-center w-1fr">Cantidad</th>
+              <th className="p-2 text-center w-1fr">Unidad Peso</th>
+              <th className="p-2 text-center w-1fr">Precio movimiento</th>
+              <th className="p-2 text-center w-1fr">Estado producto</th>
+              <th className="p-2 text-center w-1fr">Nota</th>
+              <th className="p-2 text-center w-1fr">Fecha de caducidad</th>
+              <th className="p-2 text-center w-1fr">Usuario que hizo movimiento</th>
+              <th className="p-2 text-center w-1fr">Proveedor</th>
+              <th className="p-2 text-center w-1fr">Editar</th>
             </tr>
           </thead>
           <tbody id="tableMovimiento">
