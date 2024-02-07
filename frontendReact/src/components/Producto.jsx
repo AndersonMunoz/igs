@@ -53,6 +53,7 @@ const Producto = () => {
     .then((res) => res.json())
     .then((data) => {
       setProductos(data);
+      console.log(data);
     })
     .catch((e) => {
       console.log(e);
@@ -269,7 +270,7 @@ const Producto = () => {
             <th className="th-sm">N°</th>
             <th className="th-sm">NombreProducto</th>
             <th className="th-sm">NombreCategoria</th>
-            <th className="th-sm">FechaCaducidad</th>
+            {/* <th className="th-sm">FechaCaducidad</th> */}
             <th className="th-sm">Peso</th>
             <th className="th-sm">Unidad</th>
             <th className="th-sm">PrecioIndividual</th>
@@ -297,6 +298,7 @@ const Producto = () => {
                       <td>{element.id_producto}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.NombreCategoria}</td>
+                      {/*                       
                       <td>
                         {element.FechaCaducidad ? (
                           <p className="btn btn-color mx-2">{Validate.formatFecha(element.FechaCaducidad)}</p>
@@ -304,6 +306,7 @@ const Producto = () => {
                           <p className="btn btn-primary">No Asignada</p>
                         )}
                       </td>
+                       */}
                       <td>{element.Peso}</td>
                       <td>{element.Unidad}</td>
                       <td>{element.PrecioIndividual}</td>
