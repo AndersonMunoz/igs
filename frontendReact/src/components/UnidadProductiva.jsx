@@ -4,8 +4,8 @@ import { IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet2";
 import Validate from "../helpers/Validate";
 import $ from "jquery";
-/* import "datatables.net-bs4/css/dataTables.bootstrap4.css";
-import "datatables.net-bs4"; */
+import "datatables.net-bs4/css/dataTables.bootstrap4.css";
+import "datatables.net-bs4";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 
 const Up = () => {

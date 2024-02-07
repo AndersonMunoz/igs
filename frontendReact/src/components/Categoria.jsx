@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IconEdit,  IconFileSpreadsheet , IconTrash, } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
 import $ from 'jquery';
-/* import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
-import 'datatables.net-bs4'; */
-import {DownloadTableExcel}  from 'react-export-table-to-excel'
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
 
 const Categoria = () => {
   const tableRef = useRef();
@@ -223,21 +222,15 @@ const Categoria = () => {
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nueva Categoria
         </button>
-        <DownloadTableExcel 
-                    filename="Tabla Categoria "
-                    sheet="Categoria"
-                    currentTableRef={tableRef.current}
-                >
-<button type="button"  className="btn-color btn mb-4"  > < IconFileSpreadsheet /> Export excel </button>
-
-                </DownloadTableExcel>
-
-
+        <div className="d-flex align-items-center">
+          <input type="text" placeholder="Buscar Categoria" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
+          <IconSearch className="iconSearch" />
+        </div>
       </div>
       <div className="wrapper-editor">
       <table
         id="dtBasicExample"
-        className="table table-striped table-bordered border"
+        className="table table-striped table-bordered"
         ref={tableRef}
         cellSpacing={0}
         width="100%"
@@ -289,7 +282,7 @@ const Categoria = () => {
                       data-bs-toggle="modal"
                       data-bs-target="#actualizarModal"
                     >
-                     <IconEdit />
+                      Editar
                     </button>
                     <button
                       className="btn btn-danger mx-2"
@@ -297,7 +290,7 @@ const Categoria = () => {
                         deshabilitarCategoria(element.id_categoria)
                       }
                     >
-                      <IconTrash />
+                      Deshabilitar
                     </button>
                   </>
                 ) : (

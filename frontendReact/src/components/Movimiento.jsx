@@ -294,7 +294,7 @@ const Movimiento = () => {
   
   return (
    <>
-  <div>
+  <div className="container-fluid">
     <h1 className="text-center modal-title fs-5">Registro de movimiento</h1>
     <div className="d-flex justify-content-between mb-4">
     <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
