@@ -8,6 +8,7 @@ import TipoProducto from './components/TipoProducto';
 import Categoria from './components/Categoria';
 import UnidadProductiva from './components/UnidadProductiva';
 import Usuario from './components/Usuarios';
+import Dashboard from './components/Dashboard';
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
     <>
       <Routes>
         <Route path='/' element={<Menu/>}>
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento/>} />
           <Route path="/tipoproducto" element={<TipoProducto />} />

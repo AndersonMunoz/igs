@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
-import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
+import $ from 'jquery';
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
+
 
 const Producto = () => {
-  const [search, setSeach] = useState('');
   const [productos, setProductos] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [up, setUp] = useState([]);
@@ -14,6 +16,19 @@ const Producto = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
+
+  const tableRef = useRef();
+
+  useEffect(() => {
+    if (productos.length > 0) {
+
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+
+      $(tableRef.current).DataTable();
+    }
+  }, [productos]);
 
   useEffect(() => {
       listarProducto();
@@ -38,6 +53,7 @@ const Producto = () => {
     .then((res) => res.json())
     .then((data) => {
       setProductos(data);
+      console.log(data);
     })
     .catch((e) => {
       console.log(e);
@@ -114,12 +130,15 @@ const Producto = () => {
 
         if (data.status === 200) {
           Sweet.exito(data.message);
+          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable().destroy();
+          }
+          listarProducto();
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
           return;
         }
-     
 
         console.log(data);
         listarProducto();
@@ -238,84 +257,81 @@ const Producto = () => {
   }
 
   return (
-    <div>
+    <div className="text-nowrap">
       <div className="d-flex justify-content-between mb-4">
         <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nuevo Producto
         </button>
-        <div className="d-flex align-items-center">
-          <input type="text" placeholder="Buscar Producto" className="input-buscar" onChange={(e)=>setSeach(e.target.value)}/>
-          <IconSearch className="iconSearch" />
-        </div>
       </div>
       <div className="wrapper-editor">
-  <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%">
-    <thead className="text-center text-justify">
-      <tr>
-        <th className="th-sm">N°</th>
-        <th className="th-sm">NombreProducto</th>
-        <th className="th-sm">NombreCategoria</th>
-        <th className="th-sm">FechaCaducidad</th>
-        <th className="th-sm">Peso</th>
-        <th className="th-sm">Unidad</th>
-        <th className="th-sm">PrecioIndividual</th>
-        <th className="th-sm">UnidadProductiva</th>
-        <th className="th-sm">Descripcion</th>
-        <th className="th-sm">PrecioTotal</th>
-        <th className="th-sm">Estado</th>
-        <th className="th-sm" colSpan={2}>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="tableProducto" className="text-center">
-      {productos.length === 0 ? (
-        <tr>
-          <td colSpan={12}>
-            <div className="d-flex justify-content-center">
-              <div className="alert alert-danger text-center mt-4 w-50">
-                <h2> En este momento no contamos con ningún producto disponible.😟</h2>
-              </div>
-            </div>
-          </td>
-        </tr>
-      ) : (
-        <>
-          {productos.filter((item) => search.toLowerCase() === '' ? item : item.NombreProducto.toLowerCase().includes(search)).map((element,index) => (
-              <tr key={element.id_producto}>
-                <td>{index + 1}</td>
-                <td>{element.NombreProducto}</td>
-                <td>{element.NombreCategoria}</td>
-                <td>{Validate.formatFecha(element.FechaCaducidad)}</td>
-                <td>{element.Peso}</td>
-                <td>{element.Unidad}</td>
-                <td>{element.PrecioIndividual}</td>
-                <td>{element.UnidadProductiva}</td>
-                <td>{element.Descripcion}</td>
-                <td>{element.PrecioTotal}</td>
-                <td>{element.estado}</td>
-                {element.estado === 1 ? (
-                  <>
-                    <td className="mx-2">
-                      <button className="btn btn-color" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                        Editar  
-                      </button>
-                    </td>
-                    <td className="mx-2">
-                      <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}>Eliminar</button>
-                    </td>
-                  </>
-                ): (
-                  <td className="mx-2" colSpan={2}>
-                    <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
-                  </td>
-                )}
-
+      <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%" ref={tableRef}>
+        <thead className="text-center text-justify">
+          <tr>
+            <th className="th-sm">N°</th>
+            <th className="th-sm">NombreProducto</th>
+            <th className="th-sm">NombreCategoria</th>
+            {/* <th className="th-sm">FechaCaducidad</th> */}
+            <th className="th-sm">Peso</th>
+            <th className="th-sm">Unidad</th>
+            <th className="th-sm">PrecioIndividual</th>
+            <th className="th-sm">UnidadProductiva</th>
+            <th className="th-sm">Descripcion</th>
+            <th className="th-sm">PrecioTotal</th>
+            <th className="th-sm text-center">Acciones</th>
+          </tr>
+        </thead>
+          <tbody id="tableProducto" className="text-center">
+            {productos.length === 0 ? (
+              <tr>
+                <td colSpan={12}>
+                  <div className="d-flex justify-content-center">
+                    <div className="alert alert-danger text-center mt-4 w-50">
+                      <h2> En este momento no contamos con ningún producto disponible.😟</h2>
+                    </div>
+                  </div>
+                </td>
               </tr>
-            ))}
-        </>
-      )}
-    </tbody>
-  </table>
-</div>
+            ) : (                     // <td>{Validate.formatFecha(element.FechaCaducidad)}
+              <>
+                {productos.map((element) => (
+                    <tr key={element.id_producto}>
+                      <td>{element.id_producto}</td>
+                      <td>{element.NombreProducto}</td>
+                      <td>{element.NombreCategoria}</td>
+                      {/*                       
+                      <td>
+                        {element.FechaCaducidad ? (
+                          <p className="btn btn-color mx-2">{Validate.formatFecha(element.FechaCaducidad)}</p>
+                        ) : (
+                          <p className="btn btn-primary">No Asignada</p>
+                        )}
+                      </td>
+                       */}
+                      <td>{element.Peso}</td>
+                      <td>{element.Unidad}</td>
+                      <td>{element.PrecioIndividual}</td>
+                      <td>{element.UnidadProductiva}</td>
+                      <td>{element.Descripcion}</td>
+                      <td>{element.PrecioTotal}</td>
+                      <td>
+                      {element.estado === 1 ? (
+                        <>
+                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+                            Editar  
+                          </button>
+                          <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}>Eliminar</button>
+                        </>
+                      ): (
+                          <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
+                      )}
+                      </td>
+                    </tr>
+                  ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
