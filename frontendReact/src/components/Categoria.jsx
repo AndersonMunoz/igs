@@ -2,9 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { IconEdit,  IconFileSpreadsheet , IconTrash, } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet2';
 import Validate from '../helpers/Validate';
+import esES from '../languages/es-ES.json';
 import $ from 'jquery';
-import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
-import 'datatables.net-bs4';
+import 'bootstrap';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-responsive';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 
@@ -19,15 +25,18 @@ const Categoria = () => {
  
 
   useEffect(() => {
-    if (categorias_producto.length > 0) {
+		if (categorias_producto.length > 0) {
+			if ($.fn.DataTable.isDataTable(tableRef.current)) {
+				$(tableRef.current).DataTable().destroy();
+			}
+			$(tableRef.current).DataTable({
+				responsive: true,
+				language: esES,
+				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+			});
+		}
+	}, [categorias_producto]);
 
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-
-      $(tableRef.current).DataTable();
-    }
-  }, [categorias_producto]);
   
 
   useEffect(() => {
@@ -219,8 +228,8 @@ const Categoria = () => {
   const [search, setSeach] = useState('');
 
   return (
-    <div>
-      <div className="d-flex justify-content-between mb-4">
+    <div >
+      <div className="d-flex justify-content-between  mb-4">
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nueva Categoria
         </button>
@@ -238,10 +247,10 @@ const Categoria = () => {
 
 
       </div>
-      <div className="wrapper-editor">
+      <div className="wrapper-editor" >
       <table
         id="dtBasicExample"
-        className="table table-striped table-bordered border"
+        className="table table-striped table-bordered border display responsive nowrap"
         ref={tableRef}
         cellSpacing={0}
         width="100%"
