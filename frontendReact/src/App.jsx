@@ -8,12 +8,15 @@ import TipoProducto from './components/TipoProducto';
 import Categoria from './components/Categoria';
 import UnidadProductiva from './components/UnidadProductiva';
 import Usuario from './components/Usuarios';
+import Dashboard from './components/Dashboard';
+
 
 const App = () => {
   return (
     <>
       <Routes>
         <Route path='/' element={<Menu/>}>
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento/>} />
           <Route path="/tipoproducto" element={<TipoProducto />} />
@@ -21,6 +24,7 @@ const App = () => {
           <Route path="/up" element={<UnidadProductiva />} />
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
+          
         </Route>
       </Routes>
     </>
