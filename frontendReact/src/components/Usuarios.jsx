@@ -1,27 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/usuarios.css";
-import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
-import Sweet from '../helpers/Sweet2';
+import "../style/usuarios.css"
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
-import esES from '../languages/es-ES.json';
-import $ from 'jquery';
-import 'bootstrap';
-import 'datatables.net';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import 'datatables.net-responsive';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
+import esES from "../languages/es-ES.json";
+import $ from "jquery";
+import "bootstrap";
+import "datatables.net";
+import "datatables.net-bs5";
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "datatables.net-responsive";
+import "datatables.net-responsive-bs5";
+import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 
 const Usuario = () => {
-	const tableRef = useRef();
-	const [search, setSearch] = useState('');
 	const [usuarios, setUsuarios] = useState([]);
 	const [showModal, setShowModal] = useState(false);
 	const modalUsuarioRef = useRef(null);
 	const [updateModal, setUpdateModal] = useState(false);
 	const modalUpdateRef = useRef(null);
 	const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
+	const tableRef = useRef();
+
+
+	
 
 	useEffect(() => {
 		if (usuarios.length > 0) {
@@ -29,13 +31,26 @@ const Usuario = () => {
 				$(tableRef.current).DataTable().destroy();
 			}
 			$(tableRef.current).DataTable({
+				columnDefs: [
+					{
+						targets: -1,
+						responsivePriority: 1
+					}
+				],
 				responsive: true,
 				language: esES,
-				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+				paging: true,
+				select: {
+					'style': 'multi',
+					'selector': 'td:first-child',
+				},
+				lengthMenu: [
+					[10, 50, 100, -1],
+					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+				],
 			});
 		}
 	}, [usuarios]);
-
 
 
 	useEffect(() => {
@@ -89,7 +104,9 @@ const Usuario = () => {
 				}
 				if (data.status === 200) {
 					Sweet.exito(data.menssage);
-
+					if ($.fn.DataTable.isDataTable(tableRef.current)) {
+						$(tableRef.current).DataTable().destroy();
+					}
 
 				}
 				if (data.status === 403) {
@@ -127,7 +144,15 @@ const Usuario = () => {
 						if (data.status === 401) {
 							Sweet.deshabilitadoFallido();
 						}
+
+						console.log(data);
 						listarUsuario();
+						setShowModal(false);
+						removeModalBackdrop();
+						const modalBackdrop = document.querySelector('.modal-backdrop');
+						if (modalBackdrop) {
+							modalBackdrop.remove();
+						}
 					})
 					.catch(error => {
 						console.error('Error usuario no medificado:', error);
@@ -199,11 +224,10 @@ const Usuario = () => {
 				if (data.status == 401) {
 					Sweet.actualizacionFallido();
 				}
-				console.log(data);
 				listarUsuario();
 				setUpdateModal(false);
 				removeModalBackdrop();
-				const modalBackdrop = document.querySelector('.modal-backdrop');
+				const modalBackdrop = document.querySelector(".modal-backdrop");
 				if (modalBackdrop) {
 					modalBackdrop.remove();
 				}
@@ -214,8 +238,8 @@ const Usuario = () => {
 	}
 
 	return (
-		<div className="container-fluid">
-			<div className="container-fluid d-flex justify-content-between mb-4">
+		<div>
+			<div className="d-flex justify-content-between mb-4">
 				<button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal"
 					onClick={() => {
 						setShowModal(true);
@@ -223,16 +247,14 @@ const Usuario = () => {
 					}}>
 					Registrar Usuario
 				</button>
-				<div className="d-flex align-items-center">
-					<input type="text" placeholder="Buscar Usuario" className="input-buscar" onChange={(e) => setSeach(e.target.value)} />
-					<IconSearch className="iconSearch" />
-				</div>
 			</div>
 			<div className="container-fluid w-full">
 				<table
 					id="dtBasicExample"
+					className="table table-striped table-bordered border display responsive nowrap b-4"
 					ref={tableRef}
-					className="table table-striped table-bordered border display responsive nowrap"
+					cellSpacing={0}
+					width="100%"
 				>
 					<thead className="text-center text-justify">
 						<tr>
@@ -257,7 +279,7 @@ const Usuario = () => {
 							</tr>
 						) : (
 							<>
-								{usuarios.filter((item) => search.toLowerCase() === '' ? item : item.nombre_usuario.toLowerCase().includes(search)).map((element, index) => (
+								{usuarios.map((element, index) => (
 									<tr key={element.id_usuario}>
 										<td>{index + 1}</td>
 										<td>{element.nombre_usuario}</td>
@@ -270,7 +292,8 @@ const Usuario = () => {
 													<button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
 														<IconEdit />
 													</button>
-													<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)}> <IconTrash /></button>
+													<button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)
+													}> <IconTrash /></button>
 												</>
 											) : (
 												<button className="btn btn-primary" onClick={() => activarUsuario(element.id_usuario)}>Activar</button>
@@ -284,6 +307,7 @@ const Usuario = () => {
 					</tbody>
 				</table>
 			</div>
+
 
 			<div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }} >
 				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
@@ -481,7 +505,7 @@ const Usuario = () => {
 			</div>
 
 
-		</div>
+		</div >
 	)
 };
 

@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
 import { IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
-import Sweet from "../helpers/Sweet2";
+import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
-import $ from "jquery";
-import "datatables.net-bs4/css/dataTables.bootstrap4.css";
-import "datatables.net-bs4";
+import esES from '../languages/es-ES.json';
+import $ from 'jquery';
+import 'bootstrap';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-responsive';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import generatePDF from 'react-to-pdf';
 
 const Up = () => {
   const [unidad_productiva, setunidad_productiva] = useState([]);
@@ -19,14 +26,17 @@ const Up = () => {
   const tableRef = useRef();
 
   useEffect(() => {
-    if (unidad_productiva.length > 0) {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-
-      $(tableRef.current).DataTable();
-    }
-  }, [unidad_productiva]);
+		if (unidad_productiva.length > 0) {
+			if ($.fn.DataTable.isDataTable(tableRef.current)) {
+				$(tableRef.current).DataTable().destroy();
+			}
+			$(tableRef.current).DataTable({
+				responsive: true,
+				language: esES,
+				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+			});
+		}
+	}, [unidad_productiva]);
 
   useEffect(() => {
     listarUp();
@@ -231,11 +241,14 @@ const Up = () => {
             <IconFileSpreadsheet /> Export excel{" "}
           </button>
         </DownloadTableExcel>
+        <div>
+          <button type="button" className="btn btn-danger mb-4" onClick={() => generatePDF(tableRef, {filename: 'Bodega.pdf'})}>Download PDF</button>
+        </div>
       </div>
       <div className="wrapper-editor">
         <table
           id="dtBasicExample"
-          className="table table-striped table-bordered border"
+          className="table table-striped table-bordered border display responsive nowrap"
           ref={tableRef}
           cellSpacing={0}
           width="100%"

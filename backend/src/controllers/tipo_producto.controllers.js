@@ -10,8 +10,8 @@ export const registroTipo_producto = async (req, res) => {
             return res.status(400).json(error)
         }
 
-        let { nombre_tipo, fk_categoria_pro } = req.body;
-        let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro) values('${nombre_tipo}','${fk_categoria_pro}')`;
+        let { nombre_tipo, fk_categoria_pro ,unidad_peso} = req.body;
+        let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro,unidad_peso) values('${nombre_tipo}','${fk_categoria_pro}','${unidad_peso}')`;
       
 
         const [rows] = await pool.query(sql);
@@ -39,7 +39,7 @@ export const registroTipo_producto = async (req, res) => {
 export const listarTipoProducto = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria ORDER BY t.estado DESC');
+            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto,t.unidad_peso AS UnidadPeso, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria ORDER BY t.estado DESC');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
@@ -95,9 +95,9 @@ export const editarTipo_producto = async (req, res) => {
             return res.status(400).json(error)
         }
         let id = req.params.id;
-        let { nombre_tipo, fk_categoria_pro } = req.body;
+        let { nombre_tipo, fk_categoria_pro , unidad_peso} = req.body;
 
-        let sql = `update tipo_productos SET nombre_tipo = '${nombre_tipo}', fk_categoria_pro= '${fk_categoria_pro}'
+        let sql = `update tipo_productos SET nombre_tipo = '${nombre_tipo}', fk_categoria_pro= '${fk_categoria_pro}' , unidad_peso= '${unidad_peso}'
         where id_tipo = ${id} `;
         console.log(sql)
 

@@ -29,10 +29,10 @@ export const guardarProducto = async (req, res) => {
   }
 };
 export const listarProductos = async (req, res) => {
-  try {
+  try {// x.fecha_caducidad AS FechaCaducidad,JOIN factura_movimiento x ON p.id_producto = x.fk_id_producto
     const [result] = await pool.query(
       `SELECT p.id_producto, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS NombreCategoria,
-	     p.cantidad_peso_producto AS Peso, 
+	     p.cantidad_peso_producto AS Peso,
 	p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
 	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
 	FROM productos p 
@@ -49,6 +49,7 @@ export const listarProductos = async (req, res) => {
     });
   }
 };
+
 
 export const buscarProducto = async (req, res) => {
   try {

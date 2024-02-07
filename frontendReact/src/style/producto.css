@@ -13,20 +13,4 @@
 .btn-color:hover{
   background-color: rgb(59, 141, 0);
 }
-.input-buscar {
-  border: none;
-  border-bottom: 2px solid rgb(57, 169, 0);
-  outline: none;
-  padding: 5px;
-  transition: border-bottom 0.3s;
-  width: 300px; 
-}
-.input-buscar:focus {
-  border-bottom: 2px solid rgb(59, 141, 0);
-}
-.iconSearch {
-  position: relative;
-  top: -8px;
-  right: 26px;
-  cursor: pointer;
-}
+

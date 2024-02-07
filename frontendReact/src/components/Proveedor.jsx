@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/proveedor.css";
-import { IconSearch } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet2";
 import Validate from "../helpers/Validate";
 import $ from 'jquery';
@@ -80,6 +79,9 @@ const proveedor = () => {
             Sweet.exito(  data.message);
             listarProveedor();
             removeFond();
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+              $(tableRef.current).DataTable().destroy()
+            }
           } else {
             if (data.status === 403) {
               Sweet.error(  data.error.errors[0].msg)
@@ -189,7 +191,7 @@ const proveedor = () => {
               <th className="th-sm">Direccion</th>
               <th className="th-sm">Contrato</th>
               <th className="th-sm">Estado</th>
-              <th className="th'sm">acciones</th>
+              <th className="th'sm text-center">acciones</th>
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -202,7 +204,7 @@ const proveedor = () => {
                     <td>{element.telefono_proveedores}</td>
                     <td>{element.direccion_proveedores}</td>
                     <td>{element.contrato_proveedores}</td>
-                    <td>{element.estado === 1 ? 'Activo' : 'Deshabilitado'}</td>
+                    <td>{element.estado === 1 ? 'Activo' : 'Inactivo'}</td>
                     <td>
                       {element.estado !== 1 ? 'NO DISPONIBLES' : (
                         <>
