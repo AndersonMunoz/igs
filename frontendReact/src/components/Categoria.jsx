@@ -5,7 +5,8 @@ import Validate from '../helpers/Validate';
 import $ from 'jquery';
 import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
 import 'datatables.net-bs4';
-import {DownloadTableExcel}  from 'react-export-table-to-excel'
+import {DownloadTableExcel}  from 'react-export-table-to-excel';
+import generatePDF from 'react-to-pdf';
 
 const Categoria = () => {
   const tableRef = useRef();
@@ -231,6 +232,9 @@ const Categoria = () => {
 <button type="button"  className="btn-color btn mb-4"  > < IconFileSpreadsheet /> Export excel </button>
 
                 </DownloadTableExcel>
+                <div>
+          <button type="button" className="btn btn-danger mb-4" onClick={() => generatePDF(tableRef, {filename: 'Categoria.pdf'})}>Download PDF</button>
+        </div>
 
 
       </div>

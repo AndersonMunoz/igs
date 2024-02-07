@@ -7,6 +7,7 @@ import $ from "jquery";
 import "datatables.net-bs4/css/dataTables.bootstrap4.css";
 import "datatables.net-bs4";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import generatePDF from 'react-to-pdf';
 
 const Tipo = () => {
   const [tipos, setTipo] = useState([]);
@@ -237,6 +238,12 @@ const Tipo = () => {
 
   const [search, setSeach] = useState("");
 
+
+
+ 
+
+ 
+
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
@@ -264,6 +271,11 @@ const Tipo = () => {
             <IconFileSpreadsheet /> Export excel{" "}
           </button>
         </DownloadTableExcel>
+
+        <div>
+          <button type="button" className="btn btn-danger mb-4" onClick={() => generatePDF(tableRef, {filename: 'tipo.pdf'})}>Download PDF</button>
+        </div>
+
       </div>
       <div className="wrapper-editor">
         <table

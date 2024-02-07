@@ -7,6 +7,7 @@ import $ from "jquery";
 import "datatables.net-bs4/css/dataTables.bootstrap4.css";
 import "datatables.net-bs4";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import generatePDF from 'react-to-pdf';
 
 const Up = () => {
   const [unidad_productiva, setunidad_productiva] = useState([]);
@@ -231,6 +232,9 @@ const Up = () => {
             <IconFileSpreadsheet /> Export excel{" "}
           </button>
         </DownloadTableExcel>
+        <div>
+          <button type="button" className="btn btn-danger mb-4" onClick={() => generatePDF(tableRef, {filename: 'Bodega.pdf'})}>Download PDF</button>
+        </div>
       </div>
       <div className="wrapper-editor">
         <table
