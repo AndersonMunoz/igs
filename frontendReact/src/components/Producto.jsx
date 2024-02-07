@@ -4,6 +4,7 @@ import { IconSearch } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 
+
 const Producto = () => {
   const [search, setSeach] = useState('');
   const [productos, setProductos] = useState([]);

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
-import { IconSearch } from "@tabler/icons-react";
+import { IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet2";
 import Validate from "../helpers/Validate";
 import $ from "jquery";
-import "datatables.net-bs4/css/dataTables.bootstrap4.css";
-import "datatables.net-bs4";
+/* import "datatables.net-bs4/css/dataTables.bootstrap4.css";
+import "datatables.net-bs4"; */
+import { DownloadTableExcel } from "react-export-table-to-excel";
 
 const Tipo = () => {
   const [tipos, setTipo] = useState([]);
@@ -108,12 +109,10 @@ const Tipo = () => {
           Sweet.exito(data.menssage);
           if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
-          
           }
           listarTipo();
-          
         }
-        if (data.status !==200) {
+        if (data.status !== 200) {
           Sweet.error(data.errors[0].msg);
           return;
         }
@@ -254,20 +253,22 @@ const Tipo = () => {
         >
           Registrar Nuevo tipo de producto
         </button>
-        <div className="d-flex align-items-center">
-          <input
-            type="text"
-            placeholder="Buscar Producto"
-            className="input-buscar"
-            onChange={(e) => setSeach(e.target.value)}
-          />
-          <IconSearch className="iconSearch" />
-        </div>
+
+        <DownloadTableExcel
+          filename="Tabla Tipo de producto "
+          sheet="Tipo"
+          currentTableRef={tableRef.current}
+        >
+          <button type="button" className="btn-color btn mb-4">
+            {" "}
+            <IconFileSpreadsheet /> Export excel{" "}
+          </button>
+        </DownloadTableExcel>
       </div>
       <div className="wrapper-editor">
         <table
           id="dtBasicExample"
-          className="table table-striped table-bordered"
+          className="table table-striped table-bordered boreder"
           ref={tableRef}
           cellSpacing={0}
           width="100%"
@@ -320,14 +321,14 @@ const Tipo = () => {
                               data-bs-toggle="modal"
                               data-bs-target="#actualizarModal"
                             >
-                              Editar
+                              <IconEdit />
                             </button>
 
                             <button
                               className="btn btn-danger"
                               onClick={() => deshabilitarTipo(element.id)}
                             >
-                              Deshabilitar
+                              <IconTrash />
                             </button>
                           </>
                         ) : (

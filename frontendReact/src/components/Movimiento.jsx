@@ -3,10 +3,15 @@ import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
 import { IconSearch } from "@tabler/icons-react"; 
+import esES from '../languages/es-ES.json';
 import $ from 'jquery';
-import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
-import 'datatables.net-bs4';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-responsive';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 
 
 const Movimiento = () => {
@@ -37,19 +42,19 @@ const Movimiento = () => {
   const handleCheckboxChange2 = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
+ // Asegúrate de que se ejecute después de actualizar los datos de movimiento
   useEffect(() => {
-    if (movimientos.length > 0) {
-      
-      // Destruir la instancia DataTables antes de volver a inicializar
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-
-      // Inicializar DataTables después de actualizar los datos de movimiento
-      $(tableRef.current).DataTable();
-    }
-  }, [movimientos]); // Asegúrate de que se ejecute después de actualizar los datos de movimiento
-
+		if (movimientos.length > 0) {
+			if ($.fn.DataTable.isDataTable(tableRef.current)) {
+				$(tableRef.current).DataTable().destroy();
+			}
+			$(tableRef.current).DataTable({
+				responsive: true,
+				language: esES,
+				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+			});
+		}
+	}, [movimientos]);
   
 
   function removeModalBackdrop() {
@@ -296,8 +301,8 @@ const Movimiento = () => {
     Registrar nuevo movimiento
     </button>
         </div>
-        <div className="table-responsive">
-        <table id="tabla" ref={tableRef} className="table table-striped nowrap w-100">
+        <div className="container-fluid w-full">
+        <table id="tabla" ref={tableRef} className="table table-striped table-bordered border display responsive nowrap">
           <thead>
             <tr>
               <th className="p-2 text-center w-1fr">Nombre producto</th>
