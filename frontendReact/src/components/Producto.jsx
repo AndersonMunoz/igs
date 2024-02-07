@@ -2,9 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
+import esES from '../languages/es-ES.json';
 import $ from 'jquery';
-import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
-import 'datatables.net-bs4';
+import 'bootstrap';
+import 'datatables.net';
+import 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-responsive';
+import 'datatables.net-responsive-bs5';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
+import {DownloadTableExcel}  from 'react-export-table-to-excel';
+import generatePDF from 'react-to-pdf';
 
 
 const Producto = () => {
@@ -20,15 +28,26 @@ const Producto = () => {
   const tableRef = useRef();
 
   useEffect(() => {
-    if (productos.length > 0) {
-
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-
-      $(tableRef.current).DataTable();
-    }
-  }, [productos]);
+		if (productos.length > 0) {
+			if ($.fn.DataTable.isDataTable(tableRef.current)) {
+				$(tableRef.current).DataTable().destroy();
+			}
+      $(tableRef.current).DataTable({
+        columnDefs: [
+          {
+             targets: -1, 
+             responsivePriority: 1 
+          }
+       ],
+        responsive: true,
+        language: esES,
+        lengthMenu: [
+           [ 10, 50, 100, -1 ],
+           [ '10 Filas', '50 Filas', '100 Filas', 'Ver Todo' ]
+        ],
+     });
+		}
+	}, [productos]);
 
   useEffect(() => {
       listarProducto();
@@ -42,7 +61,6 @@ const Producto = () => {
       modalBackdrop.remove();
     }
   }
-
   function listarProducto() {
     fetch("http://localhost:3000/producto/listar", {
       method: "GET",
@@ -105,7 +123,6 @@ const Producto = () => {
         console.error("Error al procesar la respuesta:", e);
       });
   }
-  
   function registrarProducto() {
     let precio_producto = document.getElementById('precio_producto').value;
     let descripcion_producto = document.getElementById('descripcion_producto').value;
@@ -228,7 +245,6 @@ const Producto = () => {
       }
     })
   }
-
   function activarProducto(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
@@ -257,14 +273,32 @@ const Producto = () => {
   }
 
   return (
-    <div className="text-nowrap">
+    <div>
       <div className="d-flex justify-content-between mb-4">
         <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nuevo Producto
         </button>
+          <div>
+          <DownloadTableExcel
+            filename="Tabla productos"
+            sheet="productos"
+            currentTableRef={tableRef.current}
+          >
+            <button type="button" className="btn-color btn me-2">
+              Exportar a Excel
+            </button>
+          </DownloadTableExcel>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => generatePDF(tableRef, { filename: "producto.pdf" })}
+          >
+            Descargar PDF
+          </button>
+        </div>
       </div>
       <div className="wrapper-editor">
-      <table id="dtBasicExample" className="table table-striped table-bordered" cellSpacing={0} width="100%" ref={tableRef}>
+      <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
         <thead className="text-center text-justify">
           <tr>
             <th className="th-sm">N°</th>
