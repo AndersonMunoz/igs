@@ -3,9 +3,9 @@ import "../style/proveedor.css";
 import Sweet from "../helpers/Sweet2";
 import Validate from "../helpers/Validate";
 import $ from 'jquery';
-import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+/* import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
 import 'datatables.net-bs4';
-
+ */
 
 const proveedor = () => {
   const tableRef = useRef();
