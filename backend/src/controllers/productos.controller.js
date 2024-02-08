@@ -33,7 +33,7 @@ export const listarProductos = async (req, res) => {
     const [result] = await pool.query(
       `SELECT p.id_producto, t.nombre_tipo AS NombreProducto, c.nombre_categoria AS NombreCategoria,
 	     p.cantidad_peso_producto AS Peso,
-	p.unidad_peso_producto AS Unidad, p.descripcion_producto AS Descripcion,
+ p.descripcion_producto AS Descripcion,
 	p.precio_producto AS PrecioIndividual, (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, u.nombre_up AS UnidadProductiva, p.estado AS estado 
 	FROM productos p 
 	JOIN bodega u ON p.fk_id_up = u.id_up
