@@ -317,7 +317,7 @@ const Movimiento = () => {
           </button>
           <div>
             <DownloadTableExcel
-              filename="Tabla productos"
+              filename="Movimiento Detalles Excel"
               sheet="movimientos"
               currentTableRef={tableRef.current}
             >
@@ -328,7 +328,7 @@ const Movimiento = () => {
             <button
               type="button"
               className="btn btn-danger"
-              onClick={() => generatePDF(tableRef, { filename: "producto.pdf" })}
+              onClick={() => generatePDF(tableRef, { filename: "Movimiento Detalles Excel.pdf" })}
             >
               PDF
             </button>
