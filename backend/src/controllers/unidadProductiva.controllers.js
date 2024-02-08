@@ -21,12 +21,12 @@ export const registroUnidadProductiva = async (req, res) => {
 
 			res.status(200).json({
 				"status": 200,
-				"menssage": "bodega registrada con exito "
+				"menssage": "Bodega registrada con exito "
 			})
 		} else {
 			res.status(403).json({
 				"status": 403,
-				"menssage": "bodega no se puedo registrar"
+				"menssage": "Bodega no se puedo registrar"
 			})
 
 		}

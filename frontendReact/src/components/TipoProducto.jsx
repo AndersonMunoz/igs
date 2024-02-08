@@ -26,17 +26,31 @@ const Tipo = () => {
   const tableRef = useRef();
 
   useEffect(() => {
-    if (tipos.length > 0) {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-      $(tableRef.current).DataTable({
-        responsive: true,
-        language: esES,
-        autoWidth: true, // Ajustar automáticamente el ancho de las columnas
-      });
-    }
-  }, [tipos]);
+		if (tipos.length > 0) {
+			if ($.fn.DataTable.isDataTable(tableRef.current)) {
+				$(tableRef.current).DataTable().destroy();
+			}
+			$(tableRef.current).DataTable({
+				columnDefs: [
+					{
+						targets: -1,
+						responsivePriority: 1
+					}
+				],
+				responsive: true,
+				language: esES,
+				paging: true,
+				select: {
+					'style': 'multi',
+					'selector': 'td:first-child',
+				},
+				lengthMenu: [
+					[10, 50, 100, -1],
+					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+				],
+			});
+		}
+	}, [tipos]);
 
   useEffect(() => {
     listarTipo();
@@ -262,27 +276,24 @@ const Tipo = () => {
             Validate.limpiar(".limpiar");
           }}
         >
-          Registrar Nuevo tipo de producto
+          Registrar Nuevo Tipo de Producto
         </button>
-
-        <DownloadTableExcel
-          filename="Tabla Tipo de producto "
-          sheet="Tipo"
-          currentTableRef={tableRef.current}
-        >
-          <button type="button" className="btn-color btn mb-4">
-            {" "}
-            <IconFileSpreadsheet /> Export excel{" "}
-          </button>
-        </DownloadTableExcel>
-
         <div>
+          <DownloadTableExcel
+            filename="Tabla Tipo de producto"
+            sheet="Tipo"
+            currentTableRef={tableRef.current}
+          >
+            <button type="button" className="btn-color btn me-2">
+              Excel
+            </button>
+          </DownloadTableExcel>
           <button
             type="button"
-            className="btn btn-danger mb-4"
+            className="btn btn-danger"
             onClick={() => generatePDF(tableRef, { filename: "tipo.pdf" })}
           >
-            Download PDF
+           PDF
           </button>
         </div>
       </div>
@@ -297,8 +308,8 @@ const Tipo = () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">NombreProducto</th>
-              <th className="th-sm">NombreCategoria</th>
+              <th className="th-sm">Nombre Producto</th>
+              <th className="th-sm">Nombre Categoria</th>
               <th className="th-sm">Unidad Peso</th>
               <th className="th-sm">Acciones</th>
             </tr>
@@ -329,9 +340,9 @@ const Tipo = () => {
                   .map((element) => (
                     <tr key={element.id}>
                       <td>{element.id}</td>
-                      <td>{element.NombreProducto}</td>
-                      <td>{element.Categoría}</td>
-                      <td>{element.UnidadPeso}</td>
+                      <td style={{textTransform: 'capitalize'}}>{element.NombreProducto}</td>
+                      <td style={{textTransform: 'capitalize'}}>{element.Categoría}</td>
+                      <td style={{textTransform: 'capitalize'}}>{element.UnidadPeso}</td>
                       <td>
                         {element.estado === 1 ? (
                           <>
@@ -382,7 +393,7 @@ const Tipo = () => {
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
-              <h1 className="modal-title fs-5">Registrar Tipo de producto</h1>
+              <h1 className="modal-title fs-5">Registrar Tipo de Producto</h1>
               <button
                 type="button"
                 className="btn-close text-white bg-white"
@@ -402,10 +413,10 @@ const Tipo = () => {
                       className="form-control form-empty limpiar"
                       id="nombre_tipo"
                       name="	nombre_tipo"
-                      placeholder="nombre de tipo de producto "
+                      placeholder="Nombre de tipo de producto "
                     />
                     <div className="invalid-feedback is-invalid">
-                      Por favor, el nombre
+                      Por favor, el Nombre
                     </div>
                   </div>
                 </div>
@@ -429,7 +440,7 @@ const Tipo = () => {
                         </option>
                       ) : (
                         <>
-                          <option value="">Selecciona una categoria</option>
+                          <option value="">Selecciona una Categoria</option>
                           {categoria.map((element) => (
                             <option
                               key={element.id_categoria}
@@ -442,7 +453,7 @@ const Tipo = () => {
                       )}
                     </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un categoria
+                      Por favor, seleccione un Categoria
                     </div>
                   </div>
                 </div>
@@ -452,7 +463,7 @@ const Tipo = () => {
                       htmlFor="unidad_peso"
                       className="label-bold mb-2"
                     >
-                    Unidad de peso 
+                    Unidad de Peso 
                     </label>
           
                    <select name="unidad_peso" id="unidad_peso" className="form-select form-control form-empty limpiar">
@@ -464,7 +475,7 @@ const Tipo = () => {
                             <option value="ml">Mililitro (Ml)</option>
                    </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, la unidad de peso 
+                      Por favor, la Unidad de peso 
                     </div>
                   </div>
                 </div>
@@ -503,7 +514,7 @@ const Tipo = () => {
           <div className="modal-content">
             <div className="modal-header bg text-white">
               <h1 className="modal-title fs-5" id="actualizarModalLabel">
-                Actualizar tipo de producto{" "}
+                Actualizar Tipo de Producto{" "}
               </h1>
               <button
                 type="button"
@@ -517,7 +528,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="nombre " className="label-bold mb-2">
-                      nombre{" "}
+                      Nombre{" "}
                     </label>
                     <input
                       type="hidden"
@@ -555,7 +566,7 @@ const Tipo = () => {
                       htmlFor="fk_categoria_pro"
                       className="label-bold mb-2"
                     >
-                      categoria{" "}
+                      Categoria{" "}
                     </label>
                     <select
                       className="form-select form-update"
@@ -588,7 +599,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="unidad_peso " className="label-bold mb-2">
-                      unidad{" "}
+                      Unidad de Peso{" "}
                     </label>
                     <select
                       className="form-select form-update"

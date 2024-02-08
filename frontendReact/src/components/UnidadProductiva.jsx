@@ -31,9 +31,23 @@ const Up = () => {
 				$(tableRef.current).DataTable().destroy();
 			}
 			$(tableRef.current).DataTable({
+				columnDefs: [
+					{
+						targets: -1,
+						responsivePriority: 1
+					}
+				],
 				responsive: true,
 				language: esES,
-				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+				paging: true,
+				select: {
+					'style': 'multi',
+					'selector': 'td:first-child',
+				},
+				lengthMenu: [
+					[10, 50, 100, -1],
+					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+				],
 			});
 		}
 	}, [unidad_productiva]);
@@ -229,20 +243,26 @@ const Up = () => {
             Validate.limpiar(".limpiar");
           }}
         >
-          Registrar nueva bodega
+          Registrar Nueva Bodega
         </button>
-        <DownloadTableExcel
-          filename="Tabla Bodega"
-          sheet="Bodega"
-          currentTableRef={tableRef.current}
-        >
-          <button type="button" className="btn-color btn mb-4">
-            {" "}
-            <IconFileSpreadsheet /> Export excel{" "}
-          </button>
-        </DownloadTableExcel>
+
         <div>
-          <button type="button" className="btn btn-danger mb-4" onClick={() => generatePDF(tableRef, {filename: 'Bodega.pdf'})}>Download PDF</button>
+          <DownloadTableExcel
+            filename="Tabla Bodega"
+            sheet="Bodega"
+            currentTableRef={tableRef.current}
+          >
+            <button type="button" className="btn-color btn me-2">
+              Excel
+            </button>
+          </DownloadTableExcel>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => generatePDF(tableRef, { filename: "Bodega.pdf" })}
+          >
+           PDF
+          </button>
         </div>
       </div>
       <div className="wrapper-editor">
@@ -256,7 +276,7 @@ const Up = () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre bodega</th>
+              <th className="th-sm">Nombre Bodega</th>
               <th className="th-sm"> Botones Acciones</th>
             </tr>
           </thead>
@@ -285,8 +305,8 @@ const Up = () => {
                   })
                   .map((element) => (
                     <tr key={element.id_up}>
-                      <td>{element.id_up}</td>
-                      <td>{element.nombre_up}</td>
+                      <td style={{textTransform: 'capitalize'}}>{element.id_up}</td>
+                      <td style={{textTransform: 'capitalize'}}>{element.nombre_up}</td>
                       <td>
                         {element.estado === 1 ? (
                           <>
@@ -336,7 +356,7 @@ const Up = () => {
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
-              <h1 className="modal-title fs-5">Registrar bodega </h1>
+              <h1 className="modal-title fs-5">Registrar Bodega </h1>
               <button
                 type="button"
                 className="btn-close text-white bg-white"
@@ -352,15 +372,15 @@ const Up = () => {
                   >
                     Up
                   </label>
-                  <div className="input-group">
-                    <div className="input-group-text"> </div>
+ 
+                    
                     <input
                       type="text"
-                      className="form-control limpiar"
+                      className="form-control   form-empty limpiar"
                       id="nombreUp"
-                      placeholder="Nombre bodega "
+                      placeholder="Nombre Bodega "
                     />
-                  </div>
+
                 </div>
                 <div className="col-12">
                   <label
