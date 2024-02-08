@@ -322,7 +322,7 @@ const Movimiento = () => {
               currentTableRef={tableRef.current}
             >
               <button type="button" className="btn-color btn me-2">
-                Exportar a Excel
+                Excel
               </button>
             </DownloadTableExcel>
             <button
@@ -330,7 +330,7 @@ const Movimiento = () => {
               className="btn btn-danger"
               onClick={() => generatePDF(tableRef, { filename: "producto.pdf" })}
             >
-              Descargar PDF
+              PDF
             </button>
           </div>
         </div>
