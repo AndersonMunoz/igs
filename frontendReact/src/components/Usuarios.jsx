@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/usuarios.css"
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash} from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from "../languages/es-ES.json";
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import $ from "jquery";
 import "bootstrap";
 import "datatables.net";
@@ -12,6 +14,8 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
+import { DownloadTableExcel } from 'react-export-table-to-excel';
+import generatePDF from 'react-to-pdf';
 
 const Usuario = () => {
 	const [usuarios, setUsuarios] = useState([]);
@@ -23,7 +27,7 @@ const Usuario = () => {
 	const tableRef = useRef();
 
 
-	
+
 
 	useEffect(() => {
 		if (usuarios.length > 0) {
@@ -247,7 +251,25 @@ const Usuario = () => {
 					}}>
 					Registrar Usuario
 				</button>
+				<div className="btn-group" role="group" aria-label="Basic mixed styles example">
+					<div className="" title="Descargar Excel">
+						<DownloadTableExcel
+							filename="Usuarios Detalles Excel"
+							sheet="Usuarios"
+							currentTableRef={tableRef.current}
+						><button type="button" className="btn btn-light">
+								<img src={ExelLogo} className="logoExel" />
+							</button></DownloadTableExcel>
+					</div>
+					<div className="" title="Descargar Pdf">
+						<button type="button" className="btn btn-light" onClick={() => generatePDF(tableRef, { filename: "Usuarios Detalles table.pdf" })}
+						><img src={PdfLogo} className="logoExel" />
+						</button>
+					</div>
+				</div>
+
 			</div>
+
 			<div className="container-fluid w-full">
 				<table
 					id="dtBasicExample"
