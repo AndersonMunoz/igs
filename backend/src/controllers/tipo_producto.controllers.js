@@ -20,12 +20,12 @@ export const registroTipo_producto = async (req, res) => {
 
             res.status(200).json({
                 "status": 200,
-                "menssage": " el tipo de producto  registrado  con exito "
+                "menssage": " El tipo de producto  registrado  con exito "
             })
         } else {
             res.status(403).json({
                 "status": 403,
-                "menssage": "el tipo de producto no se puedo registrar"
+                "menssage": "El tipo de producto no se puedo registrar"
             })
 
         }

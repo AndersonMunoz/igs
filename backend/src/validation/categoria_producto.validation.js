@@ -6,5 +6,5 @@ export const validatorCategoria_producto = [
         .not()
         .isEmpty()
         .isLength({min: 2, max: 45})
-        .matches(/^[A-Za-z\s']+$/),
+        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÜü\s']+$/),
 ];

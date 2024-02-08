@@ -20,12 +20,12 @@ export const registrocategoria_producto = async (req, res) => {
 
             res.status(200).json({
                 "status": 200,
-                "menssage": " el producto  de categoria fue  registrado  con exito "
+                "menssage": " la Categoria fue  registrado  con exito "
             })
         } else {
             res.status(403).json({
                 "status": 403,
-                "menssage": "el producto  de categoria  no se puedo registrar"
+                "menssage": "La Categoria  no se puedo registrar"
             })
 
         }

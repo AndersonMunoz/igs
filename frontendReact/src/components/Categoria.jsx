@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IconEdit,  IconFileSpreadsheet , IconTrash, } from "@tabler/icons-react";
+import {IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from '../languages/es-ES.json';
@@ -30,9 +30,23 @@ const Categoria = () => {
 				$(tableRef.current).DataTable().destroy();
 			}
 			$(tableRef.current).DataTable({
+				columnDefs: [
+					{
+						targets: -1,
+						responsivePriority: 1
+					}
+				],
 				responsive: true,
 				language: esES,
-				autoWidth: true // Ajustar automáticamente el ancho de las columnas
+				paging: true,
+				select: {
+					'style': 'multi',
+					'selector': 'td:first-child',
+				},
+				lengthMenu: [
+					[10, 50, 100, -1],
+					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+				],
 			});
 		}
 	}, [categorias_producto]);
@@ -233,19 +247,24 @@ const Categoria = () => {
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nueva Categoria
         </button>
-        <DownloadTableExcel 
-                    filename="Tabla Categoria "
-                    sheet="Categoria"
-                    currentTableRef={tableRef.current}
-                >
-<button type="button"  className="btn-color btn mb-4"  > < IconFileSpreadsheet /> Export excel </button>
-
-                </DownloadTableExcel>
-                <div>
-          <button type="button" className="btn btn-danger mb-4" onClick={() => generatePDF(tableRef, {filename: 'Categoria.pdf'})}>Download PDF</button>
+        <div>
+          <DownloadTableExcel
+            filename="Tabla Categoria"
+            sheet="Categoria"
+            currentTableRef={tableRef.current}
+          >
+            <button type="button" className="btn-color btn me-2">
+              Excel
+            </button>
+          </DownloadTableExcel>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => generatePDF(tableRef, { filename: "Categoria.pdf" })}
+          >
+           PDF
+          </button>
         </div>
-
-
       </div>
       <div className="wrapper-editor" >
       <table
@@ -288,8 +307,8 @@ const Categoria = () => {
           })
           .map((element) => (
             <tr key={element.id_categoria}>
-              <td>{element.id_categoria}</td>
-              <td>{element.nombre_categoria}</td>
+              <td style={{textTransform: 'capitalize'}}>{element.id_categoria}</td>
+              <td style={{textTransform: 'capitalize'}}>{element.nombre_categoria}</td>
               <td>
                 {element.estado === 1 ? (
                   <>
@@ -302,7 +321,7 @@ const Categoria = () => {
                       data-bs-toggle="modal"
                       data-bs-target="#actualizarModal"
                     >
-                      Editar
+                       <IconEdit />
                     </button>
                     <button
                       className="btn btn-danger mx-2"
@@ -310,7 +329,7 @@ const Categoria = () => {
                         deshabilitarCategoria(element.id_categoria)
                       }
                     >
-                      Deshabilitar
+                    <IconTrash />
                     </button>
                   </>
                 ) : (
@@ -348,7 +367,6 @@ const Categoria = () => {
                        Categoria 
                       </label>
                       <div className="input-group">
-                        <div className="input-group-text">  </div>
                         <input
                           type="text"
                           className="form-control limpiar "
@@ -396,7 +414,7 @@ const Categoria = () => {
                        Up
                       </label>
                       <div className="col-md-12">
-                    <label htmlFor="nombre_categoria" className="label-bold mb-2">nombre categoria</label>
+                    <label htmlFor="nombre_categoria" className="label-bold mb-2">Nombre Categoria</label>
                     <input type="hidden" value={categoriaSeleccionada.nombre_categoria || ''} onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, nombre_categoria: e.target.value })} disabled/>
                     <input type="text" className="form-control form-update" placeholder="nombre categoria" value={categoriaSeleccionada.nombre_categoria || ''} name="nombre_categoria" onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, nombre_categoria: e.target.value })}/>
                     <div className="invalid-feedback is-invalid">
