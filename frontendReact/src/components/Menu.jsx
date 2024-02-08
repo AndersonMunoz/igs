@@ -113,7 +113,7 @@ export const Menu = () => {
 									<a to="#">Kardes</a>
 								</li>
 								<li>
-									<a to="#">Catalogo</a>
+									<Link to="/inventario">Inventario</Link>
 								</li>
 							</ul>
 						</li>
