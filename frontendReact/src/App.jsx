@@ -9,13 +9,13 @@ import Categoria from "./components/Categoria";
 import UnidadProductiva from "./components/UnidadProductiva";
 import Usuario from "./components/Usuarios";
 import Dashboard from "./components/Dashboard";
-import Inicio from "./components/Inicio";
+// import Inicio from "./components/Inicio";
 
 const App = () => {
   return (
     <>
       <Routes>
-        <Route index element={<Inicio />} />
+        
         <Route path="/" element={<Menu />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/producto" element={<Producto />} />
