@@ -19,6 +19,7 @@ import generatePDF from 'react-to-pdf';
 const Movimiento = () => {
 
   const [movimientos, setMovimientos] = useState([]);
+  const [productosCategoria,setProCat] = useState([]);
   const [search, setSeach] = useState('');
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
   const [categoria_list, setcategorias_producto] = useState([]);
@@ -85,7 +86,7 @@ const Movimiento = () => {
     listarTipo();
     listarProveedor();
     listarUsuario();
-    listarProducto()
+
   }, []);
 
   function listarCategoria() {
@@ -150,19 +151,42 @@ const Movimiento = () => {
       ;
   }
 
-  function listarProducto() {
-    fetch("http://localhost:3000/producto/listar", {
+  function listarProveedor() {
+    fetch("http://localhost:3000/proveedor/listar", {
       method: "GET",
       headers: {
-        "Content-type": "application/json",
+        "content-type": "application/json",
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        setProductos(data);
+        setProveedor(data)
       })
       .catch((e) => {
         console.log(e);
+      })
+      ;
+  }
+
+  function listarProducto(id_categoria) {
+
+    fetch(
+      `http://localhost:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setProCat(data);
+        console.log("PRODUCTO - CATEGORIA : ", data);
+      })
+      .catch((e) => {
+        setProCat([]);
+        console.log("xd: ", e);
       });
   }
   function editarMovimiento(id) {
@@ -307,6 +331,8 @@ const Movimiento = () => {
       });
   }
 
+
+
   return (
     <>
       <div>
@@ -360,7 +386,7 @@ const Movimiento = () => {
             <tbody id="tableMovimiento">
               {movimientos.length === 0 ? (
                 <tr>
-                  <td colSpan={12}>
+                  <td colSpan={13}>
                     <div className="d-flex justify-content-center">
                       <div className="alert alert-danger text-center mt-4 w-50">
                         <h2> En este momento no contamos con ningún movimiento disponible.😟</h2>
@@ -370,22 +396,22 @@ const Movimiento = () => {
                 </tr>
               ) : (
                 <>
-                  {movimientos.filter((item) => { return search.toLowerCase() === '' ? item : item.estado_producto_movimiento.toLowerCase().includes(search) }).map((element) => (
+                  {movimientos.map((element) => (
                     <tr key={element.id_factura}>
-                      <td className="p-2 text-center">{element.nombre_tipo}</td>
-                      <td className="p-2 text-center">{element.num_lote}</td>
-                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
-                      <td className="p-2 text-center">{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
-                      <td className="p-2 text-center">{element.unidad_peso_movimiento}</td>
-                      <td className="p-2 text-center">{element.precio_movimiento}</td>
-                      <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
-                      <td className="p-2 text-center">{element.nota_factura}</td>
-                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
-                      <td className="p-2 text-center">{element.nombre_usuario}</td>
-                      <td className="p-2 text-center">{element.nombre_proveedores}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_tipo}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.num_lote}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_movimiento)}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.tipo_movimiento}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso_movimiento}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.precio_movimiento}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.estado_producto_movimiento}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nota_factura}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_caducidad)}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_proveedores}</td>
 
-                      <td className="mx-2" onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); }} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                      <td className="p-2 text-center"   style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); }} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <button className="btn btn-color" >
                           Editar
                         </button>
@@ -412,10 +438,11 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="categoria">Categoria</label>
-                          <select className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
+                          <select onChange={(e)=>{listarProducto(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
                             <option value="">Selecciona una categoria</option>
                             {categoria_list.map((element) => (
-                              <option key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
+                              
+                              <option  key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
                             ))}
                           </select>
                           <div className="invalid-feedback is-invalid">
@@ -428,9 +455,9 @@ const Movimiento = () => {
                           <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                           <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
-                            {productos.map((element) => (
-                              <option key={element.fk_id_tipo_producto} value={element.id_producto}>{element.NombreProducto}</option>
-                            ))}
+                            {productosCategoria.length > 0 ? productosCategoria.map((element) => (
+                              <option key={element.id_producto} value={element.id_producto}>{element.nombre_tipo}</option>
+                            )): ""}
                           </select>
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un producto.
@@ -478,14 +505,14 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="	unidad_peso_movimiento">Unidad</label>
-                          <select defaultValue="" className="form-select form-empty limpiar" id="unidad_peso_movimiento" name="unidad_peso_movimiento" aria-label="Default select example">
-                            <option value="">Seleccione una opción</option>
-                            <option value="kg">Kilo (Kg)</option>
-                            <option value="lb">Libra (Lb)</option>
-                            <option value="gr">Gramo (Gr)</option>
-                            <option value="lt">Litro (Lt)</option>
-                            <option value="ml">Mililitro (Ml)</option>
-                          </select>
+                          
+                            
+
+                          <div>
+                          {productosCategoria.length > 0 ?
+                              <p value={productosCategoria[0].unidad_peso}>{productosCategoria[0].unidad_peso}</p>
+                            : ""}
+                          </div>
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione una unidad de peso.
                           </div>

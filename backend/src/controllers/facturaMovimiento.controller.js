@@ -185,3 +185,23 @@ export const actualizarMovimiento = async (req, res) => {
 	}
 };
 
+export const obtenerProCategoria = async (req, res) => {
+	try {
+		let id = req.params.id_categoria;
+		let sql = `SELECT pro.id_producto, pr.nombre_tipo, pr.unidad_peso FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id};`;
+
+		const [rows] = await pool.query(sql);
+
+		if (rows.length > 0) {
+			res.status(200).json(rows);
+		} else {
+			res.status(200).json({ "status": 401 , "message":"No se listaron productos"});
+		}
+	} catch (e) {
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + e
+		});
+	}
+};
+
