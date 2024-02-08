@@ -62,7 +62,7 @@ export const Menu = () => {
 					</div>
 					<ul className="nav-links">
 						<li>
-							<Link to="/">
+							<Link to="/dashboard">
 								<div className="tamañoLateral">
 									<IconHome className="iconosLaterales" />
 								</div>
@@ -326,6 +326,7 @@ export const Menu = () => {
 				</div>
 				<div className="contenido">
 					<div className="contSeg">
+						
 						<Outlet />
 						<div className="espacioBotton"></div>
 					</div>
