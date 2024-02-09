@@ -1,102 +1,124 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
-    const [categoryInput, setCategoryInput] = useState('');
-    const [categories, setCategories] = useState([]);
+  const [categoryInput, setCategoryInput] = useState("");
+  const [categories, setCategories] = useState([]);
 
-    const handleAddCategory = () => {
-        if (categoryInput.trim() !== '') {
-            setCategories([...categories, categoryInput]);
-            setCategoryInput('');
-        }
-    };
-
-    useEffect(() => {
-        listaCat();
-    }, []);
-
-    function listaCat() {
-        fetch("http://localhost:3000/categoria/listar", {
-            method: "get",
-            headers: {
-                "Content-type": "application/json",
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data) {
-                    const categoryNames = Object.keys(data).map(key => data[key].nombre_categoria);
-                    setCategories(prevCategories => [...prevCategories, ...categoryNames]);
-                } else {
-                    console.log('no hay datos');
-                }
-            });
+  const handleAddCategory = () => {
+    if (categoryInput.trim() !== "") {
+      setCategories([...categories, categoryInput]);
+      setCategoryInput("");
     }
+  };
 
-    const renderCategories = () => {
-        const rows = [];
-        for (let i = 0; i < categories.length; i += 2) {
-            rows.push(
-                <div className="row mt-4" key={i}>
-                    {categories.slice(i, i + 2).map((category, index) => (
-                        <div key={index} className="col">
-                            <div className="border-color rounded p-2">
-                                <h2 className="text-center">{category}</h2>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            );
+  useEffect(() => {
+    listaCat();
+  }, []);
+
+  function listaCat() {
+    fetch("http://localhost:3000/categoria/listar", {
+      method: "get",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories("");
+        if (data) {
+          const categoryNames = Object.keys(data)
+            .filter((key) => data[key].estado !== 0)
+            .map((key) => data[key].nombre_categoria);
+
+          setCategories((prevCategories) => [
+            ...prevCategories,
+            ...categoryNames,
+          ]);
+        } else {
+          console.log("no hay datos");
         }
-        return rows;
-    };
+      });
+  }
 
-    return (
-        <div className="container border border-primary rounded p-4 mt-4">
-            <div className="rounded p-1 mb-4 btn-color">
-                <h1 className="text-center">INVENTARIO</h1>
+  const navigate = useNavigate(); // Mueve useNavigate dentro de la función de componente
+
+  const newLink = (category) => {
+    navigate("/tipoproducto");
+    console.log(category);
+    return category;
+  };
+
+  const renderCategories = () => {
+    const rows = [];
+    for (let i = 0; i < categories.length; i += 2) {
+      rows.push(
+        <div className="row mt-4" key={i}>
+          {categories.slice(i, i + 2).map((category, index) => (
+            <div key={index} className="col">
+              <button
+                onClick={() => newLink(category)}
+                className="w-100 border-color"
+              >
+                {category}
+              </button>
             </div>
-            <div className="container mt-4">
-                <div className="row offset-4">
-                    <div className="form-group col-9">
-                        <input
-                            type="text"
-                            className="form-control border-color"
-                            placeholder="Buscar una categoría"
-                            value={categoryInput}
-                            onChange={(e) => setCategoryInput(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group col-3">
-                        <button
-                            className='btn-color border-color rounded h-100 w-100'
-                            type="button"
-                            onClick={handleAddCategory}
-                        >
-                            Buscar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {renderCategories()}
-
-            <div className="d-grid gap-2 col-6 mx-auto mt-4">
-                <div className="row">
-                    <div className="col text-center">
-                        <button className="btn btn-primary mb-2 w-100">Kardes</button>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col text-center">
-                        <button className="btn btn-danger w-100">Productos a caducar</button>
-                    </div>
-                </div>
-            </div>
-
+          ))}
         </div>
-    );
+      );
+    }
+    return rows;
+  };
+
+  return (
+    <div className="container border border-primary rounded p-4 mt-4">
+      <div className="rounded p-1 mb-4 btn-color">
+        <h1 className="text-center">INVENTARIO</h1>
+      </div>
+      <div className="container mt-4">
+        <div className="row offset-4">
+          <div className="form-group col-9">
+            <input
+              type="text"
+              className="form-control border-color"
+              placeholder="Buscar una categoría"
+              value={categoryInput}
+              onChange={(e) => setCategoryInput(e.target.value)}
+            />
+          </div>
+          <div className="form-group col-3">
+            <button
+              className="btn-color border-color rounded h-100 w-100"
+              type="button"
+              onClick={handleAddCategory}
+            >
+              Buscar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {renderCategories()}
+
+      <div className="d-grid gap-2 col-6 mx-auto mt-4">
+        <div className="row">
+          <div className="col text-center">
+            <button className="btn btn-primary mb-2 w-100">Kardes</button>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col text-center">
+            <button className="btn btn-danger w-100">
+              Productos a caducar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
+
+export const newLink = App.newLink; // Exporta la función newLink
 
 export default App;

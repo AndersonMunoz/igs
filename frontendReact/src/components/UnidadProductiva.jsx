@@ -6,6 +6,8 @@ import Validate from "../helpers/Validate";
 import esES from '../languages/es-ES.json';
 import $ from 'jquery';
 import 'bootstrap';
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import 'datatables.net';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
@@ -252,16 +254,16 @@ const Up = () => {
             sheet="Bodega"
             currentTableRef={tableRef.current}
           >
-            <button type="button" className="btn-color btn me-2">
-              Excel
+            <button type="button" className="btn btn-light">
+            <img src={ExelLogo} className="logoExel" />
             </button>
           </DownloadTableExcel>
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-light"
             onClick={() => generatePDF(tableRef, { filename: "Bodega.pdf" })}
           >
-           PDF
+    <img src={PdfLogo} className="logoExel" />
           </button>
         </div>
       </div>
@@ -289,7 +291,7 @@ const Up = () => {
                       <h2>
                         {" "}
                         En este momento no contamos con ningúna bodega
-                        disponible.{" "}
+                        disponible. 😟 {" "}
                       </h2>
                     </div>
                   </div>

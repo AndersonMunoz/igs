@@ -6,6 +6,9 @@ const Sweet = {
       icon: 'success',
       title: `${mensaje}`,
       confirmButtonText: 'Cerrar',
+      didClose: () => {
+        document.querySelector('[data-bs-dismiss="modal"]').click();
+      }
     });
   },
   error: (mensaje) => {
@@ -13,6 +16,7 @@ const Sweet = {
       icon: 'warning',
       title: `${mensaje}`,
       confirmButtonText: 'Cerrar',
+      
     });
   },
   registroExitoso: () => {
@@ -92,6 +96,9 @@ const Sweet = {
       icon: 'success',
       text: 'Actualización Exitosa',
       confirmButtonText: 'Cerrar',
+      didClose: () => {
+        document.querySelector('[data-bs-dismiss="modal"]').click();
+      }
     });
   },
   actualizacionFallido: () => {
