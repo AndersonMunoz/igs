@@ -24,6 +24,7 @@ const Sweet = {
       title: `${mensaje}`,
       timer: 1000,
       toast: true,
+      
       showConfirmButton: false
     });
   }
