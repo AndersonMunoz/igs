@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-02-2024 a las 00:55:18
--- Versión del servidor: 10.4.18-MariaDB
--- Versión de PHP: 7.4.16
+-- Tiempo de generación: 10-02-2024 a las 00:56:09
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +31,7 @@ CREATE TABLE `bodega` (
   `id_up` int(11) NOT NULL,
   `nombre_up` varchar(45) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -43,7 +43,7 @@ CREATE TABLE `categorias_producto` (
   `id_categoria` int(11) NOT NULL,
   `nombre_categoria` varchar(45) DEFAULT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -56,7 +56,6 @@ CREATE TABLE `factura_movimiento` (
   `fecha_movimiento` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `tipo_movimiento` enum('entrada','salida') NOT NULL,
   `cantidad_peso_movimiento` float NOT NULL,
-  `unidad_peso_movimiento` enum('kg','lb','gr','lt','ml') NOT NULL,
   `precio_movimiento` float NOT NULL,
   `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
@@ -65,7 +64,7 @@ CREATE TABLE `factura_movimiento` (
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) NOT NULL,
   `num_lote` int(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -81,7 +80,7 @@ CREATE TABLE `productos` (
   `fk_id_up` int(11) NOT NULL,
   `fk_id_tipo_producto` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -96,7 +95,7 @@ CREATE TABLE `proveedores` (
   `direccion_proveedores` varchar(50) NOT NULL,
   `contrato_proveedores` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -110,7 +109,7 @@ CREATE TABLE `tipo_productos` (
   `fk_categoria_pro` int(11) DEFAULT NULL,
   `unidad_peso` enum('kg','lb','gr','lt','ml') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -126,7 +125,7 @@ CREATE TABLE `usuarios` (
   `contrasena_usuario` varchar(45) NOT NULL,
   `tipo_usuario` enum('administrador','coadministrador') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Índices para tablas volcadas

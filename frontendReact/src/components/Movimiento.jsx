@@ -269,7 +269,7 @@ const Movimiento = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote }),
+      body: JSON.stringify({ tipo_movimiento, cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote }),
     })
       .then((res) => res.json())
       .then(data => {
@@ -415,7 +415,7 @@ const Movimiento = () => {
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.tipo_movimiento}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.cantidad_peso_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso_movimiento}</td>
+                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.precio_movimiento}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nota_factura}</td>
@@ -543,7 +543,7 @@ const Movimiento = () => {
                             <option value="">Seleccione una opción</option>
                             <option value="bueno">Bueno</option>
                             <option value="regular">Regular</option>
-                            <option value="malo">Malo</option>
+                            <option value="malo">Malo</option>http://localhost:5173/categoria
                           </select>
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un estado.
