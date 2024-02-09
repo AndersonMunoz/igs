@@ -77,17 +77,28 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
-							<Link to="/movimiento">
-								<div className="tamañoLateral">
-									<IconArrowsRandom className="iconosLaterales" />
+							<div className="content-nav">
+								<Link to="/movimiento">
+									<div className="tamañoLateral">
+										<IconArrowsRandom className="iconosLaterales" />
+									</div>
+									<span className="link_name">Movimientos</span>
+								</Link>
+								<div className="container-icon">
+									<IconChevronDown className="iconoA" />
 								</div>
-								<span className="link_name">Movimientos</span>
-							</Link>
-							<ul className="sub-menu blank">
+							</div>
+							<ul className="sub-menu">
 								<li>
-									<Link to="/movimiento" className="link_name">
-										Movimientos
+									<Link className="link_name" to="/movimiento">
+										Movimiento
 									</Link>
+								</li>
+								<li>
+									<Link to="/movimiento/entrada">Entrada</Link>
+								</li>
+								<li>
+									<Link to="/movimiento/salida">Salida</Link>
 								</li>
 							</ul>
 						</li>

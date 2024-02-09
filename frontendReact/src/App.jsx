@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Menu } from "./components/Menu";
 import Producto from "./components/Producto";
+import MovimientoEntrada from "./components/MovimientoEntrada";
+import MovimientoSalida from "./components/MovimientoSalida";
 import Movimiento from "./components/Movimiento";
 import Proveedor from "./components/Proveedor";
 import TipoProducto from "./components/TipoProducto";
@@ -16,19 +18,22 @@ const App = () => {
   return (
     <>
       <Routes>
-        
         <Route path="/" element={<Menu />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento />} />
+          <Route path="movimiento/entrada" element={<MovimientoEntrada />} />
+          <Route path="movimiento/salida" element={<MovimientoSalida />} />
           <Route path="/tipoproducto" element={<TipoProducto />} />
           <Route path="/categoria" element={<Categoria />} />
           <Route path="/up" element={<UnidadProductiva />} />
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
-          <Route path="/inventario" element={<Inventario/>}/>
+          <Route path="/inventario" element={<Inventario />} />
         </Route>
       </Routes>
+
+
     </>
   );
 };

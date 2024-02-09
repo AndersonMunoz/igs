@@ -3,41 +3,48 @@ import { validationResult } from "express-validator";
 
 
 export const registroUsuario = async (req, res) => {
-
     try {
-
         let error = validationResult(req);
         if (!error.isEmpty()) {
-           return res.status(403).json({"status": 403 ,error})
+            return res.status(403).json({"status": 403 ,error})
         }
 
         let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
-        let sql = `insert into usuarios (documento_usuario,email_usuario,nombre_usuario, contrasena_usuario, tipo_usuario)
-    values('${documento_usuario}','${email_usuario}','${nombre_usuario}','${contrasena_usuario}','${tipo_usuario}')`;
-        console.log(sql);
 
-        const [rows] = await pool.query(sql);
+        // Consultar si el documento ya está registrado
+        const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}'`;
+        const [existingUsers] = await pool.query(documentQuery);
+
+        if (existingUsers.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El documento ya está registrado"
+            });
+        }
+
+        // Si el documento no está registrado, proceder con la inserción
+        const insertQuery = `INSERT INTO usuarios (documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario)
+                             VALUES ('${documento_usuario}', '${email_usuario}', '${nombre_usuario}', '${contrasena_usuario}', '${tipo_usuario}')`;
+
+        const [rows] = await pool.query(insertQuery);
 
         if (rows.affectedRows > 0) {
-
-            res.status(200).json({
+            return res.status(200).json({
                 "status": 200,
-                "menssage": "Usuario registrado con exito"
-            })
+                "message": "Usuario registrado con éxito"
+            });
         } else {
-            res.status(401).json({
+            return res.status(401).json({
                 "status": 401,
-                "menssage": "Usuario no fue registrado, datos insuficientes"
-            })
-
+                "message": "Usuario no fue registrado, datos insuficientes"
+            });
         }
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             "status": 500,
-            "status": "Error interno, intente nuevamente" + error
-        })
+            "message": "Error interno, intente nuevamente: " + error
+        });
     }
-
 }
 
 export const listarUsuario = async (req, res) => {
