@@ -1,7 +1,7 @@
 import { check } from "express-validator";
 
 export const validatorUsuario = [
-    check('documento_usuario', 'El documento debe ser un número de documento válido')
+    check('documento_usuario', 'El documento debe ser mayor a 6 caracteres')
         .exists()
         .not()
         .isEmpty()
