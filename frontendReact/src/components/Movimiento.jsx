@@ -27,7 +27,6 @@ const Movimiento = () => {
   const [proveedor_list, setProveedor] = useState([]);
   const [tipos, setTipo] = useState([]);
   const [usuario_list, setUsuario] = useState([]);
-  const [productos, setProductos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
@@ -152,22 +151,6 @@ const Movimiento = () => {
       ;
   }
 
-  function listarProducto() {
-    fetch("http://localhost:3000/producto/listar", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-    .then((res) => res.json())
-    .then((data) => {
-      setProductos(data);
-      console.log(data);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-  }
 
   function listarProductoCategoria(id_categoria) {
 
@@ -538,7 +521,7 @@ const Movimiento = () => {
                             
 
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} value={element.unidad_peso}/>
+                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} value={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
                         </div>
                       </div>
