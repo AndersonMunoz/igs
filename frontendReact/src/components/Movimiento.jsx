@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
-import { IconSearch } from "@tabler/icons-react";
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import esES from '../languages/es-ES.json';
 import $ from 'jquery';
 import 'bootstrap';
@@ -20,7 +21,7 @@ const Movimiento = () => {
 
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
-  const [search, setSeach] = useState('');
+  const [unidadesProductos,setUniPro] = useState([]);
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
   const [categoria_list, setcategorias_producto] = useState([]);
   const [proveedor_list, setProveedor] = useState([]);
@@ -151,24 +152,24 @@ const Movimiento = () => {
       ;
   }
 
-  function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listar", {
+  function listarProducto() {
+    fetch("http://localhost:3000/producto/listar", {
       method: "GET",
       headers: {
-        "content-type": "application/json",
+        "Content-type": "application/json",
       },
     })
-      .then((res) => res.json())
-      .then((data) => {
-        setProveedor(data)
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      ;
+    .then((res) => res.json())
+    .then((data) => {
+      setProductos(data);
+      console.log(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
   }
 
-  function listarProducto(id_categoria) {
+  function listarProductoCategoria(id_categoria) {
 
     fetch(
       `http://localhost:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
@@ -181,12 +182,36 @@ const Movimiento = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        setUniPro([]);
         setProCat(data);
+        
         console.log("PRODUCTO - CATEGORIA : ", data);
       })
       .catch((e) => {
         setProCat([]);
-        console.log("xd: ", e);
+        console.log("Error:: ", e);
+      });
+  }
+
+  function listarUnidadesPro(id_producto) {
+
+    fetch(
+      `http://localhost:3000/facturamovimiento//buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setUniPro(data);
+        console.log("Unidades producto   : ", data);
+      })
+      .catch((e) => {
+        setUniPro([]);
+        console.log("Error:: ", e);
       });
   }
   function editarMovimiento(id) {
@@ -341,23 +366,27 @@ const Movimiento = () => {
           <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); }}>
             Registrar nuevo movimiento
           </button>
-          <div>
-            <DownloadTableExcel
-              filename="Movimiento Detalles Excel"
-              sheet="movimientos"
-              currentTableRef={tableRef.current}
-            >
-              <button type="button" className="btn-color btn me-2">
-                Excel
+          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+              <DownloadTableExcel
+                filename="Movimiento Detalles Excel"
+                sheet="movimientos"
+                currentTableRef={tableRef.current}
+              >
+                <button type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+              </DownloadTableExcel>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => generatePDF(tableRef, { filename: "Movimiento Detalles Excel.pdf" })}
+              >
+                <img src={PdfLogo} className="logoExel" />
               </button>
-            </DownloadTableExcel>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={() => generatePDF(tableRef, { filename: "Movimiento Detalles Excel.pdf" })}
-            >
-              PDF
-            </button>
+            </div>
           </div>
         </div>
         <div className="container-fluid w-full">
@@ -366,7 +395,7 @@ const Movimiento = () => {
             ref={tableRef}
             cellSpacing={0}
             width="100%">
-            <thead text-center text-justify>
+            <thead className="text-center text-justify">
               <tr>
                 <th className="th-sm">Nombre producto</th>
                 <th className="th-sm"># Lote</th>
@@ -438,7 +467,7 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="categoria">Categoria</label>
-                          <select onChange={(e)=>{listarProducto(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
+                          <select onChange={(e)=>{listarProductoCategoria(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
                             <option value="">Selecciona una categoria</option>
                             {categoria_list.map((element) => (
                               
@@ -453,7 +482,7 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="fk_id_producto">Producto</label>
-                          <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
+                          <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             {productosCategoria.length > 0 ? productosCategoria.map((element) => (
                               <option key={element.id_producto} value={element.id_producto}>{element.nombre_tipo}</option>
@@ -504,18 +533,13 @@ const Movimiento = () => {
                       </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="	unidad_peso_movimiento">Unidad</label>
+                          <label className="form-label" htmlFor="unidad_peso_movimiento">Unidad</label><br></br>
                           
                             
 
-                          <div>
-                          {productosCategoria.length > 0 ?
-                              <p value={productosCategoria[0].unidad_peso}>{productosCategoria[0].unidad_peso}</p>
-                            : ""}
-                          </div>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione una unidad de peso.
-                          </div>
+                          {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
+                              <input id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} value={element.unidad_peso}/>
+                              )): "No hay unidad de medida"}
                         </div>
                       </div>
                     </div>

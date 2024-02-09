@@ -34,13 +34,13 @@ export const guardarMovimiento = async (req, res) => {
 			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
 				res.status(200).json({
 					"status": 200,
-					"message": "Se registró el movimiento de entrada :D"
+					"message": "¡Se registró el movimiento de entrada!"
 				}
 				)
 			} else {
 				res.status(401).json({
 					"status": 401,
-					"message": "No se registro factura movimientos"
+					"message": "¡No se registro factura movimientos!"
 				});
 			}
 		} else if (tipo_movimiento === "salida") {
@@ -83,13 +83,13 @@ export const guardarMovimiento = async (req, res) => {
 				if (result3[0].affectedRows > 0 && result4[0].affectedRows > 0) {
 					res.status(200).json({
 						"status": 200,
-						"message": "Se registró el movimiento  de salida:D"
+						"message": "¡Se registró el movimiento  de salida!"
 					}
 					)
 				}else {
 					res.status(401).json({
 						"status": 401,
-						"message": "No se registro factura movimientos"
+						"message": "¡No se registro factura movimientos!"
 					});
 				}
 			}
@@ -173,9 +173,9 @@ export const actualizarMovimiento = async (req, res) => {
 		const [rows] = await pool.query(sql);
 
 		if (rows.affectedRows > 0) {
-			res.status(200).json({ "status": 200, "message": "Se actualizó el movimiento con éxito :D ..!!" });
+			res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
 		} else {
-			res.status(401).json({ "status": 401, "message": "NO se actualizó el movimiento :(  ..!!" });
+			res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
 		}
 	} catch (e) {
 		res.status(500).json({
@@ -188,7 +188,7 @@ export const actualizarMovimiento = async (req, res) => {
 export const obtenerProCategoria = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT pro.id_producto, pr.nombre_tipo, pr.unidad_peso FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id};`;
+		let sql = `SELECT pro.id_producto, pr.nombre_tipo, pr.unidad_peso, pr.id_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id};`;
 
 		const [rows] = await pool.query(sql);
 
@@ -204,4 +204,25 @@ export const obtenerProCategoria = async (req, res) => {
 		});
 	}
 };
+
+export const obtenerUnidad = async (req, res) => {
+	try {
+		let id = req.params.id_producto;
+		let sql = `SELECT pro.id_producto, pr.nombre_tipo, pr.unidad_peso, pr.id_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where pro.id_producto= ${id};`;
+
+		const [rows] = await pool.query(sql);
+
+		if (rows.length > 0) {
+			res.status(200).json(rows);
+		} else {
+			res.status(200).json({ "status": 401 , "message":"No se listaron unidades"});
+		}
+	} catch (e) {
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + e
+		});
+	}
+};
+
 
