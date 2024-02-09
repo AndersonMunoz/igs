@@ -1,29 +1,49 @@
 .custom-spinner .p-progress-spinner-circle {
   stroke: #28a745 !important; 
 }
-.p-password-custom .p-password-panel {
-  background-color: #343a40;
-  border: 1px solid #495057;
+
+/* Eliminamos el fondo y ajustamos los márgenes */
+body {
+  margin: 0;
+  padding: 0;
+}
+/* .contenedor{
+
+} */
+/* Estilo para el contenedor principal */
+.content-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1100px;
+  padding: 20px; /* Añadimos un espacio alrededor del contenedor */
+  box-sizing: border-box; /* El padding se incluye en el ancho máximo */
 }
 
-.p-password-custom .p-password-panel .p-password-meter .p-password-meter-strength {
-  background-color: #28a745; /* Cambia el color de la barra de fuerza a verde */
+/* Estilo para los contenedores pequeños */
+.small-container  {
+  background-color: #f0f0f0; /* Color de fondo */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+  flex: 1; /* Ocupan todo el espacio disponible */
+  margin-right: 20px; /* Espacio entre los contenedores */
+  height: 200px; /* Ajustamos la altura */
+  width: 100px; /* Ajustamos el ancho */
 }
 
-.p-password-custom .p-password-panel .p-password-info {
-  color: #6c757d; /* Cambia el color del texto de información */
+/* Eliminamos el margen derecho del último contenedor */
+.small-container:last-child {
+  margin-right: 0;
 }
 
-.p-password-custom .p-password-panel .p-password-panel-header {
-  background-color: #343a40;
-  border-bottom: 1px solid #495057;
+/* Estilo para el texto dentro de los contenedores */
+.small-container p {
+  font-size: 18px; /* Tamaño de fuente */
+  text-align: center; /* Alineación del texto */
+  margin: 20px; /* Espacio alrededor del texto */
 }
-
-.p-password-custom .p-password-panel .p-password-panel-footer {
-  background-color: #343a40;
-  border-top: 1px solid #495057;
-}
-
-.p-password-custom .p-password-panel .p-password-panel-footer .p-password-strength-text {
-  color: #ffffff; /* Cambia el color del texto de fuerza de contraseña */
+.large-container {
+  background-color: #f0f0f0; /* Color de fondo */
+  border-radius: 10px;
+  height: 300px; /* Ajustar la altura según sea necesario */
+  width: 1000px; /* Ajustar el ancho según sea necesario */
 }

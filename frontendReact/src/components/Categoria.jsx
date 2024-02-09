@@ -3,6 +3,8 @@ import {IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from '../languages/es-ES.json';
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import $ from 'jquery';
 import 'bootstrap';
 import 'datatables.net';
@@ -253,16 +255,16 @@ const Categoria = () => {
             sheet="Categoria"
             currentTableRef={tableRef.current}
           >
-            <button type="button" className="btn-color btn me-2">
-              Excel
+            <button type="button" className="btn btn-light">
+            <img src={ExelLogo} className="logoExel" />
             </button>
           </DownloadTableExcel>
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn  btn-light"
             onClick={() => generatePDF(tableRef, { filename: "Categoria.pdf" })}
           >
-           PDF
+            <img src={PdfLogo} className="logoExel" />
           </button>
         </div>
       </div>
@@ -290,7 +292,7 @@ const Categoria = () => {
 
           <div className="d-flex justify-content-center">
               <div className=" alert alert-danger text-center mt-4 w-50">
-              <h2> En este momento no contamos con ningúna Categoria disponible. </h2>
+              <h2> En este momento no contamos con ningúna Categoria disponible.😟 </h2>
               </div>
             </div>
           </td>
