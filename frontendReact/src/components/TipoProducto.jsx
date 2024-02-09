@@ -4,6 +4,8 @@ import { IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import $ from "jquery";
 import "bootstrap";
 import "datatables.net";
@@ -14,6 +16,7 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
+import { newLink } from "./Inventario.jsx";
 
 const Tipo = () => {
   const [tipos, setTipo] = useState([]);
@@ -24,33 +27,35 @@ const Tipo = () => {
   const modalUpdateRef = useRef(null);
   const [tiposeleccionado, setTiposeleccionado] = useState({});
   const tableRef = useRef();
+  const categoriaRecived = "";
+  console.log(categoriaRecived);
 
   useEffect(() => {
-		if (tipos.length > 0) {
-			if ($.fn.DataTable.isDataTable(tableRef.current)) {
-				$(tableRef.current).DataTable().destroy();
-			}
-			$(tableRef.current).DataTable({
-				columnDefs: [
-					{
-						targets: -1,
-						responsivePriority: 1
-					}
-				],
-				responsive: true,
-				language: esES,
-				paging: true,
-				select: {
-					'style': 'multi',
-					'selector': 'td:first-child',
-				},
-				lengthMenu: [
-					[10, 50, 100, -1],
-					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
-				],
-			});
-		}
-	}, [tipos]);
+    if (tipos.length > 0) {
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+      $(tableRef.current).DataTable({
+        columnDefs: [
+          {
+            targets: -1,
+            responsivePriority: 1,
+          },
+        ],
+        responsive: true,
+        language: esES,
+        paging: true,
+        select: {
+          style: "multi",
+          selector: "td:first-child",
+        },
+        lengthMenu: [
+          [10, 50, 100, -1],
+          ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
+        ],
+      });
+    }
+  }, [tipos]);
 
   useEffect(() => {
     listarTipo();
@@ -123,7 +128,7 @@ const Tipo = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nombre_tipo, fk_categoria_pro,unidad_peso }),
+      body: JSON.stringify({ nombre_tipo, fk_categoria_pro, unidad_peso }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -259,8 +264,15 @@ const Tipo = () => {
         console.error("Error:", error);
       });
   }
+  // Componente externo donde se define category
+  const category = categoriaRecived;
 
-  const [search, setSeach] = useState("");
+  // Componente donde se define la función setSearch
+  const setSeach = ({ category }) => {
+    return category;
+  };
+
+  const search = setSeach({ category }); // Pasando el valor de category como argumento
 
   return (
     <div>
@@ -284,16 +296,16 @@ const Tipo = () => {
             sheet="Tipo"
             currentTableRef={tableRef.current}
           >
-            <button type="button" className="btn-color btn me-2">
-              Excel
+            <button type="button" className="btn btn-light">
+              <img src={ExelLogo} className="logoExel" />
             </button>
           </DownloadTableExcel>
           <button
             type="button"
-            className="btn btn-danger"
+            className="btn btn-light"
             onClick={() => generatePDF(tableRef, { filename: "tipo.pdf" })}
           >
-           PDF
+            <img src={PdfLogo} className="logoExel" />
           </button>
         </div>
       </div>
@@ -323,7 +335,7 @@ const Tipo = () => {
                       <h2>
                         {" "}
                         En este momento no contamos con ningún tipo de producto
-                        disponible.{" "}
+                        disponible.😟{" "}
                       </h2>
                     </div>
                   </div>
@@ -333,16 +345,24 @@ const Tipo = () => {
               <>
                 {tipos
                   .filter((item) => {
-                    return search.toLowerCase() === ""
+                    return typeof search === "string" &&
+                      search.toLowerCase() === ""
                       ? item
-                      : item.NombreProducto.toLowerCase().includes(search);
+                      : item.Categoría.toLowerCase().includes(search);
                   })
+
                   .map((element) => (
                     <tr key={element.id}>
                       <td>{element.id}</td>
-                      <td style={{textTransform: 'capitalize'}}>{element.NombreProducto}</td>
-                      <td style={{textTransform: 'capitalize'}}>{element.Categoría}</td>
-                      <td style={{textTransform: 'capitalize'}}>{element.UnidadPeso}</td>
+                      <td style={{ textTransform: "capitalize" }}>
+                        {element.NombreProducto}
+                      </td>
+                      <td style={{ textTransform: "capitalize" }}>
+                        {element.Categoría}
+                      </td>
+                      <td style={{ textTransform: "capitalize" }}>
+                        {element.UnidadPeso}
+                      </td>
                       <td>
                         {element.estado === 1 ? (
                           <>
@@ -421,7 +441,7 @@ const Tipo = () => {
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <div className="col-md-7">
+                  <div className="col-md-6">
                     <label
                       htmlFor="fk_categoria_pro"
                       className="label-bold mb-2"
@@ -456,26 +476,26 @@ const Tipo = () => {
                       Por favor, seleccione un Categoria
                     </div>
                   </div>
-                </div>
-                <div className="row mb-3">
-                  <div className="col-md-12">
-                  <label
-                      htmlFor="unidad_peso"
-                      className="label-bold mb-2"
-                    >
-                    Unidad de Peso 
+
+                  <div className="col-md-6">
+                    <label htmlFor="unidad_peso" className="label-bold mb-2">
+                      Unidad de Peso
                     </label>
-          
-                   <select name="unidad_peso" id="unidad_peso" className="form-select form-control form-empty limpiar">
-                   <option value="">Seleccione una opción</option>
-                            <option value="kg">Kilo (Kg)</option>
-                            <option value="lb">Libra (Lb)</option>
-                            <option value="gr">Gramo (Gr)</option>
-                            <option value="lt">Litro (Lt)</option>
-                            <option value="ml">Mililitro (Ml)</option>
-                   </select>
+
+                    <select
+                      name="unidad_peso"
+                      id="unidad_peso"
+                      className="form-select form-control form-empty limpiar"
+                    >
+                      <option value="">Seleccione una opción</option>
+                      <option value="kg">Kilo (Kg)</option>
+                      <option value="lb">Libra (Lb)</option>
+                      <option value="gr">Gramo (Gr)</option>
+                      <option value="lt">Litro (Lt)</option>
+                      <option value="ml">Mililitro (Ml)</option>
+                    </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, la Unidad de peso 
+                      Por favor, la Unidad de peso
                     </div>
                   </div>
                 </div>
@@ -611,16 +631,17 @@ const Tipo = () => {
                           unidad_peso: e.target.value,
                         })
                       }
-        
-                    > <option value="">Seleccione una opción</option>
-                    <option value="kg">Kilo (Kg)</option>
-                    <option value="lb">Libra (Lb)</option>
-                    <option value="gr">Gramo (Gr)</option>
-                    <option value="lt">Litro (Lt)</option>
-                    <option value="ml">Mililitro (Ml)</option>
-           </select>
+                    >
+                      {" "}
+                      <option value="">Seleccione una opción</option>
+                      <option value="kg">Kilo (Kg)</option>
+                      <option value="lb">Libra (Lb)</option>
+                      <option value="gr">Gramo (Gr)</option>
+                      <option value="lt">Litro (Lt)</option>
+                      <option value="ml">Mililitro (Ml)</option>
+                    </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor,  unidad de peso 
+                      Por favor, unidad de peso
                     </div>
                   </div>
                 </div>
