@@ -1,29 +1,3 @@
 .custom-spinner .p-progress-spinner-circle {
   stroke: #28a745 !important; 
 }
-.p-password-custom .p-password-panel {
-  background-color: #343a40;
-  border: 1px solid #495057;
-}
-
-.p-password-custom .p-password-panel .p-password-meter .p-password-meter-strength {
-  background-color: #28a745; /* Cambia el color de la barra de fuerza a verde */
-}
-
-.p-password-custom .p-password-panel .p-password-info {
-  color: #6c757d; /* Cambia el color del texto de información */
-}
-
-.p-password-custom .p-password-panel .p-password-panel-header {
-  background-color: #343a40;
-  border-bottom: 1px solid #495057;
-}
-
-.p-password-custom .p-password-panel .p-password-panel-footer {
-  background-color: #343a40;
-  border-top: 1px solid #495057;
-}
-
-.p-password-custom .p-password-panel .p-password-panel-footer .p-password-strength-text {
-  color: #ffffff; /* Cambia el color del texto de fuerza de contraseña */
-}

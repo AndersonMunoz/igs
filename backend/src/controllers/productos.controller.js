@@ -9,12 +9,11 @@ export const guardarProducto = async (req, res) => {
     }
     let {
       descripcion_producto,
-      precio_producto,
       fk_id_up,
       fk_id_tipo_producto
     } = req.body;
-    const sql = "INSERT INTO productos (descripcion_producto, precio_producto, fk_id_up, fk_id_tipo_producto) VALUES (?, ?, ?, ?)";
-    const [rows] = await pool.query(sql, [descripcion_producto, precio_producto, fk_id_up, fk_id_tipo_producto]);    
+    const sql = "INSERT INTO productos (descripcion_producto, fk_id_up, fk_id_tipo_producto) VALUES (?, ?, ?)";
+    const [rows] = await pool.query(sql, [descripcion_producto, fk_id_up, fk_id_tipo_producto]);    
     if (rows.affectedRows > 0) {
       res
         .status(200)
