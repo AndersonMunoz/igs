@@ -47,8 +47,17 @@ const Movimiento = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
   const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control, select, input[type="number"], input[type="checkbox"]');
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
     formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+    formFields2.forEach(field => {
       if (field.type === 'checkbox') {
         field.checked = false;
       } else {
@@ -218,7 +227,7 @@ const Movimiento = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setMovimientoSeleccionado(data[0]);
         setUpdateModal(true);
       })
@@ -228,8 +237,9 @@ const Movimiento = () => {
   }
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
+    
     fetch(`http://localhost:3000/facturamovimiento/actualizar/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
         'Content-type': 'application/json'
       },
@@ -242,13 +252,12 @@ const Movimiento = () => {
           return;
         }
         if (data.status == 200) {
-          Sweet.actualizacionExitoso();
+          Sweet.exito(data.message);
         }
-        if (data.status == 403) {
+        if (data.status == 401) {
           Sweet.error(data.error.errors[0].msg);
-        return;
-        }
-        console.log(data);
+        return;}
+        //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
         removeModalBackdrop();
@@ -435,8 +444,8 @@ const Movimiento = () => {
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_proveedores}</td>
 
-                      <td className="p-2 text-center"   style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); }} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
-                        <button className="btn btn-color" onClick={() => { resetFormState();}}>
+                      <td className="p-2 text-center"   >
+                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
 
@@ -660,7 +669,7 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
-                          <select className="form-select form-update " value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
+                          <select className="form-control limpiar form-update" value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
                             <option value="">Seleccione una opción</option>
                             <option value="bueno">Bueno</option>
                             <option value="regular">Regular</option>
@@ -683,7 +692,7 @@ const Movimiento = () => {
                     <div className="col">
                       <div data-mdb-input-init className="form-outline">
                         <label className="form-label" htmlFor="num_lote">Número lote</label>
-                        <input type="number" id="num_lote" name="num_lote" className="form-control " value={movimientoSeleccionado.num_lote || ''} onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })} />
+                        <input type="number" id="num_lote" name="num_lote" className="form-control form-update " value={movimientoSeleccionado.num_lote || ''} onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })} />
                         <div className="invalid-feedback is-invalid">
                           Por favor, ingrese una cantidad.
                         </div>
@@ -695,7 +704,7 @@ const Movimiento = () => {
                           <p>¿Deseas editar la fecha de caducidad?</p>
                           <div className="form-check">
                             <input
-                              className="form-check-input "
+                              className="form-check-input form-update "
                               type="checkbox"
                               value={aplicaFechaCaducidad2}
                               id="flexCheckDefault2"
@@ -715,7 +724,7 @@ const Movimiento = () => {
                           <input
                             type="date"
                             id="fecha_caducidad"
-                            className="width: 20% form-control"
+                            className="width: 20% form-control form-update"
                             value={movimientoSeleccionado.fecha_caducidad || ''} name="fecha_caducidad" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value })}
                           />
                         </div>
@@ -724,7 +733,7 @@ const Movimiento = () => {
                   </form>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { resetFormState();}}>Cerrar</button>
                   <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); }}>Actualizar</button>
                 </div>
               </div>

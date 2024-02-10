@@ -1,6 +1,49 @@
 import { pool } from '../database/conexion.js';
 import { validationResult } from 'express-validator';
 
+export const guardarMovimientoEntrada = async (req,res) => {
+	try {
+		let error = validationResult(req);
+        if (!error.isEmpty()) {
+           return res.status(403).json({"status": 403 ,error})
+        }
+		let {cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote } = req.body;
+			let sql = `
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote)
+			VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', '${fecha_caducidad}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}', '${num_lote}');`;  
+			let sql3 = `
+                UPDATE productos
+                SET cantidad_peso_producto = cantidad_peso_producto + ?,
+                    precio_producto = ?
+                    WHERE id_producto = ?
+            `;
+
+			const [result1, result2] = await Promise.all([
+				pool.query(sql),
+				pool.query(sql3, [cantidad_peso_movimiento, precio_movimiento, fk_id_producto]),
+			]);
+
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
+				res.status(200).json({
+					"status": 200,
+					"message": "¡Se registró el movimiento de entrada!"
+				}
+				)
+			} else {
+				res.status(401).json({
+					"status": 401,
+					"message": "¡No se registro factura movimientos!"
+				});
+			}
+	} catch (e) {
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + e
+		});
+	}
+}
+
 export const guardarMovimiento = async (req, res) => {
 	try {
 		let error = validationResult(req);
@@ -138,6 +181,42 @@ export const listarMovimientos = async (req, res) => {
 	}
 }
 
+export const listarMovimientosEntrada = async (req, res) => {
+	try {
+		let error = validationResult(req);
+        if (!error.isEmpty()) {
+           return res.status(403).json({"status": 403 ,error})
+        }
+		const [result] = await pool.query
+			(
+				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, f.precio_movimiento, f.estado_producto_movimiento,
+				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
+				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores,f.num_lote
+					FROM factura_movimiento f 
+					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
+					JOIN productos p ON f.fk_id_producto = p.id_producto
+					JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
+					JOIN bodega u ON p.fk_id_up = u.id_up	
+					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "entrada"`
+			);
+		if (result.length > 0) {
+			res.status(200).json(result);
+		} else {
+			res.status(204).json({
+				"status": 204,
+				"message": "No se lista factura movimientos"
+			});
+		}
+
+	} catch (error) {
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + error
+		});
+	}
+}
+
 export const buscarMovimiento = async (req, res) => {
 	try {
 		let error = validationResult(req);
@@ -164,6 +243,10 @@ export const buscarMovimiento = async (req, res) => {
 
 export const actualizarMovimiento = async (req, res) => {
 	try {
+		let error = validationResult(req);
+		if (!error.isEmpty()) {
+			return res.status(400).json(error);
+		}
 		let id = req.params.id;
 		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario,num_lote } = req.body;
 

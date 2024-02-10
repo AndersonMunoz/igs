@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../style/Style.css";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
+import { IconEdit, IconTrash} from "@tabler/icons-react";
 import esES from "../languages/es-ES.json";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
