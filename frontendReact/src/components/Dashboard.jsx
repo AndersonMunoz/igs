@@ -13,41 +13,38 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div>
+    <div className="dashboard-container">
       {loading ? (
-        <div
-          className="text-center"
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
+        <div className="loading-spinner">
           <ProgressSpinner strokeWidth={4} className="custom-spinner" />
         </div>
       ) : (
-        <div className="contenedor">
-          <div className="content-container">
-             <div className="small-container">
-            <p>Contenedor 1</p>
+        <div className="grid-container">
+          <div className="container-wrapper">
+            <div className="small-container">
+              <p>Contenedor 1</p>
+            </div>
+            <div className="small-container">
+              <p>Contenedor 2</p>
+            </div>
+            <div className="small-container">
+              <p>Contenedor 3</p>
+            </div>
+            <div className="small-container">
+              <p>Contenedor 4</p>
+            </div>
+            <div className="small-container">
+              <p>Contenedor 5 </p>
+            </div>
           </div>
-          <div className="small-container">
-            <p>Contenedor 2</p>
+          <div className="container-wrapper">
+            <div className="grafi-container">
+              <p>Contenedor 6</p>
+            </div>
+            <div className="grafi-container">
+              <p>Contenedor 7</p>
+            </div>
           </div>
-          <div className="small-container">
-            <p>Contenedor 3</p>
-          </div>
-          <div className="small-container">
-            <p>Contenedor 4</p>
-          </div>
-          </div>
-          <div>
-          <div className="large-container">
-            <p>Contenedor 5 - Más largo verticalmente</p>
-          </div>
-          </div>
-         
         </div>
       )}
     </div>
