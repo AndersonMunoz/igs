@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/proveedor.css";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import $ from "jquery";
 import "bootstrap";
 import "datatables.net";
@@ -11,8 +14,8 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
-// import { DownloadTableExcel } from "react-export-table-to-excel";
-// import generatePDF from "react-to-pdf";
+import { DownloadTableExcel } from 'react-export-table-to-excel';
+import generatePDF from 'react-to-pdf';
 
 const proveedor = () => {
   const tableRef = useRef();
@@ -224,13 +227,30 @@ const proveedor = () => {
         >
           Registrar Nuevo Proveedor
         </button>
+        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+          <div className="" title="Descargar Excel">
+            <DownloadTableExcel
+              filename="Proveedores Detalles Excel"
+              sheet="Proveedores"
+              currentTableRef={tableRef.current}
+            ><button type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+              </button></DownloadTableExcel>
+          </div>
+          <div className="" title="Descargar Pdf">
+            <button type="button" className="btn btn-light" onClick={() => generatePDF(tableRef, { filename: "Proveedores Detalles table.pdf" })}
+            ><img src={PdfLogo} className="logoExel" />
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="wrapper-editor">
+      <div className="container-fluid w-full">
         <table
           id="dtBasicExample"
-          className="table table-striped table-bordered border display responsive nowrap"
+          className="table table-striped table-bordered border display responsive nowrap b-4"
           ref={tableRef}
           cellSpacing={0}
+          width="100%"
         >
           <thead className="text-center">
             <tr>
@@ -240,7 +260,7 @@ const proveedor = () => {
               <th className="th-sm">Direccion</th>
               <th className="th-sm">Contrato</th>
               <th className="th-sm">Estado</th>
-              <th className="th'sm text-center">acciones</th>
+              <th className="th'sm text-center">Acciones</th>
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -269,7 +289,7 @@ const proveedor = () => {
                               editarProveedor(element.id_proveedores);
                             }}
                           >
-                            Editar
+                            <IconEdit />
                           </button>
                           <button
                             className="btn btn-danger"
@@ -278,7 +298,7 @@ const proveedor = () => {
                               deshabilitarProveedor(element.id_proveedores)
                             }
                           >
-                            Deshabilitar
+                            <IconTrash />
                           </button>
                         </>
                       )}

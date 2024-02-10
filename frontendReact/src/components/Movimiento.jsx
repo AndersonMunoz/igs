@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
+import { IconEdit } from "@tabler/icons-react";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
 import esES from '../languages/es-ES.json';
@@ -425,7 +426,7 @@ const Movimiento = () => {
 
                       <td className="p-2 text-center"   style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); }} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <button className="btn btn-color" >
-                          Editar
+                        <IconEdit />
                         </button>
 
                       </td>
