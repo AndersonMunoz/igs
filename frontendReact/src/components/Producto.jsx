@@ -35,6 +35,18 @@ const Producto = () => {
 
   const tableRef = useRef();
 
+  const resetFormState = () => {
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control, select, input[type="number"], input[type="checkbox"]');
+    formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+  };
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false);
