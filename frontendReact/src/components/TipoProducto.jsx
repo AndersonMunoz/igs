@@ -264,6 +264,15 @@ const Tipo = () => {
         console.error("Error:", error);
       });
   }
+  // Componente externo donde se define category
+  const category = categoriaRecived;
+
+  // Componente donde se define la función setSearch
+  const setSeach = ({ category }) => {
+    return category;
+  };
+
+  const search = setSeach({ category }); // Pasando el valor de category como argumento
 
   return (
     <div>
