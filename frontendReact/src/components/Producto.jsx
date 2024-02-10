@@ -35,25 +35,12 @@ const Producto = () => {
 
   const tableRef = useRef();
 
-  const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control, select, input[type="number"], input[type="checkbox"]');
-    formFields.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-  };
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false);
     }, 800);
     return () => clearTimeout(timeout);
   });
-
   useEffect(() => {
 		if (productos.length > 0) {
 			if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -75,14 +62,11 @@ const Producto = () => {
      });
 		}
 	}, [productos]);
-
   useEffect(() => {
       listarProducto();
       listarUp();
       listarTipo();
-      busquedaInventario();
   }, []); 
-
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     if (modalBackdrop) {
@@ -325,14 +309,6 @@ const Producto = () => {
       }
     })
   }
-
-  function busquedaInventario() {
-    let categoria = localStorage.getItem('category')
-    console.log(categoria);
-    // favor dejar de ultimo...
-    localStorage.removeItem('category');
-  }
-
   function activarProducto(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
