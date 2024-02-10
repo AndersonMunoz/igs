@@ -20,6 +20,19 @@ const Validate = {
   
     return true; 
   },
+  validarSelect: function(selector) {// function para validar
+    const campos = document.querySelectorAll(selector);
+    let validacionExitosa = true;
+    campos.forEach(campo => {
+      if (!campo.value?.trim()) { 
+        campo.classList.add('is-invalid');
+        validacionExitosa = false;
+      } else {
+        campo.classList.remove('is-invalid');
+      }
+    });
+    return validacionExitosa;
+  },
   formatFecha:(fecha)=> {//funcion para convertir la fecha, de año-mes-dia
     const fechaObj = new Date(fecha);
     const year = fechaObj.getFullYear();

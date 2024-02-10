@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
+import { IconEdit, IconTrash} from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from '../languages/es-ES.json';
@@ -29,6 +30,8 @@ const Producto = () => {
   const modalUpdateRef = useRef(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
   const [loading, setLoading] = useState(true);
+  const [selectedTipo, setSelectedTipo] = useState(null);
+  const [selectedUp, setSelectedUp] = useState(null);
 
   const tableRef = useRef();
 
@@ -135,52 +138,105 @@ const Producto = () => {
         console.error("Error al procesar la respuesta:", e);
       });
   }
+  const handleTipo = (selectedOption) => {
+    setSelectedTipo(selectedOption); 
+  };
+  const handleUp = (selectedOption) => {
+    setSelectedUp(selectedOption); 
+  };
   function registrarProducto() {
-    let descripcion_producto = document.getElementById('descripcion_producto').value;
-    let fk_id_up = document.getElementById('fk_id_up').value;
-    let fk_id_tipo_producto = document.getElementById('fk_id_tipo_producto').value;
-
-    const validacionExitosa = Validate.validarCampos('.form-empty');
-
+    const descripcion_producto = document.getElementById('descripcion_producto').value;
+    Validate.validarCampos('.form-empty');
+    Validate.validarSelect('.form-empt');
+    const validacionExitosa = selectedTipo && selectedUp;
+  
+    if (!validacionExitosa) {
+      Sweet.registroFallido();
+      return;
+    }
+    
     fetch('http://localhost:3000/producto/registrar', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ descripcion_producto, fk_id_up, fk_id_tipo_producto }),
+      body: JSON.stringify({ descripcion_producto, fk_id_up: selectedUp.value, fk_id_tipo_producto: selectedTipo.value }),
     })
       .then((res) => res.json())
       .then(data => {
-        if (!validacionExitosa) {
-          Sweet.registroFallido();
-          return;
-        }
-
         if (data.status === 200) {
           Sweet.exito(data.message);
           if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
           }
           listarProducto();
-        }
-        if (data.status === 403) {
+          setShowModal(false);
+          removeModalBackdrop();
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
+        } else if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
-          return;
-        }
-
-        console.log(data);
-        listarProducto();
-        setShowModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-        if (modalBackdrop) {
-          modalBackdrop.remove();
+        } else {
+          console.error('Error en la petición:', data);
+          Sweet.error('Hubo un error al registrar el producto.');
         }
       })
       .catch(error => {
         console.error('Error:', error);
+        Sweet.error('Hubo un error al registrar el producto.');
       });
   }
+  
+  
+  // function registrarProducto() {
+  //   let descripcion_producto = document.getElementById('descripcion_producto').value;
+  //   const fk_id_up = selectedUp.value ;
+  //   const fk_id_tipo_producto = selectedTipo.value;
+
+  //   const validacionExitosa = Validate.validarCampos('.form-empty');
+
+  //   fetch('http://localhost:3000/producto/registrar', {
+  //     method: 'POST',
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ descripcion_producto, fk_id_up, fk_id_tipo_producto }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then(data => {
+  //       if (!validacionExitosa) {
+  //         Sweet.registroFallido();
+  //         return;
+  //       }
+
+  //       if (data.status === 200) {
+  //         Sweet.exito(data.message);
+  //         if ($.fn.DataTable.isDataTable(tableRef.current)) {
+  //           $(tableRef.current).DataTable().destroy();
+  //         }
+  //         listarProducto();
+  //       }
+  //       if (data.status === 403) {
+  //         Sweet.error(data.error.errors[0].msg);
+  //         return;
+  //       }
+
+  //       console.log(data);
+  //       listarProducto();
+  //       setShowModal(false);
+  //       removeModalBackdrop();
+  //       const modalBackdrop = document.querySelector('.modal-backdrop');
+  //       if (modalBackdrop) {
+  //         modalBackdrop.remove();
+  //       }
+  //       Validate.limpiar();
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //     });
+  // }
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -282,13 +338,7 @@ const Producto = () => {
       }
     });
   }
-  const handleTipo = (selectedOption) => {
-    if (selectedOption) {
-      console.log("Tipo seleccionado:", selectedOption.value);
-    } else {
-      console.log("No se ha seleccionado ningún tipo");
-    }
-  };
+
   return (
 <div>
       {loading ? (
@@ -306,7 +356,7 @@ const Producto = () => {
       ) : (
         <>
           <div className="d-flex justify-content-between mb-4">
-            <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); }}>
+            <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); setSelectedTipo(null);setSelectedUp(null);}}>
               Registrar Nuevo Producto
             </button>
             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -380,9 +430,9 @@ const Producto = () => {
                           {element.estado === 1 ? (
                             <>
                               <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                                Editar
+                              <IconEdit />
                               </button>
-                              <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}>Eliminar</button>
+                              <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
                             </>
                           ) : (
                             <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
@@ -406,44 +456,34 @@ const Producto = () => {
                 <div className="modal-body">
                   <form>
                     <div className="row mb-3">
-                      {/* <div className="col-md-12">
-                        <label htmlFor="precioProducto" className="label-bold mb-2">Precio del Producto</label>
-                        <input type="text" className="form-control form-empty limpiar" id="precio_producto" name="precio_producto" placeholder="Precio del Producto" />
-                        <div className="invalid-feedback is-invalid">
-                          Por favor, ingrese el precio del producto.
-                        </div>
-                      </div> */}
                     </div>
                     <div className="row mb-3">
-                    <div className="col-md-6">
+                      <div className="col-md-6">
+                      <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
                       <Select
-                        className="react-select-container"
+                        className="react-select-container  form-empt"
                         classNamePrefix="react-select"
-                        options={tipos.map(element => ({ value: element.id, label: element.NombreProducto }))}
-                        placeholder="Selecciona un Tipo"
-                        id="fk_id_tipo_producto"
-                        name="fk_id_tipo_producto"
+                        options={tipos.map(element => ({ value: element.id, label: element.NombreProducto}))}
+                        placeholder="Selecciona..."
+                        onChange={handleTipo}
+                        value={selectedTipo}
                       />
-                      <div className="invalid-feedback is-invalid">
-                        Por favor, seleccione un tipo de producto.
+                        <div className="invalid-feedback is-invalid">
+                          Por favor, seleccione un tipo de producto.
+                        </div>
                       </div>
-                    </div>
                       <div className="col-md-6">
                         <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
-                        <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
-                          {up.length === 0 ? (
-                            <option value="" disabled>No hay tipos disponibles</option>
-                          ) : (
-                            <>
-                              <option value="">Selecciona una UP</option>
-                              {up.map((element) => (
-                                <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
-                              ))}
-                            </>
-                          )}
-                        </select>
+                        <Select
+                        className="react-select-container  form-empt"
+                        classNamePrefix="react-select"
+                        options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
+                        placeholder="Selecciona..."
+                        onChange={handleUp}
+                        value={selectedUp}
+                      />
                         <div className="invalid-feedback is-invalid">
-                          Por favor, seleccione una unidad de peso.
+                          Por favor, seleccione una Bodega.
                         </div>
                       </div>
                     </div>
