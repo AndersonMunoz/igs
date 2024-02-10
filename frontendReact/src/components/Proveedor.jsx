@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-// import "../style/Proveedor.jsx";
+import "../style/Style.css";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
