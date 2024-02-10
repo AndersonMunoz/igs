@@ -7,15 +7,15 @@ export const guardarMovimiento = async (req, res) => {
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
         }
-		let { tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+		let { tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
 			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote } = req.body;
 
 		if (tipo_movimiento === "entrada") {
 
 			let sql = `
-			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento,
 			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor,num_lote)
-			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+			VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
 		'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}','${num_lote}');
 		`;  
 			let sql3 = `
@@ -65,9 +65,9 @@ export const guardarMovimiento = async (req, res) => {
 			} else if (cantidadPesoTotal >= 0) {
 
 				let sql10 = `
-				INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, unidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
+				INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
 				nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor,num_lote)
-				VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${unidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
+				VALUES ('${tipo_movimiento}','${cantidad_peso_movimiento}','${precio_movimiento}','${estado_producto_movimiento}','${nota_factura}',
 				'${fecha_caducidad}','${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}','${num_lote}');`;
 
 				let sql6 = `UPDATE productos SET  cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 

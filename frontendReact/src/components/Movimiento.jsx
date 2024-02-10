@@ -521,7 +521,7 @@ const Movimiento = () => {
                             
 
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} value={element.unidad_peso}/>
+                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} defaultValue={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
                         </div>
                       </div>
@@ -543,7 +543,7 @@ const Movimiento = () => {
                             <option value="">Seleccione una opción</option>
                             <option value="bueno">Bueno</option>
                             <option value="regular">Regular</option>
-                            <option value="malo">Malo</option>http://localhost:5173/categoria
+                            <option value="malo">Malo</option>
                           </select>
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un estado.
