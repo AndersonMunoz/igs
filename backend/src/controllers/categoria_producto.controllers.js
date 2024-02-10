@@ -20,7 +20,7 @@ export const registrocategoria_producto = async (req, res) => {
 
             res.status(200).json({
                 "status": 200,
-                "menssage": " la Categoria fue  registrado  con exito "
+                "menssage": " La Categoria fue  registrada  con exito "
             })
         } else {
             res.status(403).json({
@@ -55,7 +55,7 @@ export const listarcategoria_producto = async (req, res) => {
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
-            res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categoria  de productos   " });
+            res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categorias     " });
 
         }
 
@@ -83,10 +83,10 @@ export const editarcategoria_producto = async (req, res) => {
         const [rows] = await pool.query(sql);
         if (rows.affectedRows > 0) {
             res.status(200).json(
-                { "status": 200, "menssge": "Se actualizo con exito la categoria  de producto   " });
+                { "status": 200, "menssge": "Se actualizo con exito la categoria    " });
         } else {
             res.status(403).json(
-                { "status": 403, "menssge": "No se actualizo la  categoria de producto  " });
+                { "status": 403, "menssge": "No se actualizo la  categoria   " });
         }
     } catch (e) {
         res.status(500).json({
