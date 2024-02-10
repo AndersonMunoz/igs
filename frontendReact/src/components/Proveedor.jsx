@@ -328,6 +328,7 @@ const proveedor = () => {
       <div
         className="modal fade"
         id="exampleModal"
+        data-bs-backdrop="static" data-bs-keyboard="false"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
