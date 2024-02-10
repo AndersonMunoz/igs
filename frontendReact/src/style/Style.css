@@ -15,8 +15,16 @@
 .btn-color {
     background-color: rgb(57, 169, 0) !important;
     color: #fff !important;
+    border: none;
     /* Otros estilos */
 }
 .border-color {
-    border: 3px solid rgb(57, 169, 0);
+    border: 2px solid #DEE2E6;
+    background-color: white;
+}
+.btn-white{
+    background-color: white;
+}
+.btn-white:hover {
+    background-color: rgb(219, 219, 219);
 }

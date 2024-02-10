@@ -53,6 +53,7 @@ const Producto = () => {
       listarProducto();
       listarUp();
       listarTipo();
+      busquedaInventario();
   }, []); 
 
   function removeModalBackdrop() {
@@ -245,6 +246,14 @@ const Producto = () => {
       }
     })
   }
+
+  function busquedaInventario() {
+    let categoria = localStorage.getItem('category')
+    console.log(categoria);
+    // favor dejar de ultimo...
+    localStorage.removeItem('category');
+  }
+
   function activarProducto(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {

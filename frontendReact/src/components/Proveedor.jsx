@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "../style/proveedor.css";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+// import "../style/Proveedor.jsx";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
