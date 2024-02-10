@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import '../style/Style.css'
 
 const App = () => {
   const [categoryInput, setCategoryInput] = useState("");
   const [categories, setCategories] = useState([]);
-
+  const navigate = useNavigate();
+  
   const handleAddCategory = () => {
     if (categoryInput.trim() !== "") {
       setCategories([...categories, categoryInput]);
@@ -42,12 +44,11 @@ const App = () => {
       });
   }
 
-  const navigate = useNavigate(); // Mueve useNavigate dentro de la función de componente
 
   const newLink = (category) => {
-    navigate("/tipoproducto");
+    navigate(`/producto`);
     console.log(category);
-    return category;
+    localStorage.setItem('category', category)
   };
 
   const renderCategories = () => {
@@ -59,9 +60,9 @@ const App = () => {
             <div key={index} className="col">
               <button
                 onClick={() => newLink(category)}
-                className="w-100 border-color"
+                className="rounded btn-white w-100 border-color text-md"
               >
-                {category}
+                <h2>{category}</h2>
               </button>
             </div>
           ))}
@@ -72,36 +73,37 @@ const App = () => {
   };
 
   return (
-    <div className="container border border-primary rounded p-4 mt-4">
-      <div className="rounded p-1 mb-4 btn-color">
+    <div className="container rounded p-4 mt-4">
+      <div className="rounded p-1 mb-4 txt-color">
         <h1 className="text-center">INVENTARIO</h1>
       </div>
       <div className="container mt-4">
-        <div className="row offset-4">
-          <div className="form-group col-9">
-            <input
-              type="text"
-              className="form-control border-color"
-              placeholder="Buscar una categoría"
-              value={categoryInput}
-              onChange={(e) => setCategoryInput(e.target.value)}
-            />
-          </div>
-          <div className="form-group col-3">
-            <button
-              className="btn-color border-color rounded h-100 w-100"
-              type="button"
-              onClick={handleAddCategory}
-            >
-              Buscar
-            </button>
-          </div>
-        </div>
+      <div className="row w-100" style={{ justifyContent: 'flex-end' }}>
+  <div className="form-group col-6">
+    <input
+      type="text"
+      className="form-control border-color h-100"
+      placeholder="Buscar categoría"
+      value={categoryInput}
+      onChange={(e) => setCategoryInput(e.target.value)}
+    />
+  </div>
+  <div className="form-group col-3">
+    <button
+      className="btn-color rounded h-100 w-100"
+      type="button"
+      onClick={handleAddCategory}
+    >
+      <h3 className="mt-1">Buscar</h3>
+    </button>
+  </div>
+</div>
+
       </div>
 
       {renderCategories()}
 
-      <div className="d-grid gap-2 col-6 mx-auto mt-4">
+      <div className="d-grid gap-2 col-3 mx-auto mt-4">
         <div className="row">
           <div className="col text-center">
             <button className="btn btn-primary mb-2 w-100">Kardes</button>
