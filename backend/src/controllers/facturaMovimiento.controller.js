@@ -50,7 +50,7 @@ export const guardarMovimientoSalida = async (req,res)=> {
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
         }
-		let {cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote} = req.body;
+		let {cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, num_lote} = req.body;
 		let sql4 = `select cantidad_peso_producto from productos where id_producto = ${fk_id_producto}`
 
 			let cantidadPeso = await pool.query(sql4)
@@ -72,9 +72,9 @@ export const guardarMovimientoSalida = async (req,res)=> {
 
 				let sql10 = `
 				INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,
-				nota_factura, fk_id_producto, fk_id_usuario,fk_id_proveedor,num_lote)
+				nota_factura, fk_id_producto, fk_id_usuario,num_lote)
 				VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}',
-				'${fk_id_producto}','${fk_id_usuario}','${fk_id_proveedor}','${num_lote}');`;
+				'${fk_id_producto}','${fk_id_usuario}','${num_lote}');`;
 
 				let sql6 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
 				WHERE id_producto = ${fk_id_producto}`
@@ -214,18 +214,30 @@ export const listarMovimientos = async (req, res) => {
            return res.status(403).json({"status": 403 ,error})
         }
 		const [result] = await pool.query
-			(
-				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, f.precio_movimiento, f.estado_producto_movimiento,
-				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
-				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores,f.num_lote
-					FROM factura_movimiento f 
-					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
-					JOIN productos p ON f.fk_id_producto = p.id_producto
-					JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
-					JOIN bodega u ON p.fk_id_up = u.id_up	
-					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria`
-			);
+		(
+			`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, CASE 
+			WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica'
+			ELSE CAST(f.precio_movimiento AS CHAR)
+		END as precio_movimiento, CASE 
+			WHEN f.tipo_movimiento = 'salida' AND f.estado_producto_movimiento IN ('bueno', 'malo', 'regular') THEN 'No aplica'
+			ELSE f.estado_producto_movimiento
+		END as estado_producto_movimiento,
+			(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
+			f.nota_factura,CASE 
+			WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
+			ELSE f.fecha_caducidad
+		END as fecha_caducidad, CASE 
+			WHEN pr.id_proveedores IS NULL OR pr.id_proveedores = 0 THEN 'No aplica'
+			ELSE pr.nombre_proveedores
+		END as nombre_proveedores,f.num_lote
+			FROM factura_movimiento f 
+			JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
+			JOIN productos p ON f.fk_id_producto = p.id_producto
+			LEFT JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
+			JOIN bodega u ON p.fk_id_up = u.id_up	
+			JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+			JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria`
+		);
 		if (result.length > 0) {
 			res.status(200).json(result);
 		} else {
@@ -253,7 +265,10 @@ export const listarMovimientosEntrada = async (req, res) => {
 			(
 				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, f.precio_movimiento, f.estado_producto_movimiento,
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
-				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores,f.num_lote
+				f.nota_factura,CASE 
+				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
+				ELSE f.fecha_caducidad
+			END as fecha_caducidad, pr.nombre_proveedores,f.num_lote
 					FROM factura_movimiento f 
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto
@@ -287,13 +302,11 @@ export const listarMovimientosSalida = async (req, res) => {
         }
 		const [result] = await pool.query
 			(
-				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, f.precio_movimiento, f.estado_producto_movimiento,
-				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
-				f.nota_factura,f.fecha_caducidad, pr.nombre_proveedores,f.num_lote
+				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, 
+				f.nota_factura, f.num_lote
 					FROM factura_movimiento f 
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto
-					JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
 					JOIN bodega u ON p.fk_id_up = u.id_up	
 					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
 					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "salida"`

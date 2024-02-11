@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Outlet, Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
@@ -275,7 +276,6 @@ const Movimiento = () => {
     let nota_factura = document.getElementById('nota_factura').value;
     let fecha_caducidad = null;
     let fk_id_producto = document.getElementById('fk_id_producto').value;
-    let fk_id_proveedor = document.getElementById('fk_id_proveedor').value;
     if (aplicaFechaCaducidad) {
       fecha_caducidad = document.getElementById('fecha_caducidad').value;
     }
@@ -287,7 +287,7 @@ const Movimiento = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({cantidad_peso_movimiento, nota_factura,  fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote }),
+      body: JSON.stringify({cantidad_peso_movimiento, nota_factura,  fk_id_producto, fk_id_usuario, num_lote }),
     })
     .then((res) => res.json())
     .then(data => {
@@ -364,9 +364,13 @@ const Movimiento = () => {
       <div>
         <h1 className="text-center modal-title fs-5">Movimientos Salida</h1>
         <div className="d-flex justify-content-between mb-4">
-          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
-            Registrar nuevo movimiento de salida
+          <div>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
+            Registrar nuevo movimiento de Salida
           </button>
+          <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
+          
+          </div>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
               <DownloadTableExcel
@@ -404,12 +408,8 @@ const Movimiento = () => {
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
                 <th className="th-sm">Unidad Peso</th>
-                <th className="th-sm">Precio movimiento</th>
-                <th className="th-sm">Estado producto</th>
                 <th className="th-sm">Nota</th>
-                <th className="th-sm">Fecha de caducidad</th>
                 <th className="th-sm">Usuario que hizo movimiento</th>
-                <th className="th-sm">Proveedor</th>
                 <th className="th-sm">Editar</th>
               </tr>
             </thead>
@@ -434,12 +434,8 @@ const Movimiento = () => {
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.tipo_movimiento}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.cantidad_peso_movimiento}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.precio_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nota_factura}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_caducidad)}</td>
                       <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_proveedores}</td>
 
                       <td className="p-2 text-center"   >
                         <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
@@ -515,20 +511,6 @@ const Movimiento = () => {
                       </div>
                     </div>
                     <div className="row mb-4">
-                    <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="fk_id_proveedor">Proveedor</label>
-                          <select defaultValue="" className="form-select form-empty limpiar" id="fk_id_proveedor" name="fk_id_proveedor" aria-label="Default select example">
-                            <option value="">Seleccione una opción</option>
-                            {proveedor_list.map((element) => (
-                              <option key={element.id_proveedores} value={element.id_proveedores}>{element.nombre_proveedores}</option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione un proveedor.
-                          </div>
-                        </div>
-                      </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="num_lote">Número de Lote</label>
@@ -536,14 +518,6 @@ const Movimiento = () => {
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row mb-4">
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="nota_factura">Nota</label>
-                          <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
                         </div>
                       </div>
                       <div className="col">
@@ -571,6 +545,15 @@ const Movimiento = () => {
                         </div>
                       </div>
                     </div>
+                    <div className="row mb-4">
+                      <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="nota_factura">Nota</label>
+                          <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
+                        </div>
+                      </div>
+                      
+                    </div>
                   </form>
                 </div>
                 <div className="modal-footer">
@@ -592,19 +575,6 @@ const Movimiento = () => {
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
-                          <select className="form-control limpiar form-update" value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
-                            <option value="">Seleccione una opción</option>
-                            <option value="bueno">Bueno</option>
-                            <option value="regular">Regular</option>
-                            <option value="malo">Malo</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row mb-4">
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="nota_factura">Nota</label>
                           <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
                           <div className="invalid-feedback is-invalid">
@@ -621,38 +591,6 @@ const Movimiento = () => {
                           Por favor, ingrese una cantidad.
                         </div>
                       </div>
-                    </div>
-                    <div className="row mb-4">
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <p>¿Deseas editar la fecha de caducidad?</p>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input form-update "
-                              type="checkbox"
-                              value={aplicaFechaCaducidad2}
-                              id="flexCheckDefault2"
-                              onChange={handleCheckboxChange2}
-                            />
-                            <label className="form-check-label" htmlFor="flexCheckDefault2">
-                              Si
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      {aplicaFechaCaducidad2 && (
-                        <div className="col">
-                          <label className="form-label" htmlFor="fecha_caducidad">
-                            Fecha caducidad
-                          </label>
-                          <input
-                            type="date"
-                            id="fecha_caducidad"
-                            className="width: 20% form-control form-update"
-                            value={movimientoSeleccionado.fecha_caducidad || ''} name="fecha_caducidad" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value })}
-                          />
-                        </div>
-                      )}
                     </div>
                   </form>
                 </div>

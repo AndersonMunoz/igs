@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Outlet, Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
@@ -366,9 +367,12 @@ const Movimiento = () => {
       <div>
         <h1 className="text-center modal-title fs-5">Movimientos Entrada</h1>
         <div className="d-flex justify-content-between mb-4">
-          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
-            Registrar nuevo movimiento de entrada
+          <div>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
+            Registrar nuevo movimiento de Entrada
           </button>
+          <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
+          </div>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
               <DownloadTableExcel
