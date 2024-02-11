@@ -33,7 +33,7 @@ export const guardarMovimientoEntrada = async (req,res) => {
 			} else {
 				res.status(401).json({
 					"status": 401,
-					"message": "¡No se registro factura movimientos!"
+					"message": "¡No se registro movimiento de entrada!"
 				});
 			}
 	} catch (e) {
@@ -94,7 +94,7 @@ export const guardarMovimientoSalida = async (req,res)=> {
 				}else {
 					res.status(401).json({
 						"status": 401,
-						"message": "¡No se registro factura movimientos!"
+						"message": "¡No se registro movimiento de salida!"
 					});
 				}
 			}
@@ -144,7 +144,7 @@ export const guardarMovimiento = async (req, res) => {
 			} else {
 				res.status(401).json({
 					"status": 401,
-					"message": "¡No se registro factura movimientos!"
+					"message": "¡No se registro movimiento de salida!"
 				});
 			}
 		} else if (tipo_movimiento === "salida") {
@@ -187,13 +187,13 @@ export const guardarMovimiento = async (req, res) => {
 				if (result3[0].affectedRows > 0 && result4[0].affectedRows > 0) {
 					res.status(200).json({
 						"status": 200,
-						"message": "¡Se registró el movimiento  de salida!"
+						"message": "¡Se registró el movimiento de salida!"
 					}
 					)
 				}else {
 					res.status(401).json({
 						"status": 401,
-						"message": "¡No se registro factura movimientos!"
+						"message": "¡No se registro movimiento de salida!"
 					});
 				}
 			}
@@ -382,7 +382,7 @@ export const actualizarMovimiento = async (req, res) => {
 export const obtenerProCategoria = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT pro.id_producto, pr.nombre_tipo, pr.unidad_peso, pr.id_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id};`;
+		let sql = `SELECT pro.id_producto, pr.nombre_tipo  FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id};`;
 
 		const [rows] = await pool.query(sql);
 
@@ -402,7 +402,7 @@ export const obtenerProCategoria = async (req, res) => {
 export const obtenerUnidad = async (req, res) => {
 	try {
 		let id = req.params.id_producto;
-		let sql = `SELECT pro.id_producto, pr.nombre_tipo, pr.unidad_peso, pr.id_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where pro.id_producto= ${id};`;
+		let sql = `SELECT  pr.unidad_peso, pr.nombre_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where pro.id_producto= ${id};`;
 
 		const [rows] = await pool.query(sql);
 

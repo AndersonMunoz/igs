@@ -53,42 +53,47 @@
                 <li class="liPrin sub-menu-toggle">
                     <a href="#FacturaMovimiento">Factura Movimiento</a>
                     <ul class="sub-menu">
-                        <li><a href="#16">Doc Registrar</a></li>
-                        <li><a href="#17">Doc Listar</a></li>
-                        <li><a href="#18">Doc Buscar</a></li>
-                        <li><a href="#19">Doc Actualizar</a></li>
+                        <li><a href="#16">Doc Registrar Entrada</a></li>
+                        <li><a href="#17">Doc Registrar Salida</a></li>
+                        <li><a href="#18">Doc Listar</a></li>
+                        <li><a href="#19">Doc Listar Movimiento Entrada</a></li>
+                        <li><a href="#20">Doc Listar Movimiento Salida</a></li>
+                        <li><a href="#21">Doc Buscar</a></li>
+                        <li><a href="#22">Doc Buscar productos de categoría</a></li>
+                        <li><a href="#23">Doc Buscar unidad de tipo producto</a></li>
+                        <li><a href="#24">Doc Actualizar</a></li>
                     </ul>
                 </li>
                 <li class="liPrin sub-menu-toggle">
                     <a href="#TipoProducto">Tipo Producto</a>
                     <ul class="sub-menu">
-                        <li><a href="#20">Doc Registrar</a></li>
-                        <li><a href="#21">Doc Listar</a></li>
-                        <li><a href="#22">Doc Actualizar</a></li>
+                        <li><a href="#25">Doc Registrar</a></li>
+                        <li><a href="#26">Doc Listar</a></li>
+                        <li><a href="#27">Doc Actualizar</a></li>
                     </ul>
                 </li>
                 <li class="liPrin sub-menu-toggle">
                     <a href="#Categoria">Categoria Productos</a>
                     <ul class="sub-menu">
-                        <li><a href="#23">Doc Registrar</a></li>
-                        <li><a href="#24">Doc Listar</a></li>
-                        <li><a href="#25">Doc Actualizar</a></li>
+                        <li><a href="#28">Doc Registrar</a></li>
+                        <li><a href="#29">Doc Listar</a></li>
+                        <li><a href="#30">Doc Actualizar</a></li>
                     </ul>
                 </li>
 
                 <li class="liPrin sub-menu-toggle">
                     <a href="#unidad">Unidad Productiva</a>
                     <ul class="sub-menu">
-                        <li><a href="#26">Doc Registrar</a></li>
-                        <li><a href="#27">Doc Listar</a></li>
-                        <li><a href="#28">Doc Actualizar</a></li>
+                        <li><a href="#31">Doc Registrar</a></li>
+                        <li><a href="#32">Doc Listar</a></li>
+                        <li><a href="#33">Doc Actualizar</a></li>
 
                     </ul>
                 </li>
                 <li class="liPrin sub-menu-toggle">
                     <a href="#token">Token</a>
                     <ul class="sub-menu">
-                        <li><a href="#29">Doc Generar</a></li>
+                        <li><a href="#34">Doc Generar</a></li>
                     </ul>
                 </li>
             </ul>
@@ -1360,7 +1365,7 @@
             <table cellspacing="0"><!-- tabla registro videojuegos -->
                 <tbody>
                     <tr>
-                        <th class="radi" colspan="2">DOC. REGISTRO</th>
+                        <th class="radi" colspan="2">DOC. REGISTRAR ENTRADA</th>
                     </tr>
                     <tr>
                         <th>Numero</th>
@@ -1371,20 +1376,20 @@
                     <tr>
                         <th>Nombre Del Webservice</th>
                         <td>
-                            <p>Registrar un movimiento</p>
+                            <p>Registrar un movimiento de entrada</p>
                         </td>
                     </tr>
                     <tr>
                         <th>Url</th>
                         <td>
-                            <p>localhost:3000/facturamovimiento/registrar</p>
+                            <p>localhost:3000/facturamovimiento/registrarEntrada</p>
                         </td>
                     </tr>
                     <tr>
                         <th>Descripción</th>
                         <td>
                             <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
-                                para especificar un movimiento a registrar</p>
+                                para regstrar un movimiento de entrada de un producto.</p>
                         </td>
                     </tr>
                     <tr>
@@ -1411,7 +1416,7 @@
                     <tr>
                         <th>Usuarios</th>
                         <td>
-                            <p>administradores y coadministradores</p>
+                            <p>Administradores y coadministradores</p>
                         </td>
                     </tr>
                     <tr>
@@ -1423,13 +1428,12 @@
                             <h3>MENSAJE</h3>
                             <p>
                                 {<br>
-                                &nbsp;&nbsp;"tipo_movimiento":"entrada",<br>
                                 &nbsp;&nbsp;"cantidad_peso_movimiento":34,<br>
-                                &nbsp;&nbsp;"unidad_peso_movimiento":"lb",<br>
                                 &nbsp;&nbsp;"precio_movimiento":70000,<br>
                                 &nbsp;&nbsp;"estado_producto_movimiento":"malo",<br>
                                 &nbsp;&nbsp;"nota_factura":"La mitad está dañado",<br>
                                 &nbsp;&nbsp;"fecha_caducidad_producto":"2023-11-17",<br>
+                                &nbsp;&nbsp;"num_lote":1,<br>
                                 &nbsp;&nbsp;"fk_id_producto":1,<br>
                                 &nbsp;&nbsp;"fk_id_usuario":1,<br>
                                 &nbsp;&nbsp;"fk_id_proveedor":1<br>
@@ -1443,7 +1447,7 @@
                             <h3>CORRECTO</h3>
                             <p>status: 200,</p>
                             <h3>MENSAJE</h3>
-                            <p>body: "Se registró el movimiento :D"</p>
+                            <p>body: "¡Se registró el movimiento de entrada!"</p>
                         </td>
                     </tr>
                     <tr>
@@ -1452,7 +1456,7 @@
                             <h3>INCORRECTO</h3>
                             <p>status: 401
                             <h3>MENSAJE</h3>
-                            <p>menssge: "NO se registró el movimiento :("</p>
+                            <p>menssge: "¡No se registró el movimiento de entrada!"</p>
                             <h3>NO AUTORIZADO</h3>
                             <p>status: 500</p>
                             <h3 id="vdL">MENSAJE</h3>
@@ -1466,12 +1470,113 @@
             <table cellspacing="0">
                 <tbody>
                     <tr>
-                        <th class="radi" colspan="2">DOC. LISTAR</th>
+                        <th class="radi" colspan="2">DOC. REGISTRAR SALIDA</th>
                     </tr>
                     <tr>
                         <th>Numero</th>
                         <td>
                             <p>17</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Registrar un movimiento de salida</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/facturamovimiento/registrarSalida</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante un formulario se lleva a cabo la petición de diversos datos <br>
+                                para regstrar un movimiento de salida de un producto</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>POST</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>Administradores y coadministradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                            <P>TOKEN REQUERIDO</P><br>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>
+                                {<br>
+                                &nbsp;&nbsp;"cantidad_peso_movimiento":34,<br>
+                                &nbsp;&nbsp;"nota_factura":"La mitad está dañado",<br>
+                                &nbsp;&nbsp;"num_lote":1,<br>
+                                &nbsp;&nbsp;"fk_id_producto":1,<br>
+                                &nbsp;&nbsp;"fk_id_usuario":1,<br>
+                                }</p>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>body: "¡Se registró el movimiento de salida!"</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "¡No se registró el movimiento de salida!"</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 500</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error en el servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="18" class="tabla">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. LISTAR MOVIMIENTOS TOTALES</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>18</p>
                         </td>
                     </tr>
                     <tr>
@@ -1533,18 +1638,21 @@
                             <h3>MENSAJE</h3>
                             <p>
                                 {<br>
-                                &nbsp;&nbsp;"id_factura": 1,<br>
-                                &nbsp;&nbsp;"fecha_movimiento": "2023-10-30T15:03:51.000Z",<br>
-                                &nbsp;&nbsp;"tipo_movimiento": "salida",<br>
-                                &nbsp;&nbsp;"cantidad_peso_movimiento": 5,<br>
-                                &nbsp;&nbsp;"unidad_peso_movimiento": "kg",<br>
-                                &nbsp;&nbsp;"precio_movimiento": 6000,<br>
-                                &nbsp;&nbsp;"estado_producto_movimiento": "bueno",<br>
-                                &nbsp;&nbsp;"nota_factura": "No presenta nada malo",<br>
-                                &nbsp;&nbsp;"fecha_caducidad_producto": "2023-12-24T05:00:00.000Z",<br>
-                                &nbsp;&nbsp;"fk_id_producto": 1,<br>
-                                &nbsp;&nbsp;"fk_id_usuario": 1,<br>
-                                &nbsp;&nbsp;"fk_id_proveedor": 1<br>
+                                    &nbsp;&nbsp;"id_factura": 1,<br>
+                                    &nbsp;&nbsp;"nombre_usuario": "Jose",<br>
+                                    &nbsp;&nbsp;"tipo_movimiento": "entrada",<br>
+                                    &nbsp;&nbsp;"nombre_tipo": "Manzana verde",<br>
+                                    &nbsp;&nbsp;"nombre_categoria": "Fruta",<br>
+                                    &nbsp;&nbsp;"fecha_movimiento": "2024-02-11T21:50:55.000Z",<br>
+                                    &nbsp;&nbsp;"cantidad_peso_movimiento": 34,<br>
+                                    &nbsp;&nbsp;"unidad_peso": "lb",<br>
+                                    &nbsp;&nbsp;"precio_movimiento": 5000,<br>
+                                    &nbsp;&nbsp;"estado_producto_movimiento": "bueno",<br>
+                                    &nbsp;&nbsp;"PrecioTotalFactura": 170000,<br>
+                                    &nbsp;&nbsp;"nota_factura": "Todo bien",<br>
+                                    &nbsp;&nbsp;"fecha_caducidad": "2024-02-24",<br>
+                                    &nbsp;&nbsp;"nombre_proveedores": "Colombina",<br>
+                                    &nbsp;&nbsp;"num_lote": 1<br>
                                 }</p>
                         </td>
                     </tr>
@@ -1560,16 +1668,213 @@
                 </tbody>
             </table>
         </div>
-        <div id="18" class="tabla">
-            <table cellspacing="0"><!-- tabla registro videojuegos -->
+        <div id="19" class="tabla">
+            <table cellspacing="0">
                 <tbody>
                     <tr>
-                        <th class="radi" colspan="2">DOC. BUSCAR</th>
+                        <th class="radi" colspan="2">DOC. LISTAR MOVIMIENTOS DE ENTRADA</th>
                     </tr>
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>18</p>
+                            <p>19</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Listar los movimientos</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>http://localhost:3000/facturamovimiento/listarEntrada</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante una url se hace llamado a todos los movimientos de tipo entrada hechos<br>
+                                para poder terner una vista mas detallada solamente de este tipo.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>Administradores y coadministradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>
+                                {<br>
+                                    &nbsp;&nbsp;"id_factura": 1,<br>
+                                    &nbsp;&nbsp;"nombre_usuario": "Jose",<br>
+                                    &nbsp;&nbsp;"tipo_movimiento": "entrada",<br>
+                                    &nbsp;&nbsp;"nombre_tipo": "Manzana verde",<br>
+                                    &nbsp;&nbsp;"nombre_categoria": "Fruta",<br>
+                                    &nbsp;&nbsp;"fecha_movimiento": "2024-02-11T21:50:55.000Z",<br>
+                                    &nbsp;&nbsp;"cantidad_peso_movimiento": 34,<br>
+                                    &nbsp;&nbsp;"unidad_peso": "lb",<br>
+                                    &nbsp;&nbsp;"precio_movimiento": 5000,<br>
+                                    &nbsp;&nbsp;"estado_producto_movimiento": "bueno",<br>
+                                    &nbsp;&nbsp;"PrecioTotalFactura": 170000,<br>
+                                    &nbsp;&nbsp;"nota_factura": "Todo bien",<br>
+                                    &nbsp;&nbsp;"fecha_caducidad": "2024-02-24",<br>
+                                    &nbsp;&nbsp;"nombre_proveedores": "Colombina",<br>
+                                    &nbsp;&nbsp;"num_lote": 1<br>
+                                }</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "Error en listar movimientos de entrada"</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="20" class="tabla">
+            <table cellspacing="0">
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. LISTAR MOVIMIENTOS DE SALIDA</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>20</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>Listar los movimientos</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>http://localhost:3000/facturamovimiento/listarSalida</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante una url se hace llamado a todos los movimientos de tipo salida hechos<br>
+                                para poder terner una vista mas detallada solamente de este tipo.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>Administradores y coadministradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>
+                                {<br>
+                                    &nbsp;&nbsp;"id_factura": 2,<br>
+                                    &nbsp;&nbsp;"nombre_usuario": "Jose",<br>
+                                    &nbsp;&nbsp;"tipo_movimiento": "salida",<br>
+                                    &nbsp;&nbsp;"nombre_tipo": "Manzana verde",<br>
+                                    &nbsp;&nbsp;"nombre_categoria": "Fruta",<br>
+                                    &nbsp;&nbsp;"fecha_movimiento": "2024-02-11T21:51:30.000Z",<br>
+                                    &nbsp;&nbsp;"cantidad_peso_movimiento": 30,<br>
+                                    &nbsp;&nbsp;"unidad_peso": "lb",<br>
+                                    &nbsp;&nbsp;"nota_factura": "Para pastel",<br>
+                                    &nbsp;&nbsp;"num_lote": 2<br>
+                                }</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "Error en listar movimientos de salida"</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="21" class="tabla">
+            <table cellspacing="0"><!-- tabla registro videojuegos -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. BUSCAR MOVIMIENTO</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>21</p>
                         </td>
                     </tr>
                     <tr>
@@ -1654,13 +1959,197 @@
                             <h3>NO AUTORIZADO</h3>
                             <p>status: 500</p>
                             <h3 id="vdL">MENSAJE</h3>
-                            <p>Error en buscar movimiento :(</p>
+                            <p>Error en buscar movimiento</p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div id="19" class="tabla">
+        <div id="22" class="tabla">
+            <table cellspacing="0"><!-- tabla registro videojuegos -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. BUSCAR PRODUCTOS DE UNA CATEGORÍA</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>22</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>buscar un movimiento en específico</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/facturamovimiento/buscarProCat/:idCategoria</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante una url se hace llamado a el nombre del producto y su categoría<br>
+                                para poder observarlo mejor en detalle</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>administradores y coadministradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>
+                                {<br>
+                                    &nbsp;&nbsp;"id_producto": 4,<br>
+                                    &nbsp;&nbsp;"nombre_tipo": "Manzana verde"<br>
+                                }</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "No se listaron productos"</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 500</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error en el servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="23" class="tabla">
+            <table cellspacing="0"><!-- tabla registro videojuegos -->
+                <tbody>
+                    <tr>
+                        <th class="radi" colspan="2">DOC. BUSCAR UNIDAD DE PRODUCTO</th>
+                    </tr>
+                    <tr>
+                        <th>Numero</th>
+                        <td>
+                            <p>23</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nombre Del Webservice</th>
+                        <td>
+                            <p>buscar un movimiento en específico</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>
+                            <p>localhost:3000/facturamovimiento/buscarUnidad/:idTipoProducto</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Descripción</th>
+                        <td>
+                            <p>Mediante una url se hace llamado a el nombre del producto y su unidad de medida<br>
+                                para poder observarlo mejor en detalle</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verbo Http</th>
+                        <td>
+                            <p>GET</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Header</th>
+                        <td>
+                            <p>X-Powered-By: Express <br>
+                                Access-Control-Allow-Origin: *<br>
+                                Access-Control-Allow-Methods: GET,POST,PUT,DELETE<br>
+                                Access-Control-Allow-Headers: Content-Type, Authorization<br>
+                                Content-Type: application/json; charset=utf-8<br>
+                                Content-Length: 57<br>
+                                ETag: W/"39-By3KGi4z/8iC0PqLDph3QRpzF4Y"<br>
+                                Date: Thu, 07 Sep 2023 02:36:02 GMT<br>
+                                Connection: keep-alive<br>
+                                Keep-Alive: timeout=5</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Usuarios</th>
+                        <td>
+                            <p>administradores y coadministradores</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Request bodyform – data</th>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Response</th>
+                        <td>
+                            <h3>CORRECTO</h3>
+                            <p>status: 200,</p>
+                            <h3>MENSAJE</h3>
+                            <p>
+                                {<br>
+                                    &nbsp;&nbsp;"unidad_peso": "gr",<br>
+                                    &nbsp;&nbsp;"nombre_tipo": "Sardina"<br>
+                                }</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="rari"></th>
+                        <td class="ra">
+                            <h3>INCORRECTO</h3>
+                            <p>status: 401
+                            <h3>MENSAJE</h3>
+                            <p>menssge: "No se listaron productos"</p>
+                            <h3>NO AUTORIZADO</h3>
+                            <p>status: 500</p>
+                            <h3 id="vdL">MENSAJE</h3>
+                            <p>Error en el servidor</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="24" class="tabla">
             <table cellspacing="0"><!-- tabla registro videojuegos -->
                 <tbody>
                     <tr>
@@ -1669,7 +2158,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>19</p>
+                            <p>24</p>
                         </td>
                     </tr>
                     <tr>
@@ -1759,7 +2248,7 @@
         </div>
         <!-- DOCUMENTACION TIPO DE PRODUCTOS -->
         <h2 id="TipoProducto">Documentación Tipo de producto </h2>
-        <div id="20" class="tabla">
+        <div id="25" class="tabla">
             <table cellspacing="0"><!-- tabla registro videojuegos -->
                 <tbody>
                     <tr>
@@ -1768,7 +2257,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>20</p>
+                            <p>25</p>
                         </td>
                     </tr>
                     <tr>
@@ -1856,7 +2345,7 @@
             </tbody>
             </table>
         </div>
-        <div id="21" class="tabla">
+        <div id="26" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -1865,7 +2354,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>21</p>
+                            <p>26</p>
                         </td>
                     </tr>
                     <tr>
@@ -1941,7 +2430,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="22" class="tabla">
+        <div id="27" class="tabla">
             <table cellspacing="0"><!-- tabla registro actulizacion tipo producto -->
                 <tbody>
                     <tr>
@@ -1950,7 +2439,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>22</p>
+                            <p>27</p>
                         </td>
                     </tr>
                     <tr>
@@ -2040,7 +2529,7 @@
         </div>
         <!-- DOCUMENTACION DE CATEGORIA DE PRODUCTOS -->
         <h2 id="Categoria">Documentación Categoria Producto </h2>
-        <div id="23" class="tabla">
+        <div id="28" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -2049,7 +2538,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>23</p>
+                            <p>28</p>
                         </td>
                     </tr>
                     <tr>
@@ -2137,7 +2626,7 @@
             </tbody>
             </table>
         </div>
-        <div id="24" class="tabla">
+        <div id="29" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -2146,7 +2635,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>24</p>
+                            <p>29</p>
                         </td>
                     </tr>
                     <tr>
@@ -2222,7 +2711,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="25" class="tabla">
+        <div id="30" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -2231,7 +2720,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>25</p>
+                            <p>30</p>
                         </td>
                     </tr>
                     <tr>
@@ -2320,7 +2809,7 @@
         </div>
         <!-- Documentacion Unidad Productiva -->
         <h2 id="unidad">Documentación Unidad Productiva </h2>
-        <div id="26" class="tabla">
+        <div id="31" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -2329,7 +2818,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>26</p>
+                            <p>31</p>
                         </td>
                     </tr>
                     <tr>
@@ -2416,7 +2905,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="27" class="tabla">
+        <div id="32" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -2425,7 +2914,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>27</p>
+                            <p>32</p>
                         </td>
                     </tr>
                     <tr>
@@ -2501,7 +2990,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="28" class="tabla">
+        <div id="33" class="tabla">
             <table cellspacing="0">
                 <tbody>
                     <tr>
@@ -2510,7 +2999,7 @@
                     <tr>
                         <th>Numero</th>
                         <td>
-                            <p>28</p>
+                            <p>33</p>
                         </td>
                     </tr>
                     <tr>
@@ -2598,7 +3087,7 @@
             </table>
         </div>
         <h2 id="token">Documentación Token</h2>
-            <div id="29" class="tabla">
+            <div id="34" class="tabla">
                 <table cellspacing="0"> <!-- tabla generar token -->
                     <tbody>
                         <tr>
@@ -2607,7 +3096,7 @@
                         <tr>
                             <th>Numero</th>
                             <td>
-                                <p>29</p>
+                                <p>34</p>
                             </td>
                         </tr>
                         <tr>
