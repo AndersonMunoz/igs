@@ -22,8 +22,8 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento />} />
-          <Route path="movimiento/entrada" element={<MovimientoEntrada />} />
-          <Route path="movimiento/salida" element={<MovimientoSalida />} />
+          <Route path="/movimiento/entrada" element={<MovimientoEntrada />} />
+          <Route path="/movimiento/salida" element={<MovimientoSalida />} />
           <Route path="/tipoproducto" element={<TipoProducto />} />
           <Route path="/categoria" element={<Categoria />} />
           <Route path="/up" element={<UnidadProductiva />} />

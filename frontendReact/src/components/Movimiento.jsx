@@ -16,6 +16,7 @@ import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
+import { Outlet, Link } from "react-router-dom";
 
 
 const Movimiento = () => {
@@ -367,9 +368,12 @@ const Movimiento = () => {
       <div>
         <h1 className="text-center modal-title fs-5">Movimientos Totales</h1>
         <div className="d-flex justify-content-between mb-4">
-          <button type="button" className="btn-color btn  mb-4 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
-            Registrar nuevo movimiento
-          </button>
+          <div>
+          <Link to="/movimiento/entrada"><button type="button"  class="btn btn-success m-1 ">Registrar Entrada</button></Link>
+          <Link to="/movimiento/salida"><button type="button" class="btn btn-danger m-1 ">Registrar Salida</button></Link>
+            
+          </div>
+          
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
               <DownloadTableExcel

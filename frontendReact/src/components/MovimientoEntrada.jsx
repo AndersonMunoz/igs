@@ -455,9 +455,9 @@ const Movimiento = () => {
             </tbody>
           </table>
         </div>
-        <div className="d-flex justify-content-center align-items-center w-full h-full">
+        <div className="d-flex justify-content-center align-items-center w-80 h-full">
           <div className="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
-            <div className="modal-dialog modal-xl modal-dialog-centered">
+            <div className="modal-dialog modal-lg modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header txt-color">
                   <h1 className="modal-title fs-5" id="exampleModalLabel">Registro de movimiento de entrada</h1>
