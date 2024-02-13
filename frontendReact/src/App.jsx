@@ -12,7 +12,6 @@ import UnidadProductiva from "./components/UnidadProductiva";
 import Usuario from "./components/Usuarios";
 import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
-// import Inicio from "./components/Inicio";
 
 const App = () => {
   return (
