@@ -11,6 +11,16 @@ export const registroTipo_producto = async (req, res) => {
         }
 
         let { nombre_tipo, fk_categoria_pro ,unidad_peso} = req.body;
+        const TipoQuery = `SELECT * FROM tipo_productos WHERE nombre_tipo = '${nombre_tipo}'`;
+        const [existingTipo] = await pool.query(TipoQuery);
+        
+       
+        if (existingTipo.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El Tipo de porducto ya esta registrado"
+            });
+        }
         let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro,unidad_peso) values('${nombre_tipo}','${fk_categoria_pro}','${unidad_peso}')`;
       
 
@@ -40,6 +50,29 @@ export const listarTipoProducto = async (req, res) => {
     try {
         const [result] = await pool.query
             ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto,t.unidad_peso AS UnidadPeso, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria ORDER BY t.estado DESC');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({
+                "status": 204,
+                "message": "No se Listo los productos"
+            });
+
+        }
+
+    } catch (e) {
+        res.status(500).json({
+            "status": 500,
+            "menssge": "Error interno en el sevidor " + e
+        });
+    }
+}
+
+
+export const listarActivoTipo = async (req, res) => {
+    try {
+        const [result] = await pool.query
+            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto,t.unidad_peso AS UnidadPeso, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE t.estado = 1 ORDER BY t.estado  DESC');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {

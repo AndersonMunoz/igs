@@ -9,8 +9,21 @@ export const registrocategoria_producto = async (req, res) => {
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
         }
+    ;
+    
 
-        let { nombre_categoria } = req.body;
+        let { nombre_categoria
+         } = req.body;
+         const CategoriaQuery = `SELECT * FROM categorias_producto WHERE nombre_categoria = '${nombre_categoria}'`;
+        const [existingCategoria] = await pool.query(CategoriaQuery);
+        
+       
+        if (existingCategoria.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "La Categoria ya esta registrada"
+            });
+        }
         let sql = `insert into categorias_producto (nombre_categoria)
   values('${nombre_categoria}')`;
 
@@ -67,6 +80,27 @@ export const listarcategoria_producto = async (req, res) => {
     }
 
 };
+
+
+export const listarActivo = async (req, res) => {
+    try {
+        const [result] = await pool.query('select * from categorias_producto WHERE estado = 1');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categorias     " });
+
+        }
+
+    } catch (err) {
+        res.status(500).json({
+            "status": 500, "message": "Error en el servidor   "+err
+        
+        })
+    }
+
+};
+
 export const editarcategoria_producto = async (req, res) => {
     try {
         let error = validationResult(req);

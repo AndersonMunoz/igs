@@ -7,8 +7,17 @@ export const guardarMovimientoEntrada = async (req,res) => {
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
         }
+		
 		let {cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
 			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote } = req.body;
+			const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
+        	const [existingLote] = await pool.query(loteQuery);
+        if (existingLote.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El lote ya está registrado"
+            });
+        }
 			let sql = `
 			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote)
 			VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', '${fecha_caducidad}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}', '${num_lote}');`;  
@@ -216,7 +225,7 @@ export const listarMovimientos = async (req, res) => {
 		const [result] = await pool.query
 		(
 			`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, CASE 
-			WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica nada'
+			WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica'
 			ELSE CAST(f.precio_movimiento AS CHAR)
 		END as precio_movimiento, CASE 
 			WHEN f.tipo_movimiento = 'salida' AND f.estado_producto_movimiento IN ('bueno', 'malo', 'regular') THEN 'No aplica'
@@ -361,7 +370,27 @@ export const actualizarMovimiento = async (req, res) => {
 		}
 		let id = req.params.id;
 		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario,num_lote } = req.body;
+		
+		
+		/* const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
+        	const [existingLote] = await pool.query(loteQuery);
+        if (existingLote.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El lote ya está registrado"
+            });
+        } */
 
+		
+		const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}' AND id_factura != ${id}`;
+const [existingLote] = await pool.query(loteQuery);
+
+if (existingLote.length > 0 && num_lote !== existingLote[0].num_lote) {
+    return res.status(409).json({
+        "status": 409,
+        "message": "El lote ya está registrado"
+    });
+}
 		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}',num_lote='${num_lote}' where id_factura=${id}`;
 
 		const [rows] = await pool.query(sql);
@@ -402,7 +431,7 @@ export const obtenerProCategoria = async (req, res) => {
 export const obtenerUnidad = async (req, res) => {
 	try {
 		let id = req.params.id_producto;
-		let sql = `SELECT  pr.unidad_peso, pr.nombre_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where pro.id_producto= ${id};`;
+		let sql = `SELECT pr.id_tipo, pr.unidad_peso, pr.nombre_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where pro.id_producto= ${id};`;
 
 		const [rows] = await pool.query(sql);
 
@@ -417,25 +446,6 @@ export const obtenerUnidad = async (req, res) => {
 			"message": "Error en el servidor" + e
 		});
 	}
-};
-
-export const listarCategoriaActiva = async (req, res) => {
-    try {
-        const [result] = await pool.query('select * from categorias_producto where estado = 1');
-        if (result.length > 0) {
-            res.status(200).json(result);
-        } else {
-            res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categorias     " });
-
-        }
-
-    } catch (err) {
-        res.status(500).json({
-            "status": 500, "message": "Error en el servidor   "+err
-        
-        })
-    }
-
 };
 
 

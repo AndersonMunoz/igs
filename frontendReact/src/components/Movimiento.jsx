@@ -295,6 +295,10 @@ const Movimiento = () => {
     })
     .then((res) => res.json())
     .then(data => {
+      if (!validacionExitosa) {
+        Sweet.registroFallido();
+        return;
+      }
       if (data.status === 200) {
         Sweet.exito(data.message);
         if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -302,8 +306,13 @@ const Movimiento = () => {
         }
         listarMovimiento();
       }
+      
       if (data.status === 403) {
         Sweet.error(data.error.errors[0].msg);
+        return;
+      }
+      if (data.status === 409) {
+        Sweet.error(data.message);
         return;
       }
       console.log(data);

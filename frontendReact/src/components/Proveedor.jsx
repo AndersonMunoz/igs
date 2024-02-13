@@ -92,6 +92,7 @@ const proveedor = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          token : localStorage.getItem('token')
         },
         body: JSON.stringify({
           nombre_proveedores,
@@ -126,6 +127,7 @@ const proveedor = () => {
           method: "put",
           headers: {
             "Content-type": "application/json",
+            token : localStorage.getItem('token')
           },
         })
           .then((res) => res.json())
@@ -183,6 +185,7 @@ const proveedor = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        token : localStorage.getItem('token')
       },
       body: JSON.stringify({
         nombre_proveedores,

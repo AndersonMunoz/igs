@@ -10,6 +10,15 @@ export const listarProvedor = async (req, res) => {
         console.log(e);
     }
 }
+export const listarProvedorActivo = async (req, res) => {
+    try {
+        const [result] = await pool.query('select * from 	proveedores WHERE    estado = 1  ORDER BY estado DESC');
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(500).json({ "status": 500, "message": `error en listar proveedores: ${e} en servidor` })
+        console.log(e);
+    }
+}
 
 
 
