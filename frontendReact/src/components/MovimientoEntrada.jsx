@@ -112,7 +112,7 @@ const Movimiento = () => {
   }, []);
 
   function listarCategoria() {
-    fetch("http://localhost:3000/categoria/listar", {
+    fetch("http://localhost:3000/facturamovimiento/listarCatEstado", {
       method: "GET",
       headers: {
         "Content-type": "application/json",

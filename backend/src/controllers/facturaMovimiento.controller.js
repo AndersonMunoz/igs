@@ -216,7 +216,7 @@ export const listarMovimientos = async (req, res) => {
 		const [result] = await pool.query
 		(
 			`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, CASE 
-			WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica'
+			WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica nada'
 			ELSE CAST(f.precio_movimiento AS CHAR)
 		END as precio_movimiento, CASE 
 			WHEN f.tipo_movimiento = 'salida' AND f.estado_producto_movimiento IN ('bueno', 'malo', 'regular') THEN 'No aplica'
@@ -382,7 +382,7 @@ export const actualizarMovimiento = async (req, res) => {
 export const obtenerProCategoria = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT pro.id_producto, pr.nombre_tipo  FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id};`;
+		let sql = `SELECT pro.id_producto, pr.nombre_tipo  FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id} and pro.estado=1;`;
 
 		const [rows] = await pool.query(sql);
 
@@ -417,6 +417,25 @@ export const obtenerUnidad = async (req, res) => {
 			"message": "Error en el servidor" + e
 		});
 	}
+};
+
+export const listarCategoriaActiva = async (req, res) => {
+    try {
+        const [result] = await pool.query('select * from categorias_producto where estado = 1');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categorias     " });
+
+        }
+
+    } catch (err) {
+        res.status(500).json({
+            "status": 500, "message": "Error en el servidor   "+err
+        
+        })
+    }
+
 };
 
 
