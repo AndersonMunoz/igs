@@ -11,6 +11,16 @@ export const registroTipo_producto = async (req, res) => {
         }
 
         let { nombre_tipo, fk_categoria_pro ,unidad_peso} = req.body;
+        const TipoQuery = `SELECT * FROM tipo_productos WHERE nombre_tipo = '${nombre_tipo}'`;
+        const [existingTipo] = await pool.query(TipoQuery);
+        
+       
+        if (existingTipo.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El Tipo de porducto ya esta registrado"
+            });
+        }
         let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro,unidad_peso) values('${nombre_tipo}','${fk_categoria_pro}','${unidad_peso}')`;
       
 

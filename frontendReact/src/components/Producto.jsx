@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from '../languages/es-ES.json';
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import $ from 'jquery';
 import 'bootstrap';
 import 'datatables.net';
@@ -56,6 +59,26 @@ const Producto = () => {
       busquedaInventario();
   }, []); 
 
+  const resetFormState = () => {
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+    formFields2.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+  };
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     if (modalBackdrop) {
@@ -79,7 +102,7 @@ const Producto = () => {
     });
   }
   function listarTipo(){
-    fetch("http://localhost:3000/tipo/listar",{
+    fetch("http://localhost:3000/tipo/listarActivo",{
       method: "GET",
       headers:{
         "Content-type": "application/json",
@@ -125,7 +148,6 @@ const Producto = () => {
       });
   }
   function registrarProducto() {
-    let precio_producto = document.getElementById('precio_producto').value;
     let descripcion_producto = document.getElementById('descripcion_producto').value;
     let fk_id_up = document.getElementById('fk_id_up').value;
     let fk_id_tipo_producto = document.getElementById('fk_id_tipo_producto').value;
@@ -137,7 +159,7 @@ const Producto = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ precio_producto, descripcion_producto, fk_id_up, fk_id_tipo_producto }),
+      body: JSON.stringify({descripcion_producto, fk_id_up, fk_id_tipo_producto }),
     })
       .then((res) => res.json())
       .then(data => {
@@ -155,6 +177,10 @@ const Producto = () => {
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
+          return;
+        }
+        if (data.status === 409) {
+          Sweet.error(data.message);
           return;
         }
 
@@ -284,25 +310,25 @@ const Producto = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();}}>
           Registrar Nuevo Producto
         </button>
-          <div>
+        <div>
           <DownloadTableExcel
             filename="Tabla productos"
-            sheet="productos"
+            sheet="Productos"
             currentTableRef={tableRef.current}
           >
-            <button type="button" className="btn-color btn me-2">
-              Exportar a Excel
+            <button type="button" className="btn btn-light">
+              <img src={ExelLogo} className="logoExel" />
             </button>
           </DownloadTableExcel>
           <button
             type="button"
-            className="btn btn-danger"
-            onClick={() => generatePDF(tableRef, { filename: "producto.pdf" })}
+            className="btn btn-light"
+            onClick={() => generatePDF(tableRef, { filename: "productos.pdf" })}
           >
-            Descargar PDF
+            <img src={PdfLogo} className="logoExel" />
           </button>
         </div>
       </div>
@@ -337,19 +363,10 @@ const Producto = () => {
             ) : (                     // <td>{Validate.formatFecha(element.FechaCaducidad)}
               <>
                 {productos.map((element) => (
-                    <tr key={element.id_producto}>
+                    <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
                       <td>{element.id_producto}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.NombreCategoria}</td>
-                      {/*                       
-                      <td>
-                        {element.FechaCaducidad ? (
-                          <p className="btn btn-color mx-2">{Validate.formatFecha(element.FechaCaducidad)}</p>
-                        ) : (
-                          <p className="btn btn-primary">No Asignada</p>
-                        )}
-                      </td>
-                       */}
                       <td>{element.Peso}</td>
                       <td>{element.Unidad}</td>
                       <td>{element.PrecioIndividual}</td>
@@ -359,10 +376,10 @@ const Producto = () => {
                       <td>
                       {element.estado === 1 ? (
                         <>
-                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                            Editar  
+                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                          <IconEdit /> 
                           </button>
-                          <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}>Eliminar</button>
+                          <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
                         </>
                       ): (
                           <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
@@ -376,7 +393,7 @@ const Producto = () => {
         </table>
       </div>
 
-      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
+      <div className="modal fade"id="staticBackdrop"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -386,18 +403,9 @@ const Producto = () => {
             <div className="modal-body">
               <form>
                 <div className="row mb-3">
-                  <div className="col-md-12">
-                    <label htmlFor="precioProducto" className="label-bold mb-2">Precio del Producto</label>
-                    <input type="text" className="form-control form-empty limpiar" id="precio_producto" name="precio_producto" placeholder="Precio del Producto" />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, ingrese el precio del producto.
-                    </div>
-                  </div>
-                </div>
-                <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                    <select className="form-select  form-control form-empty limpiar" id="fk_id_tipo_producto" style={{ textTransform: 'capitalize' }}name="fk_id_tipo_producto" defaultValue="">
                       {tipos.length === 0 ? (
                         <option value="" disabled>No hay tipos disponibles</option>
                       ) : (
@@ -415,7 +423,7 @@ const Producto = () => {
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" style={{ textTransform: 'capitalize' }}defaultValue="">
                       {up.length === 0 ? (
                           <option value="" disabled>No hay tipos disponibles</option>
                       ) : (
@@ -442,7 +450,7 @@ const Producto = () => {
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { resetFormState();}}>
                 Cerrar
               </button>
               <button type="button" className="btn btn-color" onClick={registrarProducto}>
@@ -453,7 +461,7 @@ const Producto = () => {
         </div>
       </div>
 
-      <div className="modal fade"id="actualizarModal"tabIndex="-1"aria-labelledby="actualizarModalLabel"aria-hidden="true"ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
@@ -462,16 +470,6 @@ const Producto = () => {
             </div>
             <div className="modal-body">
               <form>
-                <div className="row mb-3">
-                  <div className="col-md-12">
-                    <label htmlFor="precioProducto" className="label-bold mb-2">Precio del Producto</label>
-                    <input type="hidden" value={productoSeleccionado.id_producto || ''} onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, id_producto: e.target.value })} disabled/>
-                    <input type="text" className="form-control form-update" placeholder="Precio del Producto" value={productoSeleccionado.precio_producto || ''} name="precio_producto" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, precio_producto: e.target.value })}/>
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, ingrese el precio del producto.
-                    </div>
-                  </div>
-                </div>
 
                 <div className="row mb-3">
                   <div className="col-md-6">
