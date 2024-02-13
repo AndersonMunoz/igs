@@ -112,7 +112,7 @@ const Movimiento = () => {
   }, []);
 
   function listarCategoria() {
-    fetch("http://localhost:3000/facturamovimiento/listarCatEstado", {
+    fetch("http://localhost:3000/categoria/listarActivo", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -255,9 +255,14 @@ const Movimiento = () => {
         if (data.status == 200) {
           Sweet.exito(data.message);
         }
-        if (data.status == 401) {
+        if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
-        return;}
+          return;
+        }
+        if (data.status === 409) {
+          Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
+          return;
+        }
         //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
@@ -303,6 +308,10 @@ const Movimiento = () => {
       }
       if (data.status === 403) {
         Sweet.error(data.error.errors[0].msg);
+        return;
+      }
+      if (data.status === 409) {
+        Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
         return;
       }
       console.log(data);
@@ -532,7 +541,7 @@ const Movimiento = () => {
                             
 
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} defaultValue={element.unidad_peso}/>
+                              <input type="text"  id="unidad_peso_movimiento" className="form-control form-empty limpiar" disabled="true "name="unidad_peso_movimiento" key={element.id_tipo} defaultValue={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
                         </div>
                       </div>
