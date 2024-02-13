@@ -7,8 +7,17 @@ export const guardarMovimientoEntrada = async (req,res) => {
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
         }
+		
 		let {cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
 			nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote } = req.body;
+			const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
+        	const [existingLote] = await pool.query(loteQuery);
+        if (existingLote.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El lote ya está registrado"
+            });
+        }
 			let sql = `
 			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote)
 			VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', '${fecha_caducidad}', '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}', '${num_lote}');`;  
