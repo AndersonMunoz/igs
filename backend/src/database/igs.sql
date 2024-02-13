@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-02-2024 a las 00:56:09
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.1.17
+-- Tiempo de generación: 13-02-2024 a las 14:49:14
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -56,13 +56,14 @@ CREATE TABLE `factura_movimiento` (
   `fecha_movimiento` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `tipo_movimiento` enum('entrada','salida') NOT NULL,
   `cantidad_peso_movimiento` float NOT NULL,
+  `unidad_peso_movimiento` enum('kg','lb','gr','lt','ml') NOT NULL,
   `precio_movimiento` float NOT NULL,
   `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
   `fecha_caducidad` date NOT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
-  `fk_id_proveedor` int(11) NOT NULL,
+  `fk_id_proveedor` int(11) DEFAULT NULL,
   `num_lote` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
