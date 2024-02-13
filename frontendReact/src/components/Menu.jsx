@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import "../style/dashboard.css";
-import IgsLogo from "../../img/logoigs.jpeg";
+import IgsLogo from "../../img/IGS.png";
 import {
 	IconUser,
 	IconMenu2,
@@ -57,7 +57,9 @@ export const Menu = () => {
 			<div className="main-container">
 				<div className="sidebar close">
 					<div className="logo-details">
-						<img src={IgsLogo} className="logo1" />
+
+							<img src={IgsLogo} className="logo1" />
+				
 						<span className="logo_name">IGS</span>
 					</div>
 					<ul className="nav-links">
@@ -251,7 +253,7 @@ export const Menu = () => {
 							<div className="content-nav">
 								<Link to="#">
 									<div className="tamañoLateral">
-										<IconHelpSquareRounded className="iconosLaterales" />
+										<IconSettings className="iconosLaterales" />
 									</div>
 									<span className="link_name">Ajustes</span>
 								</Link>
@@ -273,9 +275,6 @@ export const Menu = () => {
 								</li>
 								<li>
 									<Link to="#">Manual de Usuario</Link>
-								</li>
-								<li>
-									<Link to="#">Comentarios</Link>
 								</li>
 							</ul>
 						</li>
@@ -337,7 +336,7 @@ export const Menu = () => {
 				</div>
 				<div className="contenido">
 					<div className="contSeg">
-						
+
 						<Outlet />
 						<div className="espacioBotton"></div>
 					</div>

@@ -8,12 +8,13 @@ export const registroUsuario = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(403).json({"status": 403 ,error})
         }
-
         let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
 
-        // Consultar si el documento ya está registrado
         const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}'`;
         const [existingUsers] = await pool.query(documentQuery);
+        
+        const emailQuery = `SELECT * FROM usuarios WHERE email_usuario = '${email_usuario}'`;
+        const [existingEmail] = await pool.query(emailQuery);
 
         if (existingUsers.length > 0) {
             return res.status(409).json({
@@ -21,10 +22,15 @@ export const registroUsuario = async (req, res) => {
                 "message": "El documento ya está registrado"
             });
         }
+        if (existingEmail.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El email ya está registrado"
+            });
+        }
 
-        // Si el documento no está registrado, proceder con la inserción
         const insertQuery = `INSERT INTO usuarios (documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario)
-                             VALUES ('${documento_usuario}', '${email_usuario}', '${nombre_usuario}', '${contrasena_usuario}', '${tipo_usuario}')`;
+                            VALUES ('${documento_usuario}', '${email_usuario}', '${nombre_usuario}', '${contrasena_usuario}', '${tipo_usuario}')`;
 
         const [rows] = await pool.query(insertQuery);
 
@@ -55,7 +61,7 @@ export const listarUsuario = async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({
-            massage: 'error en servidor:' + err
+            message: 'error en servidor:' + err
         })
     }
 
@@ -79,35 +85,78 @@ export const buscarUsuario = async (req, res) => {
 
 };
 
-export const editarUsuario = async (req ,res) =>{
+export const editarUsuario = async (req, res) => {
     try {
-        let error= validationResult(req);
+        let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error)           
+            return res.status(400).json(error)
         }
+
         let id = req.params.id;
-    let {documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
+        let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
 
-    let sql=`update usuarios SET documento_usuario = '${documento_usuario}',
-    email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',contrasena_usuario = '${contrasena_usuario}',tipo_usuario = '${tipo_usuario}'
-    where id_usuario = ${id} `;
-    console.log(sql)
+        let sql = `SELECT * FROM usuarios WHERE id_usuario = ${id}`;
+        const [existingUser] = await pool.query(sql);
 
-    const [rows] = await pool.query(sql);
-    if (rows.affectedRows>0){
-        res.status(200).json(
-            {"status": 200,"menssge": "Se actualizo con exito el usuario"});
-    }else{
-        res.status(401).json(
-            {"status": 401,"menssge": "No se actualizo el usuario"});
-    }
+        // Verificar si el usuario existe
+        if (existingUser.length === 0) {
+            return res.status(404).json({
+                "status": 404,
+                "message": "El usuario no existe"
+            });
+        }
 
+        // Verificar duplicidad de documento solo si el documento se está actualizando
+        if (documento_usuario !== existingUser[0].documento_usuario) {
+            const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}' AND id_usuario != ${id}`;
+            const [existingDocument] = await pool.query(documentQuery);
+
+            if (existingDocument.length > 0) {
+                return res.status(409).json({
+                    "status": 409,
+                    "message": "El documento ya está registrado"
+                });
+            }
+        }
+
+        // Verificar duplicidad de correo electrónico solo si el correo se está actualizando
+        if (email_usuario !== existingUser[0].email_usuario) {
+            const emailQuery = `SELECT * FROM usuarios WHERE email_usuario = '${email_usuario}' AND id_usuario != ${id}`;
+            const [existingEmail] = await pool.query(emailQuery);
+
+            if (existingEmail.length > 0) {
+                return res.status(409).json({
+                    "status": 409,
+                    "message": "El correo electrónico ya está registrado"
+                });
+            }
+        }
+
+        sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}',
+            email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',
+            contrasena_usuario = '${contrasena_usuario}', tipo_usuario = '${tipo_usuario}'
+            WHERE id_usuario = ${id}`;
+
+        const [rows] = await pool.query(sql);
+
+        if (rows.affectedRows > 0) {
+            return res.status(200).json({
+                "status": 200,
+                "message": "Se actualizó con éxito el usuario"
+            });
+        } else {
+            return res.status(401).json({
+                "status": 401,
+                "message": "No se actualizó el usuario"
+            });
+        }
     } catch (e) {
-        res.status(500).json({
-        "status": 500,
-        "menssge": "Error interno en el sevidor :(" + e});
+        return res.status(500).json({
+            "status": 500,
+            "message": "Error interno en el servidor: " + e.message
+        });
     }
-}
+};
 
 export const actualizarEstado = async (req,res) =>{
     try{

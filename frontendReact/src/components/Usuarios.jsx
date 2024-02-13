@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/usuarios.css"
-import { IconEdit, IconTrash, IconEye, IconEyeOff } from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from "../languages/es-ES.json";
@@ -28,11 +28,9 @@ const Usuario = () => {
   const [showPassword, setShowPassword] = useState(false);
 
 
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   }
-
 
 
   useEffect(() => {
@@ -113,10 +111,15 @@ const Usuario = () => {
           return;
         }
         if (data.status === 200) {
-          Sweet.exito(data.menssage);
+          Sweet.exito(data.message);
           if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
           }
+          listarUsuario();
+        }
+        if (data.status === 409) {
+          Sweet.error(data.message);
+          return;
         }
         if (data.status !== 200) {
           Sweet.error(data.error.errors[0].msg);
@@ -231,8 +234,13 @@ const Usuario = () => {
         if (data.status == 200) {
           Sweet.actualizacionExitoso();
         }
-        if (data.status == 401) {
-          Sweet.actualizacionFallido();
+        if (data.status === 409) {
+          Sweet.error(data.message);
+          return;
+        }
+        if (data.status !== 200) {
+          Sweet.error(data.error.errors[0].msg);
+          return;
         }
         listarUsuario();
         setUpdateModal(false);
@@ -347,7 +355,7 @@ const Usuario = () => {
             <div className="modal-body">
               <div className="d-flex justify-content-center">
                 <form className="text-center border border-light ">
-                  <div className="mb-3 row">
+                  <div className="row">
                     <div className="col-md-12 mb-2">
                       <label htmlFor="nombreUsuario" className="label-bold mb-2">
                         Nombre
@@ -412,7 +420,7 @@ const Usuario = () => {
                         Por favor, selecciona un cargo
                       </div>
                     </div>
-                    <div className="col-md-12 mb-2">
+                    <div className="col-md-12">
                       <label htmlFor="contrasenaUsuario" className="label-bold mb-2">
                         Contraseña
                       </label>
@@ -442,9 +450,9 @@ const Usuario = () => {
                             </svg>}
                           </button>
                         </div>
-                      </div>
-                      <div className="invalid-feedback is-invalid">
-                        Por favor, Ingresar una contraseña válida debe tener una mayúscula, minúscula y un número
+                        <div className="invalid-feedback is-invalid">
+                          Por favor, Ingresar una contraseña válida debe tener una mayúscula, minúscula y un número
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -31,8 +31,8 @@ const Sweet = {
     Swal.fire({
       title: 'Mensaje',
       icon: 'warning',
-      text: 'Registro Fallido',
-      confirmButtonText: 'Cerrar',
+      text: 'Registro Fallido, llenar campos vacios',
+      confirmButtonText: 'Cerrar'
     });
   },
   confirmacion: () => {
