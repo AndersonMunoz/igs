@@ -12,6 +12,16 @@ export const registroUnidadProductiva = async (req, res) => {
 
 
 		let { nombre_up } = req.body;
+		const BodegaQuery = `SELECT * FROM bodega WHERE nombre_up = '${nombre_up}'`;
+		const [existingBodega] = await pool.query(BodegaQuery);
+		
+	 
+		if (existingBodega.length > 0) {
+				return res.status(409).json({
+						"status": 409,
+						"message": "la Bodega ya existe"
+				});
+		}
 		let sql = `insert into bodega (nombre_up)
         values('${nombre_up}')`;
 

@@ -112,6 +112,10 @@ const Up = () => {
             $(tableRef.current).DataTable().destroy();
           }
         }
+        if (data.status === 409) {
+          Sweet.error(data.message);
+          return;
+        }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
         }
