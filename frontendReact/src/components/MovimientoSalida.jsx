@@ -317,7 +317,7 @@ const Movimiento = () => {
         Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
         return;
       }
-      console.log(data);
+      /* console.log(data); */
       listarMovimiento();
       setShowModal(false);
       removeModalBackdrop(true );
