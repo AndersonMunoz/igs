@@ -427,15 +427,15 @@ const Movimiento = () => {
               ) : (
                 <>
                   {movimientos.map((element) => (
-                    <tr key={element.id_factura}>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_tipo}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.num_lote}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_movimiento)}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.cantidad_peso_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nota_factura}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
+                    <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
+                      <td className="p-2 text-center">{element.nombre_tipo}</td>
+                      <td className="p-2 text-center">{element.num_lote}</td>
+                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
+                      <td className="p-2 text-center">{element.tipo_movimiento}</td>
+                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center">{element.unidad_peso}</td>
+                      <td className="p-2 text-center">{element.nota_factura}</td>
+                      <td className="p-2 text-center">{element.nombre_usuario}</td>
 
                       <td className="p-2 text-center"   >
                         <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
