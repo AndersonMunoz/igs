@@ -20,20 +20,21 @@ const Validate = {
   
     return true; 
   },
-  validarSelect: function(selector) {// function para validar
-    const campos = document.querySelectorAll(selector);
+  validarSelect: function(selector) {
+    const selects = document.querySelectorAll(selector);
     let validacionExitosa = true;
-    campos.forEach(campo => {
-      if (!campo.value?.trim()) { 
-        campo.classList.add('is-invalid');
+    selects.forEach(select => {
+      const selectedOption = select.querySelector('.react-select__single-value');
+      if (!selectedOption || !selectedOption.textContent) {
+        select.classList.add('is-invalid');
         validacionExitosa = false;
       } else {
-        campo.classList.remove('is-invalid');
+        select.classList.remove('is-invalid');
       }
     });
     return validacionExitosa;
   },
-  formatFecha: (fecha) => {
+  formatFecha: (fecha) => { // function para hacer que cualquier fecha sea legible
     if (fecha === 'No aplica') {
         return 'No aplica';
     }
