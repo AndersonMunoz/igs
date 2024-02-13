@@ -66,6 +66,21 @@ export const listarUsuario = async (req, res) => {
     }
 
 };
+
+export const listarUsuarioActivo = async (req, res) =>{
+
+    try {
+         const [result] = await pool.query('select * from usuarios where estado = 1');
+         if (result.length > 0) {
+            res.status(200).json(result);
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'error en servidor:' + err
+        })
+    }
+
+}
 export const buscarUsuario = async (req, res) => {
     try {
         let id = req.params.id;

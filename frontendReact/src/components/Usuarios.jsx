@@ -23,15 +23,51 @@ const Usuario = () => {
   const modalUsuarioRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
   const tableRef = useRef();
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({
+    id_usuario: '',
+    contrasena_usuario: '',
+    confirmar_contrasena: '',
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
 
+  const handleChangeContrasena = (e) => {
+    const { name, value } = e.target;
+    setUsuarioSeleccionado({ ...usuarioSeleccionado, [name]: value });
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  }
+  };
 
+  const handleConfirmPassword = (e) => {
+    const confirmarContrasena = e.target.value;
+    const contrasena = usuarioSeleccionado.contrasena_usuario;
+    setPasswordsMatch(confirmarContrasena === contrasena);
+    setUsuarioSeleccionado({ ...usuarioSeleccionado, confirmar_contrasena: confirmarContrasena });
+  };
+
+  const resetFormState = () => {
+    const formFields = modalUsuarioRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+    formFields2.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+  };
 
   useEffect(() => {
     if (usuarios.length > 0) {
@@ -81,7 +117,16 @@ const Usuario = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setUsuarios(data);
+        if (data.status == 500) {
+          Sweet.error(data.message)
+        }
+        if (data.status == 204
+        ) {
+          Sweet.error(data.message)
+        }
+        if (data !== null) {
+          setUsuarios(data);
+        }
       })
       .catch((e) => {
         console.log(e);
@@ -261,7 +306,8 @@ const Usuario = () => {
         <button type="button" id="modalUsuario" className="bgfondo btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
           onClick={() => {
             setShowModal(true);
-            Validate.limpiar('.limpiar')
+            Validate.limpiar('.limpiar');
+            resetFormState()
           }}>
           Registrar Usuario
         </button>
@@ -302,7 +348,7 @@ const Usuario = () => {
               <th className="th-sm">Acciones</th>
             </tr>
           </thead>
-          <tbody id="listarUsuario" className="text-center cell">
+          <tbody id="tableUsuario" className="text-center cell">
             {usuarios.length === 0 ? (
               <tr>
                 <td colSpan={12}>
@@ -325,7 +371,7 @@ const Usuario = () => {
                     <td className="p-0">
                       {element.estado === 1 ? (
                         <>
-                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); }} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarUsuario(element.id_usuario); resetFormState() }} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
                             <IconEdit />
                           </button>
                           <button className="btn btn-danger" onClick={() => eliminarUsuario(element.id_usuario)
@@ -429,8 +475,10 @@ const Usuario = () => {
                           type={showPassword ? 'text' : 'password'}
                           className="form-control form-empty limpiar"
                           id="contrasena_usuario"
-                          name="contrasenaUsuario"
+                          name="contrasena_usuario"
                           placeholder="Ingrese una contraseña"
+                          value={usuarioSeleccionado.contrasena_usuario}
+                          onChange={handleChangeContrasena}
                         />
                         <div className="input-group-append">
                           <button
@@ -451,9 +499,32 @@ const Usuario = () => {
                           </button>
                         </div>
                         <div className="invalid-feedback is-invalid">
-                          Por favor, Ingresar una contraseña válida debe tener una mayúscula, minúscula y un número
+                          Por favor, ingresar una contraseña válida. Debe tener al menos una mayúscula, una minúscula y un número.
                         </div>
                       </div>
+                    </div>
+
+                    <div className="col-md-12">
+                      <label htmlFor="confirmarContrasena" className="label-bold mb-2">
+                        Confirmar Contraseña
+                      </label>
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        className={`form-control form-empty limpiar ${!passwordsMatch ? 'is-invalid' : ''}`}
+                        id="confirmar_contrasena"
+                        name="confirmar_contrasena"
+                        placeholder="Confirmar contraseña"
+                        value={usuarioSeleccionado.confirmar_contrasena}
+                        onChange={handleConfirmPassword}
+                      />
+                      <div className="invalid-feedback is-invalid">
+                          Por favor, ingresar una contraseña válida. Debe tener al menos una mayúscula, una minúscula y un número.
+                        </div>
+                      {!passwordsMatch && (
+                        <div className="invalid-feedback is-invalid">
+                          Las contraseñas no coinciden.
+                        </div>
+                      )}
                     </div>
                   </div>
                 </form>
@@ -530,46 +601,71 @@ const Usuario = () => {
                         <option value="coadministrador">Co-Administrador</option>
                       </select>
                     </div>
-                    <div className="col-md-12 mb-2">
-                      <label htmlFor="contrasena_usuario" className="label-bold mb-2">
-                        Contraseña
-                      </label>
-                      <div className="input-group">
-                        <input
-                          type="hidden"
-                          value={usuarioSeleccionado.id_usuario || ''}
-                          onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })}
-                          disabled />
-                        <input
-                          type={showPassword ? 'text' : 'password'}
-                          className="form-control form-update"
-                          onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })}
-                          value={usuarioSeleccionado.contrasena_usuario || ''}
-                          name="contrasena_suario"
-                          placeholder="Ingrese una contraseña"
-                        />
-                        <div className="input-group-append">
-                          <button
-                            className="btn btn-secondary"
-                            type="button"
-                            onClick={togglePasswordVisibility}
-                          >
-                            {showPassword ? <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye-off" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.75" stroke="white" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
-                              <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
-                              <path d="M3 3l18 18" />
-                            </svg> : <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.75" stroke="white" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                              <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                            </svg>}
-                          </button>
+                    
+                      <div className="col-md-12 mb-2">
+                        <label htmlFor="contrasena_usuario" className="label-bold mb-2">
+                          Contraseña
+                        </label>
+                        <div className="input-group">
+                          <input
+                            type="hidden"
+                            value={usuarioSeleccionado.id_usuario || ''}
+                            onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })}
+                            disabled
+                          />
+                          <input
+                            type={showPassword ? 'text' : 'password'}
+                            className="form-control form-update"
+                            onChange={handleChangeContrasena}
+                            value={usuarioSeleccionado.contrasena_usuario || ''}
+                            name="contrasena_usuario"
+                            placeholder="Ingrese una contraseña"
+                          />
+                          <div className="input-group-append">
+                            <button
+                              className="btn btn-secondary"
+                              type="button"
+                              onClick={togglePasswordVisibility}
+                            >
+                              {showPassword ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye-off" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.75" stroke="white" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                  <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                                  <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+                                  <path d="M3 3l18 18" />
+                                </svg>
+                              ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.75" stroke="white" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                  <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                </svg>
+                              )}
+                            </button>
+                          </div>
                         </div>
+                      </div>
+                      <div className="col-md-12 mb-2">
+                        <label htmlFor="confirmar_contrasena" className="label-bold mb-2">
+                          Confirmar Contraseña
+                        </label>
+                        <input
+                          type="password"
+                          className={`form-control form-update ${passwordsMatch ? '' : 'is-invalid'}`}
+                          onChange={handleConfirmPassword}
+                          value={usuarioSeleccionado.confirmar_contrasena || ''}
+                          name="confirmar_contrasena"
+                          placeholder="Confirme la contraseña"
+                        />
+                        {!passwordsMatch && (
+                          <div className="invalid-feedback">
+                            Las contraseñas no coinciden.
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                  </div>
+                  
                 </form>
               </div>
             </div>
@@ -578,6 +674,7 @@ const Usuario = () => {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={() => { resetFormState(); }}
               >
                 Cerrar
               </button>
