@@ -59,6 +59,26 @@ const Producto = () => {
       busquedaInventario();
   }, []); 
 
+  const resetFormState = () => {
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+    formFields2.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+  };
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     if (modalBackdrop) {
@@ -82,7 +102,7 @@ const Producto = () => {
     });
   }
   function listarTipo(){
-    fetch("http://localhost:3000/tipo/listar",{
+    fetch("http://localhost:3000/tipo/listarActivo",{
       method: "GET",
       headers:{
         "Content-type": "application/json",
@@ -157,6 +177,10 @@ const Producto = () => {
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
+          return;
+        }
+        if (data.status === 409) {
+          Sweet.error(data.message);
           return;
         }
 
@@ -286,7 +310,7 @@ const Producto = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();}}>
           Registrar Nuevo Producto
         </button>
         <div>
@@ -339,19 +363,10 @@ const Producto = () => {
             ) : (                     // <td>{Validate.formatFecha(element.FechaCaducidad)}
               <>
                 {productos.map((element) => (
-                    <tr key={element.id_producto}>
+                    <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
                       <td>{element.id_producto}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.NombreCategoria}</td>
-                      {/*                       
-                      <td>
-                        {element.FechaCaducidad ? (
-                          <p className="btn btn-color mx-2">{Validate.formatFecha(element.FechaCaducidad)}</p>
-                        ) : (
-                          <p className="btn btn-primary">No Asignada</p>
-                        )}
-                      </td>
-                       */}
                       <td>{element.Peso}</td>
                       <td>{element.Unidad}</td>
                       <td>{element.PrecioIndividual}</td>
@@ -361,7 +376,7 @@ const Producto = () => {
                       <td>
                       {element.estado === 1 ? (
                         <>
-                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
+                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
                           <IconEdit /> 
                           </button>
                           <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
@@ -378,7 +393,7 @@ const Producto = () => {
         </table>
       </div>
 
-      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
+      <div className="modal fade"id="staticBackdrop"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -390,7 +405,7 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_tipo_producto" name="fk_id_tipo_producto" defaultValue="">
+                    <select className="form-select  form-control form-empty limpiar" id="fk_id_tipo_producto" style={{ textTransform: 'capitalize' }}name="fk_id_tipo_producto" defaultValue="">
                       {tipos.length === 0 ? (
                         <option value="" disabled>No hay tipos disponibles</option>
                       ) : (
@@ -408,7 +423,7 @@ const Producto = () => {
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" defaultValue="">
+                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" style={{ textTransform: 'capitalize' }}defaultValue="">
                       {up.length === 0 ? (
                           <option value="" disabled>No hay tipos disponibles</option>
                       ) : (
@@ -435,7 +450,7 @@ const Producto = () => {
               </form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { resetFormState();}}>
                 Cerrar
               </button>
               <button type="button" className="btn btn-color" onClick={registrarProducto}>
@@ -446,7 +461,7 @@ const Producto = () => {
         </div>
       </div>
 
-      <div className="modal fade"id="actualizarModal"tabIndex="-1"aria-labelledby="actualizarModalLabel"aria-hidden="true"ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
