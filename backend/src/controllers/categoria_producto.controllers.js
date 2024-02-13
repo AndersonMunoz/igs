@@ -21,7 +21,7 @@ export const registrocategoria_producto = async (req, res) => {
         if (existingCategoria.length > 0) {
             return res.status(409).json({
                 "status": 409,
-                "message": "la Categoria ya esta registrada"
+                "message": "La Categoria ya esta registrada"
             });
         }
         let sql = `insert into categorias_producto (nombre_categoria)
