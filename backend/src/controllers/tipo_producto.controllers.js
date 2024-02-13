@@ -58,6 +58,29 @@ export const listarTipoProducto = async (req, res) => {
     }
 }
 
+
+export const listarActivoTipo = async (req, res) => {
+    try {
+        const [result] = await pool.query
+            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto,t.unidad_peso AS UnidadPeso, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE t.estado = 1 ORDER BY t.estado  DESC');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({
+                "status": 204,
+                "message": "No se Listo los productos"
+            });
+
+        }
+
+    } catch (e) {
+        res.status(500).json({
+            "status": 500,
+            "menssge": "Error interno en el sevidor " + e
+        });
+    }
+}
+
 export const buscarTipoProducto = async (req, res) => {
     try {
       let id = req.params.id;
