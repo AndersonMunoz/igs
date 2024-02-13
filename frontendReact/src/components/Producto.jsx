@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../style/producto.css";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import esES from '../languages/es-ES.json';
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 import $ from 'jquery';
 import 'bootstrap';
 import 'datatables.net';
@@ -125,7 +128,6 @@ const Producto = () => {
       });
   }
   function registrarProducto() {
-    let precio_producto = document.getElementById('precio_producto').value;
     let descripcion_producto = document.getElementById('descripcion_producto').value;
     let fk_id_up = document.getElementById('fk_id_up').value;
     let fk_id_tipo_producto = document.getElementById('fk_id_tipo_producto').value;
@@ -137,7 +139,7 @@ const Producto = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ precio_producto, descripcion_producto, fk_id_up, fk_id_tipo_producto }),
+      body: JSON.stringify({descripcion_producto, fk_id_up, fk_id_tipo_producto }),
     })
       .then((res) => res.json())
       .then(data => {
@@ -287,22 +289,22 @@ const Producto = () => {
         <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nuevo Producto
         </button>
-          <div>
+        <div>
           <DownloadTableExcel
             filename="Tabla productos"
-            sheet="productos"
+            sheet="Productos"
             currentTableRef={tableRef.current}
           >
-            <button type="button" className="btn-color btn me-2">
-              Exportar a Excel
+            <button type="button" className="btn btn-light">
+              <img src={ExelLogo} className="logoExel" />
             </button>
           </DownloadTableExcel>
           <button
             type="button"
-            className="btn btn-danger"
-            onClick={() => generatePDF(tableRef, { filename: "producto.pdf" })}
+            className="btn btn-light"
+            onClick={() => generatePDF(tableRef, { filename: "productos.pdf" })}
           >
-            Descargar PDF
+            <img src={PdfLogo} className="logoExel" />
           </button>
         </div>
       </div>
@@ -360,9 +362,9 @@ const Producto = () => {
                       {element.estado === 1 ? (
                         <>
                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#actualizarModal">
-                            Editar  
+                          <IconEdit /> 
                           </button>
-                          <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}>Eliminar</button>
+                          <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
                         </>
                       ): (
                           <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
@@ -385,15 +387,6 @@ const Producto = () => {
             </div>
             <div className="modal-body">
               <form>
-                <div className="row mb-3">
-                  <div className="col-md-12">
-                    <label htmlFor="precioProducto" className="label-bold mb-2">Precio del Producto</label>
-                    <input type="text" className="form-control form-empty limpiar" id="precio_producto" name="precio_producto" placeholder="Precio del Producto" />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, ingrese el precio del producto.
-                    </div>
-                  </div>
-                </div>
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
@@ -462,16 +455,6 @@ const Producto = () => {
             </div>
             <div className="modal-body">
               <form>
-                <div className="row mb-3">
-                  <div className="col-md-12">
-                    <label htmlFor="precioProducto" className="label-bold mb-2">Precio del Producto</label>
-                    <input type="hidden" value={productoSeleccionado.id_producto || ''} onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, id_producto: e.target.value })} disabled/>
-                    <input type="text" className="form-control form-update" placeholder="Precio del Producto" value={productoSeleccionado.precio_producto || ''} name="precio_producto" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, precio_producto: e.target.value })}/>
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, ingrese el precio del producto.
-                    </div>
-                  </div>
-                </div>
 
                 <div className="row mb-3">
                   <div className="col-md-6">
