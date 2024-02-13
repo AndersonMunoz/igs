@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import Sweet from "../helpers/Sweet";
+import Inicio from "../Login/Inicio";
 
 
 const LoginForm = () => {
   const [documento, setdocumento] = useState("");
   const [contrasena, setcontrasena] = useState("");
-  const [loginSuccesFull, setLoginSuccesFull] = useState("");
+  const [loginSuccesFull, setLoginSuccesFull] = useState(false);
 
 
   const handledocumentoChange = (e) => {
@@ -33,16 +34,20 @@ const LoginForm = () => {
       .then((data) => {
         if (data.status == 200) {
           console.log(data.token);
+          setLoginSuccesFull(true)
           localStorage.setItem("token", data.token);
-        } else Sweet.error(data.message);
+          window.location.reload()
+        } else {
+          Sweet.error(data.message);
+          setLoginSuccesFull(false)
+        }
       });
     console.log("documento:", documento);
     console.log("Contraseña:", contrasena);
   };
 
   return (
-    <>{}</>
-    <Container>
+    <>{loginSuccesFull? <Inicio/> :    <Container>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formdocumento">
           <Form.Label>documento</Form.Label>
@@ -68,7 +73,8 @@ const LoginForm = () => {
           Iniciar Sesión
         </Button>
       </Form>
-    </Container>
+    </Container> }</>
+
   );
 };
 
