@@ -246,23 +246,12 @@ const Movimiento = () => {
       },
       body: JSON.stringify(movimientoSeleccionado),
     })
-      .then((res) => res.json())
+      .then((res) => {if (!res.ok) {
+        throw res;
+      }
+      return res.json();})
       .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.actualizacionFallido();
-          return;
-        }
-        if (data.status == 200) {
-          Sweet.exito(data.message);
-        }
-        if (data.status === 403) {
-          Sweet.error(data.error.errors[0].msg);
-          return;
-        }
-        if (data.status === 409) {
-          Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
-          return;
-        }
+        Sweet.exito(data.message);
         //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
@@ -272,6 +261,19 @@ const Movimiento = () => {
           modalBackdrop.remove();
         }
       })
+      .catch((error) => {
+        error.json().then((body) => {
+          if (body.status === 409) {
+            Sweet.error('El número de lote ya está registrado');
+          } else if (body.errors) {
+            body.errors.forEach((err) => {
+              Sweet.error(err.msg);
+            });
+          } else {
+            Sweet.error('Error en el servidor');
+          }
+        });
+      });
   }
   function registrarMovimiento() {
 
@@ -549,7 +551,7 @@ const Movimiento = () => {
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="precio_movimiento">Precio individual del producto:</label>
+                          <label className="form-label" htmlFor="precio_movimiento">Precio por unidad:</label>
                           <input type="number" id="precio_movimiento" name="precio_movimiento" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un precio válido.
