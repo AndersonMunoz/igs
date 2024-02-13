@@ -13,14 +13,14 @@ export const guardarProducto = async (req, res) => {
       fk_id_tipo_producto
     } = req.body;
     
-    const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
-    const [existingTipo] = await pool.query(TipoQuery);
-    if (existingTipo.length > 0) {
-      return res.status(409).json({
-          "status": 409,
-          "message": "El tipo de producto ya existe"
-      });
-  }
+    // const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
+    // const [existingTipo] = await pool.query(TipoQuery);
+    // if (existingTipo.length > 0) {
+    //   return res.status(409).json({
+    //       "status": 409,
+    //       "message": "El tipo de producto ya existe"
+    //   });
+    // }
     const sql = "INSERT INTO productos (descripcion_producto, fk_id_up, fk_id_tipo_producto) VALUES (?, ?, ?)";
     const [rows] = await pool.query(sql, [descripcion_producto, fk_id_up, fk_id_tipo_producto]);    
     if (rows.affectedRows > 0) {

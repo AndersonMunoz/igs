@@ -16,6 +16,7 @@ import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
+import Select from 'react-select'
 
 
 const Producto = () => {
@@ -27,6 +28,8 @@ const Producto = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
+  const [selectedTipo, setSelectedTipo] = useState(null);
+const [selectedUp, setSelectedUp] = useState(null);
 
   const tableRef = useRef();
 
@@ -60,7 +63,7 @@ const Producto = () => {
   }, []); 
 
   const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
     formFields.forEach(field => {
       if (field.type === 'checkbox') {
@@ -147,56 +150,113 @@ const Producto = () => {
         console.error("Error al procesar la respuesta:", e);
       });
   }
+  const handleTipo = (selectedOption) => {
+    setSelectedTipo(selectedOption); 
+  };
+  const handleUp = (selectedOption) => {
+    setSelectedUp(selectedOption); 
+  };
   function registrarProducto() {
-    let descripcion_producto = document.getElementById('descripcion_producto').value;
-    let fk_id_up = document.getElementById('fk_id_up').value;
-    let fk_id_tipo_producto = document.getElementById('fk_id_tipo_producto').value;
-
-    const validacionExitosa = Validate.validarCampos('.form-empty');
-
+    const descripcion_producto = document.getElementById('descripcion_producto').value;
+    Validate.validarCampos('.form-empty');
+    const validacionTipo = Validate.validarSelect('#fk_id_tipo_producto');
+    const validacionUp = Validate.validarSelect('#unidadPeso');
+    Validate.validarSelect('.form-empt');
+    const validacionExitosa = validacionTipo && validacionUp;
+  
+    if (!validacionExitosa) {
+      Sweet.registroFallido();
+      return;
+    }
+    
     fetch('http://localhost:3000/producto/registrar', {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({descripcion_producto, fk_id_up, fk_id_tipo_producto }),
+      body: JSON.stringify({ descripcion_producto, fk_id_up: selectedUp.value, fk_id_tipo_producto: selectedTipo.value }),
     })
       .then((res) => res.json())
       .then(data => {
-        if (!validacionExitosa) {
-          Sweet.registroFallido();
-          return;
-        }
-
         if (data.status === 200) {
           Sweet.exito(data.message);
           if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
           }
           listarProducto();
-        }
-        if (data.status === 403) {
+          setShowModal(false);
+          removeModalBackdrop();
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
+        } else if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
-          return;
-        }
-        if (data.status === 409) {
-          Sweet.error(data.message);
-          return;
-        }
-
-        console.log(data);
-        listarProducto();
-        setShowModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-        if (modalBackdrop) {
-          modalBackdrop.remove();
+        }else if(data.status === 409){
+            Sweet.error(data.message);
+            return;
+        } else {
+          console.error('Error en la petición:', data);
+          Sweet.error('Hubo un error al registrar el producto.');
         }
       })
       .catch(error => {
         console.error('Error:', error);
+        Sweet.error('Hubo un error al registrar el producto.');
       });
   }
+  // function registrarProducto() {
+  //   const descripcion_producto = document.getElementById('descripcion_producto').value;
+
+  //   Validate.validarSelect('.form-empt');
+
+  //   const validacion = selectedTipo && selectedUp;
+  //   if (!validacion) {
+  //     Sweet.registroFallido();
+  //     return;
+  //   }
+
+  //   const validacionExitosa = Validate.validarCampos('.form-empty');
+
+  //   fetch('http://localhost:3000/producto/registrar', {
+  //     method: 'POST',
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ descripcion_producto, fk_id_up: selectedUp.value, fk_id_tipo_producto: selectedTipo.value }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then(data => {
+
+  //       if (data.status === 200) {
+  //         Sweet.exito(data.message);
+  //         if ($.fn.DataTable.isDataTable(tableRef.current)) {
+  //           $(tableRef.current).DataTable().destroy();
+  //         }
+  //         listarProducto();
+  //       }
+  //       if (data.status === 403) {
+  //         Sweet.error(data.error.errors[0].msg);
+  //         return;
+  //       }
+  //       if (data.status === 409) {
+  //         Sweet.error(data.message);
+  //         return;
+  //       }
+
+  //       console.log(data);
+  //       listarProducto();
+  //       setShowModal(false);
+  //       removeModalBackdrop();
+  //       const modalBackdrop = document.querySelector('.modal-backdrop');
+  //       if (modalBackdrop) {
+  //         modalBackdrop.remove();
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.error('Error:', error);
+  //     });
+  // }
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -272,14 +332,12 @@ const Producto = () => {
       }
     })
   }
-
   function busquedaInventario() {
     let categoria = localStorage.getItem('category')
     console.log(categoria);
     // favor dejar de ultimo...
     localStorage.removeItem('category');
   }
-
   function activarProducto(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
@@ -310,7 +368,7 @@ const Producto = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();}}>
+        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedUp(null);}}>
           Registrar Nuevo Producto
         </button>
         <div>
@@ -405,36 +463,30 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select  form-control form-empty limpiar" id="fk_id_tipo_producto" style={{ textTransform: 'capitalize' }}name="fk_id_tipo_producto" defaultValue="">
-                      {tipos.length === 0 ? (
-                        <option value="" disabled>No hay tipos disponibles</option>
-                      ) : (
-                        <>
-                          <option value="">Selecciona un Tipo</option>
-                            {tipos.map((element) => (
-                          <option key={element.id} value={element.id}>{element.NombreProducto}</option>
-                          ))}
-                        </>
-                      )}
-                    </select>
+                    <Select
+                        className="react-select-container  form-empt my-custom-class"
+                        classNamePrefix="react-select"
+                        options={tipos.map(element => ({ value: element.id, label: element.NombreProducto}))}
+                        placeholder="Selecciona..."
+                        onChange={handleTipo}
+                        value={selectedTipo}
+                        id="fk_id_tipo_producto"
+                      />
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
                     </div>
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
-                    <select className="form-select form-control form-empty limpiar" id="fk_id_up" name="fk_id_up" style={{ textTransform: 'capitalize' }}defaultValue="">
-                      {up.length === 0 ? (
-                          <option value="" disabled>No hay tipos disponibles</option>
-                      ) : (
-                        <>
-                          <option value="">Selecciona una UP</option>
-                            {up.map((element) => (
-                          <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
-                          ))}
-                        </>
-                      )}
-                    </select>
+                    <Select
+                        className="react-select-container  form-empt my-custom-class"
+                        classNamePrefix="react-select"
+                        options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
+                        placeholder="Selecciona..."
+                        onChange={handleUp}
+                        value={selectedUp}
+                        id="unidadPeso"
+                      />
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una unidad de peso.
                     </div>
