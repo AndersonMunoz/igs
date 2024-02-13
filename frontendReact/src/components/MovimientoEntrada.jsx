@@ -540,10 +540,10 @@ const Movimiento = () => {
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="precio_movimiento">Precio total del producto:</label>
+                          <label className="form-label" htmlFor="precio_movimiento">Precio individual del producto:</label>
                           <input type="number" id="precio_movimiento" name="precio_movimiento" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese un peso válido.
+                            Por favor, ingrese un precio válido.
                           </div>
                         </div>
                       </div>
@@ -563,7 +563,7 @@ const Movimiento = () => {
                       </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="num_lote">Número de Lote</label>
+                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
                           <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
