@@ -157,7 +157,7 @@ const Movimiento = () => {
       });
   }
   function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listar", {
+    fetch("http://localhost:3000/proveedor/listarActivo", {
       method: "GET",
       headers: {
         "content-type": "application/json",

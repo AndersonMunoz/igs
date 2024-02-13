@@ -238,35 +238,42 @@ const Movimiento = () => {
   }
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
-    
-    fetch(`http://localhost:3000/facturamovimiento/actualizar/${id}`, {
-      method: "PUT",
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(movimientoSeleccionado),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.actualizacionFallido();
-          return;
-        }
-        if (data.status == 200) {
-          Sweet.exito(data.message);
-        }
-        if (data.status == 401) {
-          Sweet.error(data.error.errors[0].msg);
-        return;}
-        //console.log(data);
-        listarMovimiento();
-        setUpdateModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-        if (modalBackdrop) {
-          modalBackdrop.remove();
-        }
-      })
+    fetch(`http://localhost:3000/facturamovimiento/actualizarSalida/${id}`, {
+    method: "PUT",
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(movimientoSeleccionado),
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw res;
+    }
+    return res.json();
+  })
+  .then((data) => {
+    Sweet.exito(data.message);
+    listarMovimiento();
+    setUpdateModal(false);
+    removeModalBackdrop(true );
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+        modalBackdrop.remove();
+      }
+  })
+  .catch((error) => {
+    error.json().then((body) => {
+      if (body.status === 409) {
+        Sweet.error('El número de lote ya está registrado');
+      } else if (body.errors) {
+        body.errors.forEach((err) => {
+          Sweet.error(err.msg);
+        });
+      } else {
+        Sweet.error('Error en el servidor');
+      }
+    });
+  });
   }
   function registrarMovimientoSalida() {
 
@@ -302,10 +309,18 @@ const Movimiento = () => {
         Sweet.error(data.error.errors[0].msg);
         return;
       }
+      if (data.status === 402) {
+        Sweet.error(data.mensaje); // El mensaje de error debe estar en data.mensaje
+        return;
+      }
+      if (data.status === 409) {
+        Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
+        return;
+      }
       console.log(data);
       listarMovimiento();
       setShowModal(false);
-      removeModalBackdrop();
+      removeModalBackdrop(true );
       const modalBackdrop = document.querySelector('.modal-backdrop');
       if (modalBackdrop) {
         modalBackdrop.remove();
