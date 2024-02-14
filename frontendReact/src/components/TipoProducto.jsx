@@ -345,7 +345,7 @@ const Tipo = () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre Producto</th>
+              <th className="th-sm">Nombre Tipo de Producto</th>
               <th className="th-sm">Nombre Categoria</th>
               <th className="th-sm">Unidad Peso</th>
               <th className="th-sm">Acciones</th>
