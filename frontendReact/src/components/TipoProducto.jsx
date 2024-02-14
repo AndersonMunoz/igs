@@ -510,6 +510,8 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
+                      <option value="oz">Onzas(OZ)</option>
+                      <option value="unidad(es)">Unidad(ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, la Unidad de peso
@@ -657,6 +659,8 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
+                      <option value="oz">Onzas (OZ)</option>
+                      <option value="unidad(es)">Unidad (ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, unidad de peso
