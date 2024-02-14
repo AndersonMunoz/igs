@@ -17,7 +17,7 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import Select from 'react-select'
-
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const Producto = () => {
   const [productos, setProductos] = useState([]);
@@ -29,7 +29,16 @@ const Producto = () => {
   const modalUpdateRef = useRef(null);
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
   const [selectedTipo, setSelectedTipo] = useState(null);
-const [selectedUp, setSelectedUp] = useState(null);
+  const [selectedUp, setSelectedUp] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const tableRef = useRef();
 
@@ -367,6 +376,12 @@ const [selectedUp, setSelectedUp] = useState(null);
 
   return (
     <div>
+      {loading ? (
+        <div className="loading-spinner">
+          <ProgressSpinner strokeWidth={4} className="custom-spinner" />
+        </div>
+      ) : ( 
+      <div>
       <div className="d-flex justify-content-between mb-4">
         <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedUp(null);}}>
           Registrar Nuevo Producto
@@ -572,6 +587,8 @@ const [selectedUp, setSelectedUp] = useState(null);
           </div>
         </div>
       </div>
+      </div>
+      )}
     </div>
   );
 };
