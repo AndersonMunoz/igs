@@ -6,8 +6,8 @@ import './css/login.css';
 
 
 const LoginForm = () => {
-  const [documento, setdocumento] = useState("");
-  const [contrasena, setcontrasena] = useState("");
+  const [documento, setDocumento] = useState("");
+  const [contrasena, setContrasena] = useState("");
   const [loginSuccesFull, setLoginSuccesFull] = useState(false);
 
 
@@ -52,31 +52,27 @@ const LoginForm = () => {
       {loginSuccesFull ? <Inicio /> :
         <>
         <Container className="login-container">
-          <Form onSubmit={handleSubmit} className="login-form">
-            <Form.Group controlId="formdocumento">
-              <Form.Label>Documento</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Ingrese su documento"
-                value={documento}
-                onChange={handledocumentoChange}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formcontrasena">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Ingrese su contraseña"
-                value={contrasena}
-                onChange={handlecontrasenaChange}
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Iniciar Sesión
-            </Button>
-          </Form>
+        <form onSubmit={handleSubmit}>
+      <label htmlFor="email">documento:</label>
+      <input
+        type="text"
+        id="text"
+        value={documento}
+        onChange={(event) => setDocumento(event.target.value)}
+      />
+      <label htmlFor="password">Contaseña:</label>
+      <input
+        type="password"
+        id="password"
+        value={contrasena}
+        onChange={(event) => setContrasena(event.target.value)}
+      />
+       
+      <button type="submit">Log in</button>
+      <div className="mt-3">
+        <a href="#">Olvide mi Contraseña</a>
+       </div>
+    </form>
         </Container>
         </>
       }
