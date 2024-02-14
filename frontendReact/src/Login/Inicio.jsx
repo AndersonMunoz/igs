@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import Sweet from "../helpers/Sweet";
 import Inicio from "../Login/Inicio";
+import './css/login.css';
 
 
 const LoginForm = () => {
@@ -47,33 +48,39 @@ const LoginForm = () => {
   };
 
   return (
-    <>{loginSuccesFull? <Inicio/> :    <Container>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formdocumento">
-          <Form.Label>documento</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Ingrese su documento"
-            value={documento}
-            onChange={handledocumentoChange}
-          />
-        </Form.Group>
+    <>
+      {loginSuccesFull ? <Inicio /> :
+        <>
+        <Container className="login-container">
+          <Form onSubmit={handleSubmit} className="login-form">
+            <Form.Group controlId="formdocumento">
+              <Form.Label>Documento</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingrese su documento"
+                value={documento}
+                onChange={handledocumentoChange}
+              />
+            </Form.Group>
 
-        <Form.Group controlId="formcontrasena">
-          <Form.Label>Contraseña</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Ingrese su contraseña"
-            value={contrasena}
-            onChange={handlecontrasenaChange}
-          />
-        </Form.Group>
+            <Form.Group controlId="formcontrasena">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Ingrese su contraseña"
+                value={contrasena}
+                onChange={handlecontrasenaChange}
+              />
+            </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Iniciar Sesión
-        </Button>
-      </Form>
-    </Container> }</>
+            <Button variant="primary" type="submit">
+              Iniciar Sesión
+            </Button>
+          </Form>
+        </Container>
+        </>
+      }
+    </>
 
   );
 };
