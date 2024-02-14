@@ -581,9 +581,9 @@ const Movimiento = () => {
           <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
             <div className="modal-dialog">
               <div className="modal-content">
-                <div className="modal-header">
+                <div className="modal-header bg text-white">
                   <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
                   <form>
