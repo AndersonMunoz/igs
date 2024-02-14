@@ -112,7 +112,7 @@ const Movimiento = () => {
   }, []);
 
   function listarCategoria() {
-    fetch("http://localhost:3000/facturamovimiento/listarCatEstado", {
+    fetch("http://localhost:3000/categoria/listarActivo", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -157,7 +157,7 @@ const Movimiento = () => {
       });
   }
   function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listar", {
+    fetch("http://localhost:3000/proveedor/listarActivo", {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -246,18 +246,12 @@ const Movimiento = () => {
       },
       body: JSON.stringify(movimientoSeleccionado),
     })
-      .then((res) => res.json())
+      .then((res) => {if (!res.ok) {
+        throw res;
+      }
+      return res.json();})
       .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.actualizacionFallido();
-          return;
-        }
-        if (data.status == 200) {
-          Sweet.exito(data.message);
-        }
-        if (data.status == 401) {
-          Sweet.error(data.error.errors[0].msg);
-        return;}
+        Sweet.exito(data.message);
         //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
@@ -267,6 +261,19 @@ const Movimiento = () => {
           modalBackdrop.remove();
         }
       })
+      .catch((error) => {
+        error.json().then((body) => {
+          if (body.status === 409) {
+            Sweet.error('El número de lote ya está registrado');
+          } else if (body.errors) {
+            body.errors.forEach((err) => {
+              Sweet.error(err.msg);
+            });
+          } else {
+            Sweet.error('Error en el servidor');
+          }
+        });
+      });
   }
   function registrarMovimiento() {
 
@@ -305,7 +312,11 @@ const Movimiento = () => {
         Sweet.error(data.error.errors[0].msg);
         return;
       }
-      console.log(data);
+      if (data.status === 409) {
+        Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
+        return;
+      }
+      /* console.log(data); */
       listarMovimiento();
       setShowModal(false);
       removeModalBackdrop();
@@ -433,22 +444,22 @@ const Movimiento = () => {
               ) : (
                 <>
                   {movimientos.map((element) => (
-                    <tr key={element.id_factura}>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_tipo}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.num_lote}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_movimiento)}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.cantidad_peso_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.precio_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.estado_producto_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nota_factura}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_caducidad)}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_proveedores}</td>
+                    <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.nombre_tipo}</td>
+                      <td className="p-2 text-center">{element.num_lote}</td>
+                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
+                      <td className="p-2 text-center">{element.tipo_movimiento}</td>
+                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center">{element.unidad_peso}</td>
+                      <td className="p-2 text-center">{element.precio_movimiento}</td>
+                      <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
+                      <td className="p-2 text-center">{element.nota_factura}</td>
+                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+                      <td className="p-2 text-center">{element.nombre_usuario}</td>
+                      <td className="p-2 text-center">{element.nombre_proveedores}</td>
 
                       <td className="p-2 text-center"   >
-                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                        <button className="btn btn-color"onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
 
@@ -532,7 +543,7 @@ const Movimiento = () => {
                             
 
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} defaultValue={element.unidad_peso}/>
+                              <input type="text"  id="unidad_peso_movimiento" className="form-control form-empty limpiar" disabled="true "name="unidad_peso_movimiento" key={element.id_tipo} defaultValue={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
                         </div>
                       </div>
@@ -540,10 +551,10 @@ const Movimiento = () => {
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="precio_movimiento">Precio total del producto:</label>
+                          <label className="form-label" htmlFor="precio_movimiento">Precio por unidad:</label>
                           <input type="number" id="precio_movimiento" name="precio_movimiento" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese un peso válido.
+                            Por favor, ingrese un precio válido.
                           </div>
                         </div>
                       </div>
@@ -563,7 +574,7 @@ const Movimiento = () => {
                       </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="num_lote">Número de Lote</label>
+                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
                           <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.

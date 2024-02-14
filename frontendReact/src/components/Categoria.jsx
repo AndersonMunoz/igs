@@ -117,6 +117,9 @@ const Categoria = () => {
             
           }
           listarCategoria();
+        } if (data.status === 409) {
+          Sweet.error(data.message);
+          return;
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
@@ -246,7 +249,7 @@ const Categoria = () => {
   return (
     <div >
       <div className="d-flex justify-content-between  mb-4">
-      <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
+      <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal"  data-bs-target="#staticBackdrop"onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nueva Categoria
         </button>
         <div>
@@ -321,7 +324,7 @@ const Categoria = () => {
                         editarCategoria(element.id_categoria);
                       }}
                       data-bs-toggle="modal"
-                      data-bs-target="#actualizarModal"
+                      data-bs-target="#staticBackdrop2"
                     >
                        <IconEdit />
                     </button>
@@ -352,7 +355,7 @@ const Categoria = () => {
           </tbody>
         </table>
       </div>
-      <div className="modal fade"id="exampleModal"tabIndex="-1"aria-labelledby="exampleModalLabel"aria-hidden="true" ref={modalCategoriaRef} style={{ display: showModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="staticBackdrop"tabIndex="-1"data-bs-backdrop="static"ref={modalCategoriaRef} style={{ display: showModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -399,7 +402,7 @@ const Categoria = () => {
         </div>
       </div>
 
-      <div className="modal fade" id="actualizarModal" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+      <div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">

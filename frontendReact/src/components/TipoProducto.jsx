@@ -18,6 +18,27 @@ import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import { newLink } from "./Inventario.jsx";
 
+const resetFormState = () => {
+  const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  formFields.forEach(field => {
+    if (field.type === 'checkbox') {
+      field.checked = false;
+    } else {
+      field.value = '';
+    }
+    field.classList.remove('is-invalid');
+  });
+  formFields2.forEach(field => {
+    if (field.type === 'checkbox') {
+      field.checked = false;
+    } else {
+      field.value = '';
+    }
+    field.classList.remove('is-invalid');
+  });
+};
+
 const Tipo = () => {
   const [tipos, setTipo] = useState([]);
   const [categoria, setCategoria] = useState([]);
@@ -141,6 +162,10 @@ const Tipo = () => {
             $(tableRef.current).DataTable().destroy();
           }
           listarTipo();
+        }
+        if (data.status === 409) {
+          Sweet.error(data.message);
+          return;
         }
         if (data.status !== 200) {
           Sweet.error(data.errors[0].msg);
@@ -282,10 +307,10 @@ const Tipo = () => {
           id="modalProducto"
           className="btn-color btn mb-4"
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          data-bs-target="#staticBackdrop"
           onClick={() => {
             setShowModal(true);
-            Validate.limpiar(".limpiar");
+            Validate.limpiar(".limpiar");resetFormState();
           }}
         >
           Registrar Nuevo Tipo de Producto
@@ -320,7 +345,7 @@ const Tipo = () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre Producto</th>
+              <th className="th-sm">Nombre Tipo de Producto</th>
               <th className="th-sm">Nombre Categoria</th>
               <th className="th-sm">Unidad Peso</th>
               <th className="th-sm">Acciones</th>
@@ -373,7 +398,7 @@ const Tipo = () => {
                                 editarTipo(element.id);
                               }}
                               data-bs-toggle="modal"
-                              data-bs-target="#actualizarModal"
+                              data-bs-target="#staticBackdrop2"
                             >
                               <IconEdit />
                             </button>
@@ -401,15 +426,7 @@ const Tipo = () => {
           </tbody>
         </table>
       </div>
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-        ref={modalProductoRef}
-        style={{ display: showModal ? "block" : "none" }}
-      >
+      <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -493,6 +510,8 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
+                      <option value="oz">Onzas(OZ)</option>
+                      <option value="unidad(es)">Unidad(ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, la Unidad de peso
@@ -523,7 +542,8 @@ const Tipo = () => {
 
       <div
         className="modal fade"
-        id="actualizarModal"
+        id="staticBackdrop2"
+        data-bs-backdrop="static" 
         tabIndex="-1"
         aria-labelledby="actualizarModalLabel"
         aria-hidden="true"
@@ -639,6 +659,8 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
+                      <option value="oz">Onzas (OZ)</option>
+                      <option value="unidad(es)">Unidad (ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, unidad de peso
@@ -652,8 +674,9 @@ const Tipo = () => {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                
               >
-                Close
+                Cerrar{" "}
               </button>
               <button
                 type="button"

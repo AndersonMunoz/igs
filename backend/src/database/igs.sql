@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-02-2024 a las 00:56:09
+-- Tiempo de generación: 14-02-2024 a las 00:47:00
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -62,7 +62,7 @@ CREATE TABLE `factura_movimiento` (
   `fecha_caducidad` date NOT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
-  `fk_id_proveedor` int(11) NOT NULL,
+  `fk_id_proveedor` int(11) DEFAULT NULL,
   `num_lote` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -107,7 +107,7 @@ CREATE TABLE `tipo_productos` (
   `id_tipo` int(11) NOT NULL,
   `nombre_tipo` varchar(45) NOT NULL,
   `fk_categoria_pro` int(11) DEFAULT NULL,
-  `unidad_peso` enum('kg','lb','gr','lt','ml') NOT NULL,
+  `unidad_peso` enum('kg','lb','gr','lt','ml','oz','unidad(es)') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -236,7 +236,7 @@ ALTER TABLE `usuarios`
 ALTER TABLE `factura_movimiento`
   ADD CONSTRAINT `factura_movimiento_ibfk_1` FOREIGN KEY (`fk_id_producto`) REFERENCES `productos` (`id_producto`),
   ADD CONSTRAINT `factura_movimiento_ibfk_2` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `tener99` FOREIGN KEY (`fk_id_proveedor`) REFERENCES `proveedores` (`id_proveedores`);
+  ADD CONSTRAINT `factura_movimiento_ibfk_3` FOREIGN KEY (`fk_id_proveedor`) REFERENCES `proveedores` (`id_proveedores`);
 
 --
 -- Filtros para la tabla `productos`

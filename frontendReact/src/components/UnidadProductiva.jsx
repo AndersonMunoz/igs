@@ -112,6 +112,10 @@ const Up = () => {
             $(tableRef.current).DataTable().destroy();
           }
         }
+        if (data.status === 409) {
+          Sweet.error(data.message);
+          return;
+        }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
         }
@@ -239,7 +243,7 @@ const Up = () => {
           id="modalProducto"
           className="btn-color btn mb-4"
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          data-bs-target="#staticBackdrop"
           onClick={() => {
             setShowModal(true);
             Validate.limpiar(".limpiar");
@@ -319,7 +323,7 @@ const Up = () => {
                                 editarUp(element.id_up);
                               }}
                               data-bs-toggle="modal"
-                              data-bs-target="#actualizarModal"
+                              data-bs-target="#staticBackdrop2"
                             >
                               <IconEdit />
                             </button>
@@ -348,7 +352,8 @@ const Up = () => {
       </div>
       <div
         className="modal fade"
-        id="exampleModal"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -416,7 +421,8 @@ const Up = () => {
 
       <div
         className="modal fade"
-        id="actualizarModal"
+        id="staticBackdrop2"
+        data-bs-backdrop="static" 
         tabIndex="-1"
         aria-labelledby="actualizarModalLabel"
         aria-hidden="true"
