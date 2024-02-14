@@ -345,7 +345,7 @@ const Tipo = () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre Producto</th>
+              <th className="th-sm">Nombre Tipo de Producto</th>
               <th className="th-sm">Nombre Categoria</th>
               <th className="th-sm">Unidad Peso</th>
               <th className="th-sm">Acciones</th>
@@ -510,6 +510,8 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
+                      <option value="oz">Onzas(OZ)</option>
+                      <option value="unidad(es)">Unidad(ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, la Unidad de peso
@@ -657,6 +659,8 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
+                      <option value="oz">Onzas (OZ)</option>
+                      <option value="unidad(es)">Unidad (ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, unidad de peso
