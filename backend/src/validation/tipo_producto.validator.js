@@ -7,5 +7,15 @@ export const validatorTipo_producto = [
         .isEmpty()
         .isLength({min: 2, max: 45})
         .matches(/^[A-Za-zÁÉÍÓÚáéíóúÜü\s']+$/),
-        check('unidad_peso','Ingrese una unida de peso válida en minúscula. Valores válidos: kg, lb, gr, lt, ml').matches(/^(gr|lb|kg|ml|lt)$/).notEmpty(),
+    check('unidad_peso').custom((value, { req }) => {
+        const unidadesValidas = ['kg', 'lb', 'gr', 'lt', 'ml', 'oz'];
+        const unidadSeleccionada = req.body.unidad_peso;
+        if (unidadesValidas.includes(unidadSeleccionada.toLowerCase())) {
+            return true;
+        } else if (unidadSeleccionada.toLowerCase().includes('unidad') || unidadSeleccionada.toLowerCase().includes('unidades')) {
+            return true;
+        } else {
+            throw new Error('Seleccione una unidad de peso válida.');
+        }
+    }),
 ];

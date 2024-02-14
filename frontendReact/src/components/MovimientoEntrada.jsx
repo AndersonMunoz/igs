@@ -157,7 +157,7 @@ const Movimiento = () => {
       });
   }
   function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listar", {
+    fetch("http://localhost:3000/proveedor/listarActivo", {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -246,23 +246,12 @@ const Movimiento = () => {
       },
       body: JSON.stringify(movimientoSeleccionado),
     })
-      .then((res) => res.json())
+      .then((res) => {if (!res.ok) {
+        throw res;
+      }
+      return res.json();})
       .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.actualizacionFallido();
-          return;
-        }
-        if (data.status == 200) {
-          Sweet.exito(data.message);
-        }
-        if (data.status === 403) {
-          Sweet.error(data.error.errors[0].msg);
-          return;
-        }
-        if (data.status === 409) {
-          Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
-          return;
-        }
+        Sweet.exito(data.message);
         //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
@@ -272,6 +261,19 @@ const Movimiento = () => {
           modalBackdrop.remove();
         }
       })
+      .catch((error) => {
+        error.json().then((body) => {
+          if (body.status === 409) {
+            Sweet.error('El número de lote ya está registrado');
+          } else if (body.errors) {
+            body.errors.forEach((err) => {
+              Sweet.error(err.msg);
+            });
+          } else {
+            Sweet.error('Error en el servidor');
+          }
+        });
+      });
   }
   function registrarMovimiento() {
 
@@ -314,7 +316,7 @@ const Movimiento = () => {
         Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
         return;
       }
-      console.log(data);
+      /* console.log(data); */
       listarMovimiento();
       setShowModal(false);
       removeModalBackdrop();
@@ -442,22 +444,22 @@ const Movimiento = () => {
               ) : (
                 <>
                   {movimientos.map((element) => (
-                    <tr key={element.id_factura}>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_tipo}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.num_lote}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_movimiento)}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.cantidad_peso_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.unidad_peso}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.precio_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.estado_producto_movimiento}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nota_factura}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{Validate.formatFecha(element.fecha_caducidad)}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
-                      <td className="p-2 text-center"  style={{ textTransform: 'capitalize' }}>{element.nombre_proveedores}</td>
+                    <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.nombre_tipo}</td>
+                      <td className="p-2 text-center">{element.num_lote}</td>
+                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
+                      <td className="p-2 text-center">{element.tipo_movimiento}</td>
+                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center">{element.unidad_peso}</td>
+                      <td className="p-2 text-center">{element.precio_movimiento}</td>
+                      <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
+                      <td className="p-2 text-center">{element.nota_factura}</td>
+                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+                      <td className="p-2 text-center">{element.nombre_usuario}</td>
+                      <td className="p-2 text-center">{element.nombre_proveedores}</td>
 
                       <td className="p-2 text-center"   >
-                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                        <button className="btn btn-color"onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
 
@@ -549,7 +551,7 @@ const Movimiento = () => {
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="precio_movimiento">Precio individual del producto:</label>
+                          <label className="form-label" htmlFor="precio_movimiento">Precio por unidad:</label>
                           <input type="number" id="precio_movimiento" name="precio_movimiento" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un precio válido.
@@ -658,9 +660,9 @@ const Movimiento = () => {
           <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
             <div className="modal-dialog">
               <div className="modal-content">
-                <div className="modal-header">
+                <div className="modal-header bg text-white">
                   <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
                   <form>
