@@ -21,7 +21,7 @@ export const guardarProducto = async (req, res) => {
           "message": "El tipo de producto ya existe"
       });
     }
-   /*  const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
+    /* const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
     const [existingTipo] = await pool.query(TipoQuery);
     if (existingTipo.length > 0) {
       return res.status(409).json({

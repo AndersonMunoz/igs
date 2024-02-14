@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 800);
+    }, 500);
     return () => clearTimeout(timeout);
   }, []);
 
