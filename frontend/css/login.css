@@ -12,7 +12,7 @@ header {
     background-color: rgb(255, 255, 255);
     height: 75px;
     display: grid;
-    grid-template: "empty-3 sena empty-1 title empty-4 container-logo empty-2" 100%/
+    grid-template: "empty-3 sena empty-1 titleIgs empty-4 container-logo empty-2" 100%/
         30px 50px 1fr 700px 1fr 50px 30px;
 }
 
@@ -27,7 +27,7 @@ header {
 
 .titleIgs {
     display: flex;
-    grid-area: title;
+    grid-area: titleIgs;
     color: rgb(57, 169, 0);
     width: 100%;
     height: 100%;

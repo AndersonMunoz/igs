@@ -1,34 +1,95 @@
-/* form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.header {
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  height: 75px;
+  display: grid;
+  grid-template: "empty-3 sena empty-1 titleIgs empty-4 container-logo empty-2" 100%/
+      2% 10% 1fr 70% 1fr 10% 2%;
+}
+.sena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-area: sena;
+  font-size: 300px;
+  width: 100%;
+  height: 100%;
+}
+
+.titleIgs {
+  display: flex;
+  grid-area: titleIgs;
+  color: rgb(0, 173, 0);
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.h1Titulo{
+  font-weight: 600;
+  font-size:2em;
+}
+@media screen and (min-width: 499) {
+  .h1Titulo {
+    font-size: 1em;
   }
-  
-  label {
-    margin-bottom: 10px;
-    font-weight: bold;
+}
+
+@media screen and  (min-width: 500px) and (max-width: 789px) {
+  .h1Titulo {
+    font-size: 1.4em;
   }
-  
-  input {
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    width: 300px;
-    margin-bottom: 20px;
-    font-size: 16px;
+}
+
+
+@media screen and (min-width: 790px) and (max-width: 1024px) {
+  .h1Titulo {
+    font-size: 1.7em;
   }
-  
-  button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
+}
+
+@media screen and (min-width: 1025px) {
+  .h1Titulo {
+    font-size: 2em;
   }
-  
-  button:hover {
-    background-color: #45a049;
-  } */
+}
+
+.container-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-area: container-logo;
+}
+
+.logoigs {
+  width: 80px;
+  height: 80px;
+}
+
+.nav {
+  height: 70px;
+  background-color: rgb(57, 169, 0);
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.inicio {
+  margin-right: 30px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  background-color: rgb(255, 255, 255);
+  color: black;
+
+}
+
