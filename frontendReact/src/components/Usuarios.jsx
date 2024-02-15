@@ -31,6 +31,20 @@ const Usuario = () => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [passwordError, setPasswordError] = useState(false);
+	const [passwordMatch, setPasswordMatch] = useState(false);
+	const [registrationEnabled, setRegistrationEnabled] = useState(false);
+
+	const handleRegistration = () => {
+		setPassword('');
+		setConfirmPassword('');
+		setPasswordMatch(false);
+		setRegistrationEnabled(false);
+		setPasswordMatch(false);
+	}
+
+	useEffect(() => {
+	}, [passwordMatch]);
+
 
 	const togglePasswordVisibility = () => {
 		setShowPassword(!showPassword);
@@ -41,24 +55,39 @@ const Usuario = () => {
 	}
 
 	const handlePasswordChange = (event) => {
-		setPassword(event.target.value);
-		if (confirmPassword && event.target.value !== confirmPassword) {
-			setPasswordError(true);
-		} else {
-			setPasswordError(false);
-		}
-		// Limpiar confirmPassword si se está modificando el campo de contraseña principal
-		setConfirmPassword('');
+		const newPassword = event.target.value;
+		setPassword(newPassword);
+
+		setPasswordMatch(newPassword === confirmPassword);
+
+
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+		const isValidPassword = passwordRegex.test(newPassword);
+
+
+		setPasswordError(!isValidPassword);
+
+
+		setRegistrationEnabled(newPassword === confirmPassword && isValidPassword);
 	}
 
 	const handleConfirmPasswordChange = (event) => {
-		setConfirmPassword(event.target.value);
-		if (password && event.target.value !== password) {
-			setPasswordError(true);
-		} else {
-			setPasswordError(false);
+		const newConfirmPassword = event.target.value;
+		setConfirmPassword(newConfirmPassword);
+	
+		if (newConfirmPassword) {
+			setPasswordMatch(newConfirmPassword === password);
 		}
-	}
+	
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+		const isValidPassword = passwordRegex.test(newConfirmPassword);
+	
+		setPasswordError(!isValidPassword);
+	
+		setRegistrationEnabled(newConfirmPassword === password && isValidPassword);
+	};
+
+
 
 	const resetFormState = () => {
 		const formFields = modalUsuarioRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -156,6 +185,7 @@ const Usuario = () => {
 						$(tableRef.current).DataTable().destroy();
 					}
 					listarUsuario();
+					handleRegistration();
 				}
 				if (data.status === 409) {
 					Sweet.error(data.message);
@@ -166,6 +196,7 @@ const Usuario = () => {
 					return;
 				}
 				console.log(data);
+				handleRegistration();
 				listarUsuario();
 				setShowModal(false);
 				removeModalBackdrop();
@@ -303,6 +334,7 @@ const Usuario = () => {
 						setShowModal(true);
 						Validate.limpiar('.limpiar');
 						resetFormState();
+						handleRegistration();
 					}}>
 					Registrar Usuario
 				</button>
@@ -385,148 +417,152 @@ const Usuario = () => {
 				</table>
 			</div>
 
-
 			<div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref={modalUsuarioRef} style={{ display: showModal ? 'block' : 'none' }} >
-				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+				<div className="modal-dialog modal-lg modal-dialog-centered d-flex align-items-center">
 					<div className="modal-content">
 						<div className="modal-header bg txt-color">
 							<h2 className="modal-title fs-5">Registrar Usuario</h2>
 							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div className="modal-body">
-							<div className="d-flex justify-content-center">
-								<form className="text-center border border-light ">
-									<div className="row">
-										<div className="col-md-12 mb-2">
-											<label htmlFor="nombreUsuario" className="label-bold mb-2">
-												Nombre
-											</label>
-											<input
-												type="text"
-												className="form-control form-empty limpiar"
-												id="nombre_usuario"
-												name="nombreUsuario"
-												placeholder="Ingrese su nombre"
-											/>
-											<div className="invalid-feedback is-invalid">
-												Por favor, Ingresar un nombre valido.
-											</div>
+							<form className="text-center border border-light ">
+								<div className="row mb-2">
+									<div className="col">
+										<label htmlFor="nombreUsuario" className="label-bold mb-2">
+											Nombre
+										</label>
+										<input
+											type="text"
+											className="form-control form-empty limpiar"
+											id="nombre_usuario"
+											name="nombreUsuario"
+											placeholder="Ingrese su nombre"
+										/>
+										<div className="invalid-feedback is-invalid">
+											Por favor, Ingresar un nombre valido.
 										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="documentoUsuario" className="label-bold mb-1">
-												Documento
-											</label>
-											<input
-												type="number"
-												className="form-control form-empty limpiar"
-												id="documento_usuario"
-												name="documentoUsuario"
-												placeholder="Ingrese su documento"
-											/>
-											<div className="invalid-feedback is-invalid">
-												Por favor, Ingresar un documento valido
-											</div>
-										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="emailUsuario" className="label-bold mb-2">
-												Correo Electrónico
-											</label>
-											<input
-												type="email"
-												className="form-control form-empty limpiar"
-												id="email_usuario"
-												name="emailUsuario"
-												placeholder="Ingrese su email"
-											/>
-											<div className="invalid-feedback is-invalid">
-												Por favor, Ingresar un correo valido
-											</div>
-										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="tipoUsuario" className="label-bold mb-2">
-												Cargo
-											</label>
-											<select
-												className="form-select form-control form-empty limpiar"
-												id="tipo_usuario"
-												name="tipoUsuario"
-												defaultValue=""
-											>
-												<option value="">Selecciona un cargo
-												</option>
-												<option value="administrador">Administrador</option>
-												<option value="coadministrador">Co-Administrador</option>
-											</select>
-											<div className="invalid-feedback is-invalid">
-												Por favor, selecciona un cargo
-											</div>
-										</div>
-										<div className="col-md-12">
-											<label htmlFor="contrasenaUsuario" className="label-bold mb-2">
-												Contraseña
-											</label>
-											<div className="input-group">
-												<input
-													type={showPassword ? 'text' : 'password'}
-													className="form-control form-empty limpiar"
-													id="contrasena_usuario"
-													name="contrasenaUsuario"
-													placeholder="Ingrese una contraseña"
-													value={password}
-													onChange={handlePasswordChange}
-												/>
-												<div className="input-group-append">
-													<button
-														className="btn btn-secondary"
-														type="button"
-														onClick={togglePasswordVisibility}
-													>
-														{showPassword ? <IconEyeOff /> : <IconEye />}
-													</button>
-												</div>
-												<div className="invalid-feedback is-invalid">
-													Por favor, Ingresar una contraseña válida debe tener una mayúscula, minúscula y un número
-												</div>
-											</div>
-										</div>
-										<div className="col-md-12">
-											<label htmlFor="confirmarContrasena" className="label-bold mb-2">
-												Confirmar Contraseña
-											</label>
-											<div className="input-group ">
-												<input
-													type={showConfirmPassword ? 'text' : 'password'}
-													className="form-control form-empty limpiar"
-													id="confirmar_contrasena"
-													name="confirmarContrasena"
-													placeholder="Confirme su contraseña"
-													value={confirmPassword}
-													onChange={handleConfirmPasswordChange}
-												/>
-												<div className="input-group-append">
-													<button
-														className="btn btn-secondary"
-														type="button"
-														onClick={toggleConfirmPasswordVisibility}
-													>
-														{showConfirmPassword ? <IconEyeOff /> : <IconEye />}
-													</button>
-												</div>
-												{passwordError && (
-													<div className="invalid-feedback is-invalid">
-														Las contraseñas no coinciden
-													</div>
-												)}
-												<div className="invalid-feedback is-invalid">
-													Por favor, Ingresar una contraseña válida debe tener una mayúscula, minúscula y un número
-												</div>
-											</div>
-										</div>
-
 
 									</div>
-								</form>
-							</div>
+									<div className="col">
+										<label htmlFor="documentoUsuario" className="label-bold mb-1">
+											Documento
+										</label>
+										<input
+											type="number"
+											className="form-control form-empty limpiar"
+											id="documento_usuario"
+											name="documentoUsuario"
+											placeholder="Ingrese su documento"
+										/>
+										<div className="invalid-feedback is-invalid">
+											Por favor, Ingresar un documento valido
+										</div>
+									</div>
+								</div>
+
+								<div className="row mb-2">
+									<div className="col">
+										<label htmlFor="emailUsuario" className="label-bold mb-2">
+											Correo Electrónico
+										</label>
+										<input
+											type="email"
+											className="form-control form-empty limpiar"
+											id="email_usuario"
+											name="emailUsuario"
+											placeholder="Ingrese su email"
+										/>
+										<div className="invalid-feedback is-invalid">
+											Por favor, Ingresar un correo valido
+										</div>
+									</div>
+									<div className="col">
+										<label htmlFor="tipoUsuario" className="label-bold mb-2">
+											Cargo
+										</label>
+										<select
+											className="form-select form-control form-empty limpiar"
+											id="tipo_usuario"
+											name="tipoUsuario"
+											defaultValue=""
+										>
+											<option value="">Selecciona un cargo
+											</option>
+											<option value="administrador">Administrador</option>
+											<option value="coadministrador">Co-Administrador</option>
+										</select>
+										<div className="invalid-feedback is-invalid">
+											Por favor, selecciona un cargo
+										</div>
+									</div>
+
+
+								</div>
+								<div className="row mb-2">
+									<div className="col-md-12 mb-2">
+										<label htmlFor="contrasenaUsuario" className="label-bold mb-2">
+											Contraseña
+										</label>
+										<div className="input-group">
+											<input
+												type={showPassword ? 'text' : 'password'}
+												className="form-control form-empty limpiar"
+												id="contrasena_usuario"
+												name="contrasenaUsuario"
+												placeholder="Ingrese una contraseña"
+												value={password}
+												onChange={handlePasswordChange}
+											/>
+											<div className="input-group-append">
+												<button
+													className="btn btn-secondary"
+													type="button"
+													onClick={togglePasswordVisibility}
+												>
+													{showPassword ? <IconEyeOff /> : <IconEye />}
+												</button>
+											</div>
+										</div>
+										{passwordError && (
+											<div className="invalid-feedback is-invalid">
+												Por favor, Ingresar una contraseña válida debe tener una mayúscula, minúscula y un número
+											</div>
+										)}
+									</div>
+									<div className="col-md-12 pl-2 ">
+										<label htmlFor="confirmarContrasena" className="label-bold mb-2">
+											Confirmar Contraseña
+										</label>
+										<div className="input-group">
+											<input
+												type={showConfirmPassword ? 'text' : 'password'}
+												className="form-control form-empty limpiar"
+												id="confirmar_contrasena"
+												name="confirmarContrasena"
+												placeholder="Confirme su contraseña"
+												value={confirmPassword}
+												onChange={handleConfirmPasswordChange}
+											/>
+											<div className="input-group-append">
+												<button
+													className="btn btn-secondary"
+													type="button"
+													onClick={toggleConfirmPasswordVisibility}
+												>
+													{showConfirmPassword ? <IconEyeOff /> : <IconEye />}
+												</button>
+											</div>
+										</div>
+										{passwordMatch ? (
+											<div className="row text-success ml-2">Las contraseñas coinciden</div>
+										) : (
+											<div className="row text-danger ml-2">Las contraseñas no coinciden</div>
+										)}
+
+									</div>
+
+								</div>
+							</form>
 						</div>
 						<div className="modal-footer">
 							<button
@@ -536,112 +572,108 @@ const Usuario = () => {
 							>
 								Cerrar
 							</button>
-							<button type="button" className="btn btn-color" onClick={registrarUsuario} >
+							<button type="button" disabled={!registrationEnabled} className="btn btn-color" onClick={registrarUsuario} >
 								Registrar
+
 							</button>
 						</div>
 					</div>
-				</div>
+				</div >
 			</div >
-			{/* modal actualizar */}
-			<div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
-				<div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+			{/* modal actualizar https://chat.openai.com/share/46202498-977b-4fd0-b1ee-baeffa0d982a*/}
+			< div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+				<div className="modal-dialog modal-lg modal-dialog-centered d-flex align-items-center">
 					<div className="modal-content">
 						<div className="modal-header txt-color">
 							<h2 className="modal-title fs-5">Actualizar Usuario</h2>
 							<button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div className="modal-body">
-							<div className="d-flex justify-content-center">
-								<form className="text-center border border-light ">
-									<div className="mb-3 row">
-										<div className="col-md-12 mb-2">
-											<label htmlFor="nombre_usuario" className="label-bold mb-2">
-												Nombre
-											</label>
-											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
-											<input type="text" className="form-control form-update" placeholder="Ingrese su nombre" value={usuarioSeleccionado.nombre_usuario || ''} name="nombre_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, nombre_usuario: e.target.value })} />
-											<div className="invalid-feedback is-invalid">
-												Por favor, Ingresar un nombre valido.
-											</div>
-										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="documento_usuario" className="label-bold mb-1">
-												Documento
-											</label>
-											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
-											<input type="text" className="form-control form-update" placeholder="Ingrese su documento" value={usuarioSeleccionado.documento_usuario || ''} name="documento_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, documento_usuario: e.target.value })} />
-											<div className="invalid-feedback is-invalid">
-												Por favor, Ingresar un documento valido
-											</div>
-										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="email_usuario" className="label-bold mb-2">
-												Correo Electrónico
-											</label>
-											<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
-											<input type="email" className="form-control form-update" placeholder="Ingrese su email" value={usuarioSeleccionado.email_usuario || ''} name="email_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, email_usuario: e.target.value })} />
-											<div className="invalid-feedback is-invalid">
-												Por Favor, Ingresar un correo valido
-											</div>
-										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="tipo_usuario" className="label-bold mb-2">
-												Cargo
-											</label>
-											<select
-												className="form-select form-control limpiar"
-												value={usuarioSeleccionado.tipo_usuario || ''} name="tipo_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, tipo_usuario: e.target.value })}>
-												<option value="" disabled>
-													Seleccione un Cargo
-												</option>
-												<option value="administrador">Administrador</option>
-												<option value="coadministrador">Co-Administrador</option>
-											</select>
-										</div>
-										<div className="col-md-12 mb-2">
-											<label htmlFor="contrasena_usuario" className="label-bold mb-2">
-												Contraseña
-											</label>
-											<div className="input-group">
-												<input
-													type="hidden"
-													value={usuarioSeleccionado.id_usuario || ''}
-													onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })}
-													disabled />
-												<input
-													type={showPassword ? 'text' : 'password'}
-													className="form-control form-update"
-													onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })}
-													value={usuarioSeleccionado.contrasena_usuario || ''}
-													name="contrasena_suario"
-													placeholder="Ingrese una contraseña"
-												/>
-												<div className="input-group-append">
-													<button
-														className="btn btn-secondary"
-														type="button"
-														onClick={togglePasswordVisibility}
-													>
-														{showPassword ? <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye-off" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.75" stroke="white" fill="none" strokeLinecap="round" strokeLinejoin="round">
-															<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-															<path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
-															<path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
-															<path d="M3 3l18 18" />
-														</svg> : <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-eye" width="24" height="24" viewBox="0 0 24 24" strokeWidth="1.75" stroke="white" fill="none" strokeLinecap="round" strokeLinejoin="round">
-															<path stroke="none" d="M0 0h24v24H0z" fill="none" />
-															<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-															<path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-														</svg>}
-													</button>
-												</div>
-											</div>
-										</div>
 
+							<form className="text-center border border-light ">
+								<div className="row mb-2">
+									<div className="col">
+										<label htmlFor="nombre_usuario" className="label-bold mb-2">
+											Nombre
+										</label>
+										<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
+										<input type="text" className="form-control form-update" placeholder="Ingrese su nombre" value={usuarioSeleccionado.nombre_usuario || ''} name="nombre_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, nombre_usuario: e.target.value })} />
+										<div className="invalid-feedback is-invalid">
+											Por favor, Ingresar un nombre valido.
+										</div>
 									</div>
-								</form>
-							</div>
+									<div className="col">
+										<label htmlFor="documento_usuario" className="label-bold mb-1">
+											Documento
+										</label>
+										<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
+										<input type="text" className="form-control form-update" placeholder="Ingrese su documento" value={usuarioSeleccionado.documento_usuario || ''} name="documento_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, documento_usuario: e.target.value })} />
+										<div className="invalid-feedback is-invalid">
+											Por favor, Ingresar un documento valido
+										</div>
+									</div>
+								</div>
+
+								<div className="row mb-2">
+									<div className="col">
+										<label htmlFor="email_usuario" className="label-bold mb-2">
+											Correo Electrónico
+										</label>
+										<input type="hidden" value={usuarioSeleccionado.id_usuario || ''} onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })} disabled />
+										<input type="email" className="form-control form-update" placeholder="Ingrese su email" value={usuarioSeleccionado.email_usuario || ''} name="email_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, email_usuario: e.target.value })} />
+										<div className="invalid-feedback is-invalid">
+											Por Favor, Ingresar un correo valido
+										</div>
+									</div>
+									<div className="col">
+										<label htmlFor="tipo_usuario" className="label-bold mb-2">
+											Cargo
+										</label>
+										<select
+											className="form-select form-control limpiar"
+											value={usuarioSeleccionado.tipo_usuario || ''} name="tipo_usuario" onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, tipo_usuario: e.target.value })}>
+											<option value="" disabled>
+												Seleccione un Cargo
+											</option>
+											<option value="administrador">Administrador</option>
+											<option value="coadministrador">Co-Administrador</option>
+										</select>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col">
+										<label htmlFor="contrasena_usuario" className="label-bold mb-2">
+											Contraseña
+										</label>
+										<div className="input-group">
+											<input
+												type="hidden"
+												value={usuarioSeleccionado.id_usuario || ''}
+												disabled
+											/>
+											<input
+												type={showPassword ? 'text' : 'password'}
+												className="form-control form-update"
+												onChange={(e) => setUsuarioSeleccionado({ ...usuarioSeleccionado, id_usuario: e.target.value })}
+												value={usuarioSeleccionado.contrasena_usuario || ''}
+												name="contrasena_suario"
+												placeholder="Ingrese una contraseña"
+											/>
+											<div className="input-group-append">
+												<button
+													className="btn btn-secondary"
+													type="button"
+													onClick={togglePasswordVisibility}
+												>
+													{showPassword ? <IconEyeOff /> : <IconEye />}
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
 						</div>
+
 						<div className="modal-footer">
 							<button
 								type="button"
@@ -655,11 +687,12 @@ const Usuario = () => {
 							</button>
 						</div>
 					</div>
-				</div>
-			</div>
+				</div >
+			</div >
 
 
-		</div>
+
+		</div >
 	)
 };
 
