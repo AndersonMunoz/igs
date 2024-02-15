@@ -190,7 +190,7 @@ const Movimiento = () => {
         setUniPro([]);
         setProCat(data);
         
-        console.log("PRODUCTO - CATEGORIA : ", data);
+        //console.log("PRODUCTO - CATEGORIA : ", data);
       })
       .catch((e) => {
         setProCat([]);
@@ -212,7 +212,7 @@ const Movimiento = () => {
       .then((res) => res.json())
       .then((data) => {
         setUniPro(data);
-        console.log("Unidades producto   : ", data);
+        //console.log("Unidades producto   : ", data);
       })
       .catch((e) => {
         setUniPro([]);
@@ -474,7 +474,6 @@ const Movimiento = () => {
                 </div>
                 <div className="modal-body">
                   <form>
-
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
@@ -497,7 +496,8 @@ const Movimiento = () => {
                           <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             {productosCategoria.length > 0 ? productosCategoria.map((element) => (
-                              <option key={element.id_producto} value={element.id_producto}>{element.nombre_tipo}</option>
+                              <option key={element.id_producto} value={element.id_producto}>
+                                {element.nombre_tipo} - {element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}</option>
                             )): ""}
                           </select>
                           <div className="invalid-feedback is-invalid">
@@ -510,17 +510,17 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                          <input type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control form-empty limpiar" />
+                          <input type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento"  className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese una cantidad.
                           </div>
                         </div>
                       </div>
                       <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="unidad_peso_movimiento">Unidad</label><br></br>
+                        <div data-mdb-input-init className="form-outline" >
+                          <label className="form-label" htmlFor="unidad_peso_movimiento" >Unidad</label><br></br>
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} defaultValue={element.unidad_peso}/>
+                              <input type="text" id="unidad_peso_movimiento" disabled={true} className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_tipo} defaultValue={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
                         </div>
                       </div>
