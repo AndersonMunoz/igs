@@ -17,6 +17,7 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import { Outlet, Link } from "react-router-dom";
+import * as xlsx from 'xlsx';
 
 
 const Movimiento = () => {
@@ -35,9 +36,45 @@ const Movimiento = () => {
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
   
+  const [originalPagination, setOriginalPagination] = useState(true);
+
+  const handleOnExport = () => {
+    // Almacenar la configuración de paginación original
+    setOriginalPagination(tableRef.current.state.pagination);
+
+    // Deshabilitar la paginación para mostrar todos los registros en una sola página
+    tableRef.current.setState({ pagination: false });
+
+    // Exportar los datos a Excel
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelTotal');
+    xlsx.writeFile(wb, 'MovimientoTotal.xlsx');
+
+    // Restaurar la configuración de paginación original
+    tableRef.current.setState({ pagination: originalPagination });
+  };
+
+  const getTableData = () => {
+    // Obtener todos los datos de la tabla
+    const tableRows = tableRef.current.dataManager.getRawData();
+    const wsData = [];
+
+    // Obtener los nombres de las columnas
+    const columns = tableRef.current.columns.map(col => col.name);
+    wsData.push(columns);
+
+    // Obtener los datos de cada fila
+    tableRows.forEach(row => {
+      const rowData = columns.map(col => row[col]);
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  }
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-
   };
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
@@ -385,15 +422,10 @@ const Movimiento = () => {
           
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <DownloadTableExcel
-                filename="Movimiento Detalles Excel"
-                sheet="movimientos"
-                currentTableRef={tableRef.current}
-              >
-                <button type="button" className="btn btn-light">
+              
+                <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
                 </button>
-              </DownloadTableExcel>
             </div>
             <div className="" title="Descargar Pdf">
               <button
