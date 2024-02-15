@@ -271,7 +271,7 @@ const Up = () => {
           </button>
         </div>
       </div>
-      <div className="wrapper-editor">
+      <div className="container-fluid w-full">
         <table
           id="dtBasicExample"
           className="table table-striped table-bordered border display responsive nowrap"
@@ -354,8 +354,9 @@ const Up = () => {
         className="modal fade"
         id="staticBackdrop"
         data-bs-backdrop="static"
+        data-bs-keyboard="false"
         tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
         ref={modalCategoriaRef}
         style={{ display: showModal ? "block" : "none" }}
@@ -387,7 +388,9 @@ const Up = () => {
                       id="nombreUp"
                       placeholder="Nombre Bodega "
                     />
-
+                  <div className="invalid-feedback is-invalid">
+                        Por favor, ingrese una bodega
+                      </div>
                 </div>
                 <div className="col-12">
                   <label

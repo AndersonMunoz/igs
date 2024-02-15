@@ -123,7 +123,7 @@ const Categoria = () => {
         }
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
-      
+          return;
         }
         console.log(data);
         listarCategoria();
@@ -271,7 +271,7 @@ const Categoria = () => {
           </button>
         </div>
       </div>
-      <div className="wrapper-editor" >
+      <div className="container-fluid w-full" >
       <table
         id="dtBasicExample"
         className="table table-striped table-bordered border display responsive nowrap"
@@ -329,7 +329,7 @@ const Categoria = () => {
                        <IconEdit />
                     </button>
                     <button
-                      className="btn btn-danger mx-2"
+                      className="btn btn-danger "
                       onClick={() =>
                         deshabilitarCategoria(element.id_categoria)
                       }
@@ -339,7 +339,7 @@ const Categoria = () => {
                   </>
                 ) : (
                   <button
-                    className="btn btn-primary mx-2"
+                    className="btn btn-primary "
                     onClick={() =>
                       activarCategoria(element.id_categoria)
                     }
@@ -355,7 +355,7 @@ const Categoria = () => {
           </tbody>
         </table>
       </div>
-      <div className="modal fade"id="staticBackdrop"tabIndex="-1"data-bs-backdrop="static"ref={modalCategoriaRef} style={{ display: showModal ? 'block' : 'none' }}>
+      <div className="modal fade"id="staticBackdrop" tabIndex="-1"data-bs-backdrop="static"ref={modalCategoriaRef} style={{ display: showModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -374,11 +374,15 @@ const Categoria = () => {
                       <div className="input-group">
                         <input
                           type="text"
-                          className="form-control limpiar "
+                          className="form-control limpiar form-empty form-control"
                           id="nombreCategoria"
-                          placeholder="Nombre Categoria "
+                          placeholder="Nombre Categoria"
                         />
+                         <div className="invalid-feedback is-invalid">
+                        Por favor, ingrese una categoria
                       </div>
+                      </div>
+
                     </div>
                     <div className="col-12">
                       <label
