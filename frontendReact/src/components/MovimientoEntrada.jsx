@@ -238,7 +238,7 @@ const Movimiento = () => {
         setUniPro([]);
         setProCat(data);
         
-        console.log("PRODUCTO - CATEGORIA : ", data);
+        //console.log("PRODUCTO - CATEGORIA : ", data);
       })
       .catch((e) => {
         setProCat([]);
@@ -260,7 +260,7 @@ const Movimiento = () => {
       .then((res) => res.json())
       .then((data) => {
         setUniPro(data);
-        console.log("Unidades producto   : ", data);
+        //console.log("Unidades producto   : ", data);
       })
       .catch((e) => {
         setUniPro([]);
