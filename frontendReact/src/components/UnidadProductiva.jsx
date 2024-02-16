@@ -14,8 +14,8 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from 'react-to-pdf';
+import * as xlsx from 'xlsx';
 
 const Up = () => {
   const [unidad_productiva, setunidad_productiva] = useState([]);
@@ -24,6 +24,38 @@ const Up = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [upSeleccionada, setupSeleccionada] = useState({});
+
+
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelBodega');
+    xlsx.writeFile(wb, 'Bodegadetalle.xlsx');
+  };
+  const getTableData = () => {
+    const wsData = [];
+
+    // Obtener las columnas
+    const columns = [
+      'Id',
+      'Nombre Bodega',
+      'estado'
+    ];
+    wsData.push(columns);
+
+    // Obtener los datos de las filas
+    unidad_productiva.forEach(element => {
+      const rowData = [
+        element.id_up,
+        element.nombre_up,
+        element.estado
+      ];
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  };
 
   const tableRef = useRef();
 
@@ -253,22 +285,22 @@ const Up = () => {
         </button>
 
         <div>
-          <DownloadTableExcel
-            filename="Tabla Bodega"
-            sheet="Bodega"
-            currentTableRef={tableRef.current}
-          >
-            <button type="button" className="btn btn-light">
-            <img src={ExelLogo} className="logoExel" />
-            </button>
-          </DownloadTableExcel>
-          <button
-            type="button"
-            className="btn btn-light"
-            onClick={() => generatePDF(tableRef, { filename: "Bodega.pdf" })}
-          >
-    <img src={PdfLogo} className="logoExel" />
-          </button>
+        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => generatePDF(tableRef, { filename: "Bodega  Excel.pdf" })}
+              >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div className="container-fluid w-full">
