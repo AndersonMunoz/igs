@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Outlet, Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
@@ -15,9 +15,10 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Movimiento = () => {
 
@@ -40,6 +41,44 @@ const Movimiento = () => {
     const ws = xlsx.utils.aoa_to_sheet(wsData);
     xlsx.utils.book_append_sheet(wb, ws, 'ExcelT  Salida');
     xlsx.writeFile(wb, 'MovimientoSalida.xlsx');
+  };
+  const exportPdfHandler = () => {
+    const doc = new jsPDF('landscape');
+  
+    const columns = [
+      { title: 'Nombre producto', dataKey: 'nombre_tipo' },
+      { title: '# Lote', dataKey: 'num_lote' },
+      { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
+      { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
+      { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
+      { title: 'Unidad Peso', dataKey: 'unidad_peso' },
+      { title: 'Nota', dataKey: 'nota_factura' },
+      { title: 'Usuario que hizo movimiento', dataKey: 'nombre_usuario' }
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = movimientos.map((element) => ({
+      nombre_tipo: element.nombre_tipo,
+      num_lote: element.num_lote,
+      fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
+      tipo_movimiento: element.tipo_movimiento,
+      cantidad_peso_movimiento: element.cantidad_peso_movimiento,
+      unidad_peso: element.unidad_peso,
+      nota_factura: element.nota_factura,
+      nombre_usuario: element.nombre_usuario,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [0,100,0] },
+    });
+  
+    // Guardar el PDF
+    doc.save('MovimientosSalida.pdf');
   };
   const getTableData = () => {
     const wsData = [];
@@ -437,7 +476,7 @@ const Movimiento = () => {
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={() => generatePDF(tableRef, { filename: "Movimiento Salida Detalles Excel.pdf" })}
+                onClick={exportPdfHandler}
               >
                 <img src={PdfLogo} className="logoExel" />
               </button>

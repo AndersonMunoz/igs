@@ -44,7 +44,6 @@ const Movimiento = () => {
     xlsx.utils.book_append_sheet(wb, ws, 'ExcelTotal');
     xlsx.writeFile(wb, 'MovimientoTotal.xlsx');
   };
-  const doc= new jsPDF();
   const exportPdfHandler = () => {
     const doc = new jsPDF('landscape');
   
@@ -85,7 +84,7 @@ const Movimiento = () => {
       body: tableData,
       margin: { top: 20 },
       styles: { overflow: 'linebreak' },
-      headStyles: { fillColor: [100, 100, 100] },
+      headStyles: { fillColor: [0, 100,0] },
     });
   
     // Guardar el PDF
