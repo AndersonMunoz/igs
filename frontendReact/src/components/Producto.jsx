@@ -152,7 +152,6 @@ const Producto = () => {
   }
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
-    setProductoSeleccionado({ ...productoSeleccionado, fk_id_tipo_producto: selectedOption.value });
   };
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption); 
@@ -206,32 +205,6 @@ const Producto = () => {
         Sweet.error('Hubo un error al registrar el producto.');
       });
   }
-  function deshabilitarProducto(id) {
-    Sweet.confirmacion().then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://localhost:3000/producto/deshabilitar/${id}`, {
-          method: 'PATCH',
-          headers: {
-            "Content-type": "application/json"
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data);
-            if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
-            }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
-            }
-            listarProducto();
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-      }
-    });
-  }
   function editarProducto(id) {
     fetch(`http://localhost:3000/producto/buscar/${id}`, {
       method: 'GET',
@@ -243,7 +216,6 @@ const Producto = () => {
       .then((data) => {
         console.log(data);
         setProductoSeleccionado(data[0]);
-        setSelectedTipo(data[0].fk_id_tipo_producto); 
         setUpdateModal(true);
       })
       .catch((error) => {
@@ -281,6 +253,32 @@ const Producto = () => {
         modalBackdrop.remove();
       }
     })
+  }
+  function deshabilitarProducto(id) {
+    Sweet.confirmacion().then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/producto/deshabilitar/${id}`, {
+          method: 'PATCH',
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            if (data.status === 200) {
+              Sweet.deshabilitadoExitoso();
+            }
+            if (data.status === 401) {
+              Sweet.deshabilitadoFallido();
+            }
+            listarProducto();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+    });
   }
   function busquedaInventario() {
     let categoria = localStorage.getItem('category')
@@ -481,15 +479,9 @@ const Producto = () => {
   classNamePrefix="react-select"
   options={tipos.map(element => ({ value: element.id, label: element.NombreProducto }))}
   placeholder="Selecciona..."
+  value={productoSeleccionado.fk_id_tipo_producto ? { value: productoSeleccionado.fk_id_tipo_producto, label: productoSeleccionado.fk_id_tipo_producto } : null}
   onChange={(selectedOption) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_tipo_producto: selectedOption.value })}
-  value={productoSeleccionado.fk_id_tipo_producto}
 />
-                    {/* <select className="form-select form-update" value={productoSeleccionado.fk_id_tipo_producto || ''} name="fk_id_tipo_producto" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_tipo_producto: e.target.value })}>
-                      <option value="">Selecciona un Tipo</option>
-                      {tipos.map((element) => (
-                        <option key={element.id} value={element.id}>{element.NombreProducto}</option>
-                      ))}
-                    </select> */}
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
                     </div>
@@ -502,15 +494,9 @@ const Producto = () => {
                       classNamePrefix="react-select"
                       options={up.map(element => ({ value: element.id_up, label: element.nombre_up }))}
                       placeholder="Selecciona..."
+                      value={productoSeleccionado.fk_id_up ? { value: productoSeleccionado.fk_id_up, label: productoSeleccionado.fk_id_up } : null}
                       onChange={(selectedOption) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: selectedOption.value })}
-                      value={selectedUp}
                     />
-                    {/* <select className="form-select form-update" value={productoSeleccionado.fk_id_up || ''} name="fk_id_up" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} >
-                      <option value="">Selecciona una UP</option>
-                      {up.map((element) => (
-                        <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
-                      ))}
-                    </select> */}
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una unidad de peso.
                     </div>
