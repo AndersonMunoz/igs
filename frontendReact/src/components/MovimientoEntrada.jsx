@@ -15,8 +15,8 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
+import * as xlsx from 'xlsx';
 
 
 const Movimiento = () => {
@@ -35,11 +35,59 @@ const Movimiento = () => {
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
   
+  const tableRef = useRef(null);
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelEntrada');
+    xlsx.writeFile(wb, 'MovimientoEntrada.xlsx');
+  };
+  const getTableData = () => {
+    const wsData = [];
+
+    // Obtener las columnas
+    const columns = [
+      'Nombre producto',
+      '# Lote',
+      'Fecha del movimiento',
+      'Tipo de movimiento',
+      'Cantidad',
+      'Unidad Peso',
+      'Precio movimiento',
+      'Estado producto',
+      'Nota',
+      'Fecha de caducidad',
+      'Usuario que hizo movimiento',
+      'Proveedor'
+    ];
+    wsData.push(columns);
+
+    // Obtener los datos de las filas
+    movimientos.forEach(element => {
+      const rowData = [
+        element.nombre_tipo,
+        element.num_lote,
+        Validate.formatFecha(element.fecha_movimiento),
+        element.tipo_movimiento,
+        element.cantidad_peso_movimiento,
+        element.unidad_peso,
+        element.precio_movimiento,
+        element.estado_producto_movimiento,
+        element.nota_factura,
+        Validate.formatFecha(element.fecha_caducidad),
+        element.nombre_usuario,
+        element.nombre_proveedores
+      ];
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
 
   };
-  const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
@@ -386,15 +434,9 @@ const Movimiento = () => {
           </div>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <DownloadTableExcel
-                filename="Movimiento Detalles Excel"
-                sheet="movimientos"
-                currentTableRef={tableRef.current}
-              >
-                <button type="button" className="btn btn-light">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
                 </button>
-              </DownloadTableExcel>
             </div>
             <div className="" title="Descargar Pdf">
               <button

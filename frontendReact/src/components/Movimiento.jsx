@@ -14,9 +14,8 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as xlsx from 'xlsx';
 
 
@@ -36,47 +35,59 @@ const Movimiento = () => {
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
   
-  const [originalPagination, setOriginalPagination] = useState(true);
-
+  const tableRef = useRef(null);
   const handleOnExport = () => {
-    // Almacenar la configuración de paginación original
-    setOriginalPagination(tableRef.current.state.pagination);
-
-    // Deshabilitar la paginación para mostrar todos los registros en una sola página
-    tableRef.current.setState({ pagination: false });
-
-    // Exportar los datos a Excel
     const wsData = getTableData();
     const wb = xlsx.utils.book_new();
     const ws = xlsx.utils.aoa_to_sheet(wsData);
     xlsx.utils.book_append_sheet(wb, ws, 'ExcelTotal');
     xlsx.writeFile(wb, 'MovimientoTotal.xlsx');
-
-    // Restaurar la configuración de paginación original
-    tableRef.current.setState({ pagination: originalPagination });
   };
 
   const getTableData = () => {
-    // Obtener todos los datos de la tabla
-    const tableRows = tableRef.current.dataManager.getRawData();
     const wsData = [];
 
-    // Obtener los nombres de las columnas
-    const columns = tableRef.current.columns.map(col => col.name);
+    // Obtener las columnas
+    const columns = [
+      'Nombre producto',
+      '# Lote',
+      'Fecha del movimiento',
+      'Tipo de movimiento',
+      'Cantidad',
+      'Unidad Peso',
+      'Precio movimiento',
+      'Estado producto',
+      'Nota',
+      'Fecha de caducidad',
+      'Usuario que hizo movimiento',
+      'Proveedor'
+    ];
     wsData.push(columns);
 
-    // Obtener los datos de cada fila
-    tableRows.forEach(row => {
-      const rowData = columns.map(col => row[col]);
+    // Obtener los datos de las filas
+    movimientos.forEach(element => {
+      const rowData = [
+        element.nombre_tipo,
+        element.num_lote,
+        Validate.formatFecha(element.fecha_movimiento),
+        element.tipo_movimiento,
+        element.cantidad_peso_movimiento,
+        element.unidad_peso,
+        element.precio_movimiento,
+        element.estado_producto_movimiento,
+        element.nota_factura,
+        Validate.formatFecha(element.fecha_caducidad),
+        element.nombre_usuario,
+        element.nombre_proveedores
+      ];
       wsData.push(rowData);
     });
 
     return wsData;
-  }
+  };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
   };
-  const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
