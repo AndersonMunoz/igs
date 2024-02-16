@@ -104,7 +104,7 @@ export const editarUsuario = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error)
+            return res.status(403).json({"status": 403 ,error})
         }
 
         let id = req.params.id;
