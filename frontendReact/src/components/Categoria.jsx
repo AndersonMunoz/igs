@@ -12,9 +12,11 @@ import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; 
 import generatePDF from 'react-to-pdf';
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Categoria = () => {
   const tableRef = useRef();
@@ -25,6 +27,62 @@ const Categoria = () => {
   const modalUpdateRef = useRef(null);
   const [categoriaSeleccionada, setcategoriaSeleccionada] = useState({});
  
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelCategoria');
+    xlsx.writeFile(wb, 'Categoriadetalle.xlsx');
+  };
+  const getTableData = () => {
+    const wsData = [];
+
+    // Obtener las columnas
+    const columns = [
+      'Id',
+      'Nombre'
+    ];
+    wsData.push(columns);
+
+    // Obtener los datos de las filas
+    categorias_producto.forEach(element => {
+      const rowData = [
+        element.id_categoria,
+        element.nombre_categoria
+      ];
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'Id', dataKey: 'id_categoria' },
+      { title: 'Nombre de categoria', dataKey: 'nombre_categoria' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = categorias_producto.map((element) => ({
+      id_categoria: element.id_categoria,
+      nombre_categoria: element.nombre_categoria,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Tipodeproducto.pdf');
+  };
 
   useEffect(() => {
 		if (categorias_producto.length > 0) {
@@ -252,24 +310,22 @@ const Categoria = () => {
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal"  data-bs-target="#staticBackdrop"onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nueva Categoria
         </button>
-        <div>
-          <DownloadTableExcel
-            filename="Tabla Categoria"
-            sheet="Categoria"
-            currentTableRef={tableRef.current}
-          >
-            <button type="button" className="btn btn-light">
-            <img src={ExelLogo} className="logoExel" />
-            </button>
-          </DownloadTableExcel>
-          <button
-            type="button"
-            className="btn  btn-light"
-            onClick={() => generatePDF(tableRef, { filename: "Categoria.pdf" })}
-          >
-            <img src={PdfLogo} className="logoExel" />
-          </button>
-        </div>
+        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}
+              >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
+          </div>
       </div>
       <div className="container-fluid w-full" >
       <table
@@ -315,7 +371,7 @@ const Categoria = () => {
               <td style={{textTransform: 'capitalize'}}>{element.id_categoria}</td>
               <td style={{textTransform: 'capitalize'}}>{element.nombre_categoria}</td>
               <td>
-                {element.estado === 1 ? (
+                {element.estado === 1   ? (
                   <>
                     <button
                       className="btn btn-color mx-2"
