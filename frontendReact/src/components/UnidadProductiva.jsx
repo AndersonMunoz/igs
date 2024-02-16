@@ -16,6 +16,8 @@ import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import generatePDF from 'react-to-pdf';
 import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Up = () => {
   const [unidad_productiva, setunidad_productiva] = useState([]);
@@ -32,6 +34,33 @@ const Up = () => {
     const ws = xlsx.utils.aoa_to_sheet(wsData);
     xlsx.utils.book_append_sheet(wb, ws, 'ExcelBodega');
     xlsx.writeFile(wb, 'Bodegadetalle.xlsx');
+  };
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'Id', dataKey: 'id_up' },
+      { title: 'Nombre de Bodega', dataKey: 'nombre_up' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = unidad_productiva.map((element) => ({
+      id_up: element.id_up,
+      nombre_up: element.nombre_up,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Bodega.pdf');
   };
   const getTableData = () => {
     const wsData = [];
@@ -295,7 +324,7 @@ const Up = () => {
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={() => generatePDF(tableRef, { filename: "Bodega  Excel.pdf" })}
+                onClick={exportPdfHandler}
               >
                 <img src={PdfLogo} className="logoExel" />
               </button>

@@ -15,6 +15,8 @@ import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; 
 import generatePDF from 'react-to-pdf';
 import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Categoria = () => {
   const tableRef = useRef();
@@ -52,6 +54,34 @@ const Categoria = () => {
     });
 
     return wsData;
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'Id', dataKey: 'id_categoria' },
+      { title: 'Nombre de categoria', dataKey: 'nombre_categoria' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = categorias_producto.map((element) => ({
+      id_categoria: element.id_categoria,
+      nombre_categoria: element.nombre_categoria,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Tipodeproducto.pdf');
   };
 
   useEffect(() => {
@@ -290,7 +320,7 @@ const Categoria = () => {
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={() => generatePDF(tableRef, { filename: "Categoria Detalles Excel.pdf" })}
+                onClick={exportPdfHandler}
               >
                 <img src={PdfLogo} className="logoExel" />
               </button>
@@ -341,7 +371,7 @@ const Categoria = () => {
               <td style={{textTransform: 'capitalize'}}>{element.id_categoria}</td>
               <td style={{textTransform: 'capitalize'}}>{element.nombre_categoria}</td>
               <td>
-                {element.estado === 1 ? (
+                {element.estado === 1   ? (
                   <>
                     <button
                       className="btn btn-color mx-2"

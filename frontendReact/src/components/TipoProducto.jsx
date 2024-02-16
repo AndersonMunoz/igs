@@ -18,6 +18,8 @@ import Select from 'react-select'
 import generatePDF from "react-to-pdf";
 import { newLink } from "./Inventario.jsx";
 import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 
@@ -63,6 +65,38 @@ const Tipo = () => {
     const ws = xlsx.utils.aoa_to_sheet(wsData);
     xlsx.utils.book_append_sheet(wb, ws, 'ExcelTipo');
     xlsx.writeFile(wb, 'Tipodetalle.xlsx');
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'Id', dataKey: 'id_tipo' },
+      { title: 'Nombre tipo de producto', dataKey: 'nombre_tipo' },
+      { title: 'Nombre Categoria ', dataKey: 'nombre_categoria' },
+      { title: 'Unidad de Peso ', dataKey: 'unidad_peso' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = tipos.map((element) => ({
+      id_tipo: element.id,
+      nombre_tipo: element.NombreProducto,
+      nombre_categoria: element.Categoría,
+      unidad_peso: element.UnidadPeso,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Tipodeproducto.pdf');
   };
   const getTableData = () => {
     const wsData = [];
@@ -394,8 +428,7 @@ const Tipo = () => {
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={() => generatePDF(tableRef, { filename: "Tipo de producto  Detalles Excel.pdf" })}
-              >
+                onClick={exportPdfHandler}                >
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
