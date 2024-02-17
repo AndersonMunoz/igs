@@ -1,17 +1,77 @@
 import React, { useEffect, useState } from "react";
+import { Chart as Chartjs } from 'chart.js/auto';
+import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import "../style/dashboardContent.css";
 
 const Dashboard = () => {
+  const [productos, setProductos] = useState([]);
+  const [usuariosCount, setUsuariosCount] = useState(0); 
+
+  useEffect(() => {
+    listarProducto();
+    listarUsuario();
+  }, []); 
+
+  function listarProducto() {
+    fetch("http://localhost:3000/producto/listar", {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      setProductos(data);
+      console.log(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+  function listarUsuario() {
+    fetch("http://localhost:3000/usuario/listarCount", {
+        method: "get",
+        headers: {
+            "Content-type": "application/json",
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => { 
+            setUsuariosCount(data.count); 
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+  }
+  const barColors = [
+    'rgba(255, 99, 132, 0.5)',
+    'rgba(54, 162, 235, 0.5)',
+    'rgba(255, 206, 86, 0.5)',
+    'rgba(75, 192, 192, 0.5)',
+    'rgba(153, 102, 255, 0.5)',
+    'rgba(255, 159, 64, 0.5)',
+    'rgba(255, 99, 132, 0.5)',
+  ];
+
+  const doughnutColors = [
+    'rgba(255, 99, 132, 0.5)',
+    'rgba(54, 162, 235, 0.5)',
+    'rgba(255, 206, 86, 0.5)',
+    'rgba(75, 192, 192, 0.5)',
+    'rgba(153, 102, 255, 0.5)',
+    'rgba(255, 159, 64, 0.5)',
+    'rgba(255, 99, 132, 0.5)',
+  ];
 
   return (
     <div className="dashboard-container">
       <div className="grid-container">
         <div className="container-wrapper">
+        <div className="small-container">
+        <p>Usuarios Registrados: {usuariosCount}</p>
+        </div>
           <div className="small-container">
-            <p>Contenedor 1</p>
-          </div>
-          <div className="small-container">
-            <p>Contenedor 2</p>
+            <p>Cantidad </p>
           </div>
           <div className="small-container">
             <p>Contenedor 3</p>
@@ -20,15 +80,42 @@ const Dashboard = () => {
             <p>Contenedor 4</p>
           </div>
           <div className="small-container">
-            <p>Contenedor 5 </p>
+            <p>Contenedor 5</p>
           </div>
         </div>
         <div className="container-wrapper">
           <div className="grafi-container">
-            <p>Contenedor 6</p>
+            <Doughnut
+              data={{
+                labels: productos.map(producto => producto.NombreProducto),
+                datasets: [
+                  {
+                    label: "Productos",
+                    data: productos.map(producto => producto.Peso),
+                    backgroundColor: doughnutColors,
+                  },
+                ]
+              }}
+            />
           </div>
           <div className="grafi-container">
-            <p>Contenedor 7</p>
+          <Line
+              data={{
+                labels: productos.map(producto => producto.NombreProducto),
+                datasets: [
+                  {
+                    label: "Productos",
+                    data: productos.map(producto => producto.Peso),
+                    backgroundColor: doughnutColors,
+                  },
+                  {
+                    label: "Productos",
+                    data: productos.map(producto => producto.Peso),
+                    backgroundColor: doughnutColors,
+                  },
+                ]
+              }}
+            />
           </div>
         </div>
       </div>

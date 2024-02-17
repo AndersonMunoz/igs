@@ -216,8 +216,8 @@ const Producto = () => {
       .then((data) => {
         console.log(data);
         setProductoSeleccionado(data[0]);
-        setSelectedTipo(data[0].fk_id_tipo_producto); // Actualizar selectedTipo con el valor del producto
-        setSelectedUp(data[0].fk_id_up); // Actualizar selectedUp con el valor del producto
+        setSelectedTipo(data[0].fk_id_tipo_producto); 
+        setSelectedUp(data[0].fk_id_up);
         setUpdateModal(true);
       })
       .catch((error) => {
@@ -471,7 +471,7 @@ const Producto = () => {
         </div>
       </div>
 
-      <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
+      {/* <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
@@ -485,13 +485,13 @@ const Producto = () => {
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
                     <Select
-  className="react-select-container"
-  classNamePrefix="react-select"
-  options={tipos.map(element => ({ value: element.id, label: element.NombreProducto }))}
-  placeholder="Selecciona..."
-  value={selectedTipo ? { value: selectedTipo, label: tipos.find(option => option.id === selectedTipo).NombreProducto } : null}
-  onChange={(selectedOption) => setSelectedTipo(selectedOption.value)}
-/>
+                      className="react-select-container"
+                      classNamePrefix="react-select"
+                      options={tipos.map(element => ({ value: element.id, label: element.NombreProducto }))}
+                      placeholder="Selecciona..."
+                      value={selectedTipo ? { value: selectedTipo, label: tipos.find(option => option.id === selectedTipo).NombreProducto } : null}
+                      onChange={(selectedOption) => setSelectedTipo(selectedOption.value)}
+                    />
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
                     </div>
@@ -532,7 +532,7 @@ const Producto = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
