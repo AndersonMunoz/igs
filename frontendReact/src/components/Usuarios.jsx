@@ -16,6 +16,8 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
+import { dataEncript } from "./encryp/encryp";
+
 
 
 const Usuario = () => {
@@ -33,6 +35,15 @@ const Usuario = () => {
 	const [passwordError, setPasswordError] = useState(false);
 	const [passwordMatch, setPasswordMatch] = useState(false);
 	const [registrationEnabled, setRegistrationEnabled] = useState(false);
+
+	const [UserPassword, setUserPassword] = useState('')
+
+	const encrypt = (e) => {
+		e.preventDefault(); 
+		let criptoPassword = dataEncript(e.target.value);
+		setUserPassword(criptoPassword); 
+	  }
+	  
 
 	const handleRegistration = () => {
 		setPassword('');
@@ -161,10 +172,11 @@ const Usuario = () => {
 		let documento_usuario = document.getElementById('documento_usuario').value
 		let email_usuario = document.getElementById('email_usuario').value
 		let nombre_usuario = document.getElementById('nombre_usuario').value
-		let contrasena_usuario = document.getElementById('contrasena_usuario').value
+		let contrasena_usuario = UserPassword;
 		let tipo_usuario = document.getElementById('tipo_usuario').value
-
 		const validacionExitosa = Validate.validarCampos('.form-empty');
+
+		console.log(contrasena_usuario);
 
 		fetch('http://localhost:3000/usuario/registrar', {
 			method: 'POST',
@@ -511,7 +523,13 @@ const Usuario = () => {
 												name="contrasenaUsuario"
 												placeholder="Ingrese una contraseña"
 												value={password}
-												onChange={handlePasswordChange}
+												onChange={(e) => {
+													handlePasswordChange(e);
+													encrypt(e);
+												  }}
+												  
+												  
+												  
 											/>
 											<div className="input-group-append">
 												<button
@@ -572,7 +590,7 @@ const Usuario = () => {
 							>
 								Cerrar
 							</button>
-							<button type="button" disabled={!registrationEnabled} className="btn btn-color" onClick={registrarUsuario} >
+							<button type="button" disabled={!registrationEnabled} className="btn btn-color" onClick={ registrarUsuario} >
 								Registrar
 
 							</button>
