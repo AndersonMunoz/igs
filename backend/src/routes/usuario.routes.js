@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario, listarUsuarioActivo} from '../controllers/cliente.controller.js';
+import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario, listarUsuarioActivo, listarUsuarioCount} from '../controllers/cliente.controller.js';
 import { validarToken } from "../controllers/autentificacion.controller.js";
 import { validatorUsuario } from "../validation/usuario.validator.js";
 
@@ -12,6 +12,7 @@ usuarioRouter.get("/buscar/:id", buscarUsuario );
 usuarioRouter.put("/editar/:id",validatorUsuario, /* validarToken, */ editarUsuario );
 usuarioRouter.patch("/deshabilitar/:id" /* ,validarToken */ , actualizarEstado );
 usuarioRouter.patch("/activar/:id",/* validarToken , */ activarEstado );
+usuarioRouter.get("/listarCount", listarUsuarioCount );
 
 
 export default usuarioRouter;

@@ -6,13 +6,13 @@ export const registroUsuario = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(403).json({"status": 403 ,error})
+            return res.status(403).json({ "status": 403, error })
         }
         let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
 
         const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}'`;
         const [existingUsers] = await pool.query(documentQuery);
-        
+
         const emailQuery = `SELECT * FROM usuarios WHERE email_usuario = '${email_usuario}'`;
         const [existingEmail] = await pool.query(emailQuery);
 
@@ -67,11 +67,11 @@ export const listarUsuario = async (req, res) => {
 
 };
 
-export const listarUsuarioActivo = async (req, res) =>{
+export const listarUsuarioActivo = async (req, res) => {
 
     try {
-         const [result] = await pool.query('select * from usuarios where estado = 1');
-         if (result.length > 0) {
+        const [result] = await pool.query('select * from usuarios where estado = 1');
+        if (result.length > 0) {
             res.status(200).json(result);
         }
     } catch (err) {
@@ -104,7 +104,7 @@ export const editarUsuario = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(403).json({"status": 403 ,error})
+            return res.status(403).json({ "status": 403, error })
         }
 
         let id = req.params.id;
@@ -173,35 +173,53 @@ export const editarUsuario = async (req, res) => {
     }
 };
 
-export const actualizarEstado = async (req,res) =>{
-    try{
+export const listarUsuarioCount = async (req, res) => {
+    try {
+        const [result] = await pool.query('SELECT COUNT(*) AS count FROM usuarios');
+        if (result.length > 0) {
+            res.status(200).json({ count: result[0].count });
+            console.log(result);
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error en servidor:' + err
+        })
+    }
+};
+
+export const actualizarEstado = async (req, res) => {
+    try {
         let id = req.params.id;
         let sql = `UPDATE usuarios SET estado = 0 WHERE id_usuario= ${id}`;
         const [rows] = await pool.query(sql);
-        if(rows.affectedRows > 0){
-            res.status(200).json({"status":200,"message":"Se actualizo el estado del usuario"
+        if (rows.affectedRows > 0) {
+            res.status(200).json({
+                "status": 200, "message": "Se actualizo el estado del usuario"
             })
-        }else{
-            res.status(401).json({"status":401,"message":"No se  actualizo el estado "
-            }) 
+        } else {
+            res.status(401).json({
+                "status": 401, "message": "No se  actualizo el estado "
+            })
         }
-    }catch(e){
-        res.status(500).json({message: 'Error en actualizar estado de usuario : '+e})
-     }
-        }
-export const activarEstado = async (req,res) =>{
-    try{
+    } catch (e) {
+        res.status(500).json({ message: 'Error en actualizar estado de usuario : ' + e })
+    }
+}
+export const activarEstado = async (req, res) => {
+    try {
         let id = req.params.id;
         let sql = `UPDATE usuarios SET estado = 1 WHERE id_usuario= ${id}`;
         const [rows] = await pool.query(sql);
-        if(rows.affectedRows > 0){
-            res.status(200).json({"status":200,"message":"Se actualizo el estado del usuario"
+        if (rows.affectedRows > 0) {
+            res.status(200).json({
+                "status": 200, "message": "Se actualizo el estado del usuario"
             })
-        }else{
-            res.status(401).json({"status":401,"message":"No se  actualizo el estado "
-            }) 
+        } else {
+            res.status(401).json({
+                "status": 401, "message": "No se  actualizo el estado "
+            })
         }
-    }catch(e){
-        res.status(500).json({message: 'Error en actualizar estado de usuario : '+e})
-     }
-        }
+    } catch (e) {
+        res.status(500).json({ message: 'Error en actualizar estado de usuario : ' + e })
+    }
+}
