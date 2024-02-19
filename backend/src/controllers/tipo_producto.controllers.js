@@ -30,7 +30,7 @@ export const registroTipo_producto = async (req, res) => {
 
             res.status(200).json({
                 "status": 200,
-                "   ": " El tipo de producto fue  registrado  con exito "
+                "menssage": " El tipo de producto fue  registrado  con exito "
             })
         } else {
             res.status(403).json({

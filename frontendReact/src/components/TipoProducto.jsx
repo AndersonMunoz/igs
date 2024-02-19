@@ -14,10 +14,16 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
-import { DownloadTableExcel } from "react-export-table-to-excel";
 import Select from 'react-select'
 import generatePDF from "react-to-pdf";
 import { newLink } from "./Inventario.jsx";
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
+
+
 
 const resetFormState = () => {
   const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -52,6 +58,74 @@ const Tipo = () => {
   const tableRef = useRef();
   const categoriaRecived = "";
   console.log(categoriaRecived);
+
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelTipo');
+    xlsx.writeFile(wb, 'Tipodetalle.xlsx');
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'Id', dataKey: 'id_tipo' },
+      { title: 'Nombre tipo de producto', dataKey: 'nombre_tipo' },
+      { title: 'Nombre Categoria ', dataKey: 'nombre_categoria' },
+      { title: 'Unidad de Peso ', dataKey: 'unidad_peso' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = tipos.map((element) => ({
+      id_tipo: element.id,
+      nombre_tipo: element.NombreProducto,
+      nombre_categoria: element.Categoría,
+      unidad_peso: element.UnidadPeso,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Tipodeproducto.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+  
+    // Obtener las columnas
+    const columns = [
+      'Id',
+      'Nombre tipo de producto ',
+      'Nombre Categoria ',
+      'Unidad de peso ',
+      'estado '
+    ];
+    wsData.push(columns);
+  
+    // Obtener los datos de las filas
+    tipos.forEach(element => {
+      const rowData = [
+        element.id,
+        element.NombreProducto,
+        element.Categoría,
+        element.UnidadPeso,
+        element.estado
+  
+      ];
+      wsData.push(rowData);
+    });
+  
+    return wsData;
+  };
 
   useEffect(() => {
     if (tipos.length > 0) {
@@ -202,7 +276,7 @@ const Tipo = () => {
         } else if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
         }else if(data.status === 409){
-            Sweet.error(data.message);
+            Sweet.error(data.menssage);
             return;
         } else {
           console.error('Error en la petición:', data);
@@ -344,24 +418,21 @@ const Tipo = () => {
         >
           Registrar Nuevo Tipo de Producto
         </button>
-        <div>
-          <DownloadTableExcel
-            filename="Tabla Tipo de producto"
-            sheet="Tipo"
-            currentTableRef={tableRef.current}
-          >
-            <button type="button" className="btn btn-light">
-              <img src={ExelLogo} className="logoExel" />
-            </button>
-          </DownloadTableExcel>
-          <button
-            type="button"
-            className="btn btn-light"
-            onClick={() => generatePDF(tableRef, { filename: "tipo.pdf" })}
-          >
-            <img src={PdfLogo} className="logoExel" />
-          </button>
-        </div>
+        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}                >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
+          </div>
       </div>
       <div className="container-fluid w-full">
         <table

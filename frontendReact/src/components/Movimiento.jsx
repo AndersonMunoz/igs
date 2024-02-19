@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
-import { IconEdit } from "@tabler/icons-react";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
 import esES from '../languages/es-ES.json';
@@ -14,12 +13,14 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
-import generatePDF from 'react-to-pdf';
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 const Movimiento = () => {
+  
 
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
@@ -35,11 +36,104 @@ const Movimiento = () => {
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
   
+  const tableRef = useRef(null);
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelTotal');
+    xlsx.writeFile(wb, 'MovimientoTotal.xlsx');
+  };
+  const exportPdfHandler = () => {
+    const doc = new jsPDF('landscape');
+  
+    const columns = [
+      { title: 'Nombre producto', dataKey: 'nombre_tipo' },
+      { title: '# Lote', dataKey: 'num_lote' },
+      { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
+      { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
+      { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
+      { title: 'Unidad Peso', dataKey: 'unidad_peso' },
+      { title: 'Precio movimiento', dataKey: 'precio_movimiento' },
+      { title: 'Estado producto', dataKey: 'estado_producto_movimiento' },
+      { title: 'Nota', dataKey: 'nota_factura' },
+      { title: 'Fecha de caducidad', dataKey: 'fecha_caducidad' },
+      { title: 'Usuario que hizo movimiento', dataKey: 'nombre_usuario' },
+      { title: 'Proveedor', dataKey: 'nombre_proveedores' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = movimientos.map((element) => ({
+      nombre_tipo: element.nombre_tipo,
+      num_lote: element.num_lote,
+      fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
+      tipo_movimiento: element.tipo_movimiento,
+      cantidad_peso_movimiento: element.cantidad_peso_movimiento,
+      unidad_peso: element.unidad_peso,
+      precio_movimiento: element.precio_movimiento,
+      estado_producto_movimiento: element.estado_producto_movimiento,
+      nota_factura: element.nota_factura,
+      fecha_caducidad: Validate.formatFecha(element.fecha_caducidad),
+      nombre_usuario: element.nombre_usuario,
+      nombre_proveedores: element.nombre_proveedores,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [0, 100,0] },
+    });
+  
+    // Guardar el PDF
+    doc.save('MovimientosTotales.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+
+    // Obtener las columnas
+    const columns = [
+      'Nombre producto',
+      '# Lote',
+      'Fecha del movimiento',
+      'Tipo de movimiento',
+      'Cantidad',
+      'Unidad Peso',
+      'Precio movimiento',
+      'Estado producto',
+      'Nota',
+      'Fecha de caducidad',
+      'Usuario que hizo movimiento',
+      'Proveedor'
+    ];
+    wsData.push(columns);
+
+    // Obtener los datos de las filas
+    movimientos.forEach(element => {
+      const rowData = [
+        element.nombre_tipo,
+        element.num_lote,
+        Validate.formatFecha(element.fecha_movimiento),
+        element.tipo_movimiento,
+        element.cantidad_peso_movimiento,
+        element.unidad_peso,
+        element.precio_movimiento,
+        element.estado_producto_movimiento,
+        element.nota_factura,
+        Validate.formatFecha(element.fecha_caducidad),
+        element.nombre_usuario,
+        element.nombre_proveedores
+      ];
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-
   };
-  const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
@@ -385,21 +479,16 @@ const Movimiento = () => {
           
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <DownloadTableExcel
-                filename="Movimiento Detalles Excel"
-                sheet="movimientos"
-                currentTableRef={tableRef.current}
-              >
-                <button type="button" className="btn btn-light">
+              
+                <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
                 </button>
-              </DownloadTableExcel>
             </div>
             <div className="" title="Descargar Pdf">
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={() => generatePDF(tableRef, { filename: "Movimiento Detalles Excel.pdf" })}
+                onClick={exportPdfHandler}
               >
                 <img src={PdfLogo} className="logoExel" />
               </button>

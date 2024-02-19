@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Outlet, Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
@@ -15,9 +15,10 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
-
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Movimiento = () => {
 
@@ -34,7 +35,84 @@ const Movimiento = () => {
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelT  Salida');
+    xlsx.writeFile(wb, 'MovimientoSalida.xlsx');
+  };
+  const exportPdfHandler = () => {
+    const doc = new jsPDF('landscape');
   
+    const columns = [
+      { title: 'Nombre producto', dataKey: 'nombre_tipo' },
+      { title: '# Lote', dataKey: 'num_lote' },
+      { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
+      { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
+      { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
+      { title: 'Unidad Peso', dataKey: 'unidad_peso' },
+      { title: 'Nota', dataKey: 'nota_factura' },
+      { title: 'Usuario que hizo movimiento', dataKey: 'nombre_usuario' }
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = movimientos.map((element) => ({
+      nombre_tipo: element.nombre_tipo,
+      num_lote: element.num_lote,
+      fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
+      tipo_movimiento: element.tipo_movimiento,
+      cantidad_peso_movimiento: element.cantidad_peso_movimiento,
+      unidad_peso: element.unidad_peso,
+      nota_factura: element.nota_factura,
+      nombre_usuario: element.nombre_usuario,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [0,100,0] },
+    });
+  
+    // Guardar el PDF
+    doc.save('MovimientosSalida.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+
+    // Obtener las columnas
+    const columns = [
+      'Nombre producto',
+      '# Lote',
+      'Fecha del movimiento',
+      'Tipo de movimiento',
+      'Cantidad',
+      'Unidad Peso',
+      'Nota',
+      'Usuario que hizo movimiento'
+    ];
+    wsData.push(columns);
+
+    // Obtener los datos de las filas
+    movimientos.forEach(element => {
+      const rowData = [
+        element.nombre_tipo,
+        element.num_lote,
+        Validate.formatFecha(element.fecha_movimiento),
+        element.tipo_movimiento,
+        element.cantidad_peso_movimiento,
+        element.unidad_peso,
+        element.nota_factura,
+        element.nombre_usuario
+      ];
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
 
@@ -190,7 +268,7 @@ const Movimiento = () => {
         setUniPro([]);
         setProCat(data);
         
-        console.log("PRODUCTO - CATEGORIA : ", data);
+        //console.log("PRODUCTO - CATEGORIA : ", data);
       })
       .catch((e) => {
         setProCat([]);
@@ -212,7 +290,7 @@ const Movimiento = () => {
       .then((res) => res.json())
       .then((data) => {
         setUniPro(data);
-        console.log("Unidades producto   : ", data);
+        //console.log("Unidades producto   : ", data);
       })
       .catch((e) => {
         setUniPro([]);
@@ -388,21 +466,17 @@ const Movimiento = () => {
           </div>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <DownloadTableExcel
-                filename="Movimiento Salida Detalles Excel"
-                sheet="movimientos"
-                currentTableRef={tableRef.current}
-              >
-                <button type="button" className="btn btn-light">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
                 </button>
-              </DownloadTableExcel>
+            </div>
             </div>
             <div className="" title="Descargar Pdf">
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={() => generatePDF(tableRef, { filename: "Movimiento Salida Detalles Excel.pdf" })}
+                onClick={exportPdfHandler}
               >
                 <img src={PdfLogo} className="logoExel" />
               </button>
@@ -474,7 +548,6 @@ const Movimiento = () => {
                 </div>
                 <div className="modal-body">
                   <form>
-
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
@@ -497,7 +570,8 @@ const Movimiento = () => {
                           <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
                             {productosCategoria.length > 0 ? productosCategoria.map((element) => (
-                              <option key={element.id_producto} value={element.id_producto}>{element.nombre_tipo}</option>
+                              <option key={element.id_producto} value={element.id_producto}>
+                                {element.nombre_tipo} - {element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}</option>
                             )): ""}
                           </select>
                           <div className="invalid-feedback is-invalid">
@@ -510,17 +584,17 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                          <input type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento" className="form-control form-empty limpiar" />
+                          <input type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento"  className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese una cantidad.
                           </div>
                         </div>
                       </div>
                       <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="unidad_peso_movimiento">Unidad</label><br></br>
+                        <div data-mdb-input-init className="form-outline" >
+                          <label className="form-label" htmlFor="unidad_peso_movimiento" >Unidad</label><br></br>
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text" id="unidad_peso_movimiento" className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_producto} defaultValue={element.unidad_peso}/>
+                              <input type="text" id="unidad_peso_movimiento" disabled={true} className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_tipo} defaultValue={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
                         </div>
                       </div>

@@ -17,7 +17,7 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import Select from 'react-select'
-import { ProgressSpinner } from "primereact/progressspinner";
+
 
 const Producto = () => {
   const [productos, setProductos] = useState([]);
@@ -30,15 +30,6 @@ const Producto = () => {
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
   const [selectedTipo, setSelectedTipo] = useState(null);
   const [selectedUp, setSelectedUp] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timeout);
-  }, []);
 
   const tableRef = useRef();
 
@@ -169,7 +160,7 @@ const Producto = () => {
     const descripcion_producto = document.getElementById('descripcion_producto').value;
     Validate.validarCampos('.form-empty');
     const validacionTipo = Validate.validarSelect('#fk_id_tipo_producto');
-    const validacionUp = Validate.validarSelect('#unidadPeso');
+    const validacionUp = Validate.validarSelect('#bodega');
     Validate.validarSelect('.form-empt');
     const validacionExitosa = validacionTipo && validacionUp;
   
@@ -214,58 +205,65 @@ const Producto = () => {
         Sweet.error('Hubo un error al registrar el producto.');
       });
   }
-  // function registrarProducto() {
-  //   const descripcion_producto = document.getElementById('descripcion_producto').value;
+  function editarProducto(id) {
+    fetch(`http://localhost:3000/producto/buscar/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setProductoSeleccionado(data[0]);
+        setSelectedTipo(data[0].fk_id_tipo_producto); 
+        setSelectedUp(data[0].fk_id_up);
+        setUpdateModal(true);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+  function actualizarProducto(id){
+    const validacionExitosa = Validate.validarCampos('.form-update');
 
-  //   Validate.validarSelect('.form-empt');
-
-  //   const validacion = selectedTipo && selectedUp;
-  //   if (!validacion) {
-  //     Sweet.registroFallido();
-  //     return;
-  //   }
-
-  //   const validacionExitosa = Validate.validarCampos('.form-empty');
-
-  //   fetch('http://localhost:3000/producto/registrar', {
-  //     method: 'POST',
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ descripcion_producto, fk_id_up: selectedUp.value, fk_id_tipo_producto: selectedTipo.value }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then(data => {
-
-  //       if (data.status === 200) {
-  //         Sweet.exito(data.message);
-  //         if ($.fn.DataTable.isDataTable(tableRef.current)) {
-  //           $(tableRef.current).DataTable().destroy();
-  //         }
-  //         listarProducto();
-  //       }
-  //       if (data.status === 403) {
-  //         Sweet.error(data.error.errors[0].msg);
-  //         return;
-  //       }
-  //       if (data.status === 409) {
-  //         Sweet.error(data.message);
-  //         return;
-  //       }
-
-  //       console.log(data);
-  //       listarProducto();
-  //       setShowModal(false);
-  //       removeModalBackdrop();
-  //       const modalBackdrop = document.querySelector('.modal-backdrop');
-  //       if (modalBackdrop) {
-  //         modalBackdrop.remove();
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //     });
-  // }
+    const updatedProductoSeleccionado = {
+      ...productoSeleccionado,
+      fk_id_tipo_producto: selectedTipo,
+      fk_id_up: selectedUp
+    };
+    
+  
+    fetch(`http://localhost:3000/producto/actualizar/${id}`,{
+      method: 'PUT',
+      headers:{
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify(updatedProductoSeleccionado),
+    })
+    .then((res)=>res.json())
+    .then((data)=>{
+      if(!validacionExitosa){
+        Sweet.actualizacionFallido();
+        return;
+      }
+      if (data.status === 200) {
+        Sweet.exito(data.message);
+      }
+      if (data.status === 403) {
+        Sweet.error(data.error.errors[0].msg);
+        return;
+      }
+      console.log(data);
+      listarProducto();
+      setUpdateModal(false);
+      removeModalBackdrop();
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+        modalBackdrop.remove();
+      }
+    })
+  }
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -291,55 +289,6 @@ const Producto = () => {
           });
       }
     });
-  }
-  function editarProducto(id) {
-    fetch(`http://localhost:3000/producto/buscar/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setProductoSeleccionado(data[0]);
-        setUpdateModal(true);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
-  function actualizarProducto(id){
-    const validacionExitosa = Validate.validarCampos('.form-update');
-    fetch(`http://localhost:3000/producto/actualizar/${id}`,{
-      method: 'PUT',
-      headers:{
-        'Content-type':'application/json'
-      },
-      body: JSON.stringify(productoSeleccionado),
-    })
-    .then((res)=>res.json())
-    .then((data)=>{
-      if(!validacionExitosa){
-        Sweet.actualizacionFallido();
-        return;
-      }
-      if (data.status === 200) {
-        Sweet.exito(data.message);
-      }
-      if (data.status === 403) {
-        Sweet.error(data.error.errors[0].msg);
-        return;
-      }
-      console.log(data);
-      listarProducto();
-      setUpdateModal(false);
-      removeModalBackdrop();
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
-    })
   }
   function busquedaInventario() {
     let categoria = localStorage.getItem('category')
@@ -376,12 +325,6 @@ const Producto = () => {
 
   return (
     <div>
-      {loading ? (
-        <div className="loading-spinner">
-          <ProgressSpinner strokeWidth={4} className="custom-spinner" />
-        </div>
-      ) : ( 
-      <div>
       <div className="d-flex justify-content-between mb-4">
         <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedUp(null);}}>
           Registrar Nuevo Producto
@@ -466,7 +409,7 @@ const Producto = () => {
         </table>
       </div>
 
-      <div className="modal fade"id="staticBackdrop"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
+      <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -492,7 +435,7 @@ const Producto = () => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
+                    <label htmlFor="bodega" className="label-bold mb-2">Bodega</label>
                     <Select
                         className="react-select-container  form-empt my-custom-class"
                         classNamePrefix="react-select"
@@ -500,7 +443,7 @@ const Producto = () => {
                         placeholder="Selecciona..."
                         onChange={handleUp}
                         value={selectedUp}
-                        id="unidadPeso"
+                        id="bodega"
                       />
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una unidad de peso.
@@ -528,7 +471,7 @@ const Producto = () => {
         </div>
       </div>
 
-      <div className="modal fade"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
+      {/* <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
@@ -541,27 +484,30 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select form-update" value={productoSeleccionado.fk_id_tipo_producto || ''} name="fk_id_tipo_producto" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_tipo_producto: e.target.value })}>
-                      <option value="">Selecciona un Tipo</option>
-                      {tipos.map((element) => (
-                        <option key={element.id} value={element.id}>{element.NombreProducto}</option>
-                      ))}
-                    </select>
+                    <Select
+                      className="react-select-container"
+                      classNamePrefix="react-select"
+                      options={tipos.map(element => ({ value: element.id, label: element.NombreProducto }))}
+                      placeholder="Selecciona..."
+                      value={selectedTipo ? { value: selectedTipo, label: tipos.find(option => option.id === selectedTipo).NombreProducto } : null}
+                      onChange={(selectedOption) => setSelectedTipo(selectedOption.value)}
+                    />
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
                     </div>
                   </div>
-
                   <div className="col-md-6">
-                    <label htmlFor="unidadPeso" className="label-bold mb-2">Bodega</label>
-                    <select className="form-select form-update" value={productoSeleccionado.fk_id_up || ''} name="fk_id_up" onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} >
-                      <option value="">Selecciona una UP</option>
-                      {up.map((element) => (
-                        <option key={element.id_up} value={element.id_up}>{element.nombre_up}</option>
-                      ))}
-                    </select>
+                    <label htmlFor="bodega" className="label-bold mb-2">Bodega</label>
+                    <Select
+  className="react-select-container"
+  classNamePrefix="react-select"
+  options={up.map(element => ({ value: element.id_up, label: element.nombre_up }))}
+  placeholder="Selecciona..."
+  value={selectedUp ? { value: selectedUp, label: up.find(option => option.id_up === selectedUp).nombre_up } : null}
+  onChange={(selectedOption) => setSelectedUp(selectedOption.value)}
+/>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione una unidad de peso.
+                      Por favor, seleccione una bodega.
                     </div>
                   </div>
 
@@ -586,9 +532,7 @@ const Producto = () => {
             </div>
           </div>
         </div>
-      </div>
-      </div>
-      )}
+      </div> */}
     </div>
   );
 };
