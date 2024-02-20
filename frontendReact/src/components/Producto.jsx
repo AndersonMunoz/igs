@@ -216,8 +216,6 @@ const Producto = () => {
       .then((data) => {
         console.log(data);
         setProductoSeleccionado(data[0]);
-        setSelectedTipo(data[0].fk_id_tipo_producto); 
-        setSelectedUp(data[0].fk_id_up);
         setUpdateModal(true);
       })
       .catch((error) => {
@@ -226,44 +224,39 @@ const Producto = () => {
   }
   function actualizarProducto(id){
     const validacionExitosa = Validate.validarCampos('.form-update');
-
-    const updatedProductoSeleccionado = {
-      ...productoSeleccionado,
-      fk_id_tipo_producto: selectedTipo,
-      fk_id_up: selectedUp
-    };
-    
-  
+      
     fetch(`http://localhost:3000/producto/actualizar/${id}`,{
       method: 'PUT',
       headers:{
         'Content-type':'application/json'
       },
-      body: JSON.stringify(updatedProductoSeleccionado),
+      body: JSON.stringify(productoSeleccionado),
     })
     .then((res)=>res.json())
     .then((data)=>{
-      if(!validacionExitosa){
+      if (!validacionExitosa) {
         Sweet.actualizacionFallido();
         return;
       }
-      if (data.status === 200) {
+      if (data.status == 200) {
         Sweet.exito(data.message);
+        console.log(data);
+        listarProducto();
+        setUpdateModal(false);
+        removeModalBackdrop();
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
       }
-      if (data.status === 403) {
+      if (data.status == 403) {
         Sweet.error(data.error.errors[0].msg);
-        return;
+      return;
       }
-      console.log(data);
-      listarProducto();
-      setUpdateModal(false);
-      removeModalBackdrop();
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
+      
     })
   }
+
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -471,7 +464,7 @@ const Producto = () => {
         </div>
       </div>
 
-      {/* <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
+      <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
@@ -484,28 +477,24 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <Select
-                      className="react-select-container"
-                      classNamePrefix="react-select"
-                      options={tipos.map(element => ({ value: element.id, label: element.NombreProducto }))}
-                      placeholder="Selecciona..."
-                      value={selectedTipo ? { value: selectedTipo, label: tipos.find(option => option.id === selectedTipo).NombreProducto } : null}
-                      onChange={(selectedOption) => setSelectedTipo(selectedOption.value)}
-                    />
+                    <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_tipo_producto || ''}onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_tipo_producto: e.target.value })} id="fk_id_tipo_producto"name="fk_id_tipo_producto">
+                    <option value="">Selecciona...</option>
+                    {tipos.map((option) => (
+                      <option key={option.id} value={option.id}>{option.NombreProducto}</option>
+                    ))}
+                  </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de producto.
                     </div>
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="bodega" className="label-bold mb-2">Bodega</label>
-                    <Select
-  className="react-select-container"
-  classNamePrefix="react-select"
-  options={up.map(element => ({ value: element.id_up, label: element.nombre_up }))}
-  placeholder="Selecciona..."
-  value={selectedUp ? { value: selectedUp, label: up.find(option => option.id_up === selectedUp).nombre_up } : null}
-  onChange={(selectedOption) => setSelectedUp(selectedOption.value)}
-/>
+                    <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_up || ''}onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} id="fk_id_up" name="fk_id_up">
+                    <option value="">Selecciona...</option>
+                    {up.map((option) => (
+                            <option key={option.id_up} value={option.id_up}>{option.nombre_up}</option>
+                          ))}
+                    </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una bodega.
                     </div>
@@ -532,7 +521,7 @@ const Producto = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
