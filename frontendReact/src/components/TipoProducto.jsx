@@ -14,9 +14,16 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
-import { DownloadTableExcel } from "react-export-table-to-excel";
+import Select from 'react-select'
 import generatePDF from "react-to-pdf";
 import { newLink } from "./Inventario.jsx";
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
+
+
 
 const resetFormState = () => {
   const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -46,10 +53,79 @@ const Tipo = () => {
   const modalProductoRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
+  const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [tiposeleccionado, setTiposeleccionado] = useState({});
   const tableRef = useRef();
   const categoriaRecived = "";
   console.log(categoriaRecived);
+
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelTipo');
+    xlsx.writeFile(wb, 'Tipodetalle.xlsx');
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'Id', dataKey: 'id_tipo' },
+      { title: 'Nombre tipo de producto', dataKey: 'nombre_tipo' },
+      { title: 'Nombre Categoria ', dataKey: 'nombre_categoria' },
+      { title: 'Unidad de Peso ', dataKey: 'unidad_peso' },
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = tipos.map((element) => ({
+      id_tipo: element.id,
+      nombre_tipo: element.NombreProducto,
+      nombre_categoria: element.Categoría,
+      unidad_peso: element.UnidadPeso,
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Tipodeproducto.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+  
+    // Obtener las columnas
+    const columns = [
+      'Id',
+      'Nombre tipo de producto ',
+      'Nombre Categoria ',
+      'Unidad de peso ',
+      'estado '
+    ];
+    wsData.push(columns);
+  
+    // Obtener los datos de las filas
+    tipos.forEach(element => {
+      const rowData = [
+        element.id,
+        element.NombreProducto,
+        element.Categoría,
+        element.UnidadPeso,
+        element.estado
+  
+      ];
+      wsData.push(rowData);
+    });
+  
+    return wsData;
+  };
 
   useEffect(() => {
     if (tipos.length > 0) {
@@ -82,6 +158,29 @@ const Tipo = () => {
     listarTipo();
     listarCategoria();
   }, []);
+
+
+  const resetFormState = () => {
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+    formFields2.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+  };
+
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector(".modal-backdrop");
@@ -136,48 +235,52 @@ const Tipo = () => {
         console.log(e);
       });
   }
-
+  const handleCategoria = (selectedOption) => {
+    setSelectedCategoria(selectedOption); 
+  };
   function registrarTipo() {
     let nombre_tipo = document.getElementById("nombre_tipo").value;
-    let fk_categoria_pro = document.getElementById("fk_categoria_pro").value;
     let unidad_peso = document.getElementById("unidad_peso").value;
+    Validate.validarCampos('.form-empty');
 
-    const validacionExitosa = Validate.validarCampos(".form-empty");
+    const validacionCategoria = Validate.validarSelect('#fk_categoria_pro');
+    Validate.validarSelect('.form-empt');
+    const validacionExitosa = validacionCategoria;
+  
+    if (!validacionExitosa) {
+      Sweet.registroFallido();
+      return;
+    }
 
     fetch("http://localhost:3000/tipo/registrar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nombre_tipo, fk_categoria_pro, unidad_peso }),
+      body: JSON.stringify({ nombre_tipo, fk_categoria_pro: selectedCategoria.value, unidad_peso }),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.registroFallido();
-        }
-        if (data.status == 200) {
+        if (data.status === 200) {
           Sweet.exito(data.menssage);
           if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
           }
           listarTipo();
-        }
-        if (data.status === 409) {
-          Sweet.error(data.message);
-          return;
-        }
-        if (data.status !== 200) {
-          Sweet.error(data.errors[0].msg);
-          return;
-        }
-        console.log(data);
-        listarTipo();
-        setShowModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector(".modal-backdrop");
-        if (modalBackdrop) {
-          modalBackdrop.remove();
+          setShowModal(false);
+          removeModalBackdrop();
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
+        } else if (data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
+        }else if(data.status === 409){
+            Sweet.error(data.menssage);
+            return;
+        } else {
+          console.error('Error en la petición:', data);
+          Sweet.error('Hubo un error al el tipo de producto.');
         }
       })
       .catch((error) => {
@@ -310,29 +413,26 @@ const Tipo = () => {
           data-bs-target="#staticBackdrop"
           onClick={() => {
             setShowModal(true);
-            Validate.limpiar(".limpiar");resetFormState();
+            Validate.limpiar(".limpiar");resetFormState();setSelectedCategoria(null);
           }}
         >
           Registrar Nuevo Tipo de Producto
         </button>
-        <div>
-          <DownloadTableExcel
-            filename="Tabla Tipo de producto"
-            sheet="Tipo"
-            currentTableRef={tableRef.current}
-          >
-            <button type="button" className="btn btn-light">
-              <img src={ExelLogo} className="logoExel" />
-            </button>
-          </DownloadTableExcel>
-          <button
-            type="button"
-            className="btn btn-light"
-            onClick={() => generatePDF(tableRef, { filename: "tipo.pdf" })}
-          >
-            <img src={PdfLogo} className="logoExel" />
-          </button>
-        </div>
+        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}                >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
+          </div>
       </div>
       <div className="container-fluid w-full">
         <table
@@ -443,7 +543,7 @@ const Tipo = () => {
                   <div className="col-md-12">
                     <label htmlFor="tipo" className="label-bold mb-2">
                       {" "}
-                      Tipo Producto
+                      Nombre Tipo  de Producto
                     </label>
                     <input
                       type="text"
@@ -453,7 +553,7 @@ const Tipo = () => {
                       placeholder="Nombre de tipo de producto "
                     />
                     <div className="invalid-feedback is-invalid">
-                      Por favor, el Nombre
+                      Por favor,  ingrese el nombre de tipo de producto 
                     </div>
                   </div>
                 </div>
@@ -465,32 +565,17 @@ const Tipo = () => {
                     >
                       Categoria
                     </label>
-                    <select
-                      className="form-select form-control form-empty limpiar"
-                      id="fk_categoria_pro"
-                      name=" fk_categoria_pro"
-                      defaultValue=""
-                    >
-                      {categoria.length === 0 ? (
-                        <option value="" disabled>
-                          No hay Categorias
-                        </option>
-                      ) : (
-                        <>
-                          <option value="">Selecciona una Categoria</option>
-                          {categoria.map((element) => (
-                            <option
-                              key={element.id_categoria}
-                              value={element.id_categoria}
-                            >
-                              {element.nombre_categoria}
-                            </option>
-                          ))}
-                        </>
-                      )}
-                    </select>
+                    <Select
+                        className="react-select-container  form-empt my-custom-class"
+                        classNamePrefix="react-select"
+                        options={categoria.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
+                        placeholder="Selecciona..."
+                        onChange={handleCategoria}
+                        value={selectedCategoria}
+                        id="fk_categoria_pro"
+                      />
                     <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un Categoria
+                      Por favor, seleccione una categoria
                     </div>
                   </div>
 
@@ -510,11 +595,11 @@ const Tipo = () => {
                       <option value="gr">Gramo (Gr)</option>
                       <option value="lt">Litro (Lt)</option>
                       <option value="ml">Mililitro (Ml)</option>
-                      <option value="oz">Onzas(OZ)</option>
-                      <option value="unidad(es)">Unidad(ES)</option>
+                      <option value="oz">Onzas (Oz)</option>
+                      <option value="unidad(es)">Unidad(es)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, la Unidad de peso
+                      Por favor, seleccione una unidad de medida
                     </div>
                   </div>
                 </div>
@@ -568,7 +653,7 @@ const Tipo = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="nombre " className="label-bold mb-2">
-                      Nombre{" "}
+                      Nombre Tipo de Producto{" "}
                     </label>
                     <input
                       type="hidden"
@@ -595,7 +680,7 @@ const Tipo = () => {
                       }
                     />
                     <div className="invalid-feedback is-invalid">
-                      Por favor, ingrese el nombre
+                      Por favor, ingrese el nombre  del Tipo de Producto 
                     </div>
                   </div>
                 </div>
@@ -620,7 +705,7 @@ const Tipo = () => {
                       }
                       onClick={listarCategoria}
                     >
-                      <option value="">Selecciona un Tipo</option>
+                      <option value="">Selecciona una Catecoria</option>
                       {categoria.map((element) => (
                         <option
                           key={element.id_categoria}
@@ -631,7 +716,7 @@ const Tipo = () => {
                       ))}
                     </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un tipo de producto.
+                      Por favor, seleccione una categoria 
                     </div>
                   </div>
                 </div>
@@ -663,7 +748,7 @@ const Tipo = () => {
                       <option value="unidad(es)">Unidad (ES)</option>
                     </select>
                     <div className="invalid-feedback is-invalid">
-                      Por favor, unidad de peso
+                      Por favor,  seleccione una unidad de peso
                     </div>
                   </div>
                 </div>

@@ -13,15 +13,15 @@ export const guardarProducto = async (req, res) => {
       fk_id_tipo_producto
     } = req.body;
     
-    const tipoQuery = `select t.id_tipo, p.fk_id_tipo_producto from productos p join tipo_productos t on p.fk_id_tipo_producto = t.id_tipo`;
-    const [existingTipo] = await pool.query(tipoQuery);
-    if (existingTipo.length > 0) {
-      return res.status(409).json({
-          "status": 409,
-          "message": "El tipo de producto ya existe"
-      });
-    }
-   /*  const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
+    // const tipoQuery = `select t.id_tipo, p.fk_id_tipo_producto from productos p join tipo_productos t on p.fk_id_tipo_producto = t.id_tipo`;
+    // const [existingTipo] = await pool.query(tipoQuery);
+    // if (existingTipo.length > 0) {
+    //   return res.status(409).json({
+    //       "status": 409,
+    //       "message": "El tipo de producto ya existe"
+    //   });
+    // }
+    /* const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
     const [existingTipo] = await pool.query(TipoQuery);
     if (existingTipo.length > 0) {
       return res.status(409).json({
