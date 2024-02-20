@@ -1,44 +1,44 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .label-bold {
-    font-weight:lighter;
-    font-size: 1rem;
-    display: flex;
-    justify-items: left;
+  font-weight: lighter;
+  font-size: 1rem;
+  display: flex;
+  justify-items: left;
 }
 
 .hg {
-    background: rgb(0, 173, 0);
+  background: rgb(0, 173, 0);
 }
 
 .bnt-color:hover {
-    background-color: rgb(23, 140, 23);
+  background-color: rgb(23, 140, 23);
 }
 
 .input-buscar {
-    border: none;
-    border-bottom: 2px solid rgb(57, 169, 0);
-    outline: none;
-    padding: 5px;
-    transition: border-bottom 0.3s;
-    width: 300px;
+  border: none;
+  border-bottom: 2px solid rgb(57, 169, 0);
+  outline: none;
+  padding: 5px;
+  transition: border-bottom 0.3s;
+  width: 300px;
 }
 
 .input-buscar:focus {
-    border-bottom: 2px solid rgb(59, 141, 0);
+  border-bottom: 2px solid rgb(59, 141, 0);
 }
 
 .iconSearch {
-    position: relative;
-    top: -8px;
-    right: 26px;
-    cursor: pointer;
+  position: relative;
+  top: -8px;
+  right: 26px;
+  cursor: pointer;
 }
 
-.logoExel{
-    width: 28px;
+.logoExel {
+  width: 28px;
 }

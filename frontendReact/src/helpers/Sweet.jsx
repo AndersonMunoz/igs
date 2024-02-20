@@ -95,10 +95,7 @@ const Sweet = {
       title: 'Mensaje',
       icon: 'success',
       text: 'Actualización Exitosa',
-      confirmButtonText: 'Cerrar',
-      didClose: () => {
-        document.querySelector('[data-bs-dismiss="modal"]').click();
-      }
+      confirmButtonText: 'Cerrar'
     });
   },
   actualizacionFallido: () => {

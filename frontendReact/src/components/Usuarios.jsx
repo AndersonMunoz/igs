@@ -17,80 +17,71 @@ import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 
-import { dataEncript } from "./encryp/encryp";
-
 const Usuario = () => {
-  const [usuarios, setUsuarios] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const modalUsuarioRef = useRef(null);
-  const [updateModal, setUpdateModal] = useState(false);
-  const modalUpdateRef = useRef(null);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
-  const tableRef = useRef();
+   const [usuarios, setUsuarios] = useState([]);
+   const [showModal, setShowModal] = useState(false);
+   const modalUsuarioRef = useRef(null);
+   const [updateModal, setUpdateModal] = useState(false);
+   const modalUpdateRef = useRef(null);
+   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
+   const tableRef = useRef();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordMatch, setPasswordMatch] = useState(false);
-  const [registrationEnabled, setRegistrationEnabled] = useState(false);
-  const [isValidPassword, setIsValidPassword] = useState(false); // Nuevo estado
-  const initialPassword = usuarioSeleccionado.contrasena_usuario || "";
-  const [passwordValue, setPasswordValue] = useState(
-    usuarioSeleccionado.contrasena_usuario || ""
-  );
-  const [inputType, setInputType] = useState("password"); // Estado para controlar el tipo de input (password o text)
-  const initialPasswordValue = usuarioSeleccionado.contrasena_usuario || ""; // Valor inicial de la contraseña
+   const [showPassword, setShowPassword] = useState(false);
+   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+   const [password, setPassword] = useState("");
+   const [confirmPassword, setConfirmPassword] = useState("");
+   const [passwordError, setPasswordError] = useState(false);
+   const [passwordMatch, setPasswordMatch] = useState(false);
+   const [registrationEnabled, setRegistrationEnabled] = useState(false);
+   const [isValidPassword, setIsValidPassword] = useState(false); // Nuevo estado
+   const initialPassword = usuarioSeleccionado.contrasena_usuario || '';
+   const [passwordValue, setPasswordValue] = useState(usuarioSeleccionado.contrasena_usuario || '');
+   const [inputType, setInputType] = useState('password'); // Estado para controlar el tipo de input (password o text)
+   const initialPasswordValue = usuarioSeleccionado.contrasena_usuario || ''; // Valor inicial de la contraseña
 
-  const [userPasswordEncripted, setUserPasswordEncripted] = useState("");
 
-  const encrypt = (e) => {
-    e.preventDefault();
-    let encryptPasswod = dataEncript(e.target.value);
-    setUserPasswordEncripted(encryptPasswod);
-  };
 
-  const handlePasswordChange2 = (event) => {
-    const newPassword = event.target.value;
-    setPasswordValue(newPassword);
-    setUsuarioSeleccionado({
-      ...usuarioSeleccionado,
-      contrasena_usuario: newPassword,
-    });
+   const handlePasswordChange2 = (event) => {
+      const newPassword = event.target.value;
+      setPasswordValue(newPassword);
+      setUsuarioSeleccionado({
+         ...usuarioSeleccionado,
+         contrasena_usuario: newPassword,
+      });
 
-    validatePassword(newPassword, confirmPassword);
-  };
+      validatePassword(newPassword, confirmPassword);
+   };
 
-  const handleRegistration = () => {
-    setPassword("");
-    setConfirmPassword("");
-    setPasswordMatch(false);
-    setRegistrationEnabled(false);
-    setPasswordMatch(false);
-  };
 
-  useEffect(() => {}, [passwordMatch]);
+   const handleRegistration = () => {
+      setPassword("");
+      setConfirmPassword("");
+      setPasswordMatch(false);
+      setRegistrationEnabled(false);
+      setPasswordMatch(false);
+   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-    setInputType(inputType === "password" ? "text" : "password");
-  };
+   useEffect(() => { }, [passwordMatch]);
 
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+   const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+      setInputType(inputType === 'password' ? 'text' : 'password');
+   };
 
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    setPasswordMatch(newPassword === confirmPassword);
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-    const isValidPassword = passwordRegex.test(newPassword);
-    setIsValidPassword(isValidPassword);
+   const toggleConfirmPasswordVisibility = () => {
+      setShowConfirmPassword(!showConfirmPassword);
+   };
 
-    validatePassword(newPassword, confirmPassword);
-  };
+   const handlePasswordChange = (event) => {
+      const newPassword = event.target.value;
+      setPassword(newPassword);
+      setPasswordMatch(newPassword === confirmPassword);
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+      const isValidPassword = passwordRegex.test(newPassword);
+      setIsValidPassword(isValidPassword);
+
+      validatePassword(newPassword, confirmPassword);
+   };
 
   /*  const resetFormState2 = () => {
       const formFields = modalUpdateRef.current.querySelectorAll(
@@ -105,814 +96,798 @@ const Usuario = () => {
       setPasswordError(false);
    };
  */
-  const handleConfirmPasswordChange = (event) => {
-    const newConfirmPassword = event.target.value;
-    setConfirmPassword(newConfirmPassword);
-    setPasswordMatch(password === newConfirmPassword);
-    validatePassword(password, newConfirmPassword);
-  };
+   const handleConfirmPasswordChange = (event) => {
+      const newConfirmPassword = event.target.value;
+      setConfirmPassword(newConfirmPassword);
+      setPasswordMatch(password === newConfirmPassword);
+      validatePassword(password, newConfirmPassword);
+   };
 
-  const validatePassword = (newPassword, newConfirmPassword) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-    const isValidPassword = passwordRegex.test(newPassword);
 
-    setPasswordError(
-      !isValidPassword ||
-        newPassword.trim() === "" ||
-        newConfirmPassword.trim() === ""
-    );
+   const validatePassword = (newPassword, newConfirmPassword) => {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+      const isValidPassword = passwordRegex.test(newPassword);
 
-    setRegistrationEnabled(
-      newPassword === newConfirmPassword && isValidPassword
-    );
-  };
+      setPasswordError(!isValidPassword || newPassword.trim() === "" || newConfirmPassword.trim() === "");
 
-  const resetFormState = () => {
-    const formFields = modalUsuarioRef.current.querySelectorAll(
-      '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
-    );
-    formFields.forEach((field) => {
-      if (field.type === "checkbox") {
-        field.checked = false;
-      } else {
-        field.value = "";
-      }
-      field.classList.remove("is-invalid");
-    });
-  };
+      setRegistrationEnabled(newPassword === newConfirmPassword && isValidPassword);
+   };
 
-  useEffect(() => {
-    if (usuarios.length > 0) {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-      $(tableRef.current).DataTable({
-        columnDefs: [
-          {
-            targets: -1,
-            responsivePriority: 1,
-          },
-        ],
-        responsive: true,
-        language: esES,
-        paging: true,
-        select: {
-          style: "multi",
-          selector: "td:first-child",
-        },
-        lengthMenu: [
-          [10, 50, 100, -1],
-          ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
-        ],
+
+   const resetFormState = () => {
+      const formFields = modalUsuarioRef.current.querySelectorAll(
+         '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
+      );
+      formFields.forEach((field) => {
+         if (field.type === "checkbox") {
+            field.checked = false;
+         } else {
+            field.value = "";
+         }
+         field.classList.remove("is-invalid");
       });
-    }
-  }, [usuarios]);
+   };
 
-  useEffect(() => {
-    listarUsuario();
-  }, []);
 
-  function removeModalBackdrop() {
-    const modalBackdrop = document.querySelector(".modal-backdrop");
-    if (modalBackdrop) {
-      modalBackdrop.remove();
-    }
-  }
-  ///listar usuario
-  function listarUsuario() {
-    fetch("http://localhost:3000/usuario/listar", {
-      method: "get",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUsuarios(data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  function registrarUsuario() {
-    let documento_usuario = document.getElementById("documento_usuario").value;
-    let email_usuario = document.getElementById("email_usuario").value;
-    let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = userPasswordEncripted;
-    let tipo_usuario = document.getElementById("tipo_usuario").value;
-
-    const validacionExitosa = Validate.validarCampos(".form-empty");
-
-    fetch("http://localhost:3000/usuario/registrar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        documento_usuario,
-        email_usuario,
-        nombre_usuario,
-        contrasena_usuario,
-        tipo_usuario,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.registroFallido();
-          return;
-        }
-        if (data.status === 200) {
-          Sweet.exito(data.message);
-          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+   useEffect(() => {
+      if (usuarios.length > 0) {
+         if ($.fn.DataTable.isDataTable(tableRef.current)) {
             $(tableRef.current).DataTable().destroy();
-          }
-          listarUsuario();
-          handleRegistration();
-        }
-        if (data.status === 409) {
-          Sweet.error(data.message);
-          return;
-        }
-        if (data.status !== 200) {
-          Sweet.error(data.error.errors[0].msg);
-          return;
-        }
-        console.log(data);
-        handleRegistration();
-        listarUsuario();
-        setShowModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector(".modal-backdrop");
-        if (modalBackdrop) {
-          modalBackdrop.remove();
-        }
-      })
-      .catch((error) => {
-        console.error("Error registro fallido:", error);
-      });
-  }
-  ///eliminar
-  function eliminarUsuario(id_usuario) {
-    Sweet.confirmacion().then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
-          method: "PATCH",
-          headers: {
-            "Content-type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
-            }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
-            }
+         }
+         $(tableRef.current).DataTable({
+            columnDefs: [
+               {
+                  targets: -1,
+                  responsivePriority: 1,
+               },
+            ],
+            responsive: true,
+            language: esES,
+            paging: true,
+            select: {
+               style: "multi",
+               selector: "td:first-child",
+            },
+            lengthMenu: [
+               [10, 50, 100, -1],
+               ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
+            ],
+         });
+      }
+   }, [usuarios]);
 
+   useEffect(() => {
+      listarUsuario();
+   }, []);
+
+   function removeModalBackdrop() {
+      const modalBackdrop = document.querySelector(".modal-backdrop");
+      if (modalBackdrop) {
+         modalBackdrop.remove();
+      }
+   }
+   ///listar usuario
+   function listarUsuario() {
+      fetch("http://localhost:3000/usuario/listar", {
+         method: "get",
+         headers: {
+            "Content-type": "application/json",
+         },
+      })
+         .then((res) => res.json())
+         .then((data) => {
+            setUsuarios(data);
+         })
+         .catch((e) => {
+            console.log(e);
+         });
+   }
+
+   function registrarUsuario() {
+      let documento_usuario = document.getElementById("documento_usuario").value;
+      let email_usuario = document.getElementById("email_usuario").value;
+      let nombre_usuario = document.getElementById("nombre_usuario").value;
+      let contrasena_usuario =
+         document.getElementById("contrasena_usuario").value;
+      let tipo_usuario = document.getElementById("tipo_usuario").value;
+
+      const validacionExitosa = Validate.validarCampos(".form-empty");
+
+      fetch("http://localhost:3000/usuario/registrar", {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+            documento_usuario,
+            email_usuario,
+            nombre_usuario,
+            contrasena_usuario,
+            tipo_usuario,
+         }),
+      })
+         .then((res) => res.json())
+         .then((data) => {
+            if (!validacionExitosa) {
+               Sweet.registroFallido();
+               return;
+            }
+            if (data.status === 200) {
+               Sweet.exito(data.message);
+               if ($.fn.DataTable.isDataTable(tableRef.current)) {
+                  $(tableRef.current).DataTable().destroy();
+               }
+               listarUsuario();
+               handleRegistration();
+            }
+            if (data.status === 409) {
+               Sweet.error(data.message);
+               return;
+            }
+            if (data.status !== 200) {
+               Sweet.error(data.error.errors[0].msg);
+               return;
+            }
             console.log(data);
+            handleRegistration();
             listarUsuario();
             setShowModal(false);
             removeModalBackdrop();
             const modalBackdrop = document.querySelector(".modal-backdrop");
             if (modalBackdrop) {
-              modalBackdrop.remove();
+               modalBackdrop.remove();
             }
-          })
-          .catch((error) => {
-            console.error("Error usuario no medificado:", error);
-          });
-      }
-    });
-  }
-  function activarUsuario(id_usuario) {
-    Sweet.confirmacionActivar().then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://localhost:3000/usuario/activar/${id_usuario}`, {
-          method: "PATCH",
-          headers: {
+         })
+         .catch((error) => {
+            console.error("Error registro fallido:", error);
+         });
+   }
+   ///eliminar
+   function eliminarUsuario(id_usuario) {
+      Sweet.confirmacion().then((result) => {
+         if (result.isConfirmed) {
+            fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
+               method: "PATCH",
+               headers: {
+                  "Content-type": "application/json",
+               },
+            })
+               .then((res) => res.json())
+               .then((data) => {
+                  console.log(data);
+                  if (data.status === 200) {
+                     Sweet.deshabilitadoExitoso();
+                  }
+                  if (data.status === 401) {
+                     Sweet.deshabilitadoFallido();
+                  }
+
+                  console.log(data);
+                  listarUsuario();
+                  setShowModal(false);
+                  removeModalBackdrop();
+                  const modalBackdrop = document.querySelector(".modal-backdrop");
+                  if (modalBackdrop) {
+                     modalBackdrop.remove();
+                  }
+               })
+               .catch((error) => {
+                  console.error("Error usuario no medificado:", error);
+               });
+         }
+      });
+   }
+   function activarUsuario(id_usuario) {
+      Sweet.confirmacionActivar().then((result) => {
+         if (result.isConfirmed) {
+            fetch(`http://localhost:3000/usuario/activar/${id_usuario}`, {
+               method: "PATCH",
+               headers: {
+                  "Content-type": "application/json",
+               },
+            })
+               .then((res) => res.json())
+               .then((data) => {
+                  console.log(data);
+                  if (data.status === 200) {
+                     Sweet.habilitadoExitoso();
+                  }
+                  if (data.status === 401) {
+                     Sweet.habilitadoFallido();
+                  }
+                  listarUsuario();
+               })
+               .catch((error) => {
+                  console.error("Error:", error);
+               });
+         }
+      });
+   }
+   function editarUsuario(id) {
+      fetch(`http://localhost:3000/usuario/buscar/${id}`, {
+         method: "GET",
+         headers: {
             "Content-type": "application/json",
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
+         },
+      })
+         .then((res) => res.json())
+         .then((data) => {
             console.log(data);
-            if (data.status === 200) {
-              Sweet.habilitadoExitoso();
+            setUsuarioSeleccionado(data[0]);
+            setUpdateModal(true);
+         })
+         .catch((error) => {
+            console.error("Error:", error);
+         });
+   }
+   function actualizarUsuario(id) {
+      const validacionExitosa = Validate.validarCampos(".form-update");
+      fetch(`http://localhost:3000/usuario/editar/${id}`, {
+         method: "PUT",
+         headers: {
+            "Content-type": "application/json",
+         },
+         body: JSON.stringify(usuarioSeleccionado),
+      })
+         .then((res) => res.json())
+         .then((data) => {
+            if (!validacionExitosa) {
+               Sweet.actualizacionFallido();
+               return;
             }
-            if (data.status === 401) {
-              Sweet.habilitadoFallido();
+            if (data.status === 200) {
+               Sweet.actualizacionExitoso();
+            }
+            if (data.status === 409) {
+               Sweet.error(data.message);
+               return;
+            }
+            if (data.status !== 200) {
+               Sweet.error(data.error.errors[0].msg);
+               return;
             }
             listarUsuario();
-          })
-          .catch((error) => {
+            setUpdateModal(false);
+            removeModalBackdrop();
+            const modalBackdrop = document.querySelector(".modal-backdrop");
+            if (modalBackdrop) {
+               modalBackdrop.remove();
+            }
+         })
+         .catch((error) => {
             console.error("Error:", error);
-          });
-      }
-    });
-  }
-  function editarUsuario(id) {
-    fetch(`http://localhost:3000/usuario/buscar/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setUsuarioSeleccionado(data[0]);
-        setUpdateModal(true);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-  function actualizarUsuario(id) {
-    const validacionExitosa = Validate.validarCampos(".form-update");
-    fetch(`http://localhost:3000/usuario/editar/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(usuarioSeleccionado),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!validacionExitosa) {
-          Sweet.actualizacionFallido();
-          return;
-        }
-        if (data.status === 200) {
-          Sweet.actualizacionExitoso();
-        }
-        if (data.status === 409) {
-          Sweet.error(data.message);
-          return;
-        }
-        if (data.status !== 200) {
-          Sweet.error(data.error.errors[0].msg);
-          return;
-        }
-        listarUsuario();
-        setUpdateModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector(".modal-backdrop");
-        if (modalBackdrop) {
-          modalBackdrop.remove();
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
+         });
+   }
 
-  return (
-    <div>
-      <div className="d-flex justify-content-between mb-4">
-        <button
-          type="button"
-          id="modalUsuario"
-          className="bgfondo btn-color btn mb-4"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          onClick={() => {
-            setShowModal(true);
-            Validate.limpiar(".limpiar");
-            resetFormState();
-            handleRegistration();
-          }}
-        >
-          Registrar Usuario
-        </button>
-        <div
-          className="btn-group"
-          role="group"
-          aria-label="Basic mixed styles example"
-        >
-          <div className="" title="Descargar Excel">
-            <DownloadTableExcel
-              filename="Usuarios Detalles Excel"
-              sheet="Usuarios"
-              currentTableRef={tableRef.current}
-            >
-              <button type="button" className="btn btn-light">
-                <img src={ExelLogo} className="logoExel" />
-              </button>
-            </DownloadTableExcel>
-          </div>
-          <div className="" title="Descargar Pdf">
+   return (
+      <div>
+         <div className="d-flex justify-content-between mb-4">
             <button
-              type="button"
-              className="btn btn-light"
-              onClick={() =>
-                generatePDF(tableRef, {
-                  filename: "Usuarios Detalles table.pdf",
-                })
-              }
+               type="button"
+               id="modalUsuario"
+               className="bgfondo btn-color btn mb-4"
+               data-bs-toggle="modal"
+               data-bs-target="#staticBackdrop"
+               onClick={() => {
+                  setShowModal(true);
+                  Validate.limpiar(".limpiar");
+                  resetFormState();
+                  handleRegistration();
+               }}
             >
-              <img src={PdfLogo} className="logoExel" />
+               Registrar Usuario
             </button>
-          </div>
-        </div>
-      </div>
+            <div
+               className="btn-group"
+               role="group"
+               aria-label="Basic mixed styles example"
+            >
+               <div className="" title="Descargar Excel">
+                  <DownloadTableExcel
+                     filename="Usuarios Detalles Excel"
+                     sheet="Usuarios"
+                     currentTableRef={tableRef.current}
+                  >
+                     <button type="button" className="btn btn-light">
+                        <img src={ExelLogo} className="logoExel" />
+                     </button>
+                  </DownloadTableExcel>
+               </div>
+               <div className="" title="Descargar Pdf">
+                  <button
+                     type="button"
+                     className="btn btn-light"
+                     onClick={() =>
+                        generatePDF(tableRef, {
+                           filename: "Usuarios Detalles table.pdf",
+                        })
+                     }
+                  >
+                     <img src={PdfLogo} className="logoExel" />
+                  </button>
+               </div>
+            </div>
+         </div>
 
-      <div className="container-fluid w-full">
-        <table
-          id="dtBasicExample"
-          className="table table-striped table-bordered border display responsive nowrap b-4"
-          ref={tableRef}
-          cellSpacing={0}
-          width="100%"
-        >
-          <thead className="text-center text-justify">
-            <tr>
-              <th className="th-sm">#</th>
-              <th className="th-sm">Nombre</th>
-              <th className="th-sm">Documento</th>
-              <th className="th-sm">Correo Electrónico</th>
-              <th className="th-sm">Cargo</th>
-              <th className="th-sm">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="listarUsuario" className="text-center cell">
-            {usuarios.length === 0 ? (
-              <tr>
-                <td colSpan={12}>
-                  <div className="d-flex justify-content-center">
-                    <div className="alert alert-danger text-center mt-4 w-50">
-                      <h2>
-                        {" "}
-                        En este momento no contamos con ningún usuario
-                        disponible.😟
-                      </h2>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              <>
-                {usuarios.map((element, index) => (
-                  <tr key={element.id_usuario}>
-                    <td>{index + 1}</td>
-                    <td>{element.nombre_usuario}</td>
-                    <td>{element.documento_usuario}</td>
-                    <td>{element.email_usuario}</td>
-                    <td>{element.tipo_usuario}</td>
-                    <td className="p-0">
-                      {element.estado === 1 ? (
-                        <>
-                          <button
-                            className="btn btn-color mx-2"
-                            onClick={() => {
-                              setUpdateModal(true);
-                              editarUsuario(element.id_usuario);
-                              resetFormState2();
-                            }}
-                            data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop2"
-                          >
-                            <IconEdit />
-                          </button>
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => eliminarUsuario(element.id_usuario)}
-                          >
-                            {" "}
-                            <IconTrash />
-                          </button>
-                        </>
-                      ) : (
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => activarUsuario(element.id_usuario)}
-                        >
-                          Activar
-                        </button>
-                      )}
-                    </td>
+         <div className="container-fluid w-full">
+            <table
+               id="dtBasicExample"
+               className="table table-striped table-bordered border display responsive nowrap b-4"
+               ref={tableRef}
+               cellSpacing={0}
+               width="100%"
+            >
+               <thead className="text-center text-justify">
+                  <tr>
+                     <th className="th-sm">#</th>
+                     <th className="th-sm">Nombre</th>
+                     <th className="th-sm">Documento</th>
+                     <th className="th-sm">Correo Electrónico</th>
+                     <th className="th-sm">Cargo</th>
+                     <th className="th-sm">Acciones</th>
                   </tr>
-                ))}
-              </>
-            )}
-          </tbody>
-        </table>
-      </div>
+               </thead>
+               <tbody id="listarUsuario" className="text-center cell">
+                  {usuarios.length === 0 ? (
+                     <tr>
+                        <td colSpan={12}>
+                           <div className="d-flex justify-content-center">
+                              <div className="alert alert-danger text-center mt-4 w-50">
+                                 <h2>
+                                    {" "}
+                                    En este momento no contamos con ningún usuario
+                                    disponible.😟
+                                 </h2>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                  ) : (
+                     <>
+                        {usuarios.map((element, index) => (
+                           <tr key={element.id_usuario}>
+                              <td>{index + 1}</td>
+                              <td>{element.nombre_usuario}</td>
+                              <td>{element.documento_usuario}</td>
+                              <td>{element.email_usuario}</td>
+                              <td>{element.tipo_usuario}</td>
+                              <td className="p-0">
+                                 {element.estado === 1 ? (
+                                    <>
+                                       <button
+                                          className="btn btn-color mx-2"
+                                          onClick={() => {
+                                             setUpdateModal(true);
+                                             editarUsuario(element.id_usuario);
+                                             resetFormState2();
 
-      <div
-        className="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-        ref={modalUsuarioRef}
-        style={{ display: showModal ? "block" : "none" }}
-      >
-        <div className="modal-dialog modal-lg modal-dialog-centered d-flex align-items-center">
-          <div className="modal-content">
-            <div className="modal-header bg txt-color">
-              <h2 className="modal-title fs-5">Registrar Usuario</h2>
-              <button
-                type="button"
-                className="btn-close text-white bg-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form className="text-center border border-light ">
-                <div className="row mb-2">
-                  <div className="col">
-                    <label htmlFor="nombreUsuario" className="label-bold mb-2">
-                      Nombre
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control form-empty limpiar"
-                      id="nombre_usuario"
-                      name="nombreUsuario"
-                      placeholder="Ingrese su nombre"
-                    />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, Ingresar un nombre valido.
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label
-                      htmlFor="documentoUsuario"
-                      className="label-bold mb-1"
-                    >
-                      Documento
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control form-empty limpiar"
-                      id="documento_usuario"
-                      name="documentoUsuario"
-                      placeholder="Ingrese su documento"
-                    />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, Ingresar un documento valido
-                    </div>
-                  </div>
-                </div>
+                                          }}
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#staticBackdrop2"
+                                       >
+                                          <IconEdit />
+                                       </button>
+                                       <button
+                                          className="btn btn-danger"
+                                          onClick={() => eliminarUsuario(element.id_usuario)}
+                                       >
+                                          {" "}
+                                          <IconTrash />
+                                       </button>
+                                    </>
+                                 ) : (
+                                    <button
+                                       className="btn btn-primary"
+                                       onClick={() => activarUsuario(element.id_usuario)}
+                                    >
+                                       Activar
+                                    </button>
+                                 )}
+                              </td>
+                           </tr>
+                        ))}
+                     </>
+                  )}
+               </tbody>
+            </table>
+         </div>
 
-                <div className="row mb-2">
-                  <div className="col">
-                    <label htmlFor="emailUsuario" className="label-bold mb-2">
-                      Correo Electrónico
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control form-empty limpiar"
-                      id="email_usuario"
-                      name="emailUsuario"
-                      placeholder="Ingrese su email"
-                    />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, Ingresar un correo valido
-                    </div>
+         <div
+            className="modal fade"
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabIndex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+            ref={modalUsuarioRef}
+            style={{ display: showModal ? "block" : "none" }}
+         >
+            <div className="modal-dialog modal-lg modal-dialog-centered d-flex align-items-center">
+               <div className="modal-content">
+                  <div className="modal-header bg txt-color">
+                     <h2 className="modal-title fs-5">Registrar Usuario</h2>
+                     <button
+                        type="button"
+                        className="btn-close text-white bg-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                     ></button>
                   </div>
-                  <div className="col">
-                    <label htmlFor="tipoUsuario" className="label-bold mb-2">
-                      Cargo
-                    </label>
-                    <select
-                      className="form-select form-control form-empty limpiar"
-                      id="tipo_usuario"
-                      name="tipoUsuario"
-                      defaultValue=""
-                    >
-                      <option value="">Selecciona un cargo</option>
-                      <option value="administrador">Administrador</option>
-                      <option value="coadministrador">Co-Administrador</option>
-                    </select>
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, selecciona un cargo
-                    </div>
-                  </div>
-                </div>
-                <div className="row mb-2">
-                  <div className="col-md-12 mb-2">
-                    <label
-                      htmlFor="contrasenaUsuario"
-                      className="label-bold mb-2"
-                    >
-                      Contraseña
-                    </label>
-                    <div className="input-group">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className="form-control form-empty limpiar"
-                        id="contrasena_usuario"
-                        name="contrasenaUsuario"
-                        placeholder="Ingrese una contraseña"
-                        value={password}
-                        onChange={(e) => {
-                          handlePasswordChange(e);
-                          encrypt(e);
-                        }}
-                      />
-                      <div className="input-group-append">
-                        <button
-                          className="btn btn-secondary"
-                          type="button"
-                          onClick={togglePasswordVisibility}
-                        >
-                          {showPassword ? <IconEyeOff /> : <IconEye />}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="row text-center">
-                      <div className="col">
-                        {password.length > 0 && !isValidPassword && (
-                          <div className="text-danger">
-                            La contraseña debe tener al menos 6 caracteres, una
-                            mayúscula, una minúscula y un número.
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-12 pl-2 ">
-                    <label
-                      htmlFor="confirmarContrasena"
-                      className="label-bold mb-2"
-                    >
-                      Confirmar Contraseña
-                    </label>
-                    <div className="input-group">
-                      <input
-                        type={showConfirmPassword ? "text" : "password"}
-                        className="form-control form-empty limpiar"
-                        id="confirmar_contrasena"
-                        name="confirmarContrasena"
-                        placeholder="Confirme su contraseña"
-                        value={confirmPassword}
-                        onChange={handleConfirmPasswordChange}
-                      />
-                      <div className="input-group-append">
-                        <button
-                          className="btn btn-secondary"
-                          type="button"
-                          onClick={toggleConfirmPasswordVisibility}
-                        >
-                          {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="row text-center">
-                      <div className="col">
-                        {confirmPassword.length > 0 && !passwordMatch && (
-                          <div className="text-danger">
-                            Las contraseñas no coinciden
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cerrar
-              </button>
-              <button
-                type="button"
-                disabled={!registrationEnabled}
-                className="btn btn-color"
-                onClick={registrarUsuario}
-              >
-                Registrar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* modal actualizar https://chat.openai.com/share/46202498-977b-4fd0-b1ee-baeffa0d982a*/}
-      <div
-        className="modal fade"
-        id="staticBackdrop2"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-        ref={modalUpdateRef}
-        style={{ display: updateModal ? "block" : "none" }}
-      >
-        <div className="modal-dialog modal-lg modal-dialog-centered d-flex align-items-center">
-          <div className="modal-content">
-            <div className="modal-header txt-color">
-              <h2 className="modal-title fs-5">Actualizar Usuario</h2>
-              <button
-                type="button"
-                className="btn-close text-white bg-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form className="text-center border border-light ">
-                <div className="row mb-2">
-                  <div className="col">
-                    <label htmlFor="nombre_usuario" className="label-bold mb-2">
-                      Nombre
-                    </label>
-                    <input
-                      type="hidden"
-                      value={usuarioSeleccionado.id_usuario || ""}
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          id_usuario: e.target.value,
-                        })
-                      }
-                      disabled
-                    />
-                    <input
-                      type="text"
-                      className="form-control form-update"
-                      placeholder="Ingrese su nombre"
-                      value={usuarioSeleccionado.nombre_usuario || ""}
-                      name="nombre_usuario"
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          nombre_usuario: e.target.value,
-                        })
-                      }
-                    />
-
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, Ingresar un nombre valido.
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label
-                      htmlFor="documento_usuario"
-                      className="label-bold mb-1"
-                    >
-                      Documento
-                    </label>
-                    <input
-                      type="hidden"
-                      value={usuarioSeleccionado.id_usuario || ""}
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          id_usuario: e.target.value,
-                        })
-                      }
-                      disabled
-                    />
-                    <input
-                      type="text"
-                      className="form-control form-update"
-                      placeholder="Ingrese su documento"
-                      value={usuarioSeleccionado.documento_usuario || ""}
-                      name="documento_usuario"
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          documento_usuario: e.target.value,
-                        })
-                      }
-                    />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, Ingresar un documento valido
-                    </div>
-                  </div>
-                </div>
-                <div className="row mb-2">
-                  <div className="col">
-                    <label htmlFor="email_usuario" className="label-bold mb-2">
-                      Correo Electrónico
-                    </label>
-                    <input
-                      type="hidden"
-                      value={usuarioSeleccionado.id_usuario || ""}
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          id_usuario: e.target.value,
-                        })
-                      }
-                    />
-                    <input
-                      type="email"
-                      className="form-control form-update"
-                      placeholder="Ingrese su email"
-                      value={usuarioSeleccionado.email_usuario || ""}
-                      name="email_usuario"
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          email_usuario: e.target.value,
-                        })
-                      }
-                    />
-                    <div className="invalid-feedback is-invalid">
-                      Por Favor, Ingresar un correo valido
-                    </div>
-                  </div>
-                  <div className="col">
-                    <label htmlFor="tipo_usuario" className="label-bold mb-2">
-                      Cargo
-                    </label>
-                    <select
-                      className="form-select form-control limpiar"
-                      value={usuarioSeleccionado.tipo_usuario || ""}
-                      name="tipo_usuario"
-                      onChange={(e) =>
-                        setUsuarioSeleccionado({
-                          ...usuarioSeleccionado,
-                          tipo_usuario: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="" disabled>
-                        Seleccione un Cargo
-                      </option>
-                      <option value="administrador">Administrador</option>
-                      <option value="coadministrador">Co-Administrador</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col">
-                    <label
-                      htmlFor="contrasena_usuario"
-                      className="label-bold mb-2"
-                    >
-                      Contraseña
-                    </label>
-                    <div className="input-group">
-                      <input
-                        type={inputType}
-                        className={`form-control form-update ${
-                          passwordError ? "is-invalid" : ""
-                        }`}
-                        value={passwordValue}
-                        onChange={handlePasswordChange2}
-                        name="contrasena_usuario"
-                        placeholder="Ingrese una contraseña"
-                      />
-                      <div className="input-group-append">
-                        <button
-                          className="btn btn-secondary"
-                          type="button"
-                          onClick={togglePasswordVisibility}
-                        >
-                          {inputType === "password" ? "Show" : "Hide"}
-                        </button>
-                      </div>
-                      {passwordError && (
-                        <div className="invalid-feedback">
-                          La contraseña debe tener al menos 6 caracteres, una
-                          mayúscula, una minúscula y un número.
+                  <div className="modal-body">
+                     <form className="text-center border border-light ">
+                        <div className="row mb-2">
+                           <div className="col">
+                              <label htmlFor="nombreUsuario" className="label-bold mb-2">
+                                 Nombre
+                              </label>
+                              <input
+                                 type="text"
+                                 className="form-control form-empty limpiar"
+                                 id="nombre_usuario"
+                                 name="nombreUsuario"
+                                 placeholder="Ingrese su nombre"
+                              />
+                              <div className="invalid-feedback is-invalid">
+                                 Por favor, Ingresar un nombre valido.
+                              </div>
+                           </div>
+                           <div className="col">
+                              <label
+                                 htmlFor="documentoUsuario"
+                                 className="label-bold mb-1"
+                              >
+                                 Documento
+                              </label>
+                              <input
+                                 type="number"
+                                 className="form-control form-empty limpiar"
+                                 id="documento_usuario"
+                                 name="documentoUsuario"
+                                 placeholder="Ingrese su documento"
+                              />
+                              <div className="invalid-feedback is-invalid">
+                                 Por favor, Ingresar un documento valido
+                              </div>
+                           </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
 
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cerrar
-              </button>
-              <button
-                type="button"
-                className="btn btn-color"
-                onClick={() => {
-                  actualizarUsuario(usuarioSeleccionado.id_usuario);
-                }}
-              >
-                Actualizar
-              </button>
+                        <div className="row mb-2">
+                           <div className="col">
+                              <label htmlFor="emailUsuario" className="label-bold mb-2">
+                                 Correo Electrónico
+                              </label>
+                              <input
+                                 type="email"
+                                 className="form-control form-empty limpiar"
+                                 id="email_usuario"
+                                 name="emailUsuario"
+                                 placeholder="Ingrese su email"
+                              />
+                              <div className="invalid-feedback is-invalid">
+                                 Por favor, Ingresar un correo valido
+                              </div>
+                           </div>
+                           <div className="col">
+                              <label htmlFor="tipoUsuario" className="label-bold mb-2">
+                                 Cargo
+                              </label>
+                              <select
+                                 className="form-select form-control form-empty limpiar"
+                                 id="tipo_usuario"
+                                 name="tipoUsuario"
+                                 defaultValue=""
+                              >
+                                 <option value="">Selecciona un cargo</option>
+                                 <option value="administrador">Administrador</option>
+                                 <option value="coadministrador">Co-Administrador</option>
+                              </select>
+                              <div className="invalid-feedback is-invalid">
+                                 Por favor, selecciona un cargo
+                              </div>
+                           </div>
+                        </div>
+                        <div className="row mb-2">
+                           <div className="col-md-12 mb-2">
+                              <label htmlFor="contrasenaUsuario" className="label-bold mb-2">Contraseña</label>
+                              <div className="input-group">
+                                 <input
+                                    type={showPassword ? "text" : "password"}
+                                    className="form-control form-empty limpiar"
+                                    id="contrasena_usuario"
+                                    name="contrasenaUsuario"
+                                    placeholder="Ingrese una contraseña"
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                 />
+                                 <div className="input-group-append">
+                                    <button
+                                       className="btn btn-secondary"
+                                       type="button"
+                                       onClick={togglePasswordVisibility}
+                                    >
+                                       {showPassword ? <IconEyeOff /> : <IconEye />}
+                                    </button>
+                                 </div>
+                              </div>
+                              <div className="row text-center">
+                                 <div className="col">
+                                    {password.length > 0 && !isValidPassword && (
+                                       <div className="text-danger">
+                                          La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula y un número.
+                                       </div>
+                                    )}
+                                 </div>
+                              </div>
+                           </div>
+
+                           <div className="col-md-12 pl-2 ">
+                              <label htmlFor="confirmarContrasena" className="label-bold mb-2">Confirmar Contraseña</label>
+                              <div className="input-group">
+                                 <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    className="form-control form-empty limpiar"
+                                    id="confirmar_contrasena"
+                                    name="confirmarContrasena"
+                                    placeholder="Confirme su contraseña"
+                                    value={confirmPassword}
+                                    onChange={handleConfirmPasswordChange}
+                                 />
+                                 <div className="input-group-append">
+                                    <button
+                                       className="btn btn-secondary"
+                                       type="button"
+                                       onClick={toggleConfirmPasswordVisibility}
+                                    >
+                                       {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
+                                    </button>
+                                 </div>
+                              </div>
+                              <div className="row text-center">
+                                 <div className="col">
+                                    {confirmPassword.length > 0 && !passwordMatch && (
+                                       <div className="text-danger">Las contraseñas no coinciden</div>
+                                    )}
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                     </form>
+                  </div>
+                  <div className="modal-footer">
+                     <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                     >
+                        Cerrar
+                     </button>
+                     <button
+                        type="button"
+                        disabled={!registrationEnabled}
+                        className="btn btn-color"
+                        onClick={registrarUsuario}
+                     >
+                        Registrar
+                     </button>
+                  </div>
+               </div>
             </div>
-          </div>
-        </div>
+         </div>
+         {/* modal actualizar https://chat.openai.com/share/46202498-977b-4fd0-b1ee-baeffa0d982a*/}
+         <div
+            className="modal fade"
+            id="staticBackdrop2"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabIndex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+            ref={modalUpdateRef}
+            style={{ display: updateModal ? "block" : "none" }}
+         >
+            <div className="modal-dialog modal-lg modal-dialog-centered d-flex align-items-center">
+               <div className="modal-content">
+                  <div className="modal-header txt-color">
+                     <h2 className="modal-title fs-5">Actualizar Usuario</h2>
+                     <button
+                        type="button"
+                        className="btn-close text-white bg-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                     ></button>
+                  </div>
+                  <div className="modal-body">
+                     <form className="text-center border border-light ">
+                        <div className="row mb-2">
+                           <div className="col">
+                              <label htmlFor="nombre_usuario" className="label-bold mb-2">
+                                 Nombre
+                              </label>
+                              <input
+                                 type="hidden"
+                                 value={usuarioSeleccionado.id_usuario || ""}
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       id_usuario: e.target.value,
+                                    })
+                                 }
+                                 disabled
+                              />
+                              <input
+                                 type="text"
+                                 className="form-control form-update"
+                                 placeholder="Ingrese su nombre"
+                                 value={usuarioSeleccionado.nombre_usuario || ""}
+                                 name="nombre_usuario"
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       nombre_usuario: e.target.value,
+                                    })
+                                 }
+                              />
+
+                              <div className="invalid-feedback is-invalid">
+                                 Por favor, Ingresar un nombre valido.
+                              </div>
+                           </div>
+                           <div className="col">
+
+                              <label
+                                 htmlFor="documento_usuario"
+                                 className="label-bold mb-1"
+                              >
+                                 Documento
+                              </label>
+                              <input
+                                 type="hidden"
+                                 value={usuarioSeleccionado.id_usuario || ""}
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       id_usuario: e.target.value,
+                                    })
+                                 }
+                                 disabled
+                              />
+                              <input
+                                 type="text"
+                                 className="form-control form-update"
+                                 placeholder="Ingrese su documento"
+                                 value={usuarioSeleccionado.documento_usuario || ""}
+                                 name="documento_usuario"
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       documento_usuario: e.target.value,
+                                    })
+                                 }
+                              />
+                              <div className="invalid-feedback is-invalid">
+                                 Por favor, Ingresar un documento valido
+                              </div>
+                           </div>
+                        </div>
+                        <div className="row mb-2">
+                           <div className="col">
+                              <label htmlFor="email_usuario" className="label-bold mb-2">
+                                 Correo Electrónico
+                              </label>
+                              <input
+                                 type="hidden"
+                                 value={usuarioSeleccionado.id_usuario || ""}
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       id_usuario: e.target.value,
+                                    })
+                                 }
+
+                              />
+                              <input
+                                 type="email"
+                                 className="form-control form-update"
+                                 placeholder="Ingrese su email"
+                                 value={usuarioSeleccionado.email_usuario || ""}
+                                 name="email_usuario"
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       email_usuario: e.target.value,
+                                    })
+                                 }
+                              />
+                              <div className="invalid-feedback is-invalid">
+                                 Por Favor, Ingresar un correo valido
+                              </div>
+                           </div>
+                           <div className="col">
+                              <label htmlFor="tipo_usuario" className="label-bold mb-2">
+                                 Cargo
+                              </label>
+                              <select
+                                 className="form-select form-control limpiar"
+                                 value={usuarioSeleccionado.tipo_usuario || ""}
+                                 name="tipo_usuario"
+                                 onChange={(e) =>
+                                    setUsuarioSeleccionado({
+                                       ...usuarioSeleccionado,
+                                       tipo_usuario: e.target.value,
+                                    })
+                                 }
+                              >
+                                 <option value="" disabled>
+                                    Seleccione un Cargo
+                                 </option>
+                                 <option value="administrador">Administrador</option>
+                                 <option value="coadministrador">Co-Administrador</option>
+                              </select>
+                           </div>
+                        </div>
+                        <div className="row">
+                           <div className="col">
+                              <label htmlFor="contrasena_usuario" className="label-bold mb-2">
+                                 Contraseña
+                              </label>
+                              <div className="input-group">
+                                 <input
+                                    type={inputType}
+                                    className={`form-control form-update ${passwordError ? 'is-invalid' : ''}`}
+                                    value={passwordValue}
+                                    onChange={handlePasswordChange2}
+                                    name="contrasena_usuario"
+                                    placeholder="Ingrese una contraseña"
+                                 />
+                                 <div className="input-group-append">
+                                    <button
+                                       className="btn btn-secondary"
+                                       type="button"
+                                       onClick={togglePasswordVisibility}
+                                    >
+                                       {inputType === 'password' ? 'Show' : 'Hide'}
+                                    </button>
+                                 </div>
+                                 {passwordError && (
+                                    <div className="invalid-feedback">
+                                       La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula y un número.
+                                    </div>
+                                 )}
+                              </div>
+                           </div>
+                        </div>
+
+
+
+
+                     </form>
+                  </div>
+
+                  <div className="modal-footer">
+                     <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                     >
+                        Cerrar
+                     </button>
+                     <button
+                        type="button"
+                        className="btn btn-color"
+                        onClick={() => {
+                           actualizarUsuario(usuarioSeleccionado.id_usuario);
+                        }}
+                     >
+                        Actualizar
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
-    </div>
-  );
+   );
 };
 
 export default Usuario;

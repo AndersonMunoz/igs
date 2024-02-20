@@ -29,7 +29,7 @@ export const validatorUsuario = [
         .matches(/\d/),
 
 
-    check('tipo_usuario', 'el tipo de usuario es requerido o !!!')
+    check('tipo_usuario', '¡El tipo de usuario es requerido!')
         .not()
         .isEmpty()
         .isIn(['administrador', 'coadministrador'])
