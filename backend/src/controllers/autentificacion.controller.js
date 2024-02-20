@@ -1,21 +1,37 @@
 import { pool } from "../database/conexion.js";
 import jwt from 'jsonwebtoken';
+import CryptoJs from "crypto-js";
+import { secretKey } from "../const/keys.js";
 
-export const validarUsuario = async (req,res) =>{
-	try{
-		let {documento, contrasena} = req.body;
-		let sql = `SELECT id_usuario, email_usuario, nombre_usuario, tipo_usuario from usuarios estado WHERE documento_usuario='${documento}' AND contrasena_usuario = '${contrasena}'`;
-		const [rows] = await pool.query(sql);
-		if(rows.length > 0){
-			let token = jwt.sign({user:rows},process.env.AUT_SECRET,{expiresIn:process.env.AUT_EXPIRE});
-			return res.status(200).json({"status":200,token:token,message:'Usuario Autorizado'});
-		}else{
-			res.status(401).json({"status":401,"message":"Usuario no encontrado..."})
-		}
-	}catch(e){
-		res.status(500).json({message: 'Error en validarUsuario: '+e})
-	}
+export const validarUsuario = async (req, res) => {
+    try {
+        let { documento, contrasena } = req.body;
+        let sql = `SELECT id_usuario, email_usuario, nombre_usuario, tipo_usuario, contrasena_usuario from usuarios WHERE documento_usuario='${documento}' AND estado = 1`; // Corregir la consulta SQL, no se necesita "estado"
+        const [rows] = await pool.query(sql);
+        
+        if (rows.length > 0) {
+            const contraseñaDB = dataDecript(rows[0].contrasena_usuario).replace(/"/g, ''); 
+            if (contrasena == contraseñaDB) {
+                let token = jwt.sign({ user: rows }, process.env.AUT_SECRET, { expiresIn: process.env.AUT_EXPIRE });
+                return res.status(200).json({ "status": 200, token: token, message: 'Usuario Autorizado' });
+            } else {
+                return res.status(401).json({ "status": 401, "message": "Error, no te hemos encontrado" });
+            }
+        } else {
+            return res.status(401).json({ "status": 401, "message": "Error, no te hemos encontrado" });
+        }
+    } catch (e) {
+        return res.status(500).json({ message: 'Error en validarUsuario: ' + e });
+    }
 }
+
+// Función para desencriptar la contraseña
+function dataDecript(encryptedPassword) {
+    const bytes = CryptoJs.AES.decrypt(encryptedPassword, secretKey);
+    return bytes.toString(CryptoJs.enc.Utf8);
+}
+
+
 export const validarToken = async (req,res,next) =>{
 	try{
 		let tokenUsuario = req.headers['token'];

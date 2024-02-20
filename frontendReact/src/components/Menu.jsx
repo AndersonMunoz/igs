@@ -328,7 +328,7 @@ export const Menu = () => {
 							<Link className="letraUser ax">
 								<IconSettings className="iconModal ti-settings" />Ajustes
 							</Link>
-							<Link onClick={()=>(localStorage.removeItem("token"), window.location.reload())} className="letraUser az">
+							<Link onClick={()=>(localStorage.clear(), window.location.reload())} className="letraUser az">
 								<IconUserOff className="iconModal ti-user-x" />Cerrar sesión
 							</Link>
 						</div>

@@ -15,16 +15,6 @@ const LoginForm = () => {
 	const [documento, setDocumento] = useState("");
 	const [contrasena, setContrasena] = useState("");
 	const [loginSuccesFull, setLoginSuccesFull] = useState(false);
-
-
-	const handledocumentoChange = (e) => {
-		setdocumento(e.target.value);
-	};
-
-	const handlecontrasenaChange = (e) => {
-		setcontrasena(e.target.value);
-	};
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		fetch("http://localhost:3000/aut/validar", {
