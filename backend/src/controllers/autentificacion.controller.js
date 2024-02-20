@@ -11,8 +11,6 @@ export const validarUsuario = async (req, res) => {
         
         if (rows.length > 0) {
             const contraseñaDB = dataDecript(rows[0].contrasena_usuario).replace(/"/g, ''); 
-
-            console.log(contraseñaDB, contrasena);
             if (contrasena == contraseñaDB) {
                 let token = jwt.sign({ user: rows }, process.env.AUT_SECRET, { expiresIn: process.env.AUT_EXPIRE });
                 return res.status(200).json({ "status": 200, token: token, message: 'Usuario Autorizado' });
