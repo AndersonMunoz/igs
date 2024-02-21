@@ -470,7 +470,7 @@ const Movimiento = () => {
   return (
     <>
       <div>
-        <h1 className="text-center modal-title fs-5">Movimientos Entrada</h1>
+        <h1 className="text-center modal-title fs-5 m-4">Movimientos Entrada</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
           <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
