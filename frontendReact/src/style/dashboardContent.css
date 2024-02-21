@@ -1,54 +1,89 @@
-.custom-spinner .p-progress-spinner-circle {
-  stroke: #fe8700 !important;
-}
-
 .dashboard-container {
   width: 100%;
   margin-top: 10px;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
-}
-.dashboard-container > div {
-  width: 1650px;
-  flex: none;
-  max-width: 100%;
-}
-.loading-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .container-wrapper {
   gap: 10px;
-  font-size: 20px;
+  width: 100%;
+  height: 150px;
   font-weight: 700;
   display: grid;
   justify-content: center;
-  flex-direction: row;
   grid-template:
-    "small-container1 small-container2 small-container3 small-container4 " 100%/
-    25% 25% 25% 25%;
-  height: 340px;
+    "empty-1 small-container1 small-container2 small-container3 small-container4 empty-2 " 100%/
+    2% 24% 24% 24% 24% 2%;
+}
+.small-container1{
+  grid-area: small-container1;
+  grid-template: 
+  "contInterno contInterno2" 110px
+  "linkContenido linkContenido"40px
+  / 60% 40%;
+  
+}
+.small-container2{
+  grid-area: small-container2;
+  grid-template: 
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido"40px
+    / 60% 40%;
+}
+.small-container3{
+  grid-area: small-container3;
+  grid-template: 
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido"40px
+    / 60% 40%;
+}
+.small-container4{
+  grid-area: small-container4;
+  grid-template: 
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido"40px
+    / 60% 40%;
 }
 
-.small-container1 {
-  grid-area: small-container1;
-  background-color: #e24e4e;
-  border: 1px solid #ccc;
+.small-container1, .small-container2, .small-container3, .small-container4 {
   border-radius: 10px;
-  color: white;
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+
+.contInterno {
+  border-radius: 10px 0px 0px 0px;
+  background-color: #fe8700;
+  grid-area: contInterno;
+}
+
+.contInterno2 {
+  border-radius: 0px 10px 0px 0px;
+  background-color: #fe8700;
+  grid-area: contInterno2;
   display: flex;
-  position: relative;
   align-items: center;
   justify-content: center;
-  text-align: center;
 }
-.small-container2 {
+
+.ssssIcono{
+  opacity: .7;
+  width: 110px;
+  height: 110px;
+}
+
+.linkContenido {
+  grid-area: linkContenido;
+  background-color: #cb6c00;
+  border-radius: 0px 0px 10px 10px;
+}
+
+
+/* .small-container2 {
   grid-area: small-container2;
   background-color: #1e9e84;
   border: 1px solid #ccc;
@@ -80,7 +115,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-}
+} */
 /* .small-container5 {
   grid-area: small-container5;
   background-color: #b517a2;
@@ -119,17 +154,11 @@
   border: 1px solid #ccc;
   border-radius: 10px;
   text-align: center;
-  z-index: 1;
 }
 .iconoUsuarioPng {
-  z-index: 2;
-  position: absolute;
   opacity: 0.7;
   width: 100%;
   height: 100%;
-}
-.usuarioTiti {
-  z-index: 3;
 }
 
 .conteEstadistica2 {
