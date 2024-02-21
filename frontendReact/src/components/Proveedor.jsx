@@ -24,6 +24,12 @@ const proveedor = () => {
   const [proveedor, setProveedor] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
+  const [nombre_proveedores, setNombre_proveedores] = useState('');
+  const [direccion_proveedores, setDireccion_proveedores] = useState('');
+  const [contrato_proveedores, setContrato_proveedores] = useState('');
+  const [telefono_proveedores, setTelefono_proveedores] = useState('');
+  const [inicio_contrato, setContratoInicio] = useState('');
+  const [fin_contrato, setContratoFin] = useState('');
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -130,7 +136,6 @@ const proveedor = () => {
   useEffect(() => {
     listarProveedor();
   }, []);
-
   function listarProveedor() {
     fetch("http://localhost:3000/proveedor/listar", {
       method: "get",
@@ -149,17 +154,9 @@ const proveedor = () => {
         console.log(e);
       });
   }
-
   function registrarProveedor() {
     const validacionExitosa = Validate.validarCampos(".form-empty");
-    let nombre_proveedores = document.getElementById("nombresProveedor").value;
-    let direccion_proveedores =
-      document.getElementById("direccionProveedor").value;
-    let contrato_proveedores =
-      document.getElementById("contratoProveedor").value;
-    let telefono_proveedores =
-      document.getElementById("telefonoProveedor").value;
-
+    console.log(contratoInicio);
     if (validacionExitosa) {
       fetch("http://localhost:3000/proveedor/registrar", {
         method: "POST",
@@ -172,10 +169,13 @@ const proveedor = () => {
           direccion_proveedores,
           contrato_proveedores,
           telefono_proveedores,
+          inicio_contrato,
+          fin_contrato,
         }),
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.status === 200) {
             Sweet.exito(data.message);
             listarProveedor();
@@ -231,29 +231,18 @@ const proveedor = () => {
       .then((data) => {
         if (data.length > 0) {
           setSelectedProveedorData(data[0]);
-          document.getElementById("nombresProveedor").value =
-            data[0].nombre_proveedores;
-          document.getElementById("direccionProveedor").value =
-            data[0].direccion_proveedores;
-          document.getElementById("contratoProveedor").value =
-            data[0].contrato_proveedores;
-          document.getElementById("telefonoProveedor").value =
-            data[0].telefono_proveedores;
+          document.getElementById("nombresProveedor").value = data[0].nombre_proveedores;
+          document.getElementById("direccionProveedor").value = data[0].direccion_proveedores;
+          document.getElementById("contratoProveedor").value = data[0].contrato_proveedores;
+          document.getElementById("telefonoProveedor").value = data[0].telefono_proveedores;
+          document.getElementById("contratoInicio").value = formtDate(data[0].inicio_contrato);
+          document.getElementById("contratoFin").value = formtDate(data[0].fin_contrato);
         } else {
           listarProveedor();
         }
       });
   }
-
   function actualizarProveedor(id) {
-    let nombre_proveedores = document.getElementById("nombresProveedor").value;
-    let direccion_proveedores =
-      document.getElementById("direccionProveedor").value;
-    let contrato_proveedores =
-      document.getElementById("contratoProveedor").value;
-    let telefono_proveedores =
-      document.getElementById("telefonoProveedor").value;
-
     fetch(`http://localhost:3000/proveedor/actualizar/${id}`, {
       method: "PUT",
       headers: {
@@ -261,10 +250,12 @@ const proveedor = () => {
         token : localStorage.getItem('token')
       },
       body: JSON.stringify({
-        nombre_proveedores,
-        direccion_proveedores,
-        contrato_proveedores,
-        telefono_proveedores,
+          nombre_proveedores,
+          direccion_proveedores,
+          contrato_proveedores,
+          telefono_proveedores,
+          inicio_contrato,
+          fin_contrato,
       }),
     })
       .then((res) => res.json())
@@ -283,6 +274,13 @@ const proveedor = () => {
       });
   }
 
+  function formtDate(value) {
+    // Obtener las fechas del objeto data
+    const inicioContrato = new Date(value);
+    // Formatear las fechas en el formato 'yyyy-MM-dd'
+    const fechaFormateada= inicioContrato.toISOString().split('T')[0];
+    return fechaFormateada
+  }
   return (
     <div>
       <div className="d-flex justify-content-between mb-4">
@@ -336,7 +334,10 @@ const proveedor = () => {
               <th className="th-sm">Dirección</th>
               <th className="th-sm">Contrato</th>
               <th className="th-sm">Estado</th>
-              <th className="th'sm text-center">Acciones</th>
+              <th className="th-sm">Inicio de contrato</th>
+              <th className="th-sm">Fin de contrato</th>
+
+              <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -350,21 +351,14 @@ const proveedor = () => {
                     <td>{element.direccion_proveedores}</td>
                     <td>{element.contrato_proveedores}</td>
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
+                    <td>{formtDate(element.inicio_contrato)}</td>
+                    <td>{formtDate(element.fin_contrato)}</td>
                     <td>
                       {element.estado !== 1 ? (
                         "NO DISPONIBLES"
                       ) : (
                         <>
-                          <button
-                            type="button"
-                            className="btn-color btn mx-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            onClick={() => {
-                              setModal(true);
-                              editarProveedor(element.id_proveedores);
-                            }}
-                          >
+                          <button type="button"  className="btn-color btn mx-2"  data-bs-toggle="modal"  data-bs-target="#exampleModal"  onClick={() => {    setModal(true);    editarProveedor(element.id_proveedores);}}>
                             <IconEdit />
                           </button>
                           <button
@@ -433,6 +427,7 @@ const proveedor = () => {
                     <div className="col">
                       <label htmlFor="nombresProveedor">Nombres</label>
                       <input
+                      onChange={(e)=>{setNombre_proveedores(e.target.value)}}
                         type="text"
                         id="nombresProveedor"
                         name="nombresProveedor"
@@ -447,6 +442,7 @@ const proveedor = () => {
                     <div className="col ms-3">
                       <label htmlFor="direccionProveedor">Direccion</label>
                       <input
+                      onChange={(e)=>{setDireccion_proveedores(e.target.value)}}
                         type="text"
                         id="direccionProveedor"
                         name="direccionProveedor"
@@ -458,10 +454,11 @@ const proveedor = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="d-flex form-row mb-1">
+                  <div className="d-flex form-row mb-4">
                     <div className="col">
-                      <label htmlFor="contratoProveedor">Contrato</label>
+                      <label htmlFor="contratoProveedor">N° Contrato</label>
                       <input
+                      onChange={(e)=>{setContrato_proveedores(e.target.value)}}
                         type="text"
                         name="contratoProveedor"
                         id="contratoProveedor"
@@ -475,9 +472,42 @@ const proveedor = () => {
                     <div className="col ms-3">
                       <label htmlFor="">Telefono</label>
                       <input
+                      onChange={(e)=>{setTelefono_proveedores(e.target.value)}}
                         type="text"
                         name="telefonoProveedor"
                         id="telefonoProveedor"
+                        className="form-control form-empty limpiar"
+                        placeholder="Telefono"
+                        aria-describedby="defaultRegisterFormPhoneHelpBlock"
+                      ></input>
+                      <div className="invalid-feedback is-invalid">
+                        Este campo es obligatorio.
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="d-flex form-row mb-1">
+                    <div className="col">
+                      <label htmlFor="contratoInicio">Inicio de  contrato</label>
+                      <input
+                      onChange={(e)=>{setContratoInicio(e.target.value)}}
+                        type="date"
+                        name="contratoInicio"
+                        id="contratoInicio"
+                        className="form-control form-empty  limpiar"
+                        placeholder="N° de contrato"
+                      ></input>
+                      <div className="invalid-feedback is-invalid">
+                        Este campo es obligatorio.
+                      </div>
+                    </div>
+                    <div className="col ms-3">
+                      <label htmlFor="contratoFin">Fin de contrato</label>
+                      <input
+                      onChange={(e)=>{setContratoFin(e.target.value)}}
+                        type="date"
+                        name="contratoFin"
+                        id="contratoFin"
                         className="form-control form-empty limpiar"
                         placeholder="Telefono"
                         aria-describedby="defaultRegisterFormPhoneHelpBlock"

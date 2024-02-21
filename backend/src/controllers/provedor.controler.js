@@ -38,7 +38,7 @@ export const registrarProvedor = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(403).json({ "status": 403, error })
         }
-        let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores, inicio_contrato ,fin_contrato } = req.body;
+        let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores,inicio_contrato ,fin_contrato } = req.body;
         let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
         const [rows] = await pool.query(selectUser)
         if (rows.length > 0) {
@@ -47,7 +47,7 @@ export const registrarProvedor = async (req, res) => {
             });
         } else {
             let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores,inicio_contrato, fin_contrato)
-                values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}','${inicio_contrato}'),'${fin_contrato}'`;
+            values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}','${inicio_contrato}','${fin_contrato}')`;
             const [rows] = await pool.query(sql);
             if (rows.affectedRows > 0) {
                 res.status(200).json({

@@ -26,31 +26,32 @@ export const validarProvedor = [
         .isNumeric()
         .custom(value => value >= 0), 
 
-    check('inicio_contrato', '¡Error! La fecha de inicio del contrato debe estar en formato día-mes-año y no puede ser menor que la fecha actual.')
-        .not()
-        .isEmpty()
-        .matches(/^\d{2}-\d{2}-\d{4}$/)
-        .custom(value => {
-            const today = new Date();
-            const [day, month, year] = value.split('-').map(Number);
-            const date = new Date(year, month - 1, day);
-
-            if (date < today) {
-                throw new Error('¡Error! La fecha de inicio del contrato no puede ser menor que la fecha actual.');
-            }
-        }),
-
-    check('fin_contrato', '¡Error! La fecha de fin del contrato debe estar en formato día-mes-año y no puede ser menor que la fecha actual.')
-        .not()
-        .isEmpty()
-        .matches(/^\d{2}-\d{2}-\d{4}$/)
-        .custom(value => {
-            const today = new Date();
-            const [day, month, year] = value.split('-').map(Number);
-            const date = new Date(year, month - 1, day);
-
-            if (date < today) {
-                throw new Error('¡Error! La fecha de fin del contrato no puede ser menor que la fecha actual.');
-            }
-        })
+    //     check('inicio_contrato', '¡Error! La fecha de inicio del contrato debe estar en formato año-mes-día y no puede ser menor que la fecha actual.')
+    //     .not()
+    //     .isEmpty()
+    //     .matches(/^\d{4}-\d{2}-\d{2}$/)
+    //     .custom(value => {
+    //         const today = new Date();
+    //         const [year, month, day] = value.split('-').map(Number);
+    //         const date = new Date(year, month - 1, day);
+    
+    //         if (date < today) {
+    //             throw new Error('¡Error! La fecha de inicio del contrato no puede ser menor que la fecha actual.');
+    //         }
+    //     }),
+    
+    // check('fin_contrato', '¡Error! La fecha de fin del contrato debe estar en formato año-mes-día y no puede ser menor que la fecha actual.')
+    //     .not()
+    //     .isEmpty()
+    //     .matches(/^\d{4}-\d{2}-\d{2}$/)
+    //     .custom(value => {
+    //         const today = new Date();
+    //         const [year, month, day] = value.split('-').map(Number);
+    //         const date = new Date(year, month - 1, day);
+    
+    //         if (date < today) {
+    //             throw new Error('¡Error! La fecha de fin del contrato no puede ser menor que la fecha actual.');
+    //         }
+    //     })
+    
 ];
