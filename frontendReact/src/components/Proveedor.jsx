@@ -15,13 +15,86 @@ import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
-import generatePDF from 'react-to-pdf';
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const proveedor = () => {
   const tableRef = useRef();
   const [proveedor, setProveedor] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
+
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelTotal');
+    xlsx.writeFile(wb, 'Proveedores.xlsx');
+  };
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'N°', dataKey: 'id_proveedores' },
+      { title: 'Nombre', dataKey: 'nombre_proveedores' },
+      { title: 'Telefono', dataKey: 'telefono_proveedores' },
+      { title: 'Dirección', dataKey: 'direccion_proveedores' },
+      { title: 'Contrato', dataKey: 'contrato_proveedores' },
+      { title: 'Estado', dataKey: 'estado' }
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = proveedor.map((element) => ({
+      id_proveedores: element.id_proveedores,
+      nombre_proveedores: element.nombre_proveedores,
+      telefono_proveedores: element.telefono_proveedores,
+      direccion_proveedores: element.direccion_proveedores,
+      contrato_proveedores: element.contrato_proveedores,
+      estado: element.estado
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [0, 100,0] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Proveedores.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+
+    // Obtener las columnas
+    const columns = [
+      'N°',
+      'Nombre',
+      'Telefono',
+      'Dirección',
+      'Contrato',
+      'Estado'
+    ];
+    wsData.push(columns);
+
+    // Obtener los datos de las filas
+    proveedor.forEach(element => {
+      const rowData = [
+        element.id_proveedores,
+        element.nombre_proveedores,
+        element.telefono_proveedores,
+        element.direccion_proveedores,
+        element.contrato_proveedores,
+        element.estado
+      ];
+      wsData.push(rowData);
+    });
+
+    return wsData;
+  };
 
   function removeFond() {
     const modalBackdrop = document.querySelector(".modal-backdrop");
@@ -231,20 +304,20 @@ const proveedor = () => {
           Registrar Nuevo Proveedor
         </button>
         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-          <div className="" title="Descargar Excel">
-            <DownloadTableExcel
-              filename="Proveedores Detalles Excel"
-              sheet="Proveedores"
-              currentTableRef={tableRef.current}
-            ><button type="button" className="btn btn-light">
+        <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
-              </button></DownloadTableExcel>
-          </div>
-          <div className="" title="Descargar Pdf">
-            <button type="button" className="btn btn-light" onClick={() => generatePDF(tableRef, { filename: "Proveedores Detalles table.pdf" })}
-            ><img src={PdfLogo} className="logoExel" />
-            </button>
-          </div>
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}
+              >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
         </div>
       </div>
       <div className="container-fluid w-full">
@@ -259,8 +332,8 @@ const proveedor = () => {
             <tr>
               <th className="th-sm">N°</th>
               <th className="th-sm">Nombre</th>
-              <th className="th-sm">Telefono</th>
-              <th className="th-sm">Direccion</th>
+              <th className="th-sm">Teléfono</th>
+              <th className="th-sm">Dirección</th>
               <th className="th-sm">Contrato</th>
               <th className="th-sm">Estado</th>
               <th className="th'sm text-center">Acciones</th>

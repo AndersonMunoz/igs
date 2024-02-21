@@ -16,8 +16,9 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
-
+import { secretKey } from "../const/keys";
 import { dataEncript } from "./encryp/encryp";
+import CryptoJs from "crypto-js";
 
 const Usuario = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -36,6 +37,7 @@ const Usuario = () => {
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [registrationEnabled, setRegistrationEnabled] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false); // Nuevo estado
+
   const initialPassword = usuarioSeleccionado.contrasena_usuario || "";
   const [passwordValue, setPasswordValue] = useState(
     usuarioSeleccionado.contrasena_usuario || ""
@@ -51,15 +53,20 @@ const Usuario = () => {
     setUserPasswordEncripted(encryptPasswod);
   };
 
+  function dataDecript(encryptedPassword) {
+    const bytes = CryptoJs.AES.decrypt(encryptedPassword, secretKey);
+    return bytes.toString(CryptoJs.enc.Utf8);
+  }
+
   const handlePasswordChange2 = (event) => {
-    const newPassword = event.target.value;
-    setPasswordValue(newPassword);
+    const newPassword2 = event.target.value;
+    setPasswordValue(newPassword2);
     setUsuarioSeleccionado({
       ...usuarioSeleccionado,
-      contrasena_usuario: newPassword,
+      contrasena_usuario: newPassword2,
     });
 
-    validatePassword(newPassword, confirmPassword);
+    validatePassword(newPassword2);
   };
 
   const handleRegistration = () => {
@@ -70,7 +77,7 @@ const Usuario = () => {
     setPasswordMatch(false);
   };
 
-  useEffect(() => {}, [passwordMatch]);
+  useEffect(() => { }, [passwordMatch]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -103,8 +110,8 @@ const Usuario = () => {
       });
 
       setPasswordError(false);
-   };
- */
+   }; */
+
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -118,8 +125,8 @@ const Usuario = () => {
 
     setPasswordError(
       !isValidPassword ||
-        newPassword.trim() === "" ||
-        newConfirmPassword.trim() === ""
+      newPassword.trim() === "" ||
+      newConfirmPassword.trim() === ""
     );
 
     setRegistrationEnabled(
@@ -372,7 +379,7 @@ const Usuario = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between mb-4">
+      <div className="d-flex justify-content-between mb-4 mt-4">
         <button
           type="button"
           id="modalUsuario"
@@ -861,10 +868,10 @@ const Usuario = () => {
                     <div className="input-group">
                       <input
                         type={inputType}
-                        className={`form-control form-update ${
-                          passwordError ? "is-invalid" : ""
-                        }`}
-                        value={passwordValue}
+                        className={`form-control form-update ${passwordError ? "is-invalid" : ""
+                          }`}
+                        /* value={dataDecript(usuarioSeleccionado.contrasena_usuario || "").replace(/"/g, '')} */
+                        value={dataDecript(initialPasswordValue).replace(/"/g, '')}
                         onChange={handlePasswordChange2}
                         name="contrasena_usuario"
                         placeholder="Ingrese una contraseña"
