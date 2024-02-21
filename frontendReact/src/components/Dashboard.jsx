@@ -96,7 +96,12 @@ const Dashboard = () => {
 
 					</div>
 					<div className="linkContenido">
-
+						<Link to="/producto/caducar">
+								<div className="tamañoLateral">
+									<IconArrowBigRight className="iconosLaterales" />
+								</div>
+								<span className="link_name">Ver Productos a caducar</span>
+							</Link>
 					</div>
 				</div>
 				<div className="small-container3">
