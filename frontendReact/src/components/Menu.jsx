@@ -57,10 +57,10 @@ export const Menu = () => {
 			<div className="main-container">
 				<div className="sidebar close">
 					<div className="logo-details">
-
-							<img src={IgsLogo} className="logo1" />
-				
-						<span className="logo_name">IGS</span>
+						<img src={IgsLogo} className="logo1" />
+						<div className="fondoImg">
+							<span className="logo_name">IGS</span>
+						</div>
 					</div>
 					<ul className="nav-links">
 						<li>
@@ -328,7 +328,7 @@ export const Menu = () => {
 							<Link className="letraUser ax">
 								<IconSettings className="iconModal ti-settings" />Ajustes
 							</Link>
-							<Link onClick={()=>(localStorage.clear(), window.location.reload())} className="letraUser az">
+							<Link onClick={() => (localStorage.clear(), window.location.reload())} className="letraUser az">
 								<IconUserOff className="iconModal ti-user-x" />Cerrar sesión
 							</Link>
 						</div>
