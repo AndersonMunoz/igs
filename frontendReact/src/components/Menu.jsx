@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import "../style/dashboard.css";
 import IgsLogo from "../../img/IGS.png";
+import { dataDecript } from "./encryp/decryp";
 import {
 	IconUser,
 	IconMenu2,
@@ -22,6 +23,12 @@ import {
 } from "@tabler/icons-react";
 
 export const Menu = () => {
+	const [userName, setUserName] = useState('');
+	const [userRoll, setUserRoll] = useState('');
+
+
+
+
 	useEffect(() => {
 		let arrow = document.querySelectorAll(".container-icon");
 		for (let i = 0; i < arrow.length; i++) {
@@ -30,6 +37,9 @@ export const Menu = () => {
 				arrowParent.classList.toggle("showMenu");
 			});
 		}
+
+		setUserName(dataDecript(localStorage.getItem('name')));
+		setUserRoll(dataDecript(localStorage.getItem('roll')));
 
 		let sidebar = document.querySelector(".sidebar");
 		let sidebarBtn = document.querySelector(".ti-menu-2");
@@ -320,7 +330,9 @@ export const Menu = () => {
 						</svg>
 					</div>
 					<div id="userAlert" className="usuario">
-						<span><IconUser className="user1" />Administrador</span>
+						<span><IconUser className="user1" />{userName}</span>
+						<span>{userRoll}</span>
+
 					</div>
 					<div className="modalClose">
 						<div className="userSpace">

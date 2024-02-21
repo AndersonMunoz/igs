@@ -9,7 +9,7 @@ import Fondo2 from "../../img/fondo.jpg"
 import Fondo3 from "../../img/fruit-171671.jpg"
 import "bootstrap";
 import './css/login.css';
-
+import { dataEncript } from "../components/encryp/encryp";
 
 const LoginForm = () => {
 	const [documento, setDocumento] = useState("");
@@ -30,9 +30,11 @@ const LoginForm = () => {
 			.then((res) => res.json())
 			.then((data) => {
 				if (data.status == 200) {
-					console.log(data.token);
+					console.log(data);
 					setLoginSuccesFull(true)
 					localStorage.setItem("token", data.token);
+					localStorage.setItem("name", dataEncript(data.nombre));
+					localStorage.setItem("roll", dataEncript(data.tipo));
 					window.location.reload()
 				} else {
 					Sweet.error(data.message);
