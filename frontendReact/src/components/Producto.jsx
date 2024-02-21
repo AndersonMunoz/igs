@@ -241,23 +241,22 @@ const Producto = () => {
   }
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
+    console.log(selectedOption);
   };
   const handleUp = (selectedOption) => {
-    setSelectedUp(selectedOption); 
+    setSelectedUp(selectedOption);
+    console.log(selectedOption); 
   };
   function registrarProducto() {
     const descripcion_producto = document.getElementById('descripcion_producto').value;
     Validate.validarCampos('.form-empty');
-    const validacionTipo = Validate.validarSelect('#fk_id_tipo_producto');
-    const validacionUp = Validate.validarSelect('#bodega');
-    Validate.validarSelect('.form-empt');
-    const validacionExitosa = validacionTipo && validacionUp;
-  
+    const validacionExitosa = Validate.validarSelect('.form-empt');
+    
     if (!validacionExitosa) {
       Sweet.registroFallido();
       return;
     }
-    
+  
     fetch('http://localhost:3000/producto/registrar', {
       method: 'POST',
       headers: {
@@ -265,35 +264,36 @@ const Producto = () => {
       },
       body: JSON.stringify({ descripcion_producto, fk_id_up: selectedUp.value, fk_id_tipo_producto: selectedTipo.value }),
     })
-      .then((res) => res.json())
-      .then(data => {
-        if (data.status === 200) {
-          Sweet.exito(data.message);
-          if ($.fn.DataTable.isDataTable(tableRef.current)) {
-            $(tableRef.current).DataTable().destroy();
-          }
-          listarProducto();
-          setShowModal(false);
-          removeModalBackdrop();
-          const modalBackdrop = document.querySelector('.modal-backdrop');
-          if (modalBackdrop) {
-            modalBackdrop.remove();
-          }
-        } else if (data.status === 403) {
-          Sweet.error(data.error.errors[0].msg);
-        }else if(data.status === 409){
-            Sweet.error(data.message);
-            return;
-        } else {
-          console.error('Error en la petición:', data);
-          Sweet.error('Hubo un error al registrar el producto.');
+    .then((res) => res.json())
+    .then(data => {
+      if (data.status === 200) {
+        Sweet.exito(data.message);
+        if ($.fn.DataTable.isDataTable(tableRef.current)) {
+          $(tableRef.current).DataTable().destroy();
         }
-      })
-      .catch(error => {
-        console.error('Error:', error);
+        listarProducto();
+        setShowModal(false);
+        removeModalBackdrop();
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      } else if (data.status === 403) {
+        Sweet.error(data.error.errors[0].msg);
+      } else if(data.status === 409){
+        Sweet.error(data.message);
+        return;
+      } else {
+        console.error('Error en la petición:', data);
         Sweet.error('Hubo un error al registrar el producto.');
-      });
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      Sweet.error('Hubo un error al registrar el producto.');
+    });
   }
+  
   function editarProducto(id) {
     fetch(`http://localhost:3000/producto/buscar/${id}`, {
       method: 'GET',
@@ -433,13 +433,13 @@ const Producto = () => {
             <th className="th-sm">N°</th>
             <th className="th-sm">NombreProducto</th>
             <th className="th-sm">NombreCategoria</th>
-            {/* <th className="th-sm">FechaCaducidad</th> */}
             <th className="th-sm">Peso</th>
             <th className="th-sm">Unidad</th>
             <th className="th-sm">PrecioIndividual</th>
             <th className="th-sm">UnidadProductiva</th>
             <th className="th-sm">Descripcion</th>
             <th className="th-sm">PrecioTotal</th>
+            <th className="th-sm text-center">Fecha de Caducidad</th>
             <th className="th-sm text-center">Acciones</th>
           </tr>
         </thead>
@@ -466,7 +466,8 @@ const Producto = () => {
                       <td>{element.PrecioIndividual}</td>
                       <td>{element.UnidadProductiva}</td>
                       <td>{element.Descripcion}</td>
-                      <td>{element.PrecioTotal}</td>
+                      <td>{element.PrecioTotal.toFixed(2)}</td>
+                      <td>{Validate.formatFecha(element.FechaCaducidad)}</td>
                       <td>
                       {element.estado === 1 ? (
                         <>
@@ -513,7 +514,7 @@ const Producto = () => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="bodega" className="label-bold mb-2">Bodega</label>
+                    <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
                     <Select
                         className="react-select-container  form-empt my-custom-class"
                         classNamePrefix="react-select"
@@ -521,7 +522,7 @@ const Producto = () => {
                         placeholder="Selecciona..."
                         onChange={handleUp}
                         value={selectedUp}
-                        id="bodega"
+                        id="fk_id_up"
                       />
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una unidad de peso.
@@ -573,7 +574,7 @@ const Producto = () => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="bodega" className="label-bold mb-2">Bodega</label>
+                    <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
                     <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_up || ''}onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} id="fk_id_up" name="fk_id_up">
                     <option value="">Selecciona...</option>
                     {up.map((option) => (

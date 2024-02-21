@@ -1,7 +1,9 @@
 .custom-spinner .p-progress-spinner-circle {
   stroke: #fe8700 !important;
 }
-
+.curson{
+  cursor: pointer;
+}
 .dashboard-container {
   width: 100%;
   margin-top: 10px;
