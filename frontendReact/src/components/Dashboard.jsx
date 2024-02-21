@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Chart as Chartjs } from 'chart.js/auto';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import userPng from '../../img/53-532960_person-icon-png.png'
 import "../style/dashboardContent.css";
 
 const Dashboard = () => {
@@ -64,10 +65,12 @@ const Dashboard = () => {
 	];
 
 	return (
-		<div className="dashboard-container">		
+		<div className="dashboard-container">
+			<div>
 				<div className="container-wrapper">
 					<div className="small-container1">
-						<p>Usuarios Registrados: {usuariosCount}</p>
+						<p className="usuarioTiti">Usuarios Registrados: {usuariosCount}</p>
+						<img src={userPng} className="iconoUsuarioPng" alt="" />
 					</div>
 					<div className="small-container2">
 						<p>Cantidad </p>
@@ -78,9 +81,7 @@ const Dashboard = () => {
 					<div className="small-container4">
 						<p>Contenedor 4</p>
 					</div>
-					<div className="small-container5">
-						<p>Contenedor 5</p>
-					</div>
+
 				</div>
 				<div className="container-wrapper2">
 					<div className="conteEstadistica1">
@@ -116,7 +117,8 @@ const Dashboard = () => {
 							}}
 						/>
 					</div>
-				</div>	
+				</div>
+			</div>
 		</div>
 	);
 };

@@ -20,7 +20,7 @@ if (localStorage.getItem("token")) {
   
   var tokenExistAndStillVAlid = (parseJwt(localStorage.getItem("token")).exp*1000 > Date.now());
 }
-
+/* var tokenExistAndStillVAlid = true */
 const Main = () => {
   return <>{tokenExistAndStillVAlid ? <App /> : <Inicio />}</>;
 };
