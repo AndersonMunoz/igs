@@ -17,6 +17,9 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import Select from 'react-select'
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 const Producto = () => {
@@ -32,6 +35,92 @@ const Producto = () => {
   const [selectedUp, setSelectedUp] = useState(null);
 
   const tableRef = useRef();
+
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelProducto');
+    xlsx.writeFile(wb, 'Productos.xlsx');
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'N°', dataKey: 'id_producto' },
+      { title: 'NombreProducto', dataKey: 'NombreProducto' },
+      { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
+      { title: 'Peso', dataKey: 'Peso' },
+      { title: 'Unidad', dataKey: 'Unidad' },
+      { title: 'PrecioIndividual', dataKey: 'PrecioIndividual' },
+      { title: 'UnidadProductiva', dataKey: 'UnidadProductiva' },
+      { title: 'Descripcion', dataKey: 'Descripcion' },
+      { title: 'PrecioTotal', dataKey: 'PrecioTotal' }
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = productos.map((element) => ({
+      id_producto: element.id_producto,
+      NombreProducto: element.NombreProducto,
+      NombreCategoria: element.NombreCategoria,
+      Peso: element.Peso,
+      Unidad: element.Unidad,
+      PrecioIndividual: element.PrecioIndividual,
+      UnidadProductiva: element.UnidadProductiva,
+      Descripcion: element.Descripcion,
+      PrecioTotal: element.PrecioTotal
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Producto.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+  
+    // Obtener las columnas
+    const columns = [
+      'N°',
+      'NombreProducto',
+      'NombreCategoria',
+      'Peso',
+      'Unidad',
+      'PrecioIndividual',
+      'UnidadProductiva',
+      'Descripcion',
+      'PrecioTotal'
+    ];
+    wsData.push(columns);
+  
+    // Obtener los datos de las filas
+    productos.forEach(element => {
+      const rowData = [
+        element.id_producto,
+        element.NombreProducto,
+        element.NombreCategoria,
+        element.Peso,
+        element.Unidad,
+        element.PrecioIndividual,
+        element.UnidadProductiva,
+        element.Descripcion,
+        element.PrecioTotal  
+      ];
+      wsData.push(rowData);
+    });
+  
+    return wsData;
+  };
+
 
   useEffect(() => {
 		if (productos.length > 0) {
@@ -256,7 +345,6 @@ const Producto = () => {
       
     })
   }
-
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -322,24 +410,21 @@ const Producto = () => {
         <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedUp(null);}}>
           Registrar Nuevo Producto
         </button>
-        <div>
-          <DownloadTableExcel
-            filename="Tabla productos"
-            sheet="Productos"
-            currentTableRef={tableRef.current}
-          >
-            <button type="button" className="btn btn-light">
-              <img src={ExelLogo} className="logoExel" />
-            </button>
-          </DownloadTableExcel>
-          <button
-            type="button"
-            className="btn btn-light"
-            onClick={() => generatePDF(tableRef, { filename: "productos.pdf" })}
-          >
-            <img src={PdfLogo} className="logoExel" />
-          </button>
-        </div>
+        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}                >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
+          </div>
       </div>
       <div className="wrapper-editor">
       <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
