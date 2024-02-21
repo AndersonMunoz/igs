@@ -18,19 +18,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const ProductoCaducar = () => {
-
-
   const [productos, setProductos] = useState([]);
-  const [tipos, setTipo] = useState([]);
-  const [up, setUp] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const modalProductoRef = useRef(null);
-  const [updateModal, setUpdateModal] = useState(false);
-  const modalUpdateRef = useRef(null);
-  const [productoSeleccionado, setProductoSeleccionado] = useState({});
-  const [selectedTipo, setSelectedTipo] = useState(null);
-  const [selectedUp, setSelectedUp] = useState(null);
-
   const tableRef = useRef();
 
   const handleOnExport = () => {
@@ -144,12 +132,10 @@ const ProductoCaducar = () => {
 
   useEffect(() => {
       listarProducto();
-      listarUp();
-      listarTipo();
   }, []); 
 
   function listarProducto() {
-    fetch("http://localhost:3000/producto/listar", {
+    fetch("http://localhost:3000/producto/listarCaducados", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -164,52 +150,7 @@ const ProductoCaducar = () => {
       console.log(e);
     });
   }
-  function listarTipo(){
-    fetch("http://localhost:3000/tipo/listarActivo",{
-      method: "GET",
-      headers:{
-        "Content-type": "application/json",
-      },
-    })
-    .then((res) => {
-      if (res.status === 204) {
-        console.log("No hay datos disponibles");
-        return null;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      if (data !== null) {
-        setTipo(data);
-      }
-    })
-    .catch((e) => {
-      console.error("Error al procesar la respuesta:", e);
-    });
-  }
-  function listarUp() {
-    fetch("http://localhost:3000/up/listar", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          console.log("No hay datos disponibles");
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setUp(data);
-        }
-      })
-      .catch((e) => {
-        console.error("Error al procesar la respuesta:", e);
-      });
-  }
+
 	return (
     <div>
       <div className="d-flex justify-content-between m-4">
@@ -259,7 +200,28 @@ const ProductoCaducar = () => {
               </tr>
             ) : (                  
               <>
-                {productos.map((element) => (
+                {productos.map((element) => {
+                  const fechaActual = new Date();
+                  const fechaCaducidad = new Date(element.FechaCaducidad);
+
+                  const diferenciaFechas = fechaCaducidad - fechaActual;
+
+                  const diasFaltantes = Math.ceil(diferenciaFechas / (1000 * 60 * 60 * 24));
+
+                  let mensaje = '';
+                  if (diasFaltantes > 2) {
+                    mensaje = <span style={{ color: 'green' }}>{`Faltan ${diasFaltantes} días para la fecha de caducidad`}</span>;
+                  } else if (diasFaltantes === 2) {
+                    mensaje = <span style={{ color: 'orange' }}>Faltan 2 días para la fecha de caducidad</span>;
+                  } else if (diasFaltantes === 1) {
+                    mensaje = <span style={{ color: 'orange' }}>Falta 1 día para la fecha de caducidad</span>;
+                  } else if (diasFaltantes === 0) {
+                    mensaje = <span style={{ color: 'red' }}>El producto caduca hoy</span>;
+                  } else {
+                    mensaje = <span style={{ color: 'red' }}>El producto ya caducó</span>;
+                  }
+
+                  return (
                     <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
                       <td>{element.id_producto}</td>
                       <td>{element.NombreProducto}</td>
@@ -270,9 +232,18 @@ const ProductoCaducar = () => {
                       <td>{element.UnidadProductiva}</td>
                       <td>{element.Descripcion}</td>
                       <td>{element.PrecioTotal.toFixed(2)}</td>
-                      <td>{Validate.formatFecha(element.FechaCaducidad)}</td>
+                        <td>
+                        {element.FechaCaducidad ? (
+                          <>
+                            {Validate.formatFecha(element.FechaCaducidad)} - <br/>{mensaje}
+                          </>
+                        ) : (
+                          'No asignada'
+                        )}
+                      </td>
                     </tr>
-                  ))}
+                  );
+                })}
               </>
             )}
           </tbody>
