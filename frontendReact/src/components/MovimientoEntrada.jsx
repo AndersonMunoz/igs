@@ -537,9 +537,13 @@ const Movimiento = () => {
                       <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center">{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {Number.isInteger(element.cantidad_peso_movimiento) ? element.cantidad_peso_movimiento : element.cantidad_peso_movimiento.toFixed(2)}
+                      </td>
                       <td className="p-2 text-center">{element.unidad_peso}</td>
-                      <td className="p-2 text-center">{element.precio_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {isNaN(Number(element.precio_movimiento)) ? element.precio_movimiento : (Number.isInteger(Number(element.precio_movimiento)) ? Number(element.precio_movimiento) : Number(element.precio_movimiento).toFixed(2))}
+                      </td>
                       <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
