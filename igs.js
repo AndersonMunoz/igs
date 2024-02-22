@@ -66,6 +66,19 @@ igs.use('/up', unidadProductiva);
 
 igs.use('/aut', autRouter);
 
+igs.get('/movimientos', async (req, res) => {
+    try {
+      // Consultar todos los movimientos desde la base de datos
+      const [movimientos] = await pool.query('SELECT * FROM factura_movimiento');
+  
+      // Enviar la lista de movimientos como respuesta
+      res.json(movimientos);
+    } catch (error) {
+      console.error('Error al obtener los movimientos:', error);
+      res.status(500).json({ error: 'Error en el servidor' });
+    }
+  });
+
 igs.listen(3000,()=>{
     console.log(`Servidor IGS ejecutando en http://localhost:${port}`);
 })

@@ -6,16 +6,32 @@ import { Outlet, Link } from "react-router-dom";
 import { IconArrowBigRightFilled } from '@tabler/icons-react';
 
 const Dashboard = () => {
-	const [productos, setProductos] = useState([]);
 	const [usuariosCount, setUsuariosCount] = useState(0);
+	const [entradaSalida, setEntradaSalida] = useState({ entraron: 0, salieron: 0 });
+	const [categoriasCount, setCategoriasCount] = useState([]);
 
 	useEffect(() => {
-		listarProducto();
+		obtenerValorTotalProductos();
 		listarUsuario();
+		listarCountCategoria();
 	}, []);
-
-	function listarProducto() {
-		fetch("http://localhost:3000/producto/listar", {
+	function listarCountCategoria() {
+    fetch("http://localhost:3000/categoria/listarCountCategoria", {
+        method: "GET",
+        headers: {
+            "Content-type": "application/json",
+        },
+    })
+		.then((res) => res.json())
+		.then((data) => {
+				setCategoriasCount(data);
+		})
+		.catch((e) => {
+				console.log(e);
+		});
+	}
+	function obtenerValorTotalProductos() {
+		fetch("http://localhost:3000/facturamovimiento/listarEntradaSalida", {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
@@ -23,7 +39,7 @@ const Dashboard = () => {
 		})
 			.then((res) => res.json())
 			.then((data) => {
-				setProductos(data);
+				setEntradaSalida(data);
 			})
 			.catch((e) => {
 				console.log(e);
@@ -53,7 +69,6 @@ const Dashboard = () => {
 		'rgba(255, 159, 64, 0.5)',
 		'rgba(255, 99, 132, 0.5)',
 	];
-
 	const doughnutColors = [
 		'rgba(255, 99, 132, 0.5)',
 		'rgba(54, 162, 235, 0.5)',
@@ -137,37 +152,58 @@ const Dashboard = () => {
 			</div>
 			<div className="container-wrapper2">
 				<div className="conteEstadistica1">
-					<Doughnut className="sssss12"
+				<Doughnut 
 						data={{
-							labels: productos.map(producto => producto.NombreProducto),
-							datasets: [
-								{
-									label: "Productos",
-									data: productos.map(producto => producto.Peso),
-									backgroundColor: doughnutColors,
-								}
-							]
+							labels: categoriasCount.map(count => count.Categoria),
+							datasets: [{
+										label: "Categorias",
+										data: categoriasCount.map(count => count.CantidadTiposProductos),
+										backgroundColor: doughnutColors,}]
 						}}
-					/>
+						options={{
+							responsive: true,
+							plugins: {
+									legend: {
+											position: 'top',
+									},
+									title: {
+											display: true,
+											text: 'Categorías'
+									}
+							}
+					}}
+				/>
 				</div>
 				<div className="conteEstadistica2">
-					<Line
+				<Line
 						data={{
-							labels: productos.map(producto => producto.NombreProducto),
-							datasets: [
-								{
-									label: "Productos",
-									data: productos.map(producto => producto.Peso),
-									backgroundColor: doughnutColors,
-								},
-								{
-									label: "Productos",
-									data: productos.map(producto => producto.Peso),
-									backgroundColor: doughnutColors,
-								},
-							]
+								labels: ['Inicio', 'Entradas', 'Salidas', 'Fin'],
+								datasets: [
+										{
+												label: 'Entradas',
+												data: [0, entradaSalida.entraron, null, 0],
+												fill: false,
+												borderColor: 'rgba(75, 192, 192)',
+												spanGaps: true,
+										},
+										{
+												label: 'Salidas',
+												data: [0, null, entradaSalida.salieron, 0],
+												fill: false,
+												borderColor: 'rgba(255, 99, 132)',
+												spanGaps: true
+										}
+								]
 						}}
-					/>
+						options={{
+								plugins: {
+										title: {
+												display: true,
+												text: 'Entradas y Salidas'
+										}
+								}
+						}}
+				/>
 				</div>
 			</div>
 		</div>
