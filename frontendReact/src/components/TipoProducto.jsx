@@ -280,7 +280,7 @@ const Tipo = () => {
             return;
         } else {
           console.error('Error en la petición:', data);
-          Sweet.error('Hubo un error al el tipo de producto.');
+          Sweet.error('Lo siento, se ha producido un error al seleccionar el tipo de producto. Por favor, asegúrate de elegir una opción válida e inténtalo de nuevo.');
         }
       })
       .catch((error) => {

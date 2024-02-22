@@ -273,12 +273,12 @@ export const Menu = () => {
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<Link className="link_name" to="#">
+									<Link className="link_name" to="/ajustes">
 										Ajustes
 									</Link>
 								</li>
 								<li>
-									<Link to="#">Perfil</Link>
+									<Link to="/ajustes">Perfil</Link>
 								</li>
 								<li>
 									<Link to="#">Ayuda</Link>
@@ -333,20 +333,23 @@ export const Menu = () => {
 						<IconUser className="user1" />
 						<div className="cargoUser">
 							<span className="nombreTamañousuario">{userName}</span>
-						<span className="tamañocargoUsuario">Cargo: {userRoll}</span>
+							<span className="tamañocargoUsuario">Cargo: {userRoll}</span>
 						</div>
-						
+
 					</div>
-					<div className="modalClose">
-						<div className="userSpace">
-							<IconX className="closeUser ti-x" id="closeX" />
-							<Link className="letraUser ax">
-								<IconSettings className="iconModal ti-settings" />Ajustes
-							</Link>
-							<Link onClick={() => (localStorage.clear(), window.location.reload())} className="letraUser az">
-								<IconUserOff className="iconModal ti-user-x" />Cerrar sesión
-							</Link>
+
+				</div>
+				<div className="modalClose">
+					<div className="userSpace">
+						<div className="contentXsalir">
+							<IconX className="closeUser" id="closeX" />
 						</div>
+						<Link to="/ajustes" className="letraUser ax">
+							<IconSettings className="iconModal" /><span>Ajustes</span>
+						</Link>
+						<Link onClick={() => (localStorage.clear(), window.location.reload())} className="letraCerrarSesion">
+							<IconUserOff className="iconModal" /><span>Cerrar sesión</span> 
+						</Link>
 					</div>
 				</div>
 				<div className="contenido">

@@ -304,81 +304,81 @@
   font-size: 0.8em;
 }
 
-
 .logoSena {
   color: white;
   width: 40px;
 }
 
+/*CSS MODAL CERRAR SESION */
 .modalUser {
-  position: absolute;
-  z-index: 800;
-  left: calc(100% - 220px);
-  background-color: #fff;
-  width: 189.5px;
-  height: 115px;
+  position: fixed;
   display: flex;
+  z-index: 80;
+  background-color: #e8e8e8;
+  right: 0;
+  margin-right: 25px;
+  width: 200px;
+  height: 120px;
   top: 65px;
   border-radius: 12px;
-  border: 0.5px solid rgba(219, 219, 219, 0.648);
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.07);
-}
+  border: 0.5px solid rgba(188, 188, 188, 0.845);
 
+}
 .modalClose {
   display: none;
 }
 
+.contentXsalir{
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: right;
+  padding-right: 15px;
+  align-items: center;
+}
+
 .closeUser {
   color: rgb(126, 121, 121);
-  top: 69px;
-  right: 35px;
-  position: fixed;
-  font-size: 25px;
+  width: 25px;
+  height: 25px;
   cursor: pointer;
 }
 
-.ax {
-  margin-top: 26px;
-}
-
-.az:hover {
+.letraCerrarSesion:hover {
+  background-color: rgb(211, 211, 211);
   border-bottom-right-radius: 12px;
   border-bottom-left-radius: 12px;
 }
+.letraUser:hover {
+  background-color: rgb(211, 211, 211);
+  cursor: pointer;
+}
 
-.letraUser {
+  .letraUser, .letraCerrarSesion {
   display: flex;
   width: 100%;
-  height: 55px;
+  height: 45px;
+  padding-left: 10px;
   color: #5b5b5b;
   font-size: 1.195em;
   align-items: center;
-  padding: 4px 25.5px 4px 9.5px;
   text-decoration: none;
 }
 
 .userSpace {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .iconModal {
   margin-right: 8px;
   width: 30px;
-  font-size: 1.4em;
+  height: 30px;
 }
-.letraUser:hover {
-  background-color: rgb(230, 230, 230);
-  cursor: pointer;
-}
-p {
-  pointer-events: none;
-}
-.text {
-  color: rgb(255, 255, 255);
-}
+
+
 .contenido {
   width: 100%;
   height: 100%;
