@@ -78,10 +78,24 @@
 
 .linkContenido {
   grid-area: linkContenido;
-  background-color: #cb6c00;
+  background-color: #cf6e00;
   border-radius: 0px 0px 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.64);
+  text-decoration: none;
+  font-size: 1.2em;
 }
-
+.linkContenido:hover{
+  background-color: #dc8017;
+}
+.iconosDashboard{
+  color: rgba(255, 255, 255, 0.704);
+  width: 32px;
+  height: 32px;
+  margin-left: 5px;
+}
 
 /* .small-container2 {
   grid-area: small-container2;
