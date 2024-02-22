@@ -218,7 +218,7 @@ const ProductoCaducar = () => {
                   } else if (diasFaltantes === 0) {
                     mensaje = <span style={{ color: 'red' }}>El producto caduca hoy</span>;
                   } else {
-                    mensaje = <span style={{ color: 'red' }}>El producto ya caducó</span>;
+                    mensaje = <span style={{ color: 'red', fontWeight: 'bold' }}>El producto ya caducó</span>;
                   }
 
                   return (
