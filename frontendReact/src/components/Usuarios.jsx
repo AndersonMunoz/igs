@@ -465,10 +465,10 @@ const Usuario = () => {
                 {usuarios.map((element, index) => (
                   <tr key={element.id_usuario}>
                     <td>{index + 1}</td>
-                    <td>{element.nombre_usuario}</td>
+                    <td style={{textTransform:'capitalize'}}>{element.nombre_usuario}</td>
                     <td>{element.documento_usuario}</td>
                     <td>{element.email_usuario}</td>
-                    <td>{element.tipo_usuario}</td>
+                    <td style={{textTransform:'capitalize'}}>{element.tipo_usuario}</td>
                     <td className="p-0">
                       {element.estado === 1 ? (
                         <>

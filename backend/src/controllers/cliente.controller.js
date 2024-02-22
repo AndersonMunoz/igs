@@ -178,7 +178,7 @@ export const listarUsuarioCount = async (req, res) => {
         const [result] = await pool.query('SELECT COUNT(*) AS count FROM usuarios');
         if (result.length > 0) {
             res.status(200).json({ count: result[0].count });
-            console.log(result);
+
         }
     } catch (err) {
         res.status(500).json({

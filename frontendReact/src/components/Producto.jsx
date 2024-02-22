@@ -293,7 +293,6 @@ const Producto = () => {
       Sweet.error('Hubo un error al registrar el producto.');
     });
   }
-  
   function editarProducto(id) {
     fetch(`http://localhost:3000/producto/buscar/${id}`, {
       method: 'GET',
