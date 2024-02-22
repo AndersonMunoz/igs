@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Chart as Chartjs } from 'chart.js/auto';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
-import userPng from '../../img/53-532960_person-icon-png.png'
 import "../style/dashboardContent.css";
 import { Outlet, Link } from "react-router-dom";
 import { IconArrowBigRightFilled } from '@tabler/icons-react';
@@ -25,7 +24,6 @@ const Dashboard = () => {
 			.then((res) => res.json())
 			.then((data) => {
 				setProductos(data);
-				console.log(data);
 			})
 			.catch((e) => {
 				console.log(e);
@@ -110,7 +108,7 @@ const Dashboard = () => {
 					<div className="contInterno2 contcolor2">
 						<svg fill="none" height="100" viewBox="0 0 48 48" width="100" className="ssssIcono" xmlns="http://www.w3.org/2000/svg"><g fill="#ffffff"><path d="m12 5c0-.55228.4477-1 1-1s1 .44772 1 1v6c0 .5523-.4477 1-1 1s-1-.4477-1-1z" /><path d="m28 5c0-.55228.4477-1 1-1s1 .44772 1 1v6c0 .5523-.4477 1-1 1s-1-.4477-1-1z" /><g clipRule="evenodd" fillRule="evenodd"><path d="m14 23h-2v2h2zm-2-2c-1.1046 0-2 .8954-2 2v2c0 1.1046.8954 2 2 2h2c1.1046 0 2-.8954 2-2v-2c0-1.1046-.8954-2-2-2z" /><path d="m22 23h-2v2h2zm-2-2c-1.1046 0-2 .8954-2 2v2c0 1.1046.8954 2 2 2h2c1.1046 0 2-.8954 2-2v-2c0-1.1046-.8954-2-2-2z" /><path d="m30 23h-2v2h2zm-2-2c-1.1046 0-2 .8954-2 2v2c0 1.1046.8954 2 2 2h2c1.1046 0 2-.8954 2-2v-2c0-1.1046-.8954-2-2-2z" /><path d="m14 31h-2v2h2zm-2-2c-1.1046 0-2 .8954-2 2v2c0 1.1046.8954 2 2 2h2c1.1046 0 2-.8954 2-2v-2c0-1.1046-.8954-2-2-2z" /><path d="m22 31h-2v2h2zm-2-2c-1.1046 0-2 .8954-2 2v2c0 1.1046.8954 2 2 2h2c1.1046 0 2-.8954 2-2v-2c0-1.1046-.8954-2-2-2z" /><path d="m9 10h24c1.1046 0 2 .8954 2 2v16c.6906 0 1.3608.0875 2 .252v-16.252c0-2.20914-1.7909-4-4-4h-24c-2.20914 0-4 1.79086-4 4v24c0 2.2091 1.79086 4 4 4h19.0703c-.3581-.619-.6356-1.2905-.8183-2h-18.252c-1.10457 0-2-.8954-2-2v-24c0-1.1046.89543-2 2-2z" /></g><path d="m5 12c0-2.20914 1.79086-4 4-4h24c2.2091 0 4 1.79086 4 4v7h-32z" /><path clipRule="evenodd" d="m33 10h-24c-1.10457 0-2 .8954-2 2v5h28v-5c0-1.1046-.8954-2-2-2zm-24-2c-2.20914 0-4 1.79086-4 4v7h32v-7c0-2.20914-1.7909-4-4-4z" fillRule="evenodd" /><path clipRule="evenodd" d="m36 19h-30v-2h30z" fillRule="evenodd" /><path clipRule="evenodd" d="m35 42c3.3137 0 6-2.6863 6-6s-2.6863-6-6-6-6 2.6863-6 6 2.6863 6 6 6zm0 2c4.4183 0 8-3.5817 8-8s-3.5817-8-8-8-8 3.5817-8 8 3.5817 8 8 8z" fillRule="evenodd" /><path clipRule="evenodd" d="m35 31.1787c.5523 0 1 .4477 1 1v4.2981l2.4515 1.7017c.4537.3149.5662.938.2512 1.3917-.3149.4537-.938.5662-1.3917.2513l-3.311-2.2983v-5.3445c0-.5523.4477-1 1-1z" fillRule="evenodd" /></g></svg>
 					</div>
-					<Link className="linkContenido linkColor3" to="/inventario">
+					<Link className="linkContenido linkColor3" to="/producto/caducar">
 						<div className="tamañoLateral">
 							<span className="">Ver Productos a caducar</span>
 							<IconArrowBigRightFilled className="iconosDashboard" />
@@ -127,7 +125,7 @@ const Dashboard = () => {
 						<svg fill="none" height="48" className="ssssIcono" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><g fill="#ffffff"><path clipRule="evenodd" d="m7.06486 17.3876c-1.1217-1.0266-1.88764-2.6925-2.03775-5.3836-.03076-.5514.42481-1.0056.97701-.9959 1.67512.0293 2.95795.1439 3.93759.4328.41979-1.0885 1.25719-2.11633 2.51209-3.05534.3232-.24186.7694-.24186 1.0926 0 1.2652.9467 2.1059 1.98374 2.5223 3.08214 1.0088-.3391 2.3019-.438 3.93-.4614.5522-.0079 1.0052.4463.9744.9977-.1501 2.6911-.916 4.357-2.0377 5.3835.5477.408.8652 1.0927.7487 1.833-.2771 1.7595-.7554 4.469-1.508 7.7795h-6.176v2h5.7046c-.7509 3.0755-1.7206 6.5554-2.9573 10.209-.583 1.7224-2.9115 1.7224-3.4945 0-.4855-1.4344-.9299-2.8421-1.33608-4.209h2.08328v-2h-2.65913c-.94571-3.3914-1.64966-6.4697-2.16103-9h3.82016v-2h-4.20706c-.20029-1.0846-.35727-2.0205-.4768-2.7795-.11658-.7403.20094-1.425.74862-1.8329zm7.13374-5.211.6824 1.8003 1.825-.6135c.5032-.1691 1.184-.2701 2.1538-.3209-.2968 1.9321-1.0122 2.7481-1.6643 3.1699-.9315.6024-2.2887.7857-4.1655.7876h-.0598c-1.8767-.0019-3.23397-.1852-4.16549-.7876-.65148-.4214-1.36612-1.2363-1.66343-3.1644 1.00073.0547 1.71303.1574 2.23468.3112l1.76834.5215.6634-1.72c.1907-.4943.5589-1.0492 1.1924-1.6342.6402.5912 1.0095 1.1517 1.1985 1.6501z" fillRule="evenodd" /><path clipRule="evenodd" d="m33.7071 13.7071c-1.9729 1.9729-2.1651 4.7274-1.0563 7.3203 4.8547-3.1784 10.3492.7524 10.3492 6.9726 0 5.5228-4.9249 10-11 10s-11-4.4772-11-10c0-5.7923 4.7646-9.5994 9.3403-7.5292-.7813-2.8005-.3768-5.8486 1.9526-8.1779zm6.263 16.5354c.134-.5358-.1918-1.0787-.7276-1.2127-.5358-.1339-1.0787.1918-1.2126.7276-.4105 1.6417-1.6307 2.862-3.2724 3.2724-.5358.134-.8616.6769-.7276 1.2127.1339.5358.6768.8616 1.2126.7276 2.3583-.5896 4.1381-2.3693 4.7276-4.7276z" fillRule="evenodd" /><path d="m34 18c3 0 5-2 5-5-3 0-5 2-5 5z" /></g></svg>
 
 					</div>
-					<Link className="linkContenido linkColor4" to="/producto/caducar">
+					<Link className="linkContenido linkColor4" to="/inventario">
 						<div className="tamañoLateral">
 							<span className="">Ver Inventario</span>
 							<IconArrowBigRightFilled className="iconosDashboard" />
