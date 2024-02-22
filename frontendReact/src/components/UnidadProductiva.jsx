@@ -66,7 +66,7 @@ const Up = () => {
     const wsData = [];
 
     // Obtener las columnas
-    const columns = [
+    const columnss = [
       'Id',
       'Nombre Bodega',
       'estado'
@@ -302,7 +302,7 @@ const Up = () => {
         <button
           type="button"
           id="modalProducto"
-          className="btn-color btn mb-4"
+          className="btn-color btn mt-4"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           onClick={() => {
