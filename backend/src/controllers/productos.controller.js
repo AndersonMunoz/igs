@@ -44,26 +44,8 @@ export const guardarProducto = async (req, res) => {
     res.status(500).json({ message: "Error en guardarProducto: " + e });
   }
 };
-
-// export const listarProductos = async (req, res) => {
-//   try {
-//     const [result] = await pool.query(
-//       `SELECT 
-//          p.*, 
-//          f.*
-//        FROM productos p 
-//       JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto`
-//     );
-//     res.status(200).json(result);
-//   } catch (er) {
-//     res.status(500).json({
-//       status: 500,
-//       message: "Error al listar productos y movimientos de factura: " + er,
-//     });
-//   }
-// };
 export const listarProductos = async (req, res) => {
-  try {//    JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto f.fecha_caducidad AS FechaCaducidad, 
+  try { //JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto  f.fecha_caducidad AS FechaCaducidad, 
     const [result] = await pool.query(
       `SELECT 
       p.id_producto, 
@@ -78,11 +60,41 @@ export const listarProductos = async (req, res) => {
       u.nombre_up AS UnidadProductiva, 
       p.estado AS estado 
     FROM productos p 
-
+    
     JOIN bodega u ON p.fk_id_up = u.id_up
     JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
     JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-    ORDER BY p.estado DESC`
+   `
+    );
+    res.status(200).json(result);
+  } catch (er) {
+    res.status(500).json({
+      status: 500,
+      menssge: "Error listarProductos " + er,
+    });
+  }
+};
+export const listarProductosCaducar = async (req, res) => {
+  try {
+    const [result] = await pool.query(
+      `SELECT 
+      p.id_producto, 
+      t.nombre_tipo AS NombreProducto,
+      f.fecha_caducidad AS FechaCaducidad, 
+      c.nombre_categoria AS NombreCategoria,
+      p.cantidad_peso_producto AS Peso, 
+      t.unidad_peso AS Unidad,
+      p.descripcion_producto AS Descripcion,
+      p.precio_producto AS PrecioIndividual, 
+      (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, 
+      u.nombre_up AS UnidadProductiva, 
+      p.estado AS estado 
+    FROM productos p 
+    JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto
+    JOIN bodega u ON p.fk_id_up = u.id_up
+    JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+    JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+    ORDER BY FechaCaducidad ASC`
     );
     res.status(200).json(result);
   } catch (er) {

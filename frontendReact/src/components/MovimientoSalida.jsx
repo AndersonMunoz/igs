@@ -455,7 +455,7 @@ const Movimiento = () => {
   return (
     <>
       <div>
-        <h1 className="text-center modal-title fs-5">Movimientos Salida</h1>
+        <h1 className="text-center modal-title fs-5 m-4">Movimientos Salida</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
           <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
@@ -521,7 +521,9 @@ const Movimiento = () => {
                       <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center">{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {Number.isInteger(element.cantidad_peso_movimiento) ? element.cantidad_peso_movimiento : element.cantidad_peso_movimiento.toFixed(2)}
+                      </td>
                       <td className="p-2 text-center">{element.unidad_peso}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>

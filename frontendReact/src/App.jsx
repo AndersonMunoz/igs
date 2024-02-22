@@ -12,6 +12,7 @@ import UnidadProductiva from "./components/UnidadProductiva";
 import Usuario from "./components/Usuarios";
 import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
+import ProductoCaducar from './components/ProductoCaducar'
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
           <Route path="/inventario" element={<Inventario />} />
+          <Route path="/producto/caducar" element={<ProductoCaducar />} />
         </Route>
       </Routes>
 
