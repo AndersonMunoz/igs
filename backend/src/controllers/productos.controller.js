@@ -77,8 +77,6 @@ export const listarProductos = async (req, res) => {
   }
 };
 
-
-
 export const buscarProducto = async (req, res) => {
   try {
     let id = req.params.id;

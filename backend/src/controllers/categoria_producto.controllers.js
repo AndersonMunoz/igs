@@ -8,9 +8,7 @@ export const registrocategoria_producto = async (req, res) => {
        let error = validationResult(req);
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
-        }
-    ;
-    
+        };
 
         let { nombre_categoria
          } = req.body;
@@ -71,14 +69,31 @@ export const listarcategoria_producto = async (req, res) => {
             res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categorias     " });
 
         }
-
     } catch (err) {
         res.status(500).json({
             "status": 500, "message": "Error en el servidor   "+err
         
         })
     }
+};
+export const listarCountCategoria = async (req, res) => {
+    try {
+        const [result] = await pool.query(`SELECT c.nombre_categoria AS Categoria, COUNT(tp.id_tipo) AS CantidadTiposProductos
+        FROM categorias_producto c
+        LEFT JOIN tipo_productos tp ON c.id_categoria = tp.fk_categoria_pro
+        GROUP BY c.nombre_categoria`);
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({ "status": 204, "message": "No se pudo listar  las  categorias     " });
 
+        }
+    } catch (err) {
+        res.status(500).json({
+            "status": 500, "message": "Error en el servidor   "+err
+        
+        })
+    }
 };
 
 

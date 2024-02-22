@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import {validarFacturaMovimiento,validarFacturaMovimientoActu,validarFacturaMovimientoSalida,validarFacturaMovimientoActuSalida} from '../validation/facturaMovimiento.validator.js';
-import {listarMovimientos,buscarMovimiento,actualizarMovimiento,obtenerProCategoria,obtenerUnidad,guardarMovimientoEntrada,listarMovimientosEntrada,listarMovimientosSalida,guardarMovimientoSalida,actualizarMovimientoSalida,listarProductosCaducar} from '../controllers/facturaMovimiento.controller.js';
+import {listarMovimientos,buscarMovimiento,actualizarMovimiento,obtenerProCategoria,obtenerUnidad,guardarMovimientoEntrada,listarMovimientosEntrada,listarMovimientosSalida,guardarMovimientoSalida,actualizarMovimientoSalida,listarProductosCaducar,obtenerValorTotalProductos} from '../controllers/facturaMovimiento.controller.js';
 import { validarToken } from "../controllers/autentificacion.controller.js";
 
 const facturaMovimientoRoute = Router();
@@ -10,6 +10,7 @@ facturaMovimientoRoute.post('/registrarSalida'/* validarToken ,*/,validarFactura
 facturaMovimientoRoute.get('/listar', listarMovimientos);
 facturaMovimientoRoute.get('/listarEntrada', listarMovimientosEntrada);
 facturaMovimientoRoute.get('/listarSalida', listarMovimientosSalida);
+facturaMovimientoRoute.get('/listarEntradaSalida', obtenerValorTotalProductos);
 facturaMovimientoRoute.get('/buscar/:id',buscarMovimiento);
 facturaMovimientoRoute.get('/listarCaducados', listarProductosCaducar);
 facturaMovimientoRoute.put('/actualizar/:id', /*validarToken, */validarFacturaMovimientoActu,actualizarMovimiento);
