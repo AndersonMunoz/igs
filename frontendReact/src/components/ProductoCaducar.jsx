@@ -135,7 +135,7 @@ const ProductoCaducar = () => {
   }, []); 
 
   function listarProducto() {
-    fetch("http://localhost:3000/producto/listarCaducados", {
+    fetch("http://localhost:3000/facturamovimiento/listarCaducados", {
       method: "GET",
       headers: {
         "Content-type": "application/json",
