@@ -172,21 +172,6 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
-							<Link to="/up">
-								<div className="tamañoLateral">
-									<IconBuildingWarehouse className="iconosLaterales" />
-								</div>
-								<span className="link_name">Almacen</span>
-							</Link>
-							<ul className="sub-menu blank">
-								<li>
-									<Link className="link_name" to="/up">
-										Almacen
-									</Link>
-								</li>
-							</ul>
-						</li>
-						<li>
 							<Link to="/tipoproducto">
 								<div className="tamañoLateral">
 									<IconApple className="iconosLaterales" />
@@ -197,6 +182,21 @@ export const Menu = () => {
 								<li>
 									<Link className="link_name" to="/up">
 										Tipo Producto
+									</Link>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<Link to="/up">
+								<div className="tamañoLateral">
+									<IconBuildingWarehouse className="iconosLaterales" />
+								</div>
+								<span className="link_name">Almacen</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/up">
+										Almacen
 									</Link>
 								</li>
 							</ul>
@@ -330,9 +330,12 @@ export const Menu = () => {
 						</svg>
 					</div>
 					<div id="userAlert" className="usuario">
-						<span><IconUser className="user1" />{userName}</span>
-						<span>{userRoll}</span>
-
+						<IconUser className="user1" />
+						<div className="cargoUser">
+							<span className="nombreTamañousuario">{userName}</span>
+						<span className="tamañocargoUsuario">Cargo: {userRoll}</span>
+						</div>
+						
 					</div>
 					<div className="modalClose">
 						<div className="userSpace">

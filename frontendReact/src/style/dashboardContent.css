@@ -18,37 +18,39 @@
     "empty-1 small-container1 small-container2 small-container3 small-container4 empty-2 " 100%/
     2% 24% 24% 24% 24% 2%;
 }
-.small-container1{
+.small-container1 {
   grid-area: small-container1;
-  grid-template: 
-  "contInterno contInterno2" 110px
-  "linkContenido linkContenido"40px
-  / 60% 40%;
-  
+  grid-template:
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
 }
-.small-container2{
+.small-container2 {
   grid-area: small-container2;
-  grid-template: 
+  grid-template:
     "contInterno contInterno2" 110px
-    "linkContenido linkContenido"40px
-    / 60% 40%;
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
 }
-.small-container3{
+.small-container3 {
   grid-area: small-container3;
-  grid-template: 
+  grid-template:
     "contInterno contInterno2" 110px
-    "linkContenido linkContenido"40px
-    / 60% 40%;
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
 }
-.small-container4{
+.small-container4 {
   grid-area: small-container4;
-  grid-template: 
+  grid-template:
     "contInterno contInterno2" 110px
-    "linkContenido linkContenido"40px
-    / 60% 40%;
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
 }
 
-.small-container1, .small-container2, .small-container3, .small-container4 {
+.small-container1,
+.small-container2,
+.small-container3,
+.small-container4 {
   border-radius: 10px;
   display: grid;
   width: 100%;
@@ -57,28 +59,46 @@
 
 .contInterno {
   border-radius: 10px 0px 0px 0px;
-  background-color: #fe8700;
   grid-area: contInterno;
+  justify-content: center;
+  display: flex;
+  font-size: 1.2em;
 }
 
 .contInterno2 {
   border-radius: 0px 10px 0px 0px;
-  background-color: #fe8700;
   grid-area: contInterno2;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.ssssIcono{
-  opacity: .7;
-  width: 110px;
-  height: 110px;
+.contcolor{
+  background-color: #ff8800;
+}
+.contcolor1 {
+  background-color: #44d4d7;
+}
+.contcolor2 {
+  background-color: #f73d3d;
+}
+.contcolor3 {
+  background-color: #b641da;
+}
+
+.ssssIcono {
+  opacity: 0.7;
+  width: 115px;
+  height: 115px;
+}
+.ssssIcono333 {
+  opacity: 0.7;
+  width: 100px;
+  height: 100px;
 }
 
 .linkContenido {
   grid-area: linkContenido;
-  background-color: #cf6e00;
   border-radius: 0px 0px 10px 10px;
   display: flex;
   justify-content: center;
@@ -87,61 +107,43 @@
   text-decoration: none;
   font-size: 1.2em;
 }
-.linkContenido:hover{
+.linkColor {
+  background-color: #cf6e00;
+}
+.linkColor:hover {
   background-color: #dc8017;
 }
-.iconosDashboard{
+.linkColor2 {
+  background-color: #45bdbf;
+}
+.linkColor2:hover {
+  background-color: #74c5c6;
+}
+.linkColor3 {
+  background-color: #ba2d2d;
+}
+.linkColor3:hover {
+  background-color: #d14b4b;
+}
+.linkColor4 {
+  background-color: #993cb5;
+}
+.linkColor4:hover {
+  background-color: #c657e8;
+}
+
+.iconosDashboard {
   color: rgba(255, 255, 255, 0.704);
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   margin-left: 5px;
 }
-
-/* .small-container2 {
-  grid-area: small-container2;
-  background-color: #1e9e84;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  color: white;
-  display: flex;
+.usuarioTitiii {
+  color: #f0f0f0;
   align-items: center;
+  display: flex;
   justify-content: center;
-  text-align: center;
 }
-.small-container3 {
-  grid-area: small-container3;
-  background-color: #cee713;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-.small-container4 {
-  grid-area: small-container4;
-  background-color: #ef3939;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-} */
-/* .small-container5 {
-  grid-area: small-container5;
-  background-color: #b517a2;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-} */
-
 .container-wrapper2 {
   margin-top: 15px;
   width: 100%;
