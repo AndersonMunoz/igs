@@ -131,8 +131,8 @@ export const guardarMovimientoSalida = async (req,res)=> {
 }
 export const obtenerValorTotalProductos = async (req, res) => {
 	try {
-			const [resultEntradas] = await pool.query(`SELECT SUM(cantidad_peso_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
-			const [resultSalidas] = await pool.query(`SELECT SUM(cantidad_peso_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
+			const [resultEntradas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
+			const [resultSalidas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
 
 			const totalEntradas = resultEntradas[0].total_entradas || 0;
 			const totalSalidas = resultSalidas[0].total_salidas || 0;
