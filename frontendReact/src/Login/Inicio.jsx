@@ -35,6 +35,7 @@ const LoginForm = () => {
 					localStorage.setItem("token", data.token);
 					localStorage.setItem("name", dataEncript(data.nombre));
 					localStorage.setItem("roll", dataEncript(data.tipo));
+					localStorage.setItem("id", dataEncript(data.id));
 					window.location.reload()
 				} else {
 					Sweet.error(data.message);
