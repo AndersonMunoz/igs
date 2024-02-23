@@ -133,6 +133,10 @@ const Movimiento = () => {
   };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
+    if (checkboxNoSeleccionado) {
+      setFechaCaducidad(null); // o undefined, '' según lo prefieras
+    } 
+
   };
   const handleCloseModal = () => {
     setShowModal(false);
@@ -470,6 +474,7 @@ const Movimiento = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setMovimientos(data);
+          console.log(data);
         }
       })
       .catch((e) => {
@@ -560,7 +565,13 @@ const Movimiento = () => {
                       </td>
                       <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
-                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+                      <td>
+                        {element.fecha_caducidad ? (
+                          Validate.formatFecha(element.fecha_caducidad)
+                        ) : (
+                          'No asignada'
+                        )}
+                      </td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
                       <td className="p-2 text-center">{element.nombre_proveedores}</td>
 
