@@ -6,7 +6,7 @@ import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
-import $ from "jquery";
+import $, { event } from "jquery";
 import "bootstrap";
 import "datatables.net";
 import "datatables.net-bs5";
@@ -26,10 +26,7 @@ const Usuario = () => {
   const modalUsuarioRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({
 
-    
-  });
   const tableRef = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -39,12 +36,9 @@ const Usuario = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [registrationEnabled, setRegistrationEnabled] = useState(false);
+  const [actualizacionEnabled, setActualizacionEnabled] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [userPasswordEncripted, setUserPasswordEncripted] = useState("");
-
-
-
-
 
 
 
@@ -59,11 +53,39 @@ const Usuario = () => {
     return bytes.toString(CryptoJs.enc.Utf8);
   }
 
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({
+    id_usuario: "",
+    contrasena_usuario: ""
+  });
+  const [contrasenaValue, setContrasenaValue] = useState("");
 
 
+  const desencriptarContrasena = (contrasenaEncriptada) => {
+    return dataDecript(contrasenaEncriptada).replace(/"/g, '');
+  };
 
-  
 
+  // Al cargar el componente, desencriptar la contraseña inicial y establecerla como valor en el estado
+  useEffect(() => {
+    const contrasenaDesencriptada = desencriptarContrasena(usuarioSeleccionado.contrasena_usuario);
+    setContrasenaValue(contrasenaDesencriptada);
+    validatePassword2(contrasenaDesencriptada); // Validar la contraseña inicial al cargar el componente
+  }, [usuarioSeleccionado.contrasena_usuario]);
+
+  // Función para validar la contraseña
+  const validatePassword2 = (newValue) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const isValidPassword = passwordRegex.test(newValue);
+    setPasswordError(!isValidPassword || newValue.trim() === "");
+    setIsValidPassword(isValidPassword);
+  };
+
+  // Manejar cambios en la contraseña
+  const handleChangeContrasena = (e) => {
+    const newValue = e.target.value;
+    setContrasenaValue(newValue);
+    validatePassword2(newValue);
+  };
 
 
   const handlePasswordChange = (event) => {
@@ -97,21 +119,6 @@ const Usuario = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-
-
-  const resetFormState2 = () => {
-    const formFields = modalUpdateRef.current.querySelectorAll(
-      '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
-    );
-    formFields.forEach((field) => {
-      if (field.classList.contains('is-invalid')) {
-        field.classList.remove("is-invalid");
-      }
-    });
-
-    setPasswordError(false);
-  };
-
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -132,6 +139,7 @@ const Usuario = () => {
     setRegistrationEnabled(
       newPassword === newConfirmPassword && isValidPassword
     );
+
   };
 
   const resetFormState = () => {
@@ -147,6 +155,21 @@ const Usuario = () => {
       field.classList.remove("is-invalid");
     });
   };
+  const resetFormState2 = () => {
+    const formFields = modalUpdateRef.current.querySelectorAll(
+      '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
+    );
+    formFields.forEach((field) => {
+      if (field.type === "checkbox") {
+        field.checked = false;
+      } else {
+        field.value = "";
+      }
+      field.classList.remove("is-invalid");
+    });
+  };
+
+
 
   useEffect(() => {
     if (usuarios.length > 0) {
@@ -345,7 +368,7 @@ const Usuario = () => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(usuarioSeleccionado),
+      body: JSON.stringify(usuarioSeleccionado,contrasenaValue),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -746,7 +769,6 @@ const Usuario = () => {
                           id_usuario: e.target.value,
                         })
                       }
-                      disabled
                     />
                     <input
                       type="text"
@@ -761,7 +783,6 @@ const Usuario = () => {
                         })
                       }
                     />
-
                     <div className="invalid-feedback is-invalid">
                       Por favor, Ingresar un nombre valido.
                     </div>
@@ -868,7 +889,7 @@ const Usuario = () => {
                     <div className="input-group">
                       <input
                         type="hidden"
-                        value={usuarioSeleccionado.contrasena_usuario || ""}
+                        value={usuarioSeleccionado.id_usuario || ""}
                         onChange={(e) =>
                           setUsuarioSeleccionado({
                             ...usuarioSeleccionado,
@@ -877,34 +898,32 @@ const Usuario = () => {
                         }
                       />
                       <input
-                        type={showConfirmPassword ? "text" : "password"}
+                        type={showConfirmPassword ? "text" : "password"} // Utilizar type=password para ocultar la contraseña
                         className={`form-control form-update ${passwordError ? "is-invalid" : ""}`}
-                        value={usuarioSeleccionado.contrasena_usuario || ""}
-                        onChange={(e) =>
-                          setUsuarioSeleccionado({
-                            ...usuarioSeleccionado,
-                            contrasena_usuario: e.target.value,
-                          })
-                        }
+                        value={contrasenaValue || ""}
+                        onChange={handleChangeContrasena}
                         name="contrasena_usuario"
                         placeholder="Ingrese una contraseña"
                       />
-
                       <div className="input-group-append">
                         <button
                           className="btn btn-secondary"
                           type="button"
                           onClick={toggleConfirmPasswordVisibility}
                         >
-                          {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
+                          {showConfirmPassword ? "Ocultar" : "Mostrar"}
                         </button>
                       </div>
-                      {passwordError && (
-                        <div className="invalid-feedback">
-                          La contraseña debe tener al menos 6 caracteres, una
-                          mayúscula, una minúscula y un número.
+                      <div className="row text-center">
+                        <div className="col">
+                          {!isValidPassword && (
+                            <div className="text-danger">
+                              La contraseña debe tener al menos 6 caracteres, una
+                              mayúscula, una minúscula y un número.
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -931,8 +950,8 @@ const Usuario = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
