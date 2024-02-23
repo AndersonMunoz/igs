@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 21-02-2024 a las 20:22:54
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 23-02-2024 a las 17:37:39
 -- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -59,7 +59,7 @@ CREATE TABLE `factura_movimiento` (
   `precio_movimiento` float NOT NULL,
   `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
-  `fecha_caducidad` date NOT NULL,
+  `fecha_caducidad` date DEFAULT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) DEFAULT NULL,
@@ -134,7 +134,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `documento_usuario`, `email_usuario`, `nombre_usuario`, `contrasena_usuario`, `tipo_usuario`, `estado`) VALUES
-(1, 1234567890, 'admin@admin.com', '@Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1);
+(1, 1234567890, 'admin@admin.com', '@Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1),
+(2, 1084259187, 'anderso@gmail.com', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1);
 
 --
 -- Índices para tablas volcadas
@@ -233,7 +234,7 @@ ALTER TABLE `tipo_productos`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
