@@ -25,11 +25,9 @@ igs.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    
-    // Permitir credenciales (si es necesario)
+
     res.setHeader("Access-Control-Allow-Credentials", true);
 
-    // Establecer la edad máxima para la caché de preflights en segundos (1 hora en este caso)
     res.setHeader("Access-Control-Max-Age", 3600);
 
     next();
@@ -45,8 +43,6 @@ igs.use(express.static('../igs/backend/src/views/js'))
 igs.get('/documents', (req,res) => {
     res.render('index.ejs');
 });
-
-
 
 igs.use(express.json()); 
 
@@ -65,19 +61,6 @@ igs.use('/categoria', categoria_productoRouter);
 igs.use('/up', unidadProductiva);
 
 igs.use('/aut', autRouter);
-
-igs.get('/movimientos', async (req, res) => {
-    try {
-      // Consultar todos los movimientos desde la base de datos
-      const [movimientos] = await pool.query('SELECT * FROM factura_movimiento');
-  
-      // Enviar la lista de movimientos como respuesta
-      res.json(movimientos);
-    } catch (error) {
-      console.error('Error al obtener los movimientos:', error);
-      res.status(500).json({ error: 'Error en el servidor' });
-    }
-  });
 
 igs.listen(3000,()=>{
     console.log(`Servidor IGS ejecutando en http://localhost:${port}`);

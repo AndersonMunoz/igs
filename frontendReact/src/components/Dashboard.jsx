@@ -60,24 +60,52 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
-	const barColors = [
-		'rgba(255, 99, 132, 0.5)',
-		'rgba(54, 162, 235, 0.5)',
-		'rgba(255, 206, 86, 0.5)',
-		'rgba(75, 192, 192, 0.5)',
-		'rgba(153, 102, 255, 0.5)',
-		'rgba(255, 159, 64, 0.5)',
-		'rgba(255, 99, 132, 0.5)',
+		const barColors = [
+			'rgba(54, 162, 235, 0.5)',
+			'rgba(255, 99, 132, 0.5)',
+			'rgba(255, 206, 86, 0.5)',
+			'rgba(75, 192, 192, 0.5)',
+			'rgba(153, 102, 255, 0.5)',
+			'rgba(255, 159, 64, 0.5)',
+			'rgba(255, 99, 132, 0.5)',
+			'rgba(220, 20, 60, 0.5)',
+			'rgba(124, 252, 0, 0.5)',
+			'rgba(255, 215, 0, 0.5)',
+			'rgba(0, 255, 255, 0.5)',
+			'rgba(128, 0, 128, 0.5)',
+			'rgba(255, 165, 0, 0.5)',
+			'rgba(0, 128, 0, 0.5)',
+			'rgba(255, 0, 255, 0.5)',
+			'rgba(0, 255, 0, 0.5)',
+			'rgba(255, 20, 147, 0.5)',
+			'rgba(70, 130, 180, 0.5)',
+			'rgba(255, 140, 0, 0.5)',
+			'rgba(0, 0, 255, 0.5)'
 	];
+
 	const doughnutColors = [
-		'rgba(255, 99, 132, 0.5)',
-		'rgba(54, 162, 235, 0.5)',
-		'rgba(255, 206, 86, 0.5)',
-		'rgba(75, 192, 192, 0.5)',
-		'rgba(153, 102, 255, 0.5)',
-		'rgba(255, 159, 64, 0.5)',
-		'rgba(255, 99, 132, 0.5)',
+			'rgba(255, 99, 132, 0.5)',
+			'rgba(54, 162, 235, 0.5)',
+			'rgba(255, 206, 86, 0.5)',
+			'rgba(75, 192, 192, 0.5)',
+			'rgba(153, 102, 255, 0.5)',
+			'rgba(255, 159, 64, 0.5)',
+			'rgba(255, 99, 132, 0.5)',
+			'rgba(220, 20, 60, 0.5)',
+			'rgba(124, 252, 0, 0.5)',
+			'rgba(255, 215, 0, 0.5)',
+			'rgba(0, 255, 255, 0.5)',
+			'rgba(128, 0, 128, 0.5)',
+			'rgba(255, 165, 0, 0.5)',
+			'rgba(0, 128, 0, 0.5)',
+			'rgba(255, 0, 255, 0.5)',
+			'rgba(0, 255, 0, 0.5)',
+			'rgba(255, 20, 147, 0.5)',
+			'rgba(70, 130, 180, 0.5)',
+			'rgba(255, 140, 0, 0.5)',
+			'rgba(0, 0, 255, 0.5)'
 	];
+
 
 	return (
 		<div className="dashboard-container mt-4">
@@ -96,7 +124,6 @@ const Dashboard = () => {
 							<span className="">Ver Usuarios</span>
 							<IconArrowBigRightFilled className="iconosDashboard" />
 						</div>
-
 					</Link>
 				</div>
 				<div className="small-container2">
@@ -164,44 +191,46 @@ const Dashboard = () => {
 							responsive: true,
 							plugins: {
 									legend: {
-											position: 'top',
+										position: 'top',
 									},
 									title: {
-											display: true,
-											text: 'Categorías'
+										display: true,
+										text: 'Categorías'
 									}
 							}
 					}}
 				/>
 				</div>
 				<div className="conteEstadistica2">
-				<Line
+				<Bar
 						data={{
-								labels: ['Inicio', 'Entradas', 'Salidas', 'Fin'],
-								datasets: [
-										{
-												label: 'Entradas',
-												data: [0, entradaSalida.entraron, null, 0],
-												fill: false,
-												borderColor: 'rgba(75, 192, 192)',
-												spanGaps: true,
-										},
-										{
-												label: 'Salidas',
-												data: [0, null, entradaSalida.salieron, 0],
-												fill: false,
-												borderColor: 'rgba(255, 99, 132)',
-												spanGaps: true
-										}
-								]
+								labels: ['Entraron', 'Salieron'],
+								datasets: [{
+										label: 'Cantidad de Productos',
+										data: [entradaSalida.entraron, entradaSalida.salieron],
+										backgroundColor: barColors,
+										borderWidth: 1
+								}]
 						}}
 						options={{
+								responsive: true,
 								plugins: {
 										title: {
 												display: true,
-												text: 'Entradas y Salidas'
+												text: 'Productos Entrados y Salidos'
 										}
-								}
+								},
+								events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+								onClick: (event, elements) => {
+									if (elements.length > 0) {
+										const index = elements[0].index;
+										if (index === 0) {
+												window.location.href = "/movimiento/entrada"; 
+										} else if (index === 1) {
+												window.location.href = "/movimiento/salida";
+										}
+									}
+								}	
 						}}
 				/>
 				</div>
