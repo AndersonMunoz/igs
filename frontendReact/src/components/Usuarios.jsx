@@ -26,7 +26,10 @@ const Usuario = () => {
   const modalUsuarioRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({
+
+    
+  });
   const tableRef = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -36,16 +39,14 @@ const Usuario = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [registrationEnabled, setRegistrationEnabled] = useState(false);
-  const [isValidPassword, setIsValidPassword] = useState(false); // Nuevo estado
-
-  const initialPassword = usuarioSeleccionado.contrasena_usuario || "";
-  const [passwordValue, setPasswordValue] = useState(
-    usuarioSeleccionado.contrasena_usuario || ""
-  );
-  const [inputType, setInputType] = useState("password"); // Estado para controlar el tipo de input (password o text)
-  const initialPasswordValue = usuarioSeleccionado.contrasena_usuario || ""; // Valor inicial de la contraseña
-
+  const [isValidPassword, setIsValidPassword] = useState(false);
   const [userPasswordEncripted, setUserPasswordEncripted] = useState("");
+
+
+
+
+
+
 
   const encrypt = (e) => {
     e.preventDefault();
@@ -58,16 +59,24 @@ const Usuario = () => {
     return bytes.toString(CryptoJs.enc.Utf8);
   }
 
-  const handlePasswordChange2 = (event) => {
-    const newPassword2 = event.target.value;
-    setPasswordValue(newPassword2);
-    setUsuarioSeleccionado({
-      ...usuarioSeleccionado,
-      contrasena_usuario: newPassword2,
-    });
 
-    validatePassword(newPassword2);
+
+
+  
+
+
+
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    setPasswordMatch(newPassword === confirmPassword);
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const isValidPassword = passwordRegex.test(newPassword);
+    setIsValidPassword(isValidPassword);
+
+    validatePassword(newPassword, confirmPassword);
   };
+
 
   const handleRegistration = () => {
     setPassword("");
@@ -88,29 +97,20 @@ const Usuario = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    setPasswordMatch(newPassword === confirmPassword);
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
-    const isValidPassword = passwordRegex.test(newPassword);
-    setIsValidPassword(isValidPassword);
 
-    validatePassword(newPassword, confirmPassword);
+
+  const resetFormState2 = () => {
+    const formFields = modalUpdateRef.current.querySelectorAll(
+      '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
+    );
+    formFields.forEach((field) => {
+      if (field.classList.contains('is-invalid')) {
+        field.classList.remove("is-invalid");
+      }
+    });
+
+    setPasswordError(false);
   };
-
-  /*  const resetFormState2 = () => {
-      const formFields = modalUpdateRef.current.querySelectorAll(
-         '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
-      );
-      formFields.forEach((field) => {
-         if (field.classList.contains('is-invalid')) {
-            field.classList.remove("is-invalid");
-         }
-      });
-
-      setPasswordError(false);
-   }; */
 
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
@@ -465,10 +465,10 @@ const Usuario = () => {
                 {usuarios.map((element, index) => (
                   <tr key={element.id_usuario}>
                     <td>{index + 1}</td>
-                    <td style={{textTransform:'capitalize'}}>{element.nombre_usuario}</td>
+                    <td style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
                     <td>{element.documento_usuario}</td>
                     <td>{element.email_usuario}</td>
-                    <td style={{textTransform:'capitalize'}}>{element.tipo_usuario}</td>
+                    <td style={{ textTransform: 'capitalize' }}>{element.tipo_usuario}</td>
                     <td className="p-0">
                       {element.estado === 1 ? (
                         <>
@@ -867,22 +867,36 @@ const Usuario = () => {
                     </label>
                     <div className="input-group">
                       <input
-                        type={inputType}
-                        className={`form-control form-update ${passwordError ? "is-invalid" : ""
-                          }`}
-                        /* value={dataDecript(usuarioSeleccionado.contrasena_usuario || "").replace(/"/g, '')} */
-                        value={dataDecript(initialPasswordValue).replace(/"/g, '')}
-                        onChange={handlePasswordChange2}
+                        type="hidden"
+                        value={usuarioSeleccionado.contrasena_usuario || ""}
+                        onChange={(e) =>
+                          setUsuarioSeleccionado({
+                            ...usuarioSeleccionado,
+                            id_usuario: e.target.value,
+                          })
+                        }
+                      />
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        className={`form-control form-update ${passwordError ? "is-invalid" : ""}`}
+                        value={usuarioSeleccionado.contrasena_usuario || ""}
+                        onChange={(e) =>
+                          setUsuarioSeleccionado({
+                            ...usuarioSeleccionado,
+                            contrasena_usuario: e.target.value,
+                          })
+                        }
                         name="contrasena_usuario"
                         placeholder="Ingrese una contraseña"
                       />
+
                       <div className="input-group-append">
                         <button
                           className="btn btn-secondary"
                           type="button"
-                          onClick={togglePasswordVisibility}
+                          onClick={toggleConfirmPasswordVisibility}
                         >
-                          {inputType === "password" ? "Show" : "Hide"}
+                          {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
                         </button>
                       </div>
                       {passwordError && (
