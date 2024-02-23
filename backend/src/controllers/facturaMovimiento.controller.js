@@ -122,6 +122,28 @@ export const guardarMovimientoSalida = async (req,res)=> {
 		});
 	}
 }
+export const obtenerValorTotalProductos = async (req, res) => {
+	try {
+			const [resultEntradas] = await pool.query(`SELECT SUM(cantidad_peso_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
+			const [resultSalidas] = await pool.query(`SELECT SUM(cantidad_peso_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
+
+			const totalEntradas = resultEntradas[0].total_entradas || 0;
+			const totalSalidas = resultSalidas[0].total_salidas || 0;
+
+			const valorTotalProductos = {
+					"entraron": totalEntradas,
+					"salieron": totalSalidas
+			};
+
+			res.status(200).json(valorTotalProductos);
+	} catch (error) {
+			console.error("Error al obtener el valor total de los productos:", error);
+			res.status(500).json({
+					"status": 500,
+					"message": "Error en el servidor"
+			});
+	}
+};
 export const listarProductosCaducar = async (req, res) => {
   try {
     const [result] = await pool.query(
