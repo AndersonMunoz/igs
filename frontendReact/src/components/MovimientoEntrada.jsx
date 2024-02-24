@@ -826,6 +826,7 @@ const Movimiento = () => {
                     </div>
                   </form>
                 </div>
+                
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
                   <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); handleCloseModal2()}}>Actualizar</button>
