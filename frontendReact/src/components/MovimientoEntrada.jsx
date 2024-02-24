@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Outlet, Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
+import { dataDecript } from "./encryp/decryp";
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
 import { IconEdit } from "@tabler/icons-react";
@@ -20,7 +21,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const Movimiento = () => {
-
+  const [userId, setUserId] = useState('');
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
   const [unidadesProductos,setUniPro] = useState([]);
@@ -132,6 +133,10 @@ const Movimiento = () => {
   };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
+    if (checkboxNoSeleccionado) {
+      setFechaCaducidad(null); // o undefined, '' según lo prefieras
+    } 
+
   };
   const handleCloseModal = () => {
     setShowModal(false);
@@ -207,6 +212,7 @@ const Movimiento = () => {
   }
 
   useEffect(() => {
+    setUserId(dataDecript(localStorage.getItem('id')));
     listarMovimiento();
     listarCategoria();
     listarTipo();
@@ -381,7 +387,7 @@ const Movimiento = () => {
   }
   function registrarMovimiento() {
 
-    let fk_id_usuario = fkIdUsuarioRef.current.value;
+    let fk_id_usuario = userId;
     let num_lote = document.getElementById('num_lote').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let precio_movimiento = document.getElementById('precio_movimiento').value;
@@ -468,6 +474,7 @@ const Movimiento = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setMovimientos(data);
+          console.log(data);
         }
       })
       .catch((e) => {
@@ -558,7 +565,13 @@ const Movimiento = () => {
                       </td>
                       <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
-                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+                      <td>
+                        {element.fecha_caducidad ? (
+                          Validate.formatFecha(element.fecha_caducidad)
+                        ) : (
+                          'No asignada'
+                        )}
+                      </td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
                       <td className="p-2 text-center">{element.nombre_proveedores}</td>
 
@@ -691,30 +704,6 @@ const Movimiento = () => {
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="nota_factura">Nota</label>
                           <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
-                        </div>
-                      </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="fk_id_usuario'">Usuario</label>
-                          <select
-                            className="form-select form-empty limpiar"
-                            id="fk_id_usuario"
-                            name="fk_id_usuario"
-                            aria-label="Default select example"
-                            ref={fkIdUsuarioRef}
-                          >
-                            <option defaultValue="" value="">
-                              Selecciona un usuario
-                            </option>
-                            {usuario_list.map((element) => (
-                              <option key={element.id_usuario} value={element.id_usuario}>
-                                {element.nombre_usuario}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione el usuario que hizo el movimiento.
-                          </div>
                         </div>
                       </div>
                     </div>
