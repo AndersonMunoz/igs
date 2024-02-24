@@ -124,8 +124,8 @@ export const guardarMovimientoSalida = async (req,res)=> {
 }
 export const obtenerValorTotalProductos = async (req, res) => {
 	try {
-			const [resultEntradas] = await pool.query(`SELECT SUM(cantidad_peso_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
-			const [resultSalidas] = await pool.query(`SELECT SUM(cantidad_peso_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
+			const [resultEntradas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
+			const [resultSalidas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
 
 			const totalEntradas = resultEntradas[0].total_entradas || 0;
 			const totalSalidas = resultSalidas[0].total_salidas || 0;
@@ -305,7 +305,8 @@ export const listarMovimientos = async (req, res) => {
 			LEFT JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
 			JOIN bodega u ON p.fk_id_up = u.id_up	
 			JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-			JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria`
+			JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+			ORDER BY f.id_factura DESC`
 		);
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -344,7 +345,8 @@ export const listarMovimientosEntrada = async (req, res) => {
 					JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
 					JOIN bodega u ON p.fk_id_up = u.id_up	
 					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "entrada"`
+					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "entrada"
+					ORDER BY f.id_factura DESC`
 			);
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -378,7 +380,8 @@ export const listarMovimientosSalida = async (req, res) => {
 					JOIN productos p ON f.fk_id_producto = p.id_producto
 					JOIN bodega u ON p.fk_id_up = u.id_up	
 					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "salida"`
+					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "salida"
+					ORDER BY f.id_factura DESC`
 			);
 		if (result.length > 0) {
 			res.status(200).json(result);

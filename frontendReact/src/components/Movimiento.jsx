@@ -503,6 +503,7 @@ const Movimiento = () => {
             width="100%">
             <thead className="text-center text-justify">
               <tr>
+                <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
                 <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
@@ -532,6 +533,7 @@ const Movimiento = () => {
                 <>
                   {movimientos.map((element) => (
                     <tr style={{ textTransform: 'capitalize' }}  key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.id_factura}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
                       <td className="p-2 text-center" >{element.num_lote}</td>
                       <td className="p-2 text-center" >{Validate.formatFecha(element.fecha_movimiento)}</td>
@@ -549,7 +551,6 @@ const Movimiento = () => {
                       <td className="p-2 text-center" >{element.nombre_usuario}</td>
                       <td className="p-2 text-center" >{element.nombre_proveedores}</td>
                     </tr>
-
                   ))}</>)}
             </tbody>
           </table>

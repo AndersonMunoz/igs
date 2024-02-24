@@ -132,7 +132,11 @@ const Movimiento = () => {
   };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setAplicaFechaCaducidad(false); // Asegura que el estado del checkbox se restablezca
+    resetFormState(); // Llama a la función para restablecer el formulario
   };
   const fkIdUsuarioRef = useRef(null);
 
@@ -140,6 +144,12 @@ const Movimiento = () => {
 
   const handleCheckboxChange2 = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
+  };
+
+  const handleCloseModal2 = () => {
+    setShowModal(false);
+    setAplicaFechaCaducidad2(false); // Asegura que el estado del checkbox se restablezca
+    resetFormState(); // Llama a la función para restablecer el formulario
   };
   const resetFormState = () => {
     const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -473,7 +483,7 @@ const Movimiento = () => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos Entrada</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();resetFormState()}}>
             Registrar nuevo movimiento de Entrada
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
@@ -503,6 +513,7 @@ const Movimiento = () => {
             width="100%">
             <thead className="text-center text-justify">
               <tr>
+                <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
                 <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
@@ -533,6 +544,7 @@ const Movimiento = () => {
                 <>
                   {movimientos.map((element) => (
                     <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.id_factura}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
                       <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
@@ -568,7 +580,7 @@ const Movimiento = () => {
               <div className="modal-content">
                 <div className="modal-header txt-color">
                   <h1 className="modal-title fs-5" id="exampleModalLabel">Registro de movimiento de entrada</h1>
-                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" onClick={handleCloseModal} aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
                   <form>
@@ -714,9 +726,9 @@ const Movimiento = () => {
                             <input
                               className="form-check-input form-empty limpiar"
                               type="checkbox"
-                              value={aplicaFechaCaducidad}
-                              id="flexCheckDefault"
+                              checked={aplicaFechaCaducidad}
                               onChange={handleCheckboxChange}
+                              id="flexCheckDefault"
                             />
                             <label className="form-check-label" htmlFor="flexCheckDefault">
                               Si
@@ -740,10 +752,10 @@ const Movimiento = () => {
                         </div>
                       )}
                     </div>
-                  </form>
+              </form>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>Cerrar</button>
                   <button type="button" className="btn-color btn" onClick={registrarMovimiento}>Registrar</button>
                 </div>
               </div>
@@ -754,7 +766,7 @@ const Movimiento = () => {
               <div className="modal-content">
                 <div className="modal-header bg text-white">
                   <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
-                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal2}></button>
                 </div>
                 <div className="modal-body">
                   <form>
@@ -826,8 +838,8 @@ const Movimiento = () => {
                   </form>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { resetFormState();}}>Cerrar</button>
-                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); }}>Actualizar</button>
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
+                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); handleCloseModal2()}}>Actualizar</button>
                 </div>
               </div>
             </div>
