@@ -6,7 +6,7 @@ import Validate from "../helpers/Validate";
 import esES from "../languages/es-ES.json";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
-import $, { event } from "jquery";
+import $ from "jquery";
 import "bootstrap";
 import "datatables.net";
 import "datatables.net-bs5";
@@ -26,7 +26,6 @@ const Usuario = () => {
   const modalUsuarioRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
-
   const tableRef = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -36,17 +35,8 @@ const Usuario = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [registrationEnabled, setRegistrationEnabled] = useState(false);
-  const [actualizacionEnabled, setActualizacionEnabled] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
-  const [userPasswordEncripted, setUserPasswordEncripted] = useState("");
 
-
-
-  const encrypt = (e) => {
-    e.preventDefault();
-    let encryptPasswod = dataEncript(e.target.value);
-    setUserPasswordEncripted(encryptPasswod);
-  };
 
   function dataDecript(encryptedPassword) {
     const bytes = CryptoJs.AES.decrypt(encryptedPassword, secretKey);
@@ -59,20 +49,18 @@ const Usuario = () => {
   });
   const [contrasenaValue, setContrasenaValue] = useState("");
 
-
   const desencriptarContrasena = (contrasenaEncriptada) => {
     return dataDecript(contrasenaEncriptada).replace(/"/g, '');
   };
 
 
-  // Al cargar el componente, desencriptar la contraseña inicial y establecerla como valor en el estado
   useEffect(() => {
     const contrasenaDesencriptada = desencriptarContrasena(usuarioSeleccionado.contrasena_usuario);
     setContrasenaValue(contrasenaDesencriptada);
-    validatePassword2(contrasenaDesencriptada); // Validar la contraseña inicial al cargar el componente
+    validatePassword2(contrasenaDesencriptada);
   }, [usuarioSeleccionado.contrasena_usuario]);
 
-  // Función para validar la contraseña
+
   const validatePassword2 = (newValue) => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
     const isValidPassword = passwordRegex.test(newValue);
@@ -88,6 +76,17 @@ const Usuario = () => {
   };
 
 
+  ///registro usuario \/ \/ \/ \/
+
+  const handleRegistration = () => {
+    setPassword("");
+    setConfirmPassword("");
+    setPasswordMatch(false);
+    setRegistrationEnabled(false);
+  };
+  
+  useEffect(() => { }, [passwordMatch]);
+
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
@@ -97,26 +96,6 @@ const Usuario = () => {
     setIsValidPassword(isValidPassword);
 
     validatePassword(newPassword, confirmPassword);
-  };
-
-
-  const handleRegistration = () => {
-    setPassword("");
-    setConfirmPassword("");
-    setPasswordMatch(false);
-    setRegistrationEnabled(false);
-    setPasswordMatch(false);
-  };
-
-  useEffect(() => { }, [passwordMatch]);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-    setInputType(inputType === "password" ? "text" : "password");
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const handleConfirmPasswordChange = (event) => {
@@ -140,6 +119,15 @@ const Usuario = () => {
       newPassword === newConfirmPassword && isValidPassword
     );
 
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+    setInputType(inputType === "password" ? "text" : "password");
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const resetFormState = () => {
@@ -229,7 +217,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = userPasswordEncripted;
+    let contrasena_usuario = document.getElementById("contrasena_usuario").value;
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -368,7 +356,7 @@ const Usuario = () => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(usuarioSeleccionado,contrasenaValue),
+      body: JSON.stringify(usuarioSeleccionado, contrasenaValue),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -643,10 +631,7 @@ const Usuario = () => {
                         name="contrasenaUsuario"
                         placeholder="Ingrese una contraseña"
                         value={password}
-                        onChange={(e) => {
-                          handlePasswordChange(e);
-                          encrypt(e);
-                        }}
+                        onChange={handlePasswordChange}
                       />
                       <div className="input-group-append">
                         <button
@@ -730,7 +715,7 @@ const Usuario = () => {
           </div>
         </div>
       </div>
-      {/* modal actualizar https://chat.openai.com/share/46202498-977b-4fd0-b1ee-baeffa0d982a*/}
+      {/* modal actualizar */}
       <div
         className="modal fade"
         id="staticBackdrop2"
