@@ -1,14 +1,22 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
 
+import { dataEncript } from "./encryp/encryp.js";
+
+
+
 
 export const registroUsuario = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(403).json({ "status": 403, error })
+            return res.status(403).json({ "status": 403, error });
         }
+
         let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
+
+        // Encriptar la contraseña
+        contrasena_usuario = dataEncript(contrasena_usuario);
 
         const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}'`;
         const [existingUsers] = await pool.query(documentQuery);
@@ -52,6 +60,7 @@ export const registroUsuario = async (req, res) => {
         });
     }
 }
+
 
 export const listarUsuario = async (req, res) => {
     try {
