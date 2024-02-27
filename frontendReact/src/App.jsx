@@ -14,6 +14,7 @@ import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
 import ProductoCaducar from './components/ProductoCaducar'
 import PefilAjustes from './components/PerfilAjustes'
+import RecuperarContraseña from './components/RecuperarContraseña'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Menu />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/recuperarcontrasena" element={<RecuperarContraseña />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento />} />
           <Route path="/movimiento/entrada" element={<MovimientoEntrada />} />
@@ -42,17 +44,3 @@ const App = () => {
 };
 
 export default App;
-
-{
-  /* <Route path="/" element={<Dashboard/>}/>
-          <Route path="/movimiento" element={<Movimiento/>}>
-            <Route path="/entrada" element={<Entrada/>}/>
-            <Route path="/salida" element={<Salida/>}/>
-          </Route>
-          <Route path="/inventario" element={<Inventario/>}>
-            <Route path="/kardex" element={<Kardex/>}/>
-            <Route path="/catalogo" element={<Catalogo/>}/>
-          </Route>
-          <Route path="/categoria" element={<Categoria/>}/>
-          <Route path="/proveedores" element={<Proveedores/>}/> */
-}
