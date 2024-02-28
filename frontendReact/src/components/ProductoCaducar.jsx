@@ -166,7 +166,7 @@ const ProductoCaducar = () => {
                 type="button"
                 className="btn btn-light"
                 onClick={exportPdfHandler}                >
-                <img src={PdfLogo} className="logoExel" />
+                <img src={PdfLogo} className="logoExel1" />
               </button>
             </div>
           </div>

@@ -125,14 +125,14 @@ return (
 										</button>
 								</div>
 
-								<div id="carouselExampleFade" className="carousel slide carousel-fade">
-										<div className="carousel-inner">
-												<div className="carousel-item active">
-														<img src={Fondo1} className="d-block w-100 " alt="..." />
-												</div>
-												<div className="carousel-item">
-														<img src={Fondo2} className="d-block w-100" alt="..." />
-												</div>
+								<div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
+                                    <div className="carousel-inner">
+                                        <div className="carousel-item active" data-bs-interval="6000">
+                                            <img src={Fondo1} className="d-block w-100 " alt="..." />
+                                        </div>
+                                        <div className="carousel-item" data-bs-interval="6000">
+                                            <img src={Fondo2} className="d-block w-100" alt="..." />
+                                        </div>
 										</div>
 										<button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
 												<span className="carousel-control-prev-icon" aria-hidden="true"></span>
