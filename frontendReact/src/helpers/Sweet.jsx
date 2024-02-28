@@ -113,6 +113,22 @@ const Sweet = {
       text: 'Datos insuficientes, Intenete Nuevamente',
       confirmButtonText: 'Cerrar',
     });
+  },
+  recuperacionFallida: () => {
+    Swal.fire({
+      title: 'Mensaje',
+      icon: 'warning',
+      text: 'No se pudo encontrar el usuario',
+      confirmButtonText: 'Cerrar'
+    });
+  },
+  recuperacionExitosa: () => {
+    Swal.fire({
+      title: 'Mensaje',
+      icon: 'success',
+      text: 'Contraseña enviada al correo electrónico asociado.',
+      confirmButtonText: 'Cerrar',
+    });
   }
   
 };

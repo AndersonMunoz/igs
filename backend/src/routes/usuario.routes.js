@@ -9,7 +9,7 @@ usuarioRouter.post("/registrar" ,validatorUsuario, registroUsuario );
 usuarioRouter.get("/listar", listarUsuario );
 usuarioRouter.get("/listaractivo", listarUsuarioActivo );
 usuarioRouter.get("/buscar/:id", buscarUsuario );
-usuarioRouter.get("/buscarCedula/:documento_usuario", buscarUsuarioCedula );
+usuarioRouter.post("/buscarCedula/:documento_usuario", buscarUsuarioCedula );
 usuarioRouter.put("/editar/:id",validatorUsuario, /* validarToken, */ editarUsuario );
 usuarioRouter.patch("/deshabilitar/:id" /* ,validarToken */ , actualizarEstado );
 usuarioRouter.patch("/activar/:id",/* validarToken , */ activarEstado );
