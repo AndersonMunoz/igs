@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Menu } from "./components/Menu";
 import Producto from "./components/Producto";
 import MovimientoEntrada from "./components/MovimientoEntrada";
@@ -14,7 +14,6 @@ import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
 import ProductoCaducar from './components/ProductoCaducar'
 import PefilAjustes from './components/PerfilAjustes'
-import RecuperarContraseña from './components/RecuperarContraseña'
 
 const App = () => {
   return (
@@ -22,7 +21,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Menu />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/recuperarcontrasena" element={<RecuperarContraseña />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento />} />
           <Route path="/movimiento/entrada" element={<MovimientoEntrada />} />
@@ -35,6 +33,7 @@ const App = () => {
           <Route path="/inventario" element={<Inventario />} />
           <Route path="/producto/caducar" element={<ProductoCaducar />} />
           <Route path="/ajustes" element={<PefilAjustes/>} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Route>
       </Routes>
 

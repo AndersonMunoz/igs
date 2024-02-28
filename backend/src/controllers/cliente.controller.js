@@ -117,16 +117,18 @@ async function enviarCorreoElectronico(destinatario, contraseña) {
         auth: {
             user: 'igs.yamboro@gmail.com',
             pass: 'oemcutckubmlrfex' 
+        },
+        tls: {
+            rejectUnauthorized: false
         }
     });
-
+    
     let mensaje = {
         from: '"IGS" <igs.yamboro@gmail.com>', 
         to: destinatario,
         subject: "Recuperación de contraseña - IGS",
         text: `Tu contraseña es: ${contraseña}`,
     };
-
     try {
         let info = await transporter.sendMail(mensaje);
         console.log('Correo electrónico enviado:', info.response);

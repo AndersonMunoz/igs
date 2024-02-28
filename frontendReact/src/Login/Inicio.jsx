@@ -8,55 +8,37 @@ import Fondo2 from "../../img/fondoIGS1.jpg"
 import "bootstrap";
 import './css/login.css';
 import { dataEncript } from "../components/encryp/encryp";
-import { Link } from "react-router-dom";
+
 
 const LoginForm = () => {
 	const [documento, setDocumento] = useState("");
 	const [contrasena, setContrasena] = useState("");
 	const [loginSuccesFull, setLoginSuccesFull] = useState(false);
-	const [showModal, setShowModal] = useState(false);
-	const [recuperar, setRecuperar] = useState(false);
-	const [cedula, setCedula] = useState(""); // Estado para almacenar la cédula ingresada en el modal
 	const [message, setMessage] = useState(""); 
 
-function handleSubmitRecuperar(documento) {
-		fetch(`http://localhost:3000/usuario/buscarCedula/${documento}`, {
-				method: 'GET',
-				headers: {
-						'Content-type': 'application/json',
-				},
-		})
-		.then((res) => res.json())
-		.then((data) => {
-				console.log(data);
-				if (data.status === 200) {
-						setMessage("Contraseña enviada al correo electrónico asociado.");
-				} else {
-						setMessage("Error: No se pudo encontrar el usuario.");
-				}
-		})
-		.catch((error) => {
-				console.error('Error:', error);
-				setMessage("Error: Fallo al enviar la solicitud.");
-		});
+	function handleSubmitRecuperar() {
+    fetch(`http://localhost:3000/usuario/buscarCedula/${documento}`, {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+        },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data);
+        if (data.status === 200) {
+            Sweet.recuperacionExitosa();
+        } else {
+						Sweet.recuperacionFallida();
+            setMessage("Error: No se pudo encontrar el usuario.");
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        setMessage("Error: Fallo al enviar la solicitud.");
+    });
 }
 
-function buscarCedula(documento_usuario) {
-		fetch(`http://localhost:3000/usuario/buscarCedula/${documento_usuario}`, {
-				method: 'GET',
-				headers: {
-						'Content-type': 'application/json',
-				},
-		})
-		.then((res) => res.json())
-		.then((data) => {
-				console.log(data);
-				setDocumento(data);
-		})
-		.catch((error) => {
-				console.error('Error:', error);
-		});
-}
 
 function removeModalBackdrop() {
 		const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -87,7 +69,6 @@ const handleSubmit = (e) => {
 								localStorage.setItem("roll", dataEncript(data.tipo));
 								localStorage.setItem("id", dataEncript(data.id));
 								window.location.reload()
-								setShowModal(false);
 						} else {
 								Sweet.error(data.message);
 								setLoginSuccesFull(false)
@@ -98,9 +79,7 @@ const handleSubmit = (e) => {
 };
 
 const handleCloseRecuperarModal = () => {
-		setRecuperar(false);
-		removeModalBackdrop();
-		setShowModal(true); 
+		removeModalBackdrop(); 
 		window.location.reload();
 };
 
@@ -120,7 +99,7 @@ return (
 										</div>
 								</div>
 								<div className="nav">
-										<button type="button" id="UserInicio" className="btn btn-light inicio222" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => { setShowModal(true); }}>
+										<button type="button" id="UserInicio" className="btn btn-light inicio222" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
 												Iniciar Sesion
 										</button>
 								</div>
@@ -180,7 +159,7 @@ return (
 																						/>
 																				</div>
 																				<button type="submit" className="btn btn-block text-center my-3">Iniciar Sesión</button>
-																				<a type="button" className="blue" data-bs-toggle="modal" data-bs-target="#staticBackdrop2" onClick={() => { setRecuperar(true); }}>
+																				<a type="button" className="blue" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
 																						¿Olvidó Contraseña?
 																				</a>
 																		</form>
@@ -190,30 +169,30 @@ return (
 										</div>
 								</div>
 
-								<div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true" style={{ display: recuperar ? 'block' : 'none' }}>
+								<div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
 										<div className="modal-dialog modal-dialog-centered">
 												<div className="modal-content">
 														<div className="modal-header">
 																<h1 className="modal-title fs-5" id="staticBackdropLabel2">Recuperacion de Contraseña</h1>
-																<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => { setRecuperar(false); setMessage(""); }}></button>
+																<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => { handleCloseRecuperarModal();}}></button>
 														</div>
 														<div className="modal-body">
-																<form onSubmit={handleSubmitRecuperar}>
-																		<label htmlFor="">Cedula</label>
-																		<input
-																				type="number"
-																				className="form-control"
-																				id="cedula"
-																				placeholder="Ingresa documento"
-																				value={cedula}
-																				onChange={(e) => setCedula(e.target.value)} 
-																		/>
-																</form>
-																{message && <p>{message}</p>} 
-														</div>
-														<div className="modal-footer">
-																<button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setRecuperar(false); setMessage(""); }}>Cerrar</button>
-																<button type="submit" className="btn btn-success" onClick={()=>{handleSubmitRecuperar();buscarCedula();}}>Enviar</button>
+														<form onSubmit={(e) => { e.preventDefault(); handleSubmitRecuperar(); }}>
+															<label htmlFor="">Cedula</label>
+															<input
+																	type="number"
+																	className="form-control"
+																	id="documento_usuario"
+																	placeholder="Ingresa documento"
+																	value={documento}
+																	onChange={(e) => setDocumento(e.target.value)} 
+															/>
+															{message && <p className="mt-2 text-danger">{message} {documento}</p>} 
+															<div className="modal-footer">
+																	<button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setMessage(""); handleCloseRecuperarModal();}}>Cerrar</button>
+																	<button type="submit" className="btn btn-success">Enviar</button>
+															</div>
+														</form>
 														</div>
 												</div>
 										</div>
