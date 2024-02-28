@@ -17,7 +17,6 @@ import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import { secretKey } from "../const/keys";
-import { dataEncript } from "./encryp/encryp";
 import CryptoJs from "crypto-js";
 
 const Usuario = () => {
@@ -115,9 +114,9 @@ const Usuario = () => {
       newConfirmPassword.trim() === ""
     );
 
-    setRegistrationEnabled(
+     setRegistrationEnabled(
       newPassword === newConfirmPassword && isValidPassword
-    );
+    ); 
 
   };
 
@@ -217,7 +216,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = document.getElementById("contrasena_usuario").value;
+    let contrasena_usuario = password
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -351,12 +350,19 @@ const Usuario = () => {
   }
   function actualizarUsuario(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
+
+    const dataToSend = {
+    ...usuarioSeleccionado,
+    contrasena_usuario: contrasenaValue
+  };
+
+
     fetch(`http://localhost:3000/usuario/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(usuarioSeleccionado, contrasenaValue),
+      body: JSON.stringify(dataToSend),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -705,7 +711,7 @@ const Usuario = () => {
               </button>
               <button
                 type="button"
-                disabled={!registrationEnabled}
+               /*  disabled={!registrationEnabled} */
                 className="btn btn-color"
                 onClick={registrarUsuario}
               >
@@ -874,7 +880,7 @@ const Usuario = () => {
                     <div className="input-group">
                       <input
                         type="hidden"
-                        value={usuarioSeleccionado.id_usuario || ""}
+                        value={usuarioSeleccionado.contrasena_usuario || ""}
                         onChange={(e) =>
                           setUsuarioSeleccionado({
                             ...usuarioSeleccionado,
@@ -896,7 +902,7 @@ const Usuario = () => {
                           type="button"
                           onClick={toggleConfirmPasswordVisibility}
                         >
-                          {showConfirmPassword ? "Ocultar" : "Mostrar"}
+                          {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
                         </button>
                       </div>
                       <div className="row text-center">
@@ -927,7 +933,7 @@ const Usuario = () => {
                 type="button"
                 className="btn btn-color"
                 onClick={() => {
-                  actualizarUsuario(usuarioSeleccionado.id_usuario);
+                  actualizarUsuario(usuarioSeleccionado.id_usuario, contrasenaValue);
                 }}
               >
                 Actualizar

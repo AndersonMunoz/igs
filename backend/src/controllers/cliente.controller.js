@@ -1,9 +1,6 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
-
 import { dataEncript } from "./encryp/encryp.js";
-
-
 
 
 export const registroUsuario = async (req, res) => {
@@ -117,11 +114,12 @@ export const editarUsuario = async (req, res) => {
         }
 
         let id = req.params.id;
-        let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
 
-        let sql = `SELECT * FROM usuarios WHERE id_usuario = ${id}`;
+        let { documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario } = req.body;
+
+        let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario FROM usuarios WHERE id_usuario = ${id}`;
         const [existingUser] = await pool.query(sql);
-
+   
         // Verificar si el usuario existe
         if (existingUser.length === 0) {
             return res.status(404).json({
@@ -155,10 +153,10 @@ export const editarUsuario = async (req, res) => {
                 });
             }
         }
-
+        
         sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}',
             email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',
-            contrasena_usuario = '${contrasena_usuario}', tipo_usuario = '${tipo_usuario}'
+            contrasena_usuario = '${contrasena_usuario = dataEncript(contrasena_usuario)}', tipo_usuario = '${tipo_usuario}'
             WHERE id_usuario = ${id}`;
 
         const [rows] = await pool.query(sql);
