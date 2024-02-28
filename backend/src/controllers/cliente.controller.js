@@ -1,9 +1,9 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
-
+import CryptoJs from "crypto-js";
 import { dataEncript } from "./encryp/encryp.js";
-
-
+import { secretKey } from "../const/keys.js";
+import nodemailer from 'nodemailer';
 
 
 export const registroUsuario = async (req, res) => {
@@ -106,8 +106,57 @@ export const buscarUsuario = async (req, res) => {
             massage: 'error en servidor:' + err
         })
     }
-
 };
+function dataDecript(encryptedPassword) {
+    const bytes = CryptoJs.AES.decrypt(encryptedPassword, secretKey);
+    return bytes.toString(CryptoJs.enc.Utf8);
+}
+async function enviarCorreoElectronico(destinatario, contraseña) {
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'igs.yamboro@gmail.com',
+            pass: 'oemcutckubmlrfex' 
+        }
+    });
+
+    let mensaje = {
+        from: '"IGS" <igs.yamboro@gmail.com>', 
+        to: destinatario,
+        subject: "Recuperación de contraseña - IGS",
+        text: `Tu contraseña es: ${contraseña}`,
+    };
+
+    try {
+        let info = await transporter.sendMail(mensaje);
+        console.log('Correo electrónico enviado:', info.response);
+    } catch (error) {
+        console.error('Error al enviar el correo electrónico:', error);
+    }
+}
+
+
+export const buscarUsuarioCedula = async (req, res) => {
+    try {
+        let documento_usuario = req.params.documento_usuario;
+        const [result] = await pool.query('select * from usuarios where documento_usuario=' + documento_usuario);
+        if (result.length > 0) {
+            const contraseñaDB = dataDecript(result[0].contrasena_usuario).replace(/"/g, '');
+            const correo_usuario = result[0].email_usuario;
+            
+            await enviarCorreoElectronico(correo_usuario, contraseñaDB);
+
+            res.status(200).json({ "status": 200, "message": "Contraseña enviada al correo electrónico asociado." });
+        } else {
+            res.status(401).json({ "status": 401, "message": "No se pudo encontrar el usuario." });
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error en el servidor: ' + err
+        });
+    }
+};
+
 
 export const editarUsuario = async (req, res) => {
     try {
