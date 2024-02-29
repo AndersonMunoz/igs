@@ -865,7 +865,10 @@ const Usuario = () => {
                           passwordError ? "is-invalid" : ""
                         }`}
                         value={passwordValue}
-                        onChange={handlePasswordChange2}
+                        onChange={(e)=>{
+                          handlePasswordChange2(e);
+                          encrypt(e);
+                        }}
                         name="contrasena_usuario"
                         placeholder="Ingrese una contraseña"
                       />
