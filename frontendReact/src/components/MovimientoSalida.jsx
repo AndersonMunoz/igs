@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
+import { dataDecript } from "./encryp/decryp";
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
 import { IconEdit } from "@tabler/icons-react";
@@ -21,7 +22,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const Movimiento = () => {
-
+  const [userId, setUserId] = useState('');
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
   const [unidadesProductos,setUniPro] = useState([]);
@@ -181,6 +182,7 @@ const Movimiento = () => {
   }
 
   useEffect(() => {
+    setUserId(dataDecript(localStorage.getItem('id')));
     listarMovimiento();
     listarCategoria();
     listarTipo();
@@ -355,7 +357,7 @@ const Movimiento = () => {
   }
   function registrarMovimientoSalida() {
 
-    let fk_id_usuario = fkIdUsuarioRef.current.value;
+    let fk_id_usuario =userId;
     let num_lote = document.getElementById('num_lote').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let nota_factura = document.getElementById('nota_factura').value;
@@ -455,7 +457,7 @@ const Movimiento = () => {
   return (
     <>
       <div>
-        <h1 className="text-center modal-title fs-5">Movimientos Salida</h1>
+        <h1 className="text-center modal-title fs-5 m-4">Movimientos Salida</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
           <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
@@ -491,6 +493,7 @@ const Movimiento = () => {
             width="100%">
             <thead className="text-center text-justify">
               <tr>
+                <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
                 <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
@@ -517,11 +520,14 @@ const Movimiento = () => {
                 <>
                   {movimientos.map((element) => (
                     <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.id_factura}</td>
                       <td className="p-2 text-center">{element.nombre_tipo}</td>
                       <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center">{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {Number.isInteger(element.cantidad_peso_movimiento) ? element.cantidad_peso_movimiento : element.cantidad_peso_movimiento.toFixed(2)}
+                      </td>
                       <td className="p-2 text-center">{element.unidad_peso}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
@@ -598,38 +604,12 @@ const Movimiento = () => {
                               )): "No hay unidad de medida"}
                         </div>
                       </div>
-                    </div>
-                    <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="num_lote">Número de Lote</label>
                           <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="fk_id_usuario'">Usuario</label>
-                          <select
-                            className="form-select form-empty limpiar"
-                            id="fk_id_usuario"
-                            name="fk_id_usuario"
-                            aria-label="Default select example"
-                            ref={fkIdUsuarioRef}
-                          >
-                            <option defaultValue="" value="">
-                              Selecciona un usuario
-                            </option>
-                            {usuario_list.map((element) => (
-                              <option key={element.id_usuario} value={element.id_usuario}>
-                                {element.nombre_usuario}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione el usuario que hizo el movimiento.
                           </div>
                         </div>
                       </div>

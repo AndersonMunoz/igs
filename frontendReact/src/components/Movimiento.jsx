@@ -469,7 +469,7 @@ const Movimiento = () => {
   return (
     <>
       <div>
-        <h1 className="text-center modal-title fs-5">Movimientos Totales</h1>
+        <h1 className="text-center modal-title fs-5 m-4">Movimientos Totales</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
           <Link to="/movimiento/entrada"><button type="button"  className="btn btn-success m-1 ">Registrar Entrada</button></Link>
@@ -503,6 +503,7 @@ const Movimiento = () => {
             width="100%">
             <thead className="text-center text-justify">
               <tr>
+                <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
                 <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
@@ -532,20 +533,24 @@ const Movimiento = () => {
                 <>
                   {movimientos.map((element) => (
                     <tr style={{ textTransform: 'capitalize' }}  key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.id_factura}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
                       <td className="p-2 text-center" >{element.num_lote}</td>
                       <td className="p-2 text-center" >{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center" >{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center" >{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {Number.isInteger(element.cantidad_peso_movimiento) ? element.cantidad_peso_movimiento : element.cantidad_peso_movimiento.toFixed(2)}
+                      </td>
                       <td className="p-2 text-center" >{element.unidad_peso}</td>
-                      <td className="p-2 text-center" >{element.precio_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {isNaN(Number(element.precio_movimiento)) ? element.precio_movimiento : (Number.isInteger(Number(element.precio_movimiento)) ? Number(element.precio_movimiento) : Number(element.precio_movimiento).toFixed(2))}
+                      </td>
                       <td className="p-2 text-center" >{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center" >{element.nota_factura}</td>
                       <td className="p-2 text-center" >{Validate.formatFecha(element.fecha_caducidad)}</td>
                       <td className="p-2 text-center" >{element.nombre_usuario}</td>
                       <td className="p-2 text-center" >{element.nombre_proveedores}</td>
                     </tr>
-
                   ))}</>)}
             </tbody>
           </table>

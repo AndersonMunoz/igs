@@ -1,14 +1,22 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
+import CryptoJs from "crypto-js";
+import { dataEncript } from "./encryp/encryp.js";
+import { secretKey } from "../const/keys.js";
+import nodemailer from 'nodemailer';
 
 
 export const registroUsuario = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(403).json({ "status": 403, error })
+            return res.status(403).json({ "status": 403, error });
         }
+
         let { documento_usuario, email_usuario, nombre_usuario, contrasena_usuario, tipo_usuario } = req.body;
+
+        // Encriptar la contraseña
+        contrasena_usuario = dataEncript(contrasena_usuario);
 
         const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}'`;
         const [existingUsers] = await pool.query(documentQuery);
@@ -52,6 +60,7 @@ export const registroUsuario = async (req, res) => {
         });
     }
 }
+
 
 export const listarUsuario = async (req, res) => {
     try {
@@ -97,8 +106,59 @@ export const buscarUsuario = async (req, res) => {
             massage: 'error en servidor:' + err
         })
     }
-
 };
+function dataDecript(encryptedPassword) {
+    const bytes = CryptoJs.AES.decrypt(encryptedPassword, secretKey);
+    return bytes.toString(CryptoJs.enc.Utf8);
+}
+async function enviarCorreoElectronico(destinatario, contraseña) {
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'igs.yamboro@gmail.com',
+            pass: 'oemcutckubmlrfex' 
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+    
+    let mensaje = {
+        from: '"IGS" <igs.yamboro@gmail.com>', 
+        to: destinatario,
+        subject: "Recuperación de contraseña - IGS",
+        text: `Tu contraseña es: ${contraseña}`,
+    };
+    try {
+        let info = await transporter.sendMail(mensaje);
+        console.log('Correo electrónico enviado:', info.response);
+    } catch (error) {
+        console.error('Error al enviar el correo electrónico:', error);
+    }
+}
+
+
+export const buscarUsuarioCedula = async (req, res) => {
+    try {
+        let documento_usuario = req.params.documento_usuario;
+        const [result] = await pool.query('select * from usuarios where documento_usuario=' + documento_usuario);
+        if (result.length > 0) {
+            const contraseñaDB = dataDecript(result[0].contrasena_usuario).replace(/"/g, '');
+            const correo_usuario = result[0].email_usuario;
+            
+            await enviarCorreoElectronico(correo_usuario, contraseñaDB);
+
+            res.status(200).json({ "status": 200, "message": "Contraseña enviada al correo electrónico asociado." });
+        } else {
+            res.status(401).json({ "status": 401, "message": "No se pudo encontrar el usuario." });
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error en el servidor: ' + err
+        });
+    }
+};
+
 
 export const editarUsuario = async (req, res) => {
     try {
@@ -178,7 +238,7 @@ export const listarUsuarioCount = async (req, res) => {
         const [result] = await pool.query('SELECT COUNT(*) AS count FROM usuarios');
         if (result.length > 0) {
             res.status(200).json({ count: result[0].count });
-            console.log(result);
+
         }
     } catch (err) {
         res.status(500).json({

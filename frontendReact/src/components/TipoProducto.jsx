@@ -280,7 +280,7 @@ const Tipo = () => {
             return;
         } else {
           console.error('Error en la petición:', data);
-          Sweet.error('Hubo un error al el tipo de producto.');
+          Sweet.error('Lo siento, se ha producido un error al seleccionar el tipo de producto. Por favor, asegúrate de elegir una opción válida e inténtalo de nuevo.');
         }
       })
       .catch((error) => {
@@ -408,7 +408,7 @@ const Tipo = () => {
         <button
           type="button"
           id="modalProducto"
-          className="btn-color btn mb-4"
+          className="btn-color btn mt-4"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           onClick={() => {
@@ -719,10 +719,7 @@ const Tipo = () => {
                       Por favor, seleccione una categoria 
                     </div>
                   </div>
-                </div>
-
-                <div className="row mb-3">
-                  <div className="col-md-12">
+                  <div className="col-md-6">
                     <label htmlFor="unidad_peso " className="label-bold mb-2">
                       Unidad de Peso{" "}
                     </label>
@@ -752,6 +749,10 @@ const Tipo = () => {
                     </div>
                   </div>
                 </div>
+
+              
+                  
+                
               </form>
             </div>
             <div className="modal-footer">

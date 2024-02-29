@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import "../style/dashboard.css";
 import IgsLogo from "../../img/IGS.png";
+import { dataDecript } from "./encryp/decryp";
 import {
 	IconUser,
 	IconMenu2,
@@ -22,6 +23,12 @@ import {
 } from "@tabler/icons-react";
 
 export const Menu = () => {
+	const [userName, setUserName] = useState('');
+	const [userRoll, setUserRoll] = useState('');
+
+
+
+
 	useEffect(() => {
 		let arrow = document.querySelectorAll(".container-icon");
 		for (let i = 0; i < arrow.length; i++) {
@@ -30,6 +37,9 @@ export const Menu = () => {
 				arrowParent.classList.toggle("showMenu");
 			});
 		}
+
+		setUserName(dataDecript(localStorage.getItem('name')));
+		setUserRoll(dataDecript(localStorage.getItem('roll')));
 
 		let sidebar = document.querySelector(".sidebar");
 		let sidebarBtn = document.querySelector(".ti-menu-2");
@@ -57,10 +67,10 @@ export const Menu = () => {
 			<div className="main-container">
 				<div className="sidebar close">
 					<div className="logo-details">
-
-							<img src={IgsLogo} className="logo1" />
-				
-						<span className="logo_name">IGS</span>
+						<img src={IgsLogo} className="logo1" />
+						<div className="fondoImg">
+							<span className="logo_name">IGS</span>
+						</div>
 					</div>
 					<ul className="nav-links">
 						<li>
@@ -162,21 +172,6 @@ export const Menu = () => {
 							</ul>
 						</li>
 						<li>
-							<Link to="/up">
-								<div className="tamañoLateral">
-									<IconBuildingWarehouse className="iconosLaterales" />
-								</div>
-								<span className="link_name">Almacen</span>
-							</Link>
-							<ul className="sub-menu blank">
-								<li>
-									<Link className="link_name" to="/up">
-										Almacen
-									</Link>
-								</li>
-							</ul>
-						</li>
-						<li>
 							<Link to="/tipoproducto">
 								<div className="tamañoLateral">
 									<IconApple className="iconosLaterales" />
@@ -187,6 +182,21 @@ export const Menu = () => {
 								<li>
 									<Link className="link_name" to="/up">
 										Tipo Producto
+									</Link>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<Link to="/up">
+								<div className="tamañoLateral">
+									<IconBuildingWarehouse className="iconosLaterales" />
+								</div>
+								<span className="link_name">Almacen</span>
+							</Link>
+							<ul className="sub-menu blank">
+								<li>
+									<Link className="link_name" to="/up">
+										Almacen
 									</Link>
 								</li>
 							</ul>
@@ -228,7 +238,7 @@ export const Menu = () => {
 									<Link to="#">Historial</Link>
 								</li>
 								<li>
-									<Link to="#">Productos a Caducar</Link>
+									<Link to="/producto/caducar">Productos a Caducar</Link>
 								</li>
 							</ul>
 						</li>
@@ -263,12 +273,12 @@ export const Menu = () => {
 							</div>
 							<ul className="sub-menu">
 								<li>
-									<Link className="link_name" to="#">
+									<Link className="link_name" to="/ajustes">
 										Ajustes
 									</Link>
 								</li>
 								<li>
-									<Link to="#">Perfil</Link>
+									<Link to="/ajustes">Perfil</Link>
 								</li>
 								<li>
 									<Link to="#">Ayuda</Link>
@@ -320,18 +330,26 @@ export const Menu = () => {
 						</svg>
 					</div>
 					<div id="userAlert" className="usuario">
-						<span><IconUser className="user1" />Administrador</span>
-					</div>
-					<div className="modalClose">
-						<div className="userSpace">
-							<IconX className="closeUser ti-x" id="closeX" />
-							<Link className="letraUser ax">
-								<IconSettings className="iconModal ti-settings" />Ajustes
-							</Link>
-							<Link onClick={()=>(localStorage.clear(), window.location.reload())} className="letraUser az">
-								<IconUserOff className="iconModal ti-user-x" />Cerrar sesión
-							</Link>
+						<IconUser className="user1" />
+						<div className="cargoUser">
+							<span className="nombreTamañousuario">{userName}</span>
+							<span className="tamañocargoUsuario">Cargo: {userRoll}</span>
 						</div>
+
+					</div>
+
+				</div>
+				<div className="modalClose">
+					<div className="userSpace">
+						<div className="contentXsalir">
+							<IconX className="closeUser" id="closeX" />
+						</div>
+						<Link to="/ajustes" className="letraUser ax">
+							<IconSettings className="iconModal" /><span>Ajustes</span>
+						</Link>
+						<Link onClick={() => (localStorage.clear(), window.location.reload())} className="letraCerrarSesion">
+							<IconUserOff className="iconModal" /><span>Cerrar sesión</span> 
+						</Link>
 					</div>
 				</div>
 				<div className="contenido">

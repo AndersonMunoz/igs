@@ -38,7 +38,7 @@ export const registrarProvedor = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(403).json({ "status": 403, error })
         }
-        let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores } = req.body;
+        let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores,inicio_contrato ,fin_contrato } = req.body;
         let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
         const [rows] = await pool.query(selectUser)
         if (rows.length > 0) {
@@ -46,8 +46,8 @@ export const registrarProvedor = async (req, res) => {
                 "status": 409, "message": "Duplicidad en contratos"
             });
         } else {
-            let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores)
-                values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}')`;
+            let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores,inicio_contrato, fin_contrato)
+            values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}','${inicio_contrato}','${fin_contrato}')`;
             const [rows] = await pool.query(sql);
             if (rows.affectedRows > 0) {
                 res.status(200).json({
@@ -92,13 +92,13 @@ export const actualizarProvedor = async (req, res) => {
             return res.status(403).json({ "status": 403, error })
         }
         let id = req.params.id;
-        let { nombre_proveedores, telefono_proveedores, contrato_proveedores, direccion_proveedores } = req.body;
+        let { nombre_proveedores, telefono_proveedores, contrato_proveedores, direccion_proveedores, inicio_contrato ,fin_contrato } = req.body;
 
         let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
         const [userExist] = await pool.query(selectUser)
 
         if (!userExist.length > 0) {
-            let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}' where id_proveedores= ${id}`;
+            let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}', inicio_contrato='${inicio_contrato}',fin_contrato='${fin_contrato}' where id_proveedores= ${id}`;
             const [rows] = await pool.query(sql);
             if (rows.affectedRows > 0) {
                 res.status(200).json({

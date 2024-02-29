@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-02-2024 a las 00:47:00
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.1.17
+-- Tiempo de generación: 23-02-2024 a las 17:37:39
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -59,7 +59,7 @@ CREATE TABLE `factura_movimiento` (
   `precio_movimiento` float NOT NULL,
   `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
-  `fecha_caducidad` date NOT NULL,
+  `fecha_caducidad` date DEFAULT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) DEFAULT NULL,
@@ -94,7 +94,9 @@ CREATE TABLE `proveedores` (
   `telefono_proveedores` varchar(45) NOT NULL,
   `direccion_proveedores` varchar(50) NOT NULL,
   `contrato_proveedores` int(11) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `estado` tinyint(4) NOT NULL DEFAULT 1,
+  `inicio_contrato` date NOT NULL,
+  `fin_contrato` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -126,6 +128,14 @@ CREATE TABLE `usuarios` (
   `tipo_usuario` enum('administrador','coadministrador') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id_usuario`, `documento_usuario`, `email_usuario`, `nombre_usuario`, `contrasena_usuario`, `tipo_usuario`, `estado`) VALUES
+(1, 1234567890, 'admin@admin.com', '@Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1),
+(2, 1084259187, 'anderso@gmail.com', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1);
 
 --
 -- Índices para tablas volcadas
@@ -224,7 +234,7 @@ ALTER TABLE `tipo_productos`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

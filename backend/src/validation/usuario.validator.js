@@ -17,7 +17,7 @@ export const validatorUsuario = [
         .exists()
         .not()
         .isEmpty()
-        .matches(/^[A-Za-z\s']+$/),
+        .matches(/^[A-Za-z\s'ñ]+$/),
 
     check('contrasena_usuario', 'La contraseña debe tener: un numero, mayusculas, minusculas y ser mayor de 6 caracteres')
         .exists()

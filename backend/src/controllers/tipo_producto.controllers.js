@@ -4,17 +4,14 @@ import { validationResult } from "express-validator";
 export const registroTipo_producto = async (req, res) => {
 
     try {
-
         let error = validationResult(req);
         if (!error.isEmpty()) {
             return res.status(400).json(error)
         }
-
         let { nombre_tipo, fk_categoria_pro ,unidad_peso} = req.body;
         const TipoQuery = `SELECT * FROM tipo_productos WHERE nombre_tipo = '${nombre_tipo}'`;
         const [existingTipo] = await pool.query(TipoQuery);
         
-       
         if (existingTipo.length > 0) {
             return res.status(409).json({
                 "status": 409,
@@ -23,11 +20,9 @@ export const registroTipo_producto = async (req, res) => {
         }
         let sql = `insert into tipo_productos (nombre_tipo,fk_categoria_pro,unidad_peso) values('${nombre_tipo}','${fk_categoria_pro}','${unidad_peso}')`;
       
-
         const [rows] = await pool.query(sql);
 
         if (rows.affectedRows > 0) {
-
             res.status(200).json({
                 "status": 200,
                 "menssage": " El tipo de producto fue  registrado  con exito "
@@ -57,9 +52,7 @@ export const listarTipoProducto = async (req, res) => {
                 "status": 204,
                 "message": "No se Listo los productos"
             });
-
         }
-
     } catch (e) {
         res.status(500).json({
             "status": 500,
@@ -67,7 +60,6 @@ export const listarTipoProducto = async (req, res) => {
         });
     }
 }
-
 
 export const listarActivoTipo = async (req, res) => {
     try {
@@ -80,7 +72,6 @@ export const listarActivoTipo = async (req, res) => {
                 "status": 204,
                 "message": "No se Listo los productos"
             });
-
         }
 
     } catch (e) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Outlet, Link } from "react-router-dom";
 import Sweet from '../helpers/Sweet';
+import { dataDecript } from "./encryp/decryp";
 import Validate from '../helpers/Validate';
 import '../style/movimiento.css';
 import { IconEdit } from "@tabler/icons-react";
@@ -20,7 +21,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const Movimiento = () => {
-
+  const [userId, setUserId] = useState('');
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
   const [unidadesProductos,setUniPro] = useState([]);
@@ -132,7 +133,15 @@ const Movimiento = () => {
   };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
+    if (checkboxNoSeleccionado) {
+      setFechaCaducidad(null); // o undefined, '' según lo prefieras
+    } 
 
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setAplicaFechaCaducidad(false); // Asegura que el estado del checkbox se restablezca
+    resetFormState(); // Llama a la función para restablecer el formulario
   };
   const fkIdUsuarioRef = useRef(null);
 
@@ -140,6 +149,12 @@ const Movimiento = () => {
 
   const handleCheckboxChange2 = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
+  };
+
+  const handleCloseModal2 = () => {
+    setShowModal(false);
+    setAplicaFechaCaducidad2(false); // Asegura que el estado del checkbox se restablezca
+    resetFormState(); // Llama a la función para restablecer el formulario
   };
   const resetFormState = () => {
     const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -197,6 +212,7 @@ const Movimiento = () => {
   }
 
   useEffect(() => {
+    setUserId(dataDecript(localStorage.getItem('id')));
     listarMovimiento();
     listarCategoria();
     listarTipo();
@@ -371,7 +387,7 @@ const Movimiento = () => {
   }
   function registrarMovimiento() {
 
-    let fk_id_usuario = fkIdUsuarioRef.current.value;
+    let fk_id_usuario = userId;
     let num_lote = document.getElementById('num_lote').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let precio_movimiento = document.getElementById('precio_movimiento').value;
@@ -458,6 +474,7 @@ const Movimiento = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setMovimientos(data);
+          console.log(data);
         }
       })
       .catch((e) => {
@@ -470,10 +487,10 @@ const Movimiento = () => {
   return (
     <>
       <div>
-        <h1 className="text-center modal-title fs-5">Movimientos Entrada</h1>
+        <h1 className="text-center modal-title fs-5 m-4">Movimientos Entrada</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();resetFormState()}}>
             Registrar nuevo movimiento de Entrada
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
@@ -503,6 +520,7 @@ const Movimiento = () => {
             width="100%">
             <thead className="text-center text-justify">
               <tr>
+                <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
                 <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
@@ -533,16 +551,27 @@ const Movimiento = () => {
                 <>
                   {movimientos.map((element) => (
                     <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
+                      <td className="p-2 text-center" >{element.id_factura}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
                       <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center">{element.tipo_movimiento}</td>
-                      <td className="p-2 text-center">{element.cantidad_peso_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {Number.isInteger(element.cantidad_peso_movimiento) ? element.cantidad_peso_movimiento : element.cantidad_peso_movimiento.toFixed(2)}
+                      </td>
                       <td className="p-2 text-center">{element.unidad_peso}</td>
-                      <td className="p-2 text-center">{element.precio_movimiento}</td>
+                      <td className="p-2 text-center" >
+                        {isNaN(Number(element.precio_movimiento)) ? element.precio_movimiento : (Number.isInteger(Number(element.precio_movimiento)) ? Number(element.precio_movimiento) : Number(element.precio_movimiento).toFixed(2))}
+                      </td>
                       <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
-                      <td className="p-2 text-center">{Validate.formatFecha(element.fecha_caducidad)}</td>
+                      <td>
+                        {element.fecha_caducidad ? (
+                          Validate.formatFecha(element.fecha_caducidad)
+                        ) : (
+                          'No asignada'
+                        )}
+                      </td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
                       <td className="p-2 text-center">{element.nombre_proveedores}</td>
 
@@ -564,7 +593,7 @@ const Movimiento = () => {
               <div className="modal-content">
                 <div className="modal-header txt-color">
                   <h1 className="modal-title fs-5" id="exampleModalLabel">Registro de movimiento de entrada</h1>
-                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" onClick={handleCloseModal} aria-label="Close"></button>
                 </div>
                 <div className="modal-body">
                   <form>
@@ -677,30 +706,6 @@ const Movimiento = () => {
                           <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
                         </div>
                       </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="fk_id_usuario'">Usuario</label>
-                          <select
-                            className="form-select form-empty limpiar"
-                            id="fk_id_usuario"
-                            name="fk_id_usuario"
-                            aria-label="Default select example"
-                            ref={fkIdUsuarioRef}
-                          >
-                            <option defaultValue="" value="">
-                              Selecciona un usuario
-                            </option>
-                            {usuario_list.map((element) => (
-                              <option key={element.id_usuario} value={element.id_usuario}>
-                                {element.nombre_usuario}
-                              </option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione el usuario que hizo el movimiento.
-                          </div>
-                        </div>
-                      </div>
                     </div>
                     <div className="row mb-4">
                       <div className="col">
@@ -710,9 +715,9 @@ const Movimiento = () => {
                             <input
                               className="form-check-input form-empty limpiar"
                               type="checkbox"
-                              value={aplicaFechaCaducidad}
-                              id="flexCheckDefault"
+                              checked={aplicaFechaCaducidad}
                               onChange={handleCheckboxChange}
+                              id="flexCheckDefault"
                             />
                             <label className="form-check-label" htmlFor="flexCheckDefault">
                               Si
@@ -736,10 +741,10 @@ const Movimiento = () => {
                         </div>
                       )}
                     </div>
-                  </form>
+              </form>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>Cerrar</button>
                   <button type="button" className="btn-color btn" onClick={registrarMovimiento}>Registrar</button>
                 </div>
               </div>
@@ -750,7 +755,7 @@ const Movimiento = () => {
               <div className="modal-content">
                 <div className="modal-header bg text-white">
                   <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
-                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal2}></button>
                 </div>
                 <div className="modal-body">
                   <form>
@@ -821,9 +826,10 @@ const Movimiento = () => {
                     </div>
                   </form>
                 </div>
+                
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { resetFormState();}}>Cerrar</button>
-                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); }}>Actualizar</button>
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
+                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); handleCloseModal2()}}>Actualizar</button>
                 </div>
               </div>
             </div>

@@ -25,11 +25,9 @@ igs.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    
-    // Permitir credenciales (si es necesario)
+
     res.setHeader("Access-Control-Allow-Credentials", true);
 
-    // Establecer la edad máxima para la caché de preflights en segundos (1 hora en este caso)
     res.setHeader("Access-Control-Max-Age", 3600);
 
     next();
@@ -45,8 +43,6 @@ igs.use(express.static('../igs/backend/src/views/js'))
 igs.get('/documents', (req,res) => {
     res.render('index.ejs');
 });
-
-
 
 igs.use(express.json()); 
 

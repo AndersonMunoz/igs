@@ -7,6 +7,7 @@ const productoRouter = Router();
 
 productoRouter.post('/registrar',/*  validarToken,*/validatorProducto,  guardarProducto);
 productoRouter.get('/listar', listarProductos);
+
 productoRouter.get('/buscar/:id',buscarProducto);
 productoRouter.put('/actualizar/:id'/* ,validarToken*/, validatorProducto ,actualizarProducto);
 productoRouter.patch('/deshabilitar/:id'/* , validarToken */, deshabilitarProducto);

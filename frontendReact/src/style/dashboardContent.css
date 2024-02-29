@@ -1,54 +1,191 @@
-.custom-spinner .p-progress-spinner-circle {
-  stroke: #fe8700 !important;
-}
-
-body {
-  margin: 0; /* Elimina el margen predeterminado del body */
-  height: 100vh; /* Asigna la altura completa de la ventana al body */
-}
-
 .dashboard-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; /* Asegura que el contenedor ocupe toda la altura */
-}
-
-.loading-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.grid-container {
+  width: 100%;
+  margin-top: 10px;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .container-wrapper {
+  gap: 10px;
+  width: 100%;
+  height: 150px;
+  font-weight: 700;
+  display: grid;
+  justify-content: center;
+  grid-template:
+    "empty-1 small-container1 small-container2 small-container3 small-container4 empty-2 " 100%/
+    2% 24% 24% 24% 24% 2%;
+}
+.small-container1 {
+  grid-area: small-container1;
+  grid-template:
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
+}
+.small-container2 {
+  grid-area: small-container2;
+  grid-template:
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
+}
+.small-container3 {
+  grid-area: small-container3;
+  grid-template:
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
+}
+.small-container4 {
+  grid-area: small-container4;
+  grid-template:
+    "contInterno contInterno2" 110px
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
+}
+
+.small-container1,
+.small-container2,
+.small-container3,
+.small-container4 {
+  border-radius: 10px;
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+
+.contInterno {
+  border-radius: 10px 0px 0px 0px;
+  grid-area: contInterno;
+  justify-content: center;
   display: flex;
+  font-size: 1.2em;
 }
 
-.small-container {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 50px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-right: 10px; /* Espacio entre contenedores */
+.contInterno2 {
+  border-radius: 0px 10px 0px 0px;
+  grid-area: contInterno2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.grafi-container {
-  margin-top: 10px; /* Espacio entre filas */
-  margin-right: 10px; 
-  width: 100%; /* Ancho al 100% del contenedor padre */
-  height: 400px;
+.contcolor{
+  background-color: #ff8800;
+}
+.contcolor1 {
+  background-color: #44d4d7;
+}
+.contcolor2 {
+  background-color: #f73d3d;
+}
+.contcolor3 {
+  background-color: #b641da;
+}
+
+.ssssIcono {
+  opacity: 0.7;
+  width: 115px;
+  height: 115px;
+}
+.ssssIcono333 {
+  opacity: 0.7;
+  width: 100px;
+  height: 100px;
+}
+
+.linkContenido {
+  grid-area: linkContenido;
+  border-radius: 0px 0px 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.64);
+  text-decoration: none;
+  font-size: 1.2em;
+}
+.linkColor {
+  background-color: #cf6e00;
+}
+.linkColor:hover {
+  background-color: #dc8017;
+}
+.linkColor2 {
+  background-color: #45bdbf;
+}
+.linkColor2:hover {
+  background-color: #74c5c6;
+}
+.linkColor3 {
+  background-color: #ba2d2d;
+}
+.linkColor3:hover {
+  background-color: #d14b4b;
+}
+.linkColor4 {
+  background-color: #993cb5;
+}
+.linkColor4:hover {
+  background-color: #c657e8;
+}
+
+.iconosDashboard {
+  color: rgba(255, 255, 255, 0.704);
+  width: 28px;
+  height: 28px;
+  margin-left: 5px;
+}
+.usuarioTitiii {
+  color: #f0f0f0;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.container-wrapper2 {
+  margin-top: 15px;
+  width: 100%;
+  height: 430px;
+  gap: 15px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  display: grid;
+  grid-template:
+    "empty-1 conteEstadistica1 conteEstadistica2 empty-2" 100%/
+    1% 49% 49% 1%;
+}
+
+.conteEstadistica1 {
+  position: relative;
+  grid-area: conteEstadistica1;
   background-color: #f0f0f0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  justify-content: center;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 60px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.iconoUsuarioPng {
+  opacity: 0.7;
+  width: 100%;
+  height: 100%;
+}
+
+.conteEstadistica2 {
+  grid-area: conteEstadistica2;
+  background-color: #f0f0f0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
 }

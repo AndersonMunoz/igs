@@ -16,8 +16,9 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
-
+import { secretKey } from "../const/keys";
 import { dataEncript } from "./encryp/encryp";
+import CryptoJs from "crypto-js";
 
 const Usuario = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -25,7 +26,6 @@ const Usuario = () => {
   const modalUsuarioRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({});
   const tableRef = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -35,51 +35,57 @@ const Usuario = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [registrationEnabled, setRegistrationEnabled] = useState(false);
-  const [isValidPassword, setIsValidPassword] = useState(false); // Nuevo estado
-  const initialPassword = usuarioSeleccionado.contrasena_usuario || "";
-  const [passwordValue, setPasswordValue] = useState(
-    usuarioSeleccionado.contrasena_usuario || ""
-  );
-  const [inputType, setInputType] = useState("password"); // Estado para controlar el tipo de input (password o text)
-  const initialPasswordValue = usuarioSeleccionado.contrasena_usuario || ""; // Valor inicial de la contraseña
+  const [isValidPassword, setIsValidPassword] = useState(false);
 
-  const [userPasswordEncripted, setUserPasswordEncripted] = useState("");
 
-  const encrypt = (e) => {
-    e.preventDefault();
-    let encryptPasswod = dataEncript(e.target.value);
-    setUserPasswordEncripted(encryptPasswod);
+  function dataDecript(encryptedPassword) {
+    const bytes = CryptoJs.AES.decrypt(encryptedPassword, secretKey);
+    return bytes.toString(CryptoJs.enc.Utf8);
+  }
+
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState({
+    id_usuario: "",
+    contrasena_usuario: ""
+  });
+  const [contrasenaValue, setContrasenaValue] = useState("");
+
+  const desencriptarContrasena = (contrasenaEncriptada) => {
+    return dataDecript(contrasenaEncriptada).replace(/"/g, '');
   };
 
-  const handlePasswordChange2 = (event) => {
-    const newPassword = event.target.value;
-    setPasswordValue(newPassword);
-    setUsuarioSeleccionado({
-      ...usuarioSeleccionado,
-      contrasena_usuario: newPassword,
-    });
 
-    validatePassword(newPassword, confirmPassword);
+  useEffect(() => {
+    const contrasenaDesencriptada = desencriptarContrasena(usuarioSeleccionado.contrasena_usuario);
+    setContrasenaValue(contrasenaDesencriptada);
+    validatePassword2(contrasenaDesencriptada);
+  }, [usuarioSeleccionado.contrasena_usuario]);
+
+
+  const validatePassword2 = (newValue) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const isValidPassword = passwordRegex.test(newValue);
+    setPasswordError(!isValidPassword || newValue.trim() === "");
+    setIsValidPassword(isValidPassword);
   };
+
+  // Manejar cambios en la contraseña
+  const handleChangeContrasena = (e) => {
+    const newValue = e.target.value;
+    setContrasenaValue(newValue);
+    validatePassword2(newValue);
+  };
+
+
+  ///registro usuario \/ \/ \/ \/
 
   const handleRegistration = () => {
     setPassword("");
     setConfirmPassword("");
     setPasswordMatch(false);
     setRegistrationEnabled(false);
-    setPasswordMatch(false);
   };
-
-  useEffect(() => {}, [passwordMatch]);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-    setInputType(inputType === "password" ? "text" : "password");
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  
+  useEffect(() => { }, [passwordMatch]);
 
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
@@ -92,19 +98,6 @@ const Usuario = () => {
     validatePassword(newPassword, confirmPassword);
   };
 
-  /*  const resetFormState2 = () => {
-      const formFields = modalUpdateRef.current.querySelectorAll(
-         '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
-      );
-      formFields.forEach((field) => {
-         if (field.classList.contains('is-invalid')) {
-            field.classList.remove("is-invalid");
-         }
-      });
-
-      setPasswordError(false);
-   };
- */
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -118,13 +111,23 @@ const Usuario = () => {
 
     setPasswordError(
       !isValidPassword ||
-        newPassword.trim() === "" ||
-        newConfirmPassword.trim() === ""
+      newPassword.trim() === "" ||
+      newConfirmPassword.trim() === ""
     );
 
     setRegistrationEnabled(
       newPassword === newConfirmPassword && isValidPassword
     );
+
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+    setInputType(inputType === "password" ? "text" : "password");
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   const resetFormState = () => {
@@ -140,6 +143,21 @@ const Usuario = () => {
       field.classList.remove("is-invalid");
     });
   };
+  const resetFormState2 = () => {
+    const formFields = modalUpdateRef.current.querySelectorAll(
+      '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
+    );
+    formFields.forEach((field) => {
+      if (field.type === "checkbox") {
+        field.checked = false;
+      } else {
+        field.value = "";
+      }
+      field.classList.remove("is-invalid");
+    });
+  };
+
+
 
   useEffect(() => {
     if (usuarios.length > 0) {
@@ -199,7 +217,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = userPasswordEncripted;
+    let contrasena_usuario = document.getElementById("contrasena_usuario").value;
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -338,7 +356,7 @@ const Usuario = () => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(usuarioSeleccionado),
+      body: JSON.stringify(usuarioSeleccionado, contrasenaValue),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -372,7 +390,7 @@ const Usuario = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between mb-4">
+      <div className="d-flex justify-content-between mb-4 mt-4">
         <button
           type="button"
           id="modalUsuario"
@@ -458,10 +476,10 @@ const Usuario = () => {
                 {usuarios.map((element, index) => (
                   <tr key={element.id_usuario}>
                     <td>{index + 1}</td>
-                    <td>{element.nombre_usuario}</td>
+                    <td style={{ textTransform: 'capitalize' }}>{element.nombre_usuario}</td>
                     <td>{element.documento_usuario}</td>
                     <td>{element.email_usuario}</td>
-                    <td>{element.tipo_usuario}</td>
+                    <td style={{ textTransform: 'capitalize' }}>{element.tipo_usuario}</td>
                     <td className="p-0">
                       {element.estado === 1 ? (
                         <>
@@ -613,10 +631,7 @@ const Usuario = () => {
                         name="contrasenaUsuario"
                         placeholder="Ingrese una contraseña"
                         value={password}
-                        onChange={(e) => {
-                          handlePasswordChange(e);
-                          encrypt(e);
-                        }}
+                        onChange={handlePasswordChange}
                       />
                       <div className="input-group-append">
                         <button
@@ -700,7 +715,7 @@ const Usuario = () => {
           </div>
         </div>
       </div>
-      {/* modal actualizar https://chat.openai.com/share/46202498-977b-4fd0-b1ee-baeffa0d982a*/}
+      {/* modal actualizar */}
       <div
         className="modal fade"
         id="staticBackdrop2"
@@ -739,7 +754,6 @@ const Usuario = () => {
                           id_usuario: e.target.value,
                         })
                       }
-                      disabled
                     />
                     <input
                       type="text"
@@ -754,7 +768,6 @@ const Usuario = () => {
                         })
                       }
                     />
-
                     <div className="invalid-feedback is-invalid">
                       Por favor, Ingresar un nombre valido.
                     </div>
@@ -860,15 +873,20 @@ const Usuario = () => {
                     </label>
                     <div className="input-group">
                       <input
-                        type={inputType}
-                        className={`form-control form-update ${
-                          passwordError ? "is-invalid" : ""
-                        }`}
-                        value={passwordValue}
-                        onChange={(e)=>{
-                          handlePasswordChange2(e);
-                          encrypt(e);
-                        }}
+                        type="hidden"
+                        value={usuarioSeleccionado.id_usuario || ""}
+                        onChange={(e) =>
+                          setUsuarioSeleccionado({
+                            ...usuarioSeleccionado,
+                            id_usuario: e.target.value,
+                          })
+                        }
+                      />
+                      <input
+                        type={showConfirmPassword ? "text" : "password"} // Utilizar type=password para ocultar la contraseña
+                        className={`form-control form-update ${passwordError ? "is-invalid" : ""}`}
+                        value={contrasenaValue || ""}
+                        onChange={handleChangeContrasena}
                         name="contrasena_usuario"
                         placeholder="Ingrese una contraseña"
                       />
@@ -876,17 +894,21 @@ const Usuario = () => {
                         <button
                           className="btn btn-secondary"
                           type="button"
-                          onClick={togglePasswordVisibility}
+                          onClick={toggleConfirmPasswordVisibility}
                         >
-                          {inputType === "password" ? "Show" : "Hide"}
+                          {showConfirmPassword ? "Ocultar" : "Mostrar"}
                         </button>
                       </div>
-                      {passwordError && (
-                        <div className="invalid-feedback">
-                          La contraseña debe tener al menos 6 caracteres, una
-                          mayúscula, una minúscula y un número.
+                      <div className="row text-center">
+                        <div className="col">
+                          {!isValidPassword && (
+                            <div className="text-danger">
+                              La contraseña debe tener al menos 6 caracteres, una
+                              mayúscula, una minúscula y un número.
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -913,8 +935,8 @@ const Usuario = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
