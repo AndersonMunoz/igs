@@ -12,15 +12,15 @@ import UnidadProductiva from "./components/UnidadProductiva";
 import Usuario from "./components/Usuarios";
 import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
-import ProductoCaducar from './components/ProductoCaducar'
-import PefilAjustes from './components/PerfilAjustes'
+import ProductoCaducar from "./components/ProductoCaducar";
+import PefilAjustes from "./components/PerfilAjustes";
 
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Menu />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/producto" element={<Producto />} />
           <Route path="/movimiento" element={<Movimiento />} />
           <Route path="/movimiento/entrada" element={<MovimientoEntrada />} />
@@ -32,12 +32,10 @@ const App = () => {
           <Route path="/usuario" element={<Usuario />} />
           <Route path="/inventario" element={<Inventario />} />
           <Route path="/producto/caducar" element={<ProductoCaducar />} />
-          <Route path="/ajustes" element={<PefilAjustes/>} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="/ajustes" element={<PefilAjustes />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
-
-
     </>
   );
 };
