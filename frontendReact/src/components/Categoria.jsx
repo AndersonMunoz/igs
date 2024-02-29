@@ -306,6 +306,7 @@ const Categoria = () => {
 
   return (
     <div >
+      <h1 className="text-center modal-title fs-5 m-4">Lista de Categorias</h1>
       <div className="d-flex justify-content-between  mt-4">
       <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal"  data-bs-target="#staticBackdrop"onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
           Registrar Nueva Categoria

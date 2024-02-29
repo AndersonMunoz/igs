@@ -153,8 +153,9 @@ const ProductoCaducar = () => {
 
 	return (
     <div>
+      <h1 className="text-center modal-title fs-5 m-4">Lista de Productos a Caducar</h1>
       <div className="d-flex justify-content-between m-4">
-        <h1>Lista de los productos cerca a caducar</h1>
+        <span></span>
         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
             <button onClick={handleOnExport} type="button" className="btn btn-light">

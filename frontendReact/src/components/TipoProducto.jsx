@@ -404,6 +404,7 @@ const Tipo = () => {
 
   return (
     <div>
+      <h1 className="text-center modal-title fs-5 m-4">Lista de Tipos de Productos</h1>
       <div className="d-flex justify-content-between mb-4">
         <button
           type="button"
