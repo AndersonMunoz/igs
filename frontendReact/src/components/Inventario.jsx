@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
-import '../style/Style.css'
+import "../style/Style.css";
 
 const App = () => {
   const [categoryInput, setCategoryInput] = useState("");
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  
+
   const handleAddCategory = () => {
     if (categoryInput.trim() !== "") {
       setCategories([...categories, categoryInput]);
@@ -44,11 +44,10 @@ const App = () => {
       });
   }
 
-
   const newLink = (category) => {
-    navigate(`/producto`);
+    navigate(`/inventario/item`);
     console.log(category);
-    localStorage.setItem('category', category)
+    localStorage.setItem("category", category);
   };
 
   const renderCategories = () => {
@@ -78,27 +77,26 @@ const App = () => {
         <h1 className="text-center">INVENTARIO</h1>
       </div>
       <div className="container mt-4">
-      <div className="row w-100" style={{ justifyContent: 'flex-end' }}>
-  <div className="form-group col-6">
-    <input
-      type="text"
-      className="form-control border-color h-100"
-      placeholder="Buscar categoría"
-      value={categoryInput}
-      onChange={(e) => setCategoryInput(e.target.value)}
-    />
-  </div>
-  <div className="form-group col-3">
-    <button
-      className="btn-color rounded h-100 w-100"
-      type="button"
-      onClick={handleAddCategory}
-    >
-      <h3 className="mt-1">Buscar</h3>
-    </button>
-  </div>
-</div>
-
+        <div className="row w-100" style={{ justifyContent: "flex-end" }}>
+          <div className="form-group col-6">
+            <input
+              type="text"
+              className="form-control border-color h-100"
+              placeholder="Buscar categoría"
+              value={categoryInput}
+              onChange={(e) => setCategoryInput(e.target.value)}
+            />
+          </div>
+          <div className="form-group col-3">
+            <button
+              className="btn-color rounded h-100 w-100"
+              type="button"
+              onClick={handleAddCategory}
+            >
+              <h3 className="mt-1">Buscar</h3>
+            </button>
+          </div>
+        </div>
       </div>
 
       {renderCategories()}

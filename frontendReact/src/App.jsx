@@ -14,6 +14,7 @@ import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
 import ProductoCaducar from "./components/ProductoCaducar";
 import PefilAjustes from "./components/PerfilAjustes";
+import BuscarInventario from "./components/InventarioItem";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
           <Route path="/inventario" element={<Inventario />} />
+          <Route path="/inventario/item" element={<BuscarInventario />} />
           <Route path="/producto/caducar" element={<ProductoCaducar />} />
           <Route path="/ajustes" element={<PefilAjustes />} />
           <Route path="*" element={<Navigate to="/" />} />
