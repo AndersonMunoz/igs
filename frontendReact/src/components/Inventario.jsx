@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import "../style/Style.css";
 
-const App = () => {
+const Inventario = () => {
   const [categoryInput, setCategoryInput] = useState("");
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -119,6 +119,6 @@ const App = () => {
   );
 };
 
-export const newLink = App.newLink; // Exporta la función newLink
+export const newLink = Inventario.newLink; // Exporta la función newLink
 
-export default App;
+export default Inventario;

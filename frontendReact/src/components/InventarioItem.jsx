@@ -2,8 +2,35 @@ import React, { useRef, useEffect, useState } from "react";
 
 const InventarioItem = () => {
   const tableRef = useRef();
-  const [name, setName] = useState("");
-  const [item, setItem] = useState("");
+  const [name, setName] = useState([]);
+  const [item, setItem] = useState([]);
+
+
+  useEffect(() => {
+    const category = localStorage.getItem('category'); // Obtener el valor de localStorage
+    setName(category); // Establecer el nombre de la categoría
+    if (category) {
+      listarCategoriaItem(category); // Llamar a listarCategoriaItem con el valor de localStorage
+    }
+  }, []);
+
+  const listarCategoriaItem = (category) => {
+    console.log(category);
+    fetch(`http://localhost:3000/categoria/listarCategoriaItem/${category}`, {
+      method: "GET",
+      headers: {
+        'Content-type': 'application/json',
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      setItem(data);
+    })
+    .catch((e) => {
+      console.log("Error: ", e);
+    });
+  }
 
   useEffect(() => {
     if (item.length > 0) {
@@ -26,10 +53,6 @@ const InventarioItem = () => {
       });
     }
   }, [item]);
-
-  useEffect(() => {
-    setName(localStorage.getItem('category'));
-  }, []);
 
   return (
     <>
@@ -59,43 +82,36 @@ const InventarioItem = () => {
             {item.length > 0 ? (
               <>
                 {item.map((element, index) => (
-                  <tr key={element.id_proveedores}>
+                  <tr key={element.id_categoria}>
                     <td>{index + 1}</td>
-                    <td>{element.nombre_proveedores}</td>
-                    <td>{element.telefono_proveedores}</td>
-                    <td>{element.direccion_proveedores}</td>
-                    <td>{element.contrato_proveedores}</td>
-                    <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
-                    <td>{Validate.formatFecha(element.inicio_contrato)}</td>
-                    <td>{Validate.formatFecha(element.fin_contrato)}</td>
+                    <td>{element.NombreCategoria}</td>
+                    <td>{element.Peso}</td>
+                    <td>{element.Unidad}</td>
+                    <td>{Validate.formatFecha(element.FechaIngreso)}</td>
+                    <td>{Validate.formatFecha(element.FechaCaducidad)}</td>
+                    <td>{element.Descripcion}</td>
                     <td>
-                      {element.estado !== 1 ? (
-                        "NO DISPONIBLES"
-                      ) : (
-                        <>
-                          <button
-                            type="button"
-                            className="btn-color btn mx-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            onClick={() => {
-                              setModal(true);
-                              editarProveedor(element.id_proveedores);
-                            }}
-                          >
-                            <IconEdit />
-                          </button>
-                          <button
-                            className="btn btn-danger"
-                            type="button"
-                            onClick={() =>
-                              deshabilitarProveedor(element.id_proveedores)
-                            }
-                          >
-                            <IconTrash />
-                          </button>
-                        </>
-                      )}
+                      <button
+                        type="button"
+                        className="btn-color btn mx-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                        onClick={() => {
+                          setModal(true);
+                          editarProveedor(element.id_categoria);
+                        }}
+                      >
+                        <IconEdit />
+                      </button>
+                      <button
+                        className="btn btn-danger"
+                        type="button"
+                        onClick={() =>
+                          deshabilitarProveedor(element.id_categoria)
+                        }
+                      >
+                        <IconTrash />
+                      </button>
                     </td>
                   </tr>
                 ))}

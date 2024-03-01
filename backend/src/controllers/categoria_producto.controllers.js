@@ -182,26 +182,30 @@ export const activarCategoria = async (req, res) => {
 		res.status(500).json({ message: "Error en activarCategoria" + e });
 	}
 };
-export const listarProductos = async (req, res) => {
-    try { 
-      const [result] = await pool.query(
-        `SELECT
-        c.nombre_categoria AS NombreCategoria,
-        p.cantidad_peso_producto AS Peso,
-        t.unidad_peso AS Unidad,
-        f.fecha_movimiento AS fechaIngreso,
-        f.fecha_caducidad AS FechaCaducidad,
-        p.descripcion_producto AS Descripcion
-      FROM categorias_producto c 
-      JOIN tipo_productos t ON t.fk_categoria_pro = c.id_categoria
-      JOIN productos p ON p.fk_id_tipo_producto = t.id_tipo
-      LEFT JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto`
-      );
-      res.status(200).json(result);
-    } catch (er) {
-      res.status(500).json({
-        status: 500,
-        message: "Error listarProductos " + er,
-      });
+export const listarCategoriaItem = async (req, res) => {
+    try {
+        let id = req.params.id;
+        const [result] = await pool.query(
+            `SELECT
+                c.id_categoria,
+                c.nombre_categoria AS NombreCategoria,
+                p.cantidad_peso_producto AS Peso,
+                t.unidad_peso AS Unidad,
+                f.fecha_movimiento AS FechaIngreso,
+                f.fecha_caducidad AS FechaCaducidad,
+                p.descripcion_producto AS Descripcion
+            FROM categorias_producto c
+            JOIN tipo_productos t ON t.fk_categoria_pro = c.id_categoria
+            JOIN productos p ON p.fk_id_tipo_producto = t.id_tipo
+            LEFT JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto
+            WHERE c.id_categoria = ?`,
+            [id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({
+            status: 500,
+            message: "Error listarProductos: " + err.message,
+        });
     }
-  };
+};

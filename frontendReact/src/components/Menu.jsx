@@ -231,9 +231,6 @@ export const Menu = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="#">Historial</Link>
-                </li>
-                <li>
                   <Link to="/producto/caducar">Productos a Caducar</Link>
                 </li>
               </ul>
