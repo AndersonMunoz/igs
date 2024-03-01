@@ -114,7 +114,7 @@ const Usuario = () => {
       newConfirmPassword.trim() === ""
     );
 
-     setRegistrationEnabled(
+    setRegistrationEnabled(
       newPassword === newConfirmPassword && isValidPassword
     ); 
 
@@ -216,7 +216,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = password
+    let contrasena_usuario = password && confirmPassword
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
