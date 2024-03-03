@@ -5,6 +5,7 @@ import LogoSena from "./LogoSena";
 import IgsLogo from "../../img/IGS.png";
 import Fondo1 from "../../img/fondoIGS2.jpg";
 import Fondo2 from "../../img/fondoIGS1.jpg";
+import Fondo3 from "../../img/fondoIGS3.jpg";
 import "bootstrap";
 import "./css/login.css";
 import { dataEncript } from "../components/encryp/encryp";
@@ -122,6 +123,9 @@ const LoginForm = () => {
               </div>
               <div className="carousel-item" data-bs-interval="6000">
                 <img src={Fondo2} className="d-block w-100" alt="..." />
+              </div>
+              <div className="carousel-item" data-bs-interval="6000">
+                <img src={Fondo3} className="d-block w-100" alt="..." />
               </div>
             </div>
             <button
