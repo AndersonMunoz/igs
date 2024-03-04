@@ -17,7 +17,6 @@ import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import { secretKey } from "../const/keys";
-import { dataEncript } from "./encryp/encryp";
 import CryptoJs from "crypto-js";
 
 const Usuario = () => {
@@ -117,9 +116,17 @@ const Usuario = () => {
 
     setRegistrationEnabled(
       newPassword === newConfirmPassword && isValidPassword
-    );
+    ); 
 
   };
+
+  function obtenerContrasena(password, confirmPassword) {
+    if (password !== confirmPassword) {
+      throw new Error("Las contraseñas no coinciden");
+    }
+    return password;
+  }
+  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -217,7 +224,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = document.getElementById("contrasena_usuario").value;
+    
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -231,7 +238,7 @@ const Usuario = () => {
         documento_usuario,
         email_usuario,
         nombre_usuario,
-        contrasena_usuario,
+        contrasena_usuario: obtenerContrasena(password, confirmPassword),
         tipo_usuario,
       }),
     })
@@ -351,12 +358,19 @@ const Usuario = () => {
   }
   function actualizarUsuario(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
+
+    const dataToSend = {
+    ...usuarioSeleccionado,
+    contrasena_usuario: contrasenaValue
+  };
+
+
     fetch(`http://localhost:3000/usuario/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify(usuarioSeleccionado, contrasenaValue),
+      body: JSON.stringify(dataToSend),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -395,7 +409,7 @@ const Usuario = () => {
         <button
           type="button"
           id="modalUsuario"
-          className="bgfondo btn-color btn mb-4"
+          className="bgfondo btn-color btn mb-4 hg"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           onClick={() => {
@@ -706,7 +720,7 @@ const Usuario = () => {
               </button>
               <button
                 type="button"
-                disabled={!registrationEnabled}
+               /*  disabled={!registrationEnabled} */
                 className="btn btn-color"
                 onClick={registrarUsuario}
               >
@@ -875,7 +889,7 @@ const Usuario = () => {
                     <div className="input-group">
                       <input
                         type="hidden"
-                        value={usuarioSeleccionado.id_usuario || ""}
+                        value={usuarioSeleccionado.contrasena_usuario || ""}
                         onChange={(e) =>
                           setUsuarioSeleccionado({
                             ...usuarioSeleccionado,
@@ -897,7 +911,7 @@ const Usuario = () => {
                           type="button"
                           onClick={toggleConfirmPasswordVisibility}
                         >
-                          {showConfirmPassword ? "Ocultar" : "Mostrar"}
+                          {showConfirmPassword ? <IconEyeOff /> : <IconEye />}
                         </button>
                       </div>
                       <div className="row text-center">
@@ -928,7 +942,7 @@ const Usuario = () => {
                 type="button"
                 className="btn btn-color"
                 onClick={() => {
-                  actualizarUsuario(usuarioSeleccionado.id_usuario);
+                  actualizarUsuario(usuarioSeleccionado.id_usuario, contrasenaValue);
                 }}
               >
                 Actualizar
