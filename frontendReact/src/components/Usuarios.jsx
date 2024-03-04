@@ -120,6 +120,14 @@ const Usuario = () => {
 
   };
 
+  function obtenerContrasena(password, confirmPassword) {
+    if (password !== confirmPassword) {
+      throw new Error("Las contraseñas no coinciden");
+    }
+    return password;
+  }
+  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
     setInputType(inputType === "password" ? "text" : "password");
@@ -216,7 +224,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    let contrasena_usuario = password && confirmPassword
+    
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -230,7 +238,7 @@ const Usuario = () => {
         documento_usuario,
         email_usuario,
         nombre_usuario,
-        contrasena_usuario,
+        contrasena_usuario: obtenerContrasena(password, confirmPassword),
         tipo_usuario,
       }),
     })
@@ -400,7 +408,7 @@ const Usuario = () => {
         <button
           type="button"
           id="modalUsuario"
-          className="bgfondo btn-color btn mb-4"
+          className="bgfondo btn-color btn mb-4 hg"
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           onClick={() => {
