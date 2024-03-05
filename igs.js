@@ -62,8 +62,7 @@ igs.use('/up', unidadProductiva);
 
 igs.use('/aut', autRouter);
 
-igs.listen(3000,()=>{
+igs.listen(port,()=>{
     console.log(`Servidor IGS ejecutando en http://localhost:${port}`);
 })
-
 
