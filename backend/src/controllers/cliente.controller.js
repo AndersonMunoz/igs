@@ -116,15 +116,15 @@ async function enviarCorreoElectronico(destinatario, contraseña) {
         service: 'Gmail',
         auth: {
             user: 'igs.yamboro@gmail.com',
-            pass: 'oemcutckubmlrfex' 
+            pass: 'oemcutckubmlrfex'
         },
         tls: {
             rejectUnauthorized: false
         }
     });
-    
+
     let mensaje = {
-        from: '"IGS" <igs.yamboro@gmail.com>', 
+        from: '"IGS" <igs.yamboro@gmail.com>',
         to: destinatario,
         subject: "Recuperación de contraseña - IGS",
         text: `Tu contraseña es: ${contraseña}`,
@@ -145,7 +145,7 @@ export const buscarUsuarioCedula = async (req, res) => {
         if (result.length > 0) {
             const contraseñaDB = dataDecript(result[0].contrasena_usuario).replace(/"/g, '');
             const correo_usuario = result[0].email_usuario;
-            
+
             await enviarCorreoElectronico(correo_usuario, contraseñaDB);
 
             res.status(200).json({ "status": 200, "message": "Contraseña enviada al correo electrónico asociado." });
@@ -158,6 +158,42 @@ export const buscarUsuarioCedula = async (req, res) => {
         });
     }
 };
+
+export const editarContrasena = async (req, res) => {
+    try {
+        let error = validationResult(req);
+        if (!error.isEmpty()) {
+            return res.status(403).json({ "status": 403, error })
+        }
+
+        let id = req.params.id;
+
+        let { contrasena_usuario } = req.body;
+
+        sql = `UPDATE usuarios SET contrasena_usuario = '${contrasena_usuario = dataEncript(contrasena_usuario)}'
+            WHERE id_usuario = ${id}`;
+
+        const [rows] = await pool.query(sql);
+
+        if (rows.affectedRows > 0) {
+            return res.status(200).json({
+                "status": 200,
+                "message": "Se actualizó con éxito el usuario"
+            });
+        } else {
+            return res.status(401).json({
+                "status": 401,
+                "message": "No se actualizó el usuario"
+            });
+        }
+
+    } catch (e) {
+        return res.status(500).json({
+            "status": 500,
+            "message": "Error interno en el servidor: " + e.message
+        });
+    }
+}
 
 
 export const editarUsuario = async (req, res) => {
@@ -173,7 +209,7 @@ export const editarUsuario = async (req, res) => {
 
         let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario FROM usuarios WHERE id_usuario = ${id}`;
         const [existingUser] = await pool.query(sql);
-   
+
         // Verificar si el usuario existe
         if (existingUser.length === 0) {
             return res.status(404).json({
@@ -207,7 +243,7 @@ export const editarUsuario = async (req, res) => {
                 });
             }
         }
-        
+
         sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}',
             email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',
             contrasena_usuario = '${contrasena_usuario = dataEncript(contrasena_usuario)}', tipo_usuario = '${tipo_usuario}'

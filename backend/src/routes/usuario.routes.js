@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario, listarUsuarioActivo, listarUsuarioCount,buscarUsuarioCedula} from '../controllers/cliente.controller.js';
+import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario, listarUsuarioActivo, listarUsuarioCount,buscarUsuarioCedula, editarContrasena} from '../controllers/cliente.controller.js';
 import { validarToken } from "../controllers/autentificacion.controller.js";
 import { validatorUsuario } from "../validation/usuario.validator.js";
 
@@ -14,6 +14,7 @@ usuarioRouter.put("/editar/:id",validatorUsuario, /* validarToken, */ editarUsua
 usuarioRouter.patch("/deshabilitar/:id" /* ,validarToken */ , actualizarEstado );
 usuarioRouter.patch("/activar/:id",/* validarToken , */ activarEstado );
 usuarioRouter.get("/listarCount", listarUsuarioCount );
+usuarioRouter.put("/editarcontra/:id", validatorUsuario, editarContrasena );
 
 
 export default usuarioRouter;
