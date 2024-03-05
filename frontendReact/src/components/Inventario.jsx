@@ -12,13 +12,97 @@ import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import esES from '../languages/es-ES.json';
-
+import {DownloadTableExcel}  from 'react-export-table-to-excel';
+import generatePDF from 'react-to-pdf';
+import Select from 'react-select'
+import * as xlsx from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import ExelLogo from "../../img/excel.224x256.png";
+import PdfLogo from "../../img/pdf.224x256.png";
 
 const Inventario = () => {
   const [categories, setCategories] = useState([]);
   const [categoriaItem, setCategoriaItem] = useState([]);
   const [selectedCategoriaNombre, setSelectedCategoriaNombre] = useState("");
   const tableRef = useRef();
+
+  const handleOnExport = () => {
+    const wsData = getTableData();
+    const wb = xlsx.utils.book_new();
+    const ws = xlsx.utils.aoa_to_sheet(wsData);
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelCategorias');
+    xlsx.writeFile(wb, 'Categorias.xlsx');
+  };
+
+  const doc= new jsPDF();
+  const exportPdfHandler = () => {
+    const doc = new jsPDF();
+  
+    const columns = [
+      { title: 'N°', dataKey: 'id_categoria' },
+      { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
+      { title: 'Peso', dataKey: 'Peso' },
+      { title: 'Unidad', dataKey: 'Unidad' },
+      { title: 'FechaIngreso', dataKey: 'FechaIngreso' },
+      { title: 'FechaCaducidad', dataKey: 'FechaCaducidad' },
+      { title: 'Descripcion', dataKey: 'Descripcion' }
+    ];
+  
+    // Obtener los datos de la tabla
+    const tableData = categoriaItem.map((element) => ({
+      id_producto: element.id_categoria,
+      NombreCategoria: element.NombreCategoria,
+      Peso: element.Peso,
+      Unidad: element.Unidad,
+      FechaIngreso: element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada',
+      FechaCaducidad: element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada',
+      Descripcion: element.Descripcion
+    }));
+  
+    // Agregar las columnas y los datos a la tabla del PDF
+    doc.autoTable({
+      columns,
+      body: tableData,
+      margin: { top: 20 },
+      styles: { overflow: 'linebreak' },
+      headStyles: { fillColor: [100, 100, 100] },
+    });
+  
+    // Guardar el PDF
+    doc.save('Categoria.pdf');
+  };
+  const getTableData = () => {
+    const wsData = [];
+  
+    // Obtener las columnas
+    const columns = [
+      'N°',
+      'NombreCategoria',
+      'Peso',
+      'Unidad',
+      'FechaIngreso',
+      'FechaCaducidad',
+      'Descripcion'
+    ];
+    wsData.push(columns);
+  
+    // Obtener los datos de las filas
+    categoriaItem.forEach(element => {
+      const rowData = [
+        element.id_categoria,
+        element.NombreCategoria,
+        element.Peso,
+        element.Unidad,
+        element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada',
+        element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada',
+        element.Descripcion, 
+      ];
+      wsData.push(rowData);
+    });
+  
+    return wsData;
+  };
 
   const handleModalOpen = (categoryName) => {
     setSelectedCategoriaNombre(categoryName);
@@ -115,6 +199,21 @@ const Inventario = () => {
               <h1 className="modal-title fs-5">Categoria {selectedCategoriaNombre}</h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal"></button>
             </div>
+            <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+            <div className="" title="Descargar Excel">
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
+                <img src={ExelLogo} className="logoExel" />
+                </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}                >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
+          </div>
             <div className="modal-body">
                 <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
                   <thead className="text-center text-justify">
