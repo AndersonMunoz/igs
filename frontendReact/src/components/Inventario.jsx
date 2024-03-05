@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../style/Style.css";
 import $ from 'jquery';
+import { Link } from "react-router-dom";
+import Validate from '../helpers/Validate'
 import 'bootstrap';
 import 'datatables.net';
 import 'datatables.net-bs5';
@@ -9,16 +11,10 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import { DownloadTableExcel } from 'react-export-table-to-excel';
-import generatePDF from 'react-to-pdf';
-import Select from 'react-select'
-import * as xlsx from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import esES from '../languages/es-ES.json';
 
+
 const Inventario = () => {
-  const [categoryInput, setCategoryInput] = useState("");
   const [categories, setCategories] = useState([]);
   const [categoriaItem, setCategoriaItem] = useState([]);
   const [selectedCategoriaNombre, setSelectedCategoriaNombre] = useState("");
@@ -27,13 +23,6 @@ const Inventario = () => {
   const handleModalOpen = (categoryName) => {
     setSelectedCategoriaNombre(categoryName);
   }
-
-  // const handleAddCategory = () => {
-  //   if (categoryInput.trim() !== "") {
-  //     setCategories([...categories, categoryInput]);
-  //     setCategoryInput("");
-  //   }
-  // };
 
   useEffect(() => {
 		if (categoriaItem.length > 0) {
@@ -75,6 +64,12 @@ const Inventario = () => {
   }
 
   const listarCategoriaItem = (id) => {
+    // Destruye el DataTable si existe
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+  
+    // Realiza la solicitud para obtener los datos
     fetch(`http://localhost:3000/categoria/listarCategoriaItem/${id}`, {
       method: "GET",
       headers: {
@@ -89,35 +84,14 @@ const Inventario = () => {
         console.error('Error al obtener los datos:', error);
       });
   }
+  
 
   return (
     <div className="container rounded p-4 mt-4">
       <div className="rounded p-1 mb-4 txt-color">
         <h1 className="text-center">INVENTARIO</h1>
       </div>
-      {/* <div className="container mt-4">
-        <div className="row w-100" style={{ justifyContent: "flex-end" }}>
-          <div className="form-group col-6">
-            <input
-              type="text"
-              className="form-control border-color h-100"
-              placeholder="Buscar categoría"
-              value={categoryInput}
-              onChange={(e) => setCategoryInput(e.target.value)}
-            />
-          </div>
-          <div className="form-group col-3">
-            <button
-              className="btn-color rounded h-100 w-100"
-              type="button"
-              onClick={handleAddCategory}
-            >
-              <h3 className="mt-1">Buscar</h3>
-            </button>
-          </div>
-        </div>
-      </div> */}
-
+      
       {categories.map((categorie, index) => (
       <div key={categorie.id_categoria} className="bg-light p-3 mb-3 rounded d-grid">
         <button
@@ -173,8 +147,8 @@ const Inventario = () => {
                             <td>{element.NombreCategoria}</td>
                             <td>{element.Peso}</td>
                             <td>{element.Unidad}</td>
-                            <td>{element.FechaIngreso ? element.FechaIngreso : 'No asignada'}</td>
-                            <td>{element.FechaCaducidad ? element.FechaCaducidad : 'No asignada'}</td>
+                            <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
+                            <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
                             <td>{element.Descripcion}</td>
                           </tr>
                         ))}
@@ -201,7 +175,11 @@ const Inventario = () => {
         <div className="row">
           <div className="col text-center">
             <button className="btn btn-danger w-100">
-              Productos a caducar
+              <Link to="/producto/caducar">
+                <div className="tamañoLateral">
+                  Productos a caducar
+                </div>
+              </Link>
             </button>
           </div>
         </div>
