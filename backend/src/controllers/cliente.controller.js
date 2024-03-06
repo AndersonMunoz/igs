@@ -170,7 +170,7 @@ export const editarContrasena = async (req, res) => {
 
         let { contrasena_usuario } = req.body;
 
-        sql = `UPDATE usuarios SET contrasena_usuario = '${contrasena_usuario = dataEncript(contrasena_usuario)}'
+        let sql = `UPDATE usuarios SET contrasena_usuario = '${dataEncript(contrasena_usuario)}'
             WHERE id_usuario = ${id}`;
 
         const [rows] = await pool.query(sql);
@@ -194,6 +194,7 @@ export const editarContrasena = async (req, res) => {
         });
     }
 }
+
 
 
 export const editarUsuario = async (req, res) => {
@@ -248,6 +249,77 @@ export const editarUsuario = async (req, res) => {
             email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',
             contrasena_usuario = '${contrasena_usuario = dataEncript(contrasena_usuario)}', tipo_usuario = '${tipo_usuario}'
             WHERE id_usuario = ${id}`;
+
+        const [rows] = await pool.query(sql);
+
+        if (rows.affectedRows > 0) {
+            return res.status(200).json({
+                "status": 200,
+                "message": "Se actualizó con éxito el usuario"
+            });
+        } else {
+            return res.status(401).json({
+                "status": 401,
+                "message": "No se actualizó el usuario"
+            });
+        }
+    } catch (e) {
+        return res.status(500).json({
+            "status": 500,
+            "message": "Error interno en el servidor: " + e.message
+        });
+    }
+};
+export const editarUsuarioAjustes = async (req, res) => {
+    try {
+        let error = validationResult(req);
+        if (!error.isEmpty()) {
+            return res.status(403).json({ "status": 403, error })
+        }
+
+        let id = req.params.id;
+
+        let { documento_usuario, email_usuario, nombre_usuario } = req.body;
+
+        let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario FROM usuarios WHERE id_usuario = ${id}`;
+        const [existingUser] = await pool.query(sql);
+
+        // Verificar si el usuario existe
+        if (existingUser.length === 0) {
+            return res.status(404).json({
+                "status": 404,
+                "message": "El usuario no existe"
+            });
+        }
+
+        // Verificar duplicidad de documento solo si el documento se está actualizando
+        if (documento_usuario !== existingUser[0].documento_usuario) {
+            const documentQuery = `SELECT * FROM usuarios WHERE documento_usuario = '${documento_usuario}' AND id_usuario != ${id}`;
+            const [existingDocument] = await pool.query(documentQuery);
+
+            if (existingDocument.length > 0) {
+                return res.status(409).json({
+                    "status": 409,
+                    "message": "El documento ya está registrado"
+                });
+            }
+        }
+
+        // Verificar duplicidad de correo electrónico solo si el correo se está actualizando
+        if (email_usuario !== existingUser[0].email_usuario) {
+            const emailQuery = `SELECT * FROM usuarios WHERE email_usuario = '${email_usuario}' AND id_usuario != ${id}`;
+            const [existingEmail] = await pool.query(emailQuery);
+
+            if (existingEmail.length > 0) {
+                return res.status(409).json({
+                    "status": 409,
+                    "message": "El correo electrónico ya está registrado"
+                });
+            }
+        }
+
+        sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}',
+            email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}' WHERE id_usuario = ${id}`;
 
         const [rows] = await pool.query(sql);
 

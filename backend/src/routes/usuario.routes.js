@@ -1,7 +1,7 @@
 import { Router } from "express";
-import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario, listarUsuarioActivo, listarUsuarioCount,buscarUsuarioCedula, editarContrasena} from '../controllers/cliente.controller.js';
+import {registroUsuario,listarUsuario,buscarUsuario,actualizarEstado,activarEstado, editarUsuario, listarUsuarioActivo, listarUsuarioCount,buscarUsuarioCedula, editarContrasena, editarUsuarioAjustes} from '../controllers/cliente.controller.js';
 import { validarToken } from "../controllers/autentificacion.controller.js";
-import { validatorUsuario } from "../validation/usuario.validator.js";
+import { validatorContrasena, validatorUsuario, validatorUsuarioAjustes } from "../validation/usuario.validator.js";
 
 const usuarioRouter = Router();
 
@@ -11,10 +11,11 @@ usuarioRouter.get("/listaractivo", listarUsuarioActivo );
 usuarioRouter.get("/buscar/:id", buscarUsuario );
 usuarioRouter.post("/buscarCedula/:documento_usuario", buscarUsuarioCedula );
 usuarioRouter.put("/editar/:id",validatorUsuario, /* validarToken, */ editarUsuario );
+usuarioRouter.put("/editarajustes/:id",validatorUsuarioAjustes, /* validarToken, */ editarUsuarioAjustes );
 usuarioRouter.patch("/deshabilitar/:id" /* ,validarToken */ , actualizarEstado );
 usuarioRouter.patch("/activar/:id",/* validarToken , */ activarEstado );
 usuarioRouter.get("/listarCount", listarUsuarioCount );
-usuarioRouter.put("/editarcontra/:id", validatorUsuario, editarContrasena );
+usuarioRouter.put("/editarcontrasena/:id", validatorContrasena, editarContrasena );
 
 
 export default usuarioRouter;

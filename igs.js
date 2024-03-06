@@ -22,7 +22,7 @@ igs.use(body_parser.urlencoded({extended:false}));
 
 igs.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCh, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
     res.setHeader("Access-Control-Allow-Credentials", "true");
 

@@ -130,7 +130,7 @@ const Usuario = () => {
 
    const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
-      setInputType(inputType === "password" ? "text" : "password");
+
    };
 
    const toggleConfirmPasswordVisibility = () => {
@@ -662,8 +662,7 @@ const Usuario = () => {
                                  <div className="col">
                                     {password.length > 0 && !isValidPassword && (
                                        <div className="text-danger">
-                                          La contraseña debe tener al menos 6 caracteres, una
-                                          mayúscula, una minúscula y un número.
+                                          La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 32 caracteres
                                        </div>
                                     )}
                                  </div>
@@ -898,7 +897,7 @@ const Usuario = () => {
                                     }
                                  />
                                  <input
-                                    type={showConfirmPassword ? "text" : "password"} // Utilizar type=password para ocultar la contraseña
+                                    type={showConfirmPassword ? "text" : "password"}
                                     className={`form-control form-update ${passwordError ? "is-invalid" : ""}`}
                                     value={contrasenaValue || ""}
                                     onChange={handleChangeContrasena}
