@@ -18,6 +18,7 @@ import generatePDF from "react-to-pdf";
 import * as xlsx from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import portConexion from "../const/portConexion";
 import { dataDecript } from "./encryp/decryp";
 
 const Up = () => {
@@ -121,7 +122,7 @@ const Up = () => {
   }
 
   function listarUp() {
-    fetch("http://localhost:3000/up/listar", {
+    fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -148,7 +149,7 @@ const Up = () => {
     let nombre_up = document.getElementById("nombreUp").value;
     const validacionExitosa = Validate.validarCampos(".form-empty");
 
-    fetch("http://localhost:3000/up/registrar", {
+    fetch(`http://${portConexion}:3000/up/registrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -191,7 +192,7 @@ const Up = () => {
   function deshabilitarUp(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/up/deshabilitar/${id}`, {
+        fetch(`http://${portConexion}:3000/up/deshabilitar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -216,7 +217,7 @@ const Up = () => {
   function activarUp(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/up/activar/${id}`, {
+        fetch(`http://${portConexion}:3000/up/activar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -241,7 +242,7 @@ const Up = () => {
   }
 
   function editarUp(id) {
-    fetch(`http://localhost:3000/up/buscar/${id}`, {
+    fetch(`http://${portConexion}:3000/up/buscar/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -259,7 +260,7 @@ const Up = () => {
   }
   function actualizarUp(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
-    fetch(`http://localhost:3000/up/editar/${id}`, {
+    fetch(`http://${portConexion}:3000/up/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",

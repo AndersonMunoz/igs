@@ -18,6 +18,7 @@ import {DownloadTableExcel}  from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import Select from 'react-select'
 import * as xlsx from 'xlsx';
+import portConexion from "../const/portConexion";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -178,7 +179,7 @@ const Producto = () => {
     }
   }
   function listarProducto() {
-    fetch("http://localhost:3000/producto/listar", {
+    fetch(`http://${portConexion}:3000/producto/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -194,7 +195,7 @@ const Producto = () => {
     });
   }
   function listarTipo(){
-    fetch("http://localhost:3000/tipo/listarActivo",{
+    fetch(`http://${portConexion}:3000/tipo/listarActivo`,{
       method: "GET",
       headers:{
         "Content-type": "application/json",
@@ -217,7 +218,7 @@ const Producto = () => {
     });
   }
   function listarUp() {
-    fetch("http://localhost:3000/up/listar", {
+    fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -257,7 +258,7 @@ const Producto = () => {
       return;
     }
   
-    fetch('http://localhost:3000/producto/registrar', {
+    fetch(`http://${portConexion}:3000/producto/registrar`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -294,7 +295,7 @@ const Producto = () => {
     });
   }
   function editarProducto(id) {
-    fetch(`http://localhost:3000/producto/buscar/${id}`, {
+    fetch(`http://${portConexion}:3000/producto/buscar/${id}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
@@ -313,7 +314,7 @@ const Producto = () => {
   function actualizarProducto(id){
     const validacionExitosa = Validate.validarCampos('.form-update');
       
-    fetch(`http://localhost:3000/producto/actualizar/${id}`,{
+    fetch(`http://${portConexion}:3000/producto/actualizar/${id}`,{
       method: 'PUT',
       headers:{
         'Content-type':'application/json'
@@ -347,7 +348,7 @@ const Producto = () => {
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/producto/deshabilitar/${id}`, {
+        fetch(`http://${portConexion}:3000/producto/deshabilitar/${id}`, {
           method: 'PATCH',
           headers: {
             "Content-type": "application/json"
@@ -379,7 +380,7 @@ const Producto = () => {
   function activarProducto(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/producto/activar/${id}`, {
+        fetch(`http://${portConexion}:3000/producto/activar/${id}`, {
           method: 'PATCH',
           headers: {
             "Content-type": "application/json"

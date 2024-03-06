@@ -13,6 +13,7 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; 
+import portConexion from "../const/portConexion";
 import generatePDF from 'react-to-pdf';
 import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
@@ -125,7 +126,7 @@ const Categoria = () => {
   }
  
   function listarCategoria() {
-    fetch("http://localhost:3000/categoria/listar", {
+    fetch(`http://${portConexion}:3000/categoria/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -154,7 +155,7 @@ const Categoria = () => {
   
     const validacionExitosa = Validate.validarCampos('.form-empty');
 
-    fetch('http://localhost:3000/categoria/registrar', {
+    fetch(`http://${portConexion}:3000/categoria/registrar`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -200,7 +201,7 @@ const Categoria = () => {
   function deshabilitarCategoria(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/categoria/deshabilitar/${id}`, {
+        fetch(`http://${portConexion}:3000/categoria/deshabilitar/${id}`, {
           method: 'PATCH',
           headers: {
             "Content-type": "application/json"
@@ -228,7 +229,7 @@ const Categoria = () => {
   function activarCategoria(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/categoria/activar/${id}`, {
+        fetch(`http://${portConexion}:3000/categoria/activar/${id}`, {
           method: 'PATCH',
           headers: {
             "Content-type": "application/json"
@@ -252,7 +253,7 @@ const Categoria = () => {
     });
   }
   function editarCategoria(id) {
-    fetch(`http://localhost:3000/categoria/buscar/${id}`, {
+    fetch(`http://${portConexion}:3000/categoria/buscar/${id}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
@@ -270,7 +271,7 @@ const Categoria = () => {
   }
   function actualizarCategoria(id){
     const validacionExitosa = Validate.validarCampos('.form-update');
-    fetch(`http://localhost:3000/categoria/editar/${id}`,{
+    fetch(`http://${portConexion}:3000/categoria/editar/${id}`,{
       method: 'PUT',
       headers:{
         'Content-type':'application/json'

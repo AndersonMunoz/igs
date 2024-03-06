@@ -19,6 +19,7 @@ import generatePDF from "react-to-pdf";
 import { newLink } from "./Inventario.jsx";
 import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
+import portConexion from "../const/portConexion";
 import autoTable from 'jspdf-autotable';
 
 
@@ -190,7 +191,7 @@ const Tipo = () => {
   }
 
   function listarTipo() {
-    fetch("http://localhost:3000/tipo/listar", {
+    fetch(`http://${portConexion}:3000/tipo/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -213,7 +214,7 @@ const Tipo = () => {
       });
   }
   function listarCategoria() {
-    fetch("http://localhost:3000/categoria/listar", {
+    fetch(`http://${portConexion}:3000/categoria/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -252,7 +253,7 @@ const Tipo = () => {
       return;
     }
 
-    fetch("http://localhost:3000/tipo/registrar", {
+    fetch(`http://${portConexion}/tipo/registrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -291,7 +292,7 @@ const Tipo = () => {
   function deshabilitarTipo(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/tipo/deshabilitar/${id}`, {
+        fetch(`http://${portConexion}:3000/tipo/deshabilitar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -317,7 +318,7 @@ const Tipo = () => {
   function activarTipo(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/tipo/activar/${id}`, {
+        fetch(`http://${portConexion}:3000/tipo/activar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -342,7 +343,7 @@ const Tipo = () => {
   }
 
   function editarTipo(id) {
-    fetch(`http://localhost:3000/tipo/buscar/${id}`, {
+    fetch(`http://${portConexion}:3000/tipo/buscar/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -360,7 +361,7 @@ const Tipo = () => {
   }
   function actualizarTipo(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
-    fetch(`http://localhost:3000/tipo/editar/${id}`, {
+    fetch(`http://${portConexion}:3000/tipo/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
