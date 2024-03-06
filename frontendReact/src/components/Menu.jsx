@@ -236,7 +236,7 @@ export const Menu = () => {
                 </li>
               </ul>
             </li>
-            <li>{userRoll == "Administrador" &&(
+            <li>{userRoll == "administrador" &&(
               <Link to="/usuario">
                 <div className="tamañoLateral">
                   <IconUser className="iconosLaterales" />

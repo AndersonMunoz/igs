@@ -295,7 +295,7 @@ const Up = () => {
       <h1 className="text-center modal-title fs-5 m-4">Lista de Bodegas</h1>
       <div className="d-flex justify-content-between mb-4">
         <div>
-          {userRoll == "Administrador" && (
+          {userRoll == "administrador" && (
             <button
               type="button"
               id="modalProducto"
@@ -351,7 +351,7 @@ const Up = () => {
             <tr>
               <th className="th-sm">Id</th>
               <th className="th-sm">Nombre Bodega</th>
-              {userRoll == "Administrador" && (
+              {userRoll == "administrador" && (
                 <th className="th-sm"> Botones Acciones</th>
               )}
             </tr>
@@ -387,7 +387,7 @@ const Up = () => {
                       <td style={{ textTransform: "capitalize" }}>
                         {element.nombre_up}
                       </td>
-                      {userRoll == "Administrador" && (
+                      {userRoll == "administrador" && (
                         <td>
                           {element.estado === 1 ? (
                             <>

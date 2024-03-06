@@ -290,7 +290,7 @@ const proveedor = () => {
     <div>
       <div className="d-flex justify-content-between mt-4">
         <div>
-          {userRoll == "Administrador" && (
+          {userRoll == "administrador" && (
             <button
               type="button"
               id="modalProducto"
@@ -361,7 +361,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              {userRoll == "Administrador" && (
+              {userRoll == "administrador" && (
                 <th className="th-sm text-center">Acciones</th>
               )}
             </tr>
@@ -379,7 +379,7 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    {userRoll == "Administrador" && (
+                    {userRoll == "administrador" && (
                       <td>
                         {element.estado !== 1 ? (
                           "NO DISPONIBLES"
