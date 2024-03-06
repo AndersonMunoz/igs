@@ -18,6 +18,7 @@ import { DownloadTableExcel } from "react-export-table-to-excel";
 import * as xlsx from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import portConexion from "../const/portConexion";
 
 const proveedor = () => {
   const tableRef = useRef();
@@ -136,8 +137,9 @@ const proveedor = () => {
   useEffect(() => {
     listarProveedor();
   }, []);
+
   function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listar", {
+    fetch(`http://${portConexion}:3000/proveedor/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -158,7 +160,7 @@ const proveedor = () => {
     const validacionExitosa = Validate.validarCampos(".form-empty");
     console.log(contratoInicio);
     if (validacionExitosa) {
-      fetch("http://localhost:3000/proveedor/registrar", {
+      fetch(`http://${portConexion}:3000/proveedor/registrar`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -196,7 +198,7 @@ const proveedor = () => {
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
       if (res.isConfirmed) {
-        fetch(`http://localhost:3000/proveedor/eliminar/${id}`, {
+        fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
           method: "put",
           headers: {
             "Content-type": "application/json",
@@ -251,7 +253,7 @@ const proveedor = () => {
       });
   }
   function actualizarProveedor(id) {
-    fetch(`http://localhost:3000/proveedor/actualizar/${id}`, {
+    fetch(`http://${portConexion}:3000/proveedor/actualizar/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
