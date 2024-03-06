@@ -19,6 +19,7 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import portConexion from "../const/portConexion";
 
 const Movimiento = () => {
   const [userId, setUserId] = useState('');
@@ -222,7 +223,7 @@ const Movimiento = () => {
   }, []);
 
   function listarCategoria() {
-    fetch("http://localhost:3000/categoria/listarActivo", {
+    fetch(`http://${portConexion}:3000/categoria/listarActivo`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -245,7 +246,7 @@ const Movimiento = () => {
       });
   }
   function listarTipo() {
-    fetch("http://localhost:3000/tipo/listar", {
+    fetch(`http://${portConexion}:3000/tipo/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -267,7 +268,7 @@ const Movimiento = () => {
       });
   }
   function listarProveedor() {
-    fetch("http://localhost:3000/proveedor/listarActivo", {
+    fetch(`http://${portConexion}:3000/proveedor/listarActivo`, {
       method: "GET",
       headers: {
         "content-type": "application/json",
@@ -287,7 +288,7 @@ const Movimiento = () => {
   function listarProductoCategoria(id_categoria) {
 
     fetch(
-      `http://localhost:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+      `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
       {
         method: "GET",
         headers: {
@@ -311,7 +312,7 @@ const Movimiento = () => {
   function listarUnidadesPro(id_producto) {
 
     fetch(
-      `http://localhost:3000/facturamovimiento//buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
+      `http://${portConexion}:3000/facturamovimiento//buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
       {
         method: "GET",
         headers: {
@@ -330,7 +331,7 @@ const Movimiento = () => {
       });
   }
   function editarMovimiento(id) {
-    fetch(`http://localhost:3000/facturamovimiento/buscar/${id}`, {
+    fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
@@ -349,7 +350,7 @@ const Movimiento = () => {
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
     
-    fetch(`http://localhost:3000/facturamovimiento/actualizar/${id}`, {
+    fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
       method: "PUT",
       headers: {
         'Content-type': 'application/json'
@@ -402,7 +403,7 @@ const Movimiento = () => {
 
     const validacionExitosa = Validate.validarCampos('.form-empty');
 
-    fetch('http://localhost:3000/facturamovimiento/registrarEntrada', {
+    fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -442,7 +443,7 @@ const Movimiento = () => {
     //console.log(document.getElementById('fecha_caducidad'));
   }
   function listarUsuario() {
-    fetch("http://localhost:3000/usuario/listar", {
+    fetch(`http://${portConexion}:3000/usuario/listar`, {
       method: "get",
       headers: {
         "content-type": "application/json"
@@ -460,7 +461,7 @@ const Movimiento = () => {
   }
 
   function listarMovimiento() {
-    fetch("http://localhost:3000/facturamovimiento/listarEntrada", {
+    fetch(`http://${portConexion}:3000/facturamovimiento/listarEntrada`, {
       method: "GET",
       headers: {
         "content-type": "application/json",

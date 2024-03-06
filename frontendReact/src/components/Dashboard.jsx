@@ -132,14 +132,14 @@ const Dashboard = () => {
             </svg>
           </div>
           {userRoll == "administrador" ? (
-            <Link className="linkContenido linkColor">
+            <Link className="linkContenido linkColor" to="/usuario">
               <div className="tamañoLateral">
                 <span className="">Ver Usuarios</span>
                 <IconArrowBigRightFilled className="iconosDashboard" />
               </div>
             </Link>
           ) : (
-            <div className="linkContenido linkColor" to="/usuario">
+            <div className="linkContenido linkColor">
               <div className="tamañoLateral">
                 <span className="">Usuarios</span>
               </div>
