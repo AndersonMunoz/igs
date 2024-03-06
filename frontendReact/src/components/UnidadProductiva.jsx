@@ -3,21 +3,22 @@ import "../style/producto.css";
 import { IconEdit, IconFileSpreadsheet, IconTrash } from "@tabler/icons-react";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
-import esES from '../languages/es-ES.json';
-import $ from 'jquery';
-import 'bootstrap';
+import esES from "../languages/es-ES.json";
+import $ from "jquery";
+import "bootstrap";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
-import 'datatables.net';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import 'datatables.net-responsive';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import generatePDF from 'react-to-pdf';
-import * as xlsx from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import "datatables.net";
+import "datatables.net-bs5";
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "datatables.net-responsive";
+import "datatables.net-responsive-bs5";
+import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
+import generatePDF from "react-to-pdf";
+import * as xlsx from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { dataDecript } from "./encryp/decryp";
 
 const Up = () => {
   const [unidad_productiva, setunidad_productiva] = useState([]);
@@ -26,60 +27,52 @@ const Up = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const [upSeleccionada, setupSeleccionada] = useState({});
-
+  const [userRoll, setUserRoll] = useState("");
 
   const handleOnExport = () => {
     const wsData = getTableData();
     const wb = xlsx.utils.book_new();
     const ws = xlsx.utils.aoa_to_sheet(wsData);
-    xlsx.utils.book_append_sheet(wb, ws, 'ExcelBodega');
-    xlsx.writeFile(wb, 'Bodegadetalle.xlsx');
+    xlsx.utils.book_append_sheet(wb, ws, "ExcelBodega");
+    xlsx.writeFile(wb, "Bodegadetalle.xlsx");
   };
-  const doc= new jsPDF();
+  const doc = new jsPDF();
   const exportPdfHandler = () => {
     const doc = new jsPDF();
-  
+
     const columns = [
-      { title: 'Id', dataKey: 'id_up' },
-      { title: 'Nombre de Bodega', dataKey: 'nombre_up' },
+      { title: "Id", dataKey: "id_up" },
+      { title: "Nombre de Bodega", dataKey: "nombre_up" },
     ];
-  
+
     // Obtener los datos de la tabla
     const tableData = unidad_productiva.map((element) => ({
       id_up: element.id_up,
       nombre_up: element.nombre_up,
     }));
-  
+
     // Agregar las columnas y los datos a la tabla del PDF
     doc.autoTable({
       columns,
       body: tableData,
       margin: { top: 20 },
-      styles: { overflow: 'linebreak' },
+      styles: { overflow: "linebreak" },
       headStyles: { fillColor: [100, 100, 100] },
     });
-  
+
     // Guardar el PDF
-    doc.save('Bodega.pdf');
+    doc.save("Bodega.pdf");
   };
   const getTableData = () => {
     const wsData = [];
 
     // Obtener las columnas
-    const columnss = [
-      'Id',
-      'Nombre Bodega',
-      'estado'
-    ];
+    const columnss = ["Id", "Nombre Bodega", "estado"];
     wsData.push(columns);
 
     // Obtener los datos de las filas
-    unidad_productiva.forEach(element => {
-      const rowData = [
-        element.id_up,
-        element.nombre_up,
-        element.estado
-      ];
+    unidad_productiva.forEach((element) => {
+      const rowData = [element.id_up, element.nombre_up, element.estado];
       wsData.push(rowData);
     });
 
@@ -89,33 +82,34 @@ const Up = () => {
   const tableRef = useRef();
 
   useEffect(() => {
-		if (unidad_productiva.length > 0) {
-			if ($.fn.DataTable.isDataTable(tableRef.current)) {
-				$(tableRef.current).DataTable().destroy();
-			}
-			$(tableRef.current).DataTable({
-				columnDefs: [
-					{
-						targets: -1,
-						responsivePriority: 1
-					}
-				],
-				responsive: true,
-				language: esES,
-				paging: true,
-				select: {
-					'style': 'multi',
-					'selector': 'td:first-child',
-				},
-				lengthMenu: [
-					[10, 50, 100, -1],
-					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
-				],
-			});
-		}
-	}, [unidad_productiva]);
+    if (unidad_productiva.length > 0) {
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
+      $(tableRef.current).DataTable({
+        columnDefs: [
+          {
+            targets: -1,
+            responsivePriority: 1,
+          },
+        ],
+        responsive: true,
+        language: esES,
+        paging: true,
+        select: {
+          style: "multi",
+          selector: "td:first-child",
+        },
+        lengthMenu: [
+          [10, 50, 100, -1],
+          ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
+        ],
+      });
+    }
+  }, [unidad_productiva]);
 
   useEffect(() => {
+    setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarUp();
   }, []);
 
@@ -300,26 +294,38 @@ const Up = () => {
     <div>
       <h1 className="text-center modal-title fs-5 m-4">Lista de Bodegas</h1>
       <div className="d-flex justify-content-between mb-4">
-        <button
-          type="button"
-          id="modalProducto"
-          className="btn-color btn mt-4"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          onClick={() => {
-            setShowModal(true);
-            Validate.limpiar(".limpiar");
-          }}
-        >
-          Registrar Nueva Bodega
-        </button>
+        <div>
+          {userRoll == "Administrador" && (
+            <button
+              type="button"
+              id="modalProducto"
+              className="btn-color btn mt-4"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              onClick={() => {
+                setShowModal(true);
+                Validate.limpiar(".limpiar");
+              }}
+            >
+              Registrar Nueva Bodega
+            </button>
+          )}
+        </div>
 
         <div>
-        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
             <div className="" title="Descargar Excel">
-            <button onClick={handleOnExport} type="button" className="btn btn-light">
+              <button
+                onClick={handleOnExport}
+                type="button"
+                className="btn btn-light"
+              >
                 <img src={ExelLogo} className="logoExel" />
-                </button>
+              </button>
             </div>
             <div className="" title="Descargar Pdf">
               <button
@@ -345,7 +351,9 @@ const Up = () => {
             <tr>
               <th className="th-sm">Id</th>
               <th className="th-sm">Nombre Bodega</th>
-              <th className="th-sm"> Botones Acciones</th>
+              {userRoll == "Administrador" && (
+                <th className="th-sm"> Botones Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody id="tableunidadProductiva" className="text-center">
@@ -357,7 +365,7 @@ const Up = () => {
                       <h2>
                         {" "}
                         En este momento no contamos con ningúna bodega
-                        disponible. 😟 {" "}
+                        disponible. 😟{" "}
                       </h2>
                     </div>
                   </div>
@@ -373,38 +381,44 @@ const Up = () => {
                   })
                   .map((element) => (
                     <tr key={element.id_up}>
-                      <td style={{textTransform: 'capitalize'}}>{element.id_up}</td>
-                      <td style={{textTransform: 'capitalize'}}>{element.nombre_up}</td>
-                      <td>
-                        {element.estado === 1 ? (
-                          <>
-                            <button
-                              className="btn btn-color mx-2"
-                              onClick={() => {
-                                setUpdateModal(true);
-                                editarUp(element.id_up);
-                              }}
-                              data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop2"
-                            >
-                              <IconEdit />
-                            </button>
-                            <button
-                              className="btn btn-danger"
-                              onClick={() => deshabilitarUp(element.id_up)}
-                            >
-                              <IconTrash />
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => activarUp(element.id_up)}
-                          >
-                            Activar
-                          </button>
-                        )}
+                      <td style={{ textTransform: "capitalize" }}>
+                        {element.id_up}
                       </td>
+                      <td style={{ textTransform: "capitalize" }}>
+                        {element.nombre_up}
+                      </td>
+                      {userRoll == "Administrador" && (
+                        <td>
+                          {element.estado === 1 ? (
+                            <>
+                              <button
+                                className="btn btn-color mx-2"
+                                onClick={() => {
+                                  setUpdateModal(true);
+                                  editarUp(element.id_up);
+                                }}
+                                data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop2"
+                              >
+                                <IconEdit />
+                              </button>
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => deshabilitarUp(element.id_up)}
+                              >
+                                <IconTrash />
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => activarUp(element.id_up)}
+                            >
+                              Activar
+                            </button>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   ))}
               </>
@@ -442,17 +456,16 @@ const Up = () => {
                   >
                     Up
                   </label>
- 
-                    
-                    <input
-                      type="text"
-                      className="form-control   form-empty limpiar"
-                      id="nombreUp"
-                      placeholder="Nombre Bodega "
-                    />
+
+                  <input
+                    type="text"
+                    className="form-control   form-empty limpiar"
+                    id="nombreUp"
+                    placeholder="Nombre Bodega "
+                  />
                   <div className="invalid-feedback is-invalid">
-                        Por favor, ingrese una bodega
-                      </div>
+                    Por favor, ingrese una bodega
+                  </div>
                 </div>
                 <div className="col-12">
                   <label
@@ -487,7 +500,7 @@ const Up = () => {
       <div
         className="modal fade"
         id="staticBackdrop2"
-        data-bs-backdrop="static" 
+        data-bs-backdrop="static"
         tabIndex="-1"
         aria-labelledby="actualizarModalLabel"
         aria-hidden="true"

@@ -26,6 +26,7 @@ export const Menu = () => {
   const [userName, setUserName] = useState("");
   const [userRoll, setUserRoll] = useState("");
 
+
   useEffect(() => {
     let arrow = document.querySelectorAll(".container-icon");
     for (let i = 0; i < arrow.length; i++) {
@@ -235,21 +236,23 @@ export const Menu = () => {
                 </li>
               </ul>
             </li>
-            <li>
+            <li>{userRoll == "Administrador" &&(
               <Link to="/usuario">
                 <div className="tamañoLateral">
                   <IconUser className="iconosLaterales" />
                 </div>
                 <span className="link_name">Usuarios</span>
               </Link>
-
-              <ul className="sub-menu blank">
+              )}
+                <ul className="sub-menu blank">
                 <li>
                   <Link className="link_name" to="/usuario">
                     Usuarios
                   </Link>
                 </li>
               </ul>
+              
+              
             </li>
             <li>
               <div className="content-nav">

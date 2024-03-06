@@ -19,6 +19,7 @@ import * as xlsx from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import portConexion from "../const/portConexion";
+import { dataDecript } from "./encryp/decryp";
 
 const proveedor = () => {
   const tableRef = useRef();
@@ -31,6 +32,7 @@ const proveedor = () => {
   const [telefono_proveedores, setTelefono_proveedores] = useState("");
   const [inicio_contrato, setContratoInicio] = useState("");
   const [fin_contrato, setContratoFin] = useState("");
+  const [userRoll, setUserRoll] = useState("");
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -135,6 +137,7 @@ const proveedor = () => {
   }, [proveedor]);
 
   useEffect(() => {
+    setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
 
@@ -286,23 +289,35 @@ const proveedor = () => {
   return (
     <div>
       <div className="d-flex justify-content-between mt-4">
-        <button
-          type="button"
-          id="modalProducto"
-          className="btn-color btn mb-4"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
-          onClick={() => {
-            setModal(true);
-            Validate.limpiar(".limpiar");
-            document.getElementById("titleSctualizar").classList.add("d-none");
-            document.getElementById("titleRegistro").classList.remove("d-none");
-            document.getElementById("btnAgregar").classList.remove("d-none");
-            document.getElementById("btnActualizar").classList.add("d-none");
-          }}
-        >
-          Registrar Nuevo Proveedor
-        </button>
+        <div>
+          {userRoll == "Administrador" && (
+            <button
+              type="button"
+              id="modalProducto"
+              className="btn-color btn mb-4"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              onClick={() => {
+                setModal(true);
+                Validate.limpiar(".limpiar");
+                document
+                  .getElementById("titleSctualizar")
+                  .classList.add("d-none");
+                document
+                  .getElementById("titleRegistro")
+                  .classList.remove("d-none");
+                document
+                  .getElementById("btnAgregar")
+                  .classList.remove("d-none");
+                document
+                  .getElementById("btnActualizar")
+                  .classList.add("d-none");
+              }}
+            >
+              Registrar Nuevo Proveedor
+            </button>
+          )}
+        </div>
         <div
           className="btn-group"
           role="group"
@@ -346,8 +361,9 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-
-              <th className="th-sm text-center">Acciones</th>
+              {userRoll == "Administrador" && (
+                <th className="th-sm text-center">Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -363,35 +379,37 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    <td>
-                      {element.estado !== 1 ? (
-                        "NO DISPONIBLES"
-                      ) : (
-                        <>
-                          <button
-                            type="button"
-                            className="btn-color btn mx-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            onClick={() => {
-                              setModal(true);
-                              editarProveedor(element.id_proveedores);
-                            }}
-                          >
-                            <IconEdit />
-                          </button>
-                          <button
-                            className="btn btn-danger"
-                            type="button"
-                            onClick={() =>
-                              deshabilitarProveedor(element.id_proveedores)
-                            }
-                          >
-                            <IconTrash />
-                          </button>
-                        </>
-                      )}
-                    </td>
+                    {userRoll == "Administrador" && (
+                      <td>
+                        {element.estado !== 1 ? (
+                          "NO DISPONIBLES"
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              className="btn-color btn mx-2"
+                              data-bs-toggle="modal"
+                              data-bs-target="#exampleModal"
+                              onClick={() => {
+                                setModal(true);
+                                editarProveedor(element.id_proveedores);
+                              }}
+                            >
+                              <IconEdit />
+                            </button>
+                            <button
+                              className="btn btn-danger"
+                              type="button"
+                              onClick={() =>
+                                deshabilitarProveedor(element.id_proveedores)
+                              }
+                            >
+                              <IconTrash />
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </>
