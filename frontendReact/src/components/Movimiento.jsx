@@ -472,7 +472,7 @@ const Movimiento = () => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos Totales</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <Link to="/movimiento/entrada"><button type="button"  className="btn btn-success m-1 ">Registrar Entrada</button></Link>
+          <Link to="/movimiento/entrada"><button type="button"  className="btn-color btn  m-1 ">Registrar Entrada</button></Link>
           <Link to="/movimiento/salida"><button type="button" className="btn btn-danger m-1 ">Registrar Salida</button></Link>
             
           </div>
