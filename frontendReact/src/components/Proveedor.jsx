@@ -139,7 +139,7 @@ const proveedor = () => {
   }, []);
 
   function listarProveedor() {
-    fetch(`http://${portConexion}:3000/proveedor/listarnice`, {
+    fetch(`http://${portConexion}:3000/proveedor/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
