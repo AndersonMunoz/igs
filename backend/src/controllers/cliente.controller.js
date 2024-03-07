@@ -1,9 +1,9 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
-
+import CryptoJs from "crypto-js";
 import { dataEncript } from "./encryp/encryp.js";
-
-
+import { secretKey } from "../const/keys.js";
+import nodemailer from 'nodemailer'
 
 
 export const registroUsuario = async (req, res) => {
