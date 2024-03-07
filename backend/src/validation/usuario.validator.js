@@ -19,11 +19,11 @@ export const validatorUsuario = [
         .isEmpty()
         .matches(/^[A-Za-z\s'ñ]+$/),
 
-    check('contrasena_usuario', 'La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 32 caracteres')
+    check('contrasena_usuario', 'La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 12 caracteres')
         .exists()
         .not()
         .isEmpty()
-        .isLength({ min: 6, max: 32 })
+        .isLength({ min: 6, max: 12 })
         .matches(/[a-z]/)
         .matches(/[A-Z]/)
         .matches(/\d/),
@@ -35,11 +35,11 @@ export const validatorUsuario = [
 ];
 
 export const validatorContrasena = [
-    check('contrasena_usuario', 'La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 32 caracteres')
+    check('contrasena_usuario', 'La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 12 caracteres')
         .exists()
         .not()
         .isEmpty()
-        .isLength({ min: 6, max: 32 })
+        .isLength({ min: 6, max: 12})
         .matches(/[a-z]/)
         .matches(/[A-Z]/)
         .matches(/\d/)

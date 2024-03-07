@@ -80,9 +80,9 @@ const PerfilAjustes = () => {
 	function editarUsuario(userId) {
 		fetch(`http://${portConexion}:3000/usuario/buscar/${userId}`, {
 			method: "GET",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -106,9 +106,9 @@ const PerfilAjustes = () => {
 
 		fetch(`http://${portConexion}:3000/usuario/editarajustes/${userId}`, {
 			method: "PUT",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend),
 		})
@@ -146,9 +146,9 @@ const PerfilAjustes = () => {
 
 		fetch(`http://${portConexion}:3000/usuario/editarcontrasena/${userId}`, {
 			method: "PUT",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend2),
 		})
