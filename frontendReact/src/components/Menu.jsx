@@ -188,12 +188,12 @@ export const Menu = () => {
                 <div className="tamañoLateral">
                   <IconBuildingWarehouse className="iconosLaterales" />
                 </div>
-                <span className="link_name">Almacen</span>
+                <span className="link_name">Bodega</span>
               </Link>
               <ul className="sub-menu blank">
                 <li>
                   <Link className="link_name" to="/up">
-                    Almacen
+                    Bodega
                   </Link>
                 </li>
               </ul>
