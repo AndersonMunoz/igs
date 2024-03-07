@@ -285,7 +285,7 @@ const Usuario = () => {
 	function eliminarUsuario(id_usuario) {
 		Sweet.confirmacion().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://${portConexion}3000/usuario/deshabilitar/${id_usuario}`, {
+				fetch(`http://${portConexion}:3000/usuario/deshabilitar/${id_usuario}`, {
 					method: "PATCH",
 					headers: {
 						"Content-type": "application/json",
@@ -320,7 +320,7 @@ const Usuario = () => {
 	function activarUsuario(id_usuario) {
 		Sweet.confirmacionActivar().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://${portConexion}3000/usuario/activar/${id_usuario}`, {
+				fetch(`http://${portConexion}:3000/usuario/activar/${id_usuario}`, {
 					method: "PATCH",
 					headers: {
 						"Content-type": "application/json",

@@ -76,3 +76,36 @@
   display: flex;
   justify-content: end;
 }
+
+@media screen and (min-width: 50px) and (max-width: 600px) {
+  .boxBtnContendidoTitulo{
+    display: grid;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    grid-template: "btnContenido1 btnContenido3"80px
+                    "btnContenido2 btnContenido2"30px/
+                      1fr 1fr;
+  }
+  
+  .btnContenido1{
+    grid-area: btnContenido1;
+    height: 80px;
+    align-items: center;
+    display: flex;
+  }
+  .btnContenido2{
+    grid-area: btnContenido2;
+    width: 100%;
+    height:100%;
+  }
+  .btnContenido3{
+    grid-area: btnContenido3;
+    height: 100px;
+    align-items: center;
+    display: flex;
+    justify-content: end;
+  }
+}
