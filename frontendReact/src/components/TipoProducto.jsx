@@ -195,6 +195,7 @@ const Tipo = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => {
@@ -218,6 +219,7 @@ const Tipo = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => {
@@ -257,6 +259,7 @@ const Tipo = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify({ nombre_tipo, fk_categoria_pro: selectedCategoria.value, unidad_peso }),
     })
@@ -296,6 +299,7 @@ const Tipo = () => {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           },
         })
           .then((res) => res.json())
@@ -322,6 +326,7 @@ const Tipo = () => {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           },
         })
           .then((res) => res.json())
@@ -347,6 +352,7 @@ const Tipo = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -365,6 +371,7 @@ const Tipo = () => {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify(tiposeleccionado),
     })
