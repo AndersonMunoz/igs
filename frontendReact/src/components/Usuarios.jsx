@@ -345,9 +345,8 @@ const Usuario = () => {
 		});
 	}
 	function editarUsuario(id) {
-		fetch(`http://${portConexion}3000/usuario/buscar/${id}`, {
+		fetch(`http://${portConexion}:3000/usuario/buscar/${id}`, {
 			method: "GET",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
 				token: localStorage.getItem("token"),
@@ -670,7 +669,7 @@ const Usuario = () => {
 											<div className="col">
 												{password.length > 0 && !isValidPassword && (
 													<div className="text-danger">
-														La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 32 caracteres
+														La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 12 caracteres
 													</div>
 												)}
 											</div>
@@ -727,7 +726,6 @@ const Usuario = () => {
 							</button>
 							<button
 								type="button"
-								/*  disabled={!registrationEnabled} */
 								className="btn btn-color"
 								onClick={registrarUsuario}
 							>
@@ -925,7 +923,7 @@ const Usuario = () => {
 												<div className="col">
 													{!isValidPassword && (
 														<div className="text-danger">
-															La contraseña debe tener al menos 6 caracteres, una
+															La contraseña debe ser entre 6 y 12 caracteres, una
 															mayúscula, una minúscula y un número.
 														</div>
 													)}
