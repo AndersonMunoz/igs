@@ -476,7 +476,7 @@ const Producto = () => {
                       <td>{element.PrecioIndividual}</td>
                       <td>{element.UnidadProductiva}</td>
                       <td>{element.Descripcion}</td>
-                      <td>{element.PrecioTotal.toFixed(2)}</td>
+                      <td>{element.PrecioTotal}</td>
                       <td>
                         {element.FechaCaducidad ? (
                           Validate.formatFecha(element.FechaCaducidad)

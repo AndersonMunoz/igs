@@ -16,6 +16,7 @@ import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
 import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import portConexion from "../const/portConexion";
 
 const ProductoCaducar = () => {
   const [productos, setProductos] = useState([]);
@@ -135,16 +136,19 @@ const ProductoCaducar = () => {
   }, []); 
 
   function listarProducto() {
-    fetch("http://localhost:3000/facturamovimiento/listarCaducados", {
+    fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem('token')
       },
     })
     .then((res) => res.json())
     .then((data) => {
-      setProductos(data);
-      console.log(data);
+      const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad !== null);
+      const pesoProducto = data.filter(item=> item.peso > 0)
+      setProductos(pesoProducto);
+      console.log(productosConFechaCaducidad);
     })
     .catch((e) => {
       console.log(e);
@@ -194,7 +198,7 @@ const ProductoCaducar = () => {
                 <td colSpan={12}>
                   <div className="d-flex justify-content-center">
                     <div className="alert alert-danger text-center mt-4 w-50">
-                      <h2> En este momento no contamos con ningún producto disponible.😟</h2>
+                      <h2> En este momento no contamos con <br></br> productos disponibles.😟</h2>
                     </div>
                   </div>
                 </td>
