@@ -130,6 +130,7 @@ const Categoria = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+          token: localStorage.getItem("token"),
       },
     })
     .then((res) => res.json())
@@ -159,6 +160,7 @@ const Categoria = () => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify({ nombre_categoria}),
     })
@@ -204,7 +206,8 @@ const Categoria = () => {
         fetch(`http://${portConexion}:3000/categoria/deshabilitar/${id}`, {
           method: 'PATCH',
           headers: {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           }
         })
           .then(res => res.json())
@@ -232,7 +235,8 @@ const Categoria = () => {
         fetch(`http://${portConexion}:3000/categoria/activar/${id}`, {
           method: 'PATCH',
           headers: {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+          token: localStorage.getItem("token"),
           }
         })
           .then(res => res.json())
@@ -257,6 +261,7 @@ const Categoria = () => {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -274,7 +279,8 @@ const Categoria = () => {
     fetch(`http://${portConexion}:3000/categoria/editar/${id}`,{
       method: 'PUT',
       headers:{
-        'Content-type':'application/json'
+        'Content-type':'application/json',
+        token: localStorage.getItem("token"),
       },
        body: JSON.stringify(categoriaSeleccionada),
     })
