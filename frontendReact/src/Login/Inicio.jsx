@@ -302,6 +302,11 @@ const LoginForm = () => {
               </div>
             </div>
           </div>
+          <div className="footerContent">
+            <div className="boxFooter1"></div>
+            <div className="boxFooter2"></div>
+            <div className="boxFooter3"></div>
+          </div>
         </>
       )}
     </>
