@@ -10,6 +10,7 @@ import "bootstrap";
 import "./css/login.css";
 import { dataEncript } from "../components/encryp/encryp";
 import { Navigate } from "react-router-dom";
+import portConexion from "../const/portConexion";
 
 const LoginForm = () => {
   const [documento, setDocumento] = useState("");
@@ -18,7 +19,7 @@ const LoginForm = () => {
   const [message, setMessage] = useState("");
 
   function handleSubmitRecuperar() {
-    fetch(`http://localhost:3000/usuario/buscarCedula/${documento}`, {
+    fetch(`http://${portConexion}:3000/usuario/buscarCedula/${documento}`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -49,7 +50,7 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3000/aut/validar", {
+    fetch(`http://${portConexion}:3000/aut/validar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
