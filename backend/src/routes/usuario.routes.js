@@ -5,17 +5,17 @@ import { validatorContrasena, validatorUsuario, validatorUsuarioAjustes } from "
 
 const usuarioRouter = Router();
 
-usuarioRouter.post("/registrar" ,validatorUsuario, registroUsuario );
-usuarioRouter.get("/listar", listarUsuario );
-usuarioRouter.get("/listaractivo", listarUsuarioActivo );
-usuarioRouter.get("/buscar/:id", buscarUsuario );
-usuarioRouter.post("/buscarCedula/:documento_usuario", buscarUsuarioCedula );
-usuarioRouter.put("/editar/:id",validatorUsuario, /* validarToken, */ editarUsuario );
-usuarioRouter.put("/editarajustes/:id",validatorUsuarioAjustes, /* validarToken, */ editarUsuarioAjustes );
-usuarioRouter.patch("/deshabilitar/:id" /* ,validarToken */ , actualizarEstado );
-usuarioRouter.patch("/activar/:id",/* validarToken , */ activarEstado );
-usuarioRouter.get("/listarCount", listarUsuarioCount );
-usuarioRouter.put("/editarcontrasena/:id", validatorContrasena, editarContrasena );
+usuarioRouter.post("/registrar" ,validatorUsuario,validarToken, registroUsuario );
+usuarioRouter.get("/listar",validarToken, listarUsuario );
+usuarioRouter.get("/listaractivo",validarToken ,listarUsuarioActivo );
+usuarioRouter.get("/buscar/:id",validarToken ,buscarUsuario );
+usuarioRouter.post("/buscarCedula/:documento_usuario",validarToken, buscarUsuarioCedula );
+usuarioRouter.put("/editar/:id",validatorUsuario, validarToken, editarUsuario );
+usuarioRouter.put("/editarajustes/:id",validatorUsuarioAjustes, validarToken, editarUsuarioAjustes );
+usuarioRouter.patch("/deshabilitar/:id" ,validarToken , actualizarEstado );
+usuarioRouter.patch("/activar/:id",validarToken , activarEstado );
+usuarioRouter.get("/listarCount",validarToken, listarUsuarioCount );
+usuarioRouter.put("/editarcontrasena/:id", validatorContrasena, validarToken, editarContrasena );
 
 
 export default usuarioRouter;

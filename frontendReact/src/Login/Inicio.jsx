@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Sweet from "../helpers/Sweet";
 import Inicio from "../Login/Inicio";
 import LogoSena from "./LogoSena";
-import IgsLogo from "../../img/IGS.png";
+import IgsLogo from "../../img/IGS.svg";
 import Fondo1 from "../../img/fondoIGS2.jpg";
 import Fondo2 from "../../img/fondoIGS1.jpg";
 import Fondo3 from "../../img/fondoIGS3.jpg";
@@ -94,7 +94,7 @@ const LoginForm = () => {
               <LogoSena />
             </div>
             <div className="titleIgs">
-              <h1 className="h1Titulo">INVENTARIO GASTRONOMICO SENA</h1>
+              <h1 className="h1Titulo">INVENTARIO GASTRONÓMICO SENA</h1>
             </div>
             <div className="container-logo">
               <img src={IgsLogo} className="logoigs" />
@@ -108,7 +108,7 @@ const LoginForm = () => {
               data-bs-toggle="modal"
               data-bs-target="#staticBackdrop"
             >
-              Iniciar Sesion
+              Iniciar Sesión
             </button>
           </div>
 
@@ -171,7 +171,7 @@ const LoginForm = () => {
                       className="modal-title h222 text-center"
                       id="staticBackdropLabel"
                     >
-                      INCIO DE SESION IGS
+                      INICIO DE SESIÓN IGS
                     </h1>
                   </div>
                   <button
@@ -248,7 +248,7 @@ const LoginForm = () => {
               <div className="modal-content">
                 <div className="modal-header">
                   <h1 className="modal-title fs-5" id="staticBackdropLabel2">
-                    Recuperacion de Contraseña
+                    Recuperación de Contraseña
                   </h1>
                   <button
                     type="button"
@@ -267,12 +267,12 @@ const LoginForm = () => {
                       handleSubmitRecuperar();
                     }}
                   >
-                    <label htmlFor="">Cedula</label>
+                    <label htmlFor="">Documento</label>
                     <input
                       type="number"
-                      className="form-control"
+                      className="form-control mt-2"
                       id="documento_usuario"
-                      placeholder="Ingresa documento"
+                      placeholder="Ingrese documento"
                       value={documento}
                       onChange={(e) => setDocumento(e.target.value)}
                     />
@@ -293,7 +293,7 @@ const LoginForm = () => {
                       >
                         Cerrar
                       </button>
-                      <button type="submit" className="btn btn-success">
+                      <button type="submit" className="btn btn-color">
                         Enviar
                       </button>
                     </div>

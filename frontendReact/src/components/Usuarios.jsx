@@ -18,6 +18,7 @@ import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import { secretKey } from "../const/keys";
 import CryptoJs from "crypto-js";
+import portConexion from "../const/portConexion";
 
 const Usuario = () => {
 	const [usuarios, setUsuarios] = useState([]);
@@ -205,8 +206,9 @@ const Usuario = () => {
 	}
 	///listar usuario
 	function listarUsuario() {
-		fetch("http://localhost:3000/usuario/listar", {
+		fetch(`http://${portConexion}:3000/usuario/listar`, {
 			method: "get",
+			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
 			},
@@ -229,8 +231,9 @@ const Usuario = () => {
 
 		const validacionExitosa = Validate.validarCampos(".form-empty");
 
-		fetch("http://localhost:3000/usuario/registrar", {
+		fetch(`http://${portConexion}:3000/usuario/registrar`, {
 			method: "POST",
+			token: localStorage.getItem("token"),
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -282,8 +285,9 @@ const Usuario = () => {
 	function eliminarUsuario(id_usuario) {
 		Sweet.confirmacion().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
+				fetch(`http://${portConexion}3000/usuario/deshabilitar/${id_usuario}`, {
 					method: "PATCH",
+					token: localStorage.getItem("token"),
 					headers: {
 						"Content-type": "application/json",
 					},
@@ -316,8 +320,9 @@ const Usuario = () => {
 	function activarUsuario(id_usuario) {
 		Sweet.confirmacionActivar().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://localhost:3000/usuario/activar/${id_usuario}`, {
+				fetch(`http://${portConexion}3000/usuario/activar/${id_usuario}`, {
 					method: "PATCH",
+					token: localStorage.getItem("token"),
 					headers: {
 						"Content-type": "application/json",
 					},
@@ -340,8 +345,9 @@ const Usuario = () => {
 		});
 	}
 	function editarUsuario(id) {
-		fetch(`http://localhost:3000/usuario/buscar/${id}`, {
+		fetch(`http://${portConexion}3000/usuario/buscar/${id}`, {
 			method: "GET",
+			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
 			},
@@ -365,8 +371,9 @@ const Usuario = () => {
 		};
 
 
-		fetch(`http://localhost:3000/usuario/editar/${id}`, {
+		fetch(`http://${portConexion}:3000/usuario/editar/${id}`, {
 			method: "PUT",
+			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
 			},
