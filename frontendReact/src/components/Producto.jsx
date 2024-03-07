@@ -141,7 +141,7 @@ const Producto = () => {
            [ 10, 50, 100, -1 ],
            [ '10 Filas', '50 Filas', '100 Filas', 'Ver Todo' ]
         ],
-        order: [[0, 'desc']],
+        order: [[10, 'asc']],
      });
 		}
 	}, [productos]);
