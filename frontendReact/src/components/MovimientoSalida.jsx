@@ -543,7 +543,7 @@ const Movimiento = () => {
                       <td className="p-2 text-center">{element.nota_factura}</td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
 
-                      <td className="p-2 text-center"   >
+                      <td className="p-0 text-center"   >
                         <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>

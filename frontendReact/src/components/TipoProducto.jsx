@@ -497,7 +497,7 @@ const Tipo = () => {
                       <td style={{ textTransform: "capitalize" }}>
                         {element.UnidadPeso}
                       </td>
-                      <td>
+                      <td className="p-0">
                         {element.estado === 1 ? (
                           <>
                             <button

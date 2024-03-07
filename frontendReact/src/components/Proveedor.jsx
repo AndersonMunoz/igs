@@ -380,7 +380,7 @@ const proveedor = () => {
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
                     {userRoll == "administrador" && (
-                      <td>
+                      <td className="p-0">
                         {element.estado !== 1 ? (
                           "NO DISPONIBLES"
                         ) : (

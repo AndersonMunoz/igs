@@ -484,7 +484,7 @@ const Producto = () => {
                           'No asignada'
                         )}
                       </td>
-                      <td>
+                      <td className="p-0">
                       {element.estado === 1 ? (
                         <>
                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
