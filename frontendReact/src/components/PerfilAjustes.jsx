@@ -6,6 +6,7 @@ import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
 import { secretKey } from "../const/keys";
 import CryptoJs from "crypto-js";
+import portConexion from "../const/portConexion";
 
 const PerfilAjustes = () => {
 
@@ -77,10 +78,11 @@ const PerfilAjustes = () => {
 
 
 	function editarUsuario(userId) {
-		fetch(`http://localhost:3000/usuario/buscar/${userId}`, {
+		fetch(`http://${portConexion}:3000/usuario/buscar/${userId}`, {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -102,10 +104,11 @@ const PerfilAjustes = () => {
 			email_usuario: usuarioSeleccionado.email_usuario
 		};
 
-		fetch(`http://localhost:3000/usuario/editarajustes/${userId}`, {
+		fetch(`http://${portConexion}:3000/usuario/editarajustes/${userId}`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend),
 		})
@@ -141,10 +144,11 @@ const PerfilAjustes = () => {
 
 		};
 
-		fetch(`http://localhost:3000/usuario/editarcontrasena/${userId}`, {
+		fetch(`http://${portConexion}:3000/usuario/editarcontrasena/${userId}`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend2),
 		})

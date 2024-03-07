@@ -5,6 +5,7 @@ import "../style/dashboardContent.css";
 import { Outlet, Link } from "react-router-dom";
 import { IconArrowBigRightFilled } from "@tabler/icons-react";
 import { dataDecript } from "./encryp/decryp";
+import portConexion from "../const/portConexion";
 
 const Dashboard = () => {
   const [usuariosCount, setUsuariosCount] = useState(0);
@@ -22,10 +23,11 @@ const Dashboard = () => {
     listarCountCategoria();
   }, []);
   function listarCountCategoria() {
-    fetch("http://localhost:3000/categoria/listarCountCategoria", {
-      method: "GET",
+    fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
+      method: "GET",     
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -37,10 +39,11 @@ const Dashboard = () => {
       });
   }
   function obtenerValorTotalProductos() {
-    fetch("http://localhost:3000/facturamovimiento/listarEntradaSalida", {
-      method: "GET",
+    fetch(`http://${portConexion}:3000/facturamovimiento/listarEntradaSalida`, {
+      method: "GET",   
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -52,10 +55,11 @@ const Dashboard = () => {
       });
   }
   function listarUsuario() {
-    fetch("http://localhost:3000/usuario/listarCount", {
-      method: "get",
+    fetch(`http://${portConexion}:3000/usuario/listarCount`, {
+      method: "get",     
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())

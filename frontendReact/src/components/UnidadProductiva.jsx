@@ -126,6 +126,7 @@ const Up = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => {
@@ -153,6 +154,7 @@ const Up = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify({ nombre_up }),
     })
@@ -196,6 +198,7 @@ const Up = () => {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           },
         })
           .then((res) => res.json())
@@ -221,6 +224,7 @@ const Up = () => {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           },
         })
           .then((res) => res.json())
@@ -246,6 +250,7 @@ const Up = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -264,6 +269,7 @@ const Up = () => {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify(upSeleccionada),
     })

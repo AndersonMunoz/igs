@@ -141,6 +141,7 @@ const Producto = () => {
            [ 10, 50, 100, -1 ],
            [ '10 Filas', '50 Filas', '100 Filas', 'Ver Todo' ]
         ],
+        order: [[0, 'desc']],
      });
 		}
 	}, [productos]);
@@ -183,6 +184,7 @@ const Producto = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
     .then((res) => res.json())
@@ -199,6 +201,7 @@ const Producto = () => {
       method: "GET",
       headers:{
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
     .then((res) => {
@@ -222,6 +225,7 @@ const Producto = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => {
@@ -262,6 +266,7 @@ const Producto = () => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify({ descripcion_producto, fk_id_up: selectedUp.value, fk_id_tipo_producto: selectedTipo.value }),
     })
@@ -299,6 +304,7 @@ const Producto = () => {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -317,7 +323,8 @@ const Producto = () => {
     fetch(`http://${portConexion}:3000/producto/actualizar/${id}`,{
       method: 'PUT',
       headers:{
-        'Content-type':'application/json'
+        'Content-type':'application/json',
+        token: localStorage.getItem("token"),
       },
       body: JSON.stringify(productoSeleccionado),
     })
@@ -351,7 +358,8 @@ const Producto = () => {
         fetch(`http://${portConexion}:3000/producto/deshabilitar/${id}`, {
           method: 'PATCH',
           headers: {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           }
         })
           .then(res => res.json())
@@ -383,7 +391,8 @@ const Producto = () => {
         fetch(`http://${portConexion}:3000/producto/activar/${id}`, {
           method: 'PATCH',
           headers: {
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
           }
         })
         .then(res => res.json())

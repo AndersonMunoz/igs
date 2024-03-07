@@ -18,6 +18,7 @@ import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import { secretKey } from "../const/keys";
 import CryptoJs from "crypto-js";
+import portConexion from "../const/portConexion";
 
 const Usuario = () => {
 	const [usuarios, setUsuarios] = useState([]);
@@ -205,10 +206,11 @@ const Usuario = () => {
 	}
 	///listar usuario
 	function listarUsuario() {
-		fetch("http://localhost:3000/usuario/listar", {
-			method: "get",
+		fetch(`http://${portConexion}:3000/usuario/listar`, {
+			method: "get",		
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -229,10 +231,11 @@ const Usuario = () => {
 
 		const validacionExitosa = Validate.validarCampos(".form-empty");
 
-		fetch("http://localhost:3000/usuario/registrar", {
-			method: "POST",
+		fetch(`http://${portConexion}:3000/usuario/registrar`, {
+			method: "POST",			
 			headers: {
 				"Content-Type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify({
 				documento_usuario,
@@ -282,10 +285,11 @@ const Usuario = () => {
 	function eliminarUsuario(id_usuario) {
 		Sweet.confirmacion().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://localhost:3000/usuario/deshabilitar/${id_usuario}`, {
-					method: "PATCH",
+				fetch(`http://${portConexion}3000/usuario/deshabilitar/${id_usuario}`, {
+					method: "PATCH",				
 					headers: {
 						"Content-type": "application/json",
+						token: localStorage.getItem("token"),
 					},
 				})
 					.then((res) => res.json())
@@ -316,10 +320,11 @@ const Usuario = () => {
 	function activarUsuario(id_usuario) {
 		Sweet.confirmacionActivar().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://localhost:3000/usuario/activar/${id_usuario}`, {
-					method: "PATCH",
+				fetch(`http://${portConexion}3000/usuario/activar/${id_usuario}`, {
+					method: "PATCH",					
 					headers: {
 						"Content-type": "application/json",
+						token: localStorage.getItem("token"),
 					},
 				})
 					.then((res) => res.json())
@@ -340,10 +345,12 @@ const Usuario = () => {
 		});
 	}
 	function editarUsuario(id) {
-		fetch(`http://localhost:3000/usuario/buscar/${id}`, {
+		fetch(`http://${portConexion}3000/usuario/buscar/${id}`, {
 			method: "GET",
+			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -365,10 +372,11 @@ const Usuario = () => {
 		};
 
 
-		fetch(`http://localhost:3000/usuario/editar/${id}`, {
-			method: "PUT",
+		fetch(`http://${portConexion}:3000/usuario/editar/${id}`, {
+			method: "PUT",			
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend),
 		})
