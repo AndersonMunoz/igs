@@ -1,3 +1,3 @@
- const portConexion = '192.168.0.111';
+ const portConexion = '127.0.0.1';
 
  export default portConexion;
