@@ -395,7 +395,7 @@ const Up = () => {
                         {element.nombre_up}
                       </td>
                       {userRoll == "administrador" && (
-                        <td>
+                        <td className="p-0">
                           {element.estado === 1 ? (
                             <>
                               <button
