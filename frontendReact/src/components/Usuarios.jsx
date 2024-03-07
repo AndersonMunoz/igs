@@ -207,10 +207,10 @@ const Usuario = () => {
 	///listar usuario
 	function listarUsuario() {
 		fetch(`http://${portConexion}:3000/usuario/listar`, {
-			method: "get",
-			token: localStorage.getItem("token"),
+			method: "get",		
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -232,10 +232,10 @@ const Usuario = () => {
 		const validacionExitosa = Validate.validarCampos(".form-empty");
 
 		fetch(`http://${portConexion}:3000/usuario/registrar`, {
-			method: "POST",
-			token: localStorage.getItem("token"),
+			method: "POST",			
 			headers: {
 				"Content-Type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify({
 				documento_usuario,
@@ -286,10 +286,10 @@ const Usuario = () => {
 		Sweet.confirmacion().then((result) => {
 			if (result.isConfirmed) {
 				fetch(`http://${portConexion}3000/usuario/deshabilitar/${id_usuario}`, {
-					method: "PATCH",
-					token: localStorage.getItem("token"),
+					method: "PATCH",				
 					headers: {
 						"Content-type": "application/json",
+						token: localStorage.getItem("token"),
 					},
 				})
 					.then((res) => res.json())
@@ -321,10 +321,10 @@ const Usuario = () => {
 		Sweet.confirmacionActivar().then((result) => {
 			if (result.isConfirmed) {
 				fetch(`http://${portConexion}3000/usuario/activar/${id_usuario}`, {
-					method: "PATCH",
-					token: localStorage.getItem("token"),
+					method: "PATCH",					
 					headers: {
 						"Content-type": "application/json",
+						token: localStorage.getItem("token"),
 					},
 				})
 					.then((res) => res.json())
@@ -350,6 +350,7 @@ const Usuario = () => {
 			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -372,10 +373,10 @@ const Usuario = () => {
 
 
 		fetch(`http://${portConexion}:3000/usuario/editar/${id}`, {
-			method: "PUT",
-			token: localStorage.getItem("token"),
+			method: "PUT",			
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend),
 		})
