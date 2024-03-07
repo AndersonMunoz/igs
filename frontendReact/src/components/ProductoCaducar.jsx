@@ -146,7 +146,7 @@ const ProductoCaducar = () => {
     .then((res) => res.json())
     .then((data) => {
       const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad !== null);
-      const pesoProducto = data.filter(item=> item.peso > 0)
+      const pesoProducto = productosConFechaCaducidad.filter(item=> item.Peso > 0)
       setProductos(pesoProducto);
       console.log(productosConFechaCaducidad);
     })
