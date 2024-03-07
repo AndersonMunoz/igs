@@ -208,9 +208,9 @@ const Usuario = () => {
 	function listarUsuario() {
 		fetch(`http://${portConexion}:3000/usuario/listar`, {
 			method: "get",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -233,9 +233,9 @@ const Usuario = () => {
 
 		fetch(`http://${portConexion}:3000/usuario/registrar`, {
 			method: "POST",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-Type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify({
 				documento_usuario,
@@ -287,9 +287,9 @@ const Usuario = () => {
 			if (result.isConfirmed) {
 				fetch(`http://${portConexion}3000/usuario/deshabilitar/${id_usuario}`, {
 					method: "PATCH",
-					token: localStorage.getItem("token"),
 					headers: {
 						"Content-type": "application/json",
+						token: localStorage.getItem("token"),
 					},
 				})
 					.then((res) => res.json())
@@ -322,9 +322,9 @@ const Usuario = () => {
 			if (result.isConfirmed) {
 				fetch(`http://${portConexion}3000/usuario/activar/${id_usuario}`, {
 					method: "PATCH",
-					token: localStorage.getItem("token"),
 					headers: {
 						"Content-type": "application/json",
+						token: localStorage.getItem("token"),
 					},
 				})
 					.then((res) => res.json())
@@ -345,11 +345,11 @@ const Usuario = () => {
 		});
 	}
 	function editarUsuario(id) {
-		fetch(`http://${portConexion}3000/usuario/buscar/${id}`, {
+		fetch(`http://${portConexion}:3000/usuario/buscar/${id}`, {
 			method: "GET",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 		})
 			.then((res) => res.json())
@@ -373,9 +373,9 @@ const Usuario = () => {
 
 		fetch(`http://${portConexion}:3000/usuario/editar/${id}`, {
 			method: "PUT",
-			token: localStorage.getItem("token"),
 			headers: {
 				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
 			},
 			body: JSON.stringify(dataToSend),
 		})
@@ -411,29 +411,29 @@ const Usuario = () => {
 
 	return (
 		<div>
-			<h1 className="text-center modal-title fs-5 m-4">Lista los Usuarios</h1>
-			<div className="d-flex justify-content-between mb-4 mt-4">
-				<button
-					type="button"
-					id="modalUsuario"
-					className="bgfondo btn-color btn mb-4 hg"
-					data-bs-toggle="modal"
-					data-bs-target="#staticBackdrop"
-					onClick={() => {
-						setShowModal(true);
-						Validate.limpiar(".limpiar");
-						resetFormState();
-						handleRegistration();
-					}}
-				>
-					Registrar Usuario
-				</button>
-				<div
-					className="btn-group"
-					role="group"
-					aria-label="Basic mixed styles example"
-				>
-					<div className="" title="Descargar Excel">
+			<div className="boxBtnContendidoTitulo">
+				<div className="btnContenido1">
+					<button
+						type="button"
+						id="modalUsuario"
+						className="btn-color btn"
+						data-bs-toggle="modal"
+						data-bs-target="#staticBackdrop"
+						onClick={() => {
+							setShowModal(true);
+							Validate.limpiar(".limpiar");
+							resetFormState();
+							handleRegistration();
+						}}
+					>
+						Registrar Usuario
+					</button>
+				</div>
+				<div className="btnContenido2">
+					<h1 className="tituloHeaderp">Lista los Usuarios</h1>
+				</div>
+				<div className="d-flex btnContenido3">
+					<div title="Descargar Excel">
 						<DownloadTableExcel
 							filename="Usuarios Detalles Excel"
 							sheet="Usuarios"
@@ -444,7 +444,7 @@ const Usuario = () => {
 							</button>
 						</DownloadTableExcel>
 					</div>
-					<div className="" title="Descargar Pdf">
+					<div title="Descargar Pdf">
 						<button
 							type="button"
 							className="btn btn-light"
@@ -459,6 +459,7 @@ const Usuario = () => {
 					</div>
 				</div>
 			</div>
+
 
 			<div className="container-fluid w-full">
 				<table
@@ -669,7 +670,7 @@ const Usuario = () => {
 											<div className="col">
 												{password.length > 0 && !isValidPassword && (
 													<div className="text-danger">
-														La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 32 caracteres
+														La contraseña debe tener: un número, mayúsculas, minúsculas y ser mayor de 6 caracteres y menor de 12 caracteres
 													</div>
 												)}
 											</div>
@@ -726,7 +727,6 @@ const Usuario = () => {
 							</button>
 							<button
 								type="button"
-								/*  disabled={!registrationEnabled} */
 								className="btn btn-color"
 								onClick={registrarUsuario}
 							>
@@ -924,7 +924,7 @@ const Usuario = () => {
 												<div className="col">
 													{!isValidPassword && (
 														<div className="text-danger">
-															La contraseña debe tener al menos 6 caracteres, una
+															La contraseña debe ser entre 6 y 12 caracteres, una
 															mayúscula, una minúscula y un número.
 														</div>
 													)}

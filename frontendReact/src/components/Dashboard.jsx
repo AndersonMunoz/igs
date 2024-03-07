@@ -24,10 +24,10 @@ const Dashboard = () => {
   }, []);
   function listarCountCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
-      method: "GET",
-      token: localStorage.getItem("token"),
+      method: "GET",     
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -40,10 +40,10 @@ const Dashboard = () => {
   }
   function obtenerValorTotalProductos() {
     fetch(`http://${portConexion}:3000/facturamovimiento/listarEntradaSalida`, {
-      method: "GET",
-      token: localStorage.getItem("token"),
+      method: "GET",   
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -56,10 +56,10 @@ const Dashboard = () => {
   }
   function listarUsuario() {
     fetch(`http://${portConexion}:3000/usuario/listarCount`, {
-      method: "get",
-      token: localStorage.getItem("token"),
+      method: "get",     
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())

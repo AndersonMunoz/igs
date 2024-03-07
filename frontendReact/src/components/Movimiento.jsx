@@ -210,6 +210,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => {
@@ -233,6 +234,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => {
@@ -255,6 +257,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => res.json())
@@ -276,6 +279,7 @@ const Movimiento = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
+          token: localStorage.getItem("token")
         },
       }
     )
@@ -300,6 +304,7 @@ const Movimiento = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
+          token: localStorage.getItem("token")
         },
       }
     )
@@ -318,6 +323,7 @@ const Movimiento = () => {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => res.json())
@@ -336,7 +342,8 @@ const Movimiento = () => {
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
       method: "PUT",
       headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        token: localStorage.getItem("token")
       },
       body: JSON.stringify(movimientoSeleccionado),
     })
@@ -384,6 +391,7 @@ const Movimiento = () => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token")
       },
       body: JSON.stringify({ tipo_movimiento, cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote }),
     })
@@ -428,7 +436,8 @@ const Movimiento = () => {
     fetch(`http://${portConexion}:3000/usuario/listar`, {
       method: "get",
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        token: localStorage.getItem("token")
       }
     }).then((res) => {
       if (res.status === 204) {
@@ -447,6 +456,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     }).then((res) => {
       if (res.status === 204) {

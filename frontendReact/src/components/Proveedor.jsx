@@ -14,10 +14,8 @@ import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import "datatables.net-responsive";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
-import { DownloadTableExcel } from "react-export-table-to-excel";
 import * as xlsx from "xlsx";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import portConexion from "../const/portConexion";
 import { dataDecript } from "./encryp/decryp";
 
@@ -105,15 +103,6 @@ const proveedor = () => {
     return wsData;
   };
 
-  function removeFond() {
-    const modalBackdrop = document.querySelector(".modal-backdrop");
-    if (modalBackdrop) {
-      modalBackdrop.remove();
-      setModal(false);
-      console.log(modal);
-    }
-  }
-
   useEffect(() => {
     if (proveedor.length > 0) {
       if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -132,6 +121,7 @@ const proveedor = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
+        order: [[8, "asc"]],
       });
     }
   }, [proveedor]);
@@ -146,22 +136,51 @@ const proveedor = () => {
       method: "get",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        setProveedor(data);
+        if (data) {
+          setProveedor([]);
+          if (proveedor) {
+            setProveedor(data);
+          }
+        }
         if (data.status === 500) {
           Sweet.error(data.message);
         }
       })
       .catch((e) => {
-        console.log(e);
+        Sweet.error(e);
       });
   }
+
+  function deshabilitarProveedor(id) {
+    Sweet.confirmacion().then((res) => {
+      if (res.isConfirmed) {
+        fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
+          method: "put",
+          headers: {
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === 200) {
+              Sweet.exito(data.message);
+              listarProveedor();
+            } else {
+              Sweet.error(data.message);
+            }
+          });
+      }
+    });
+  }
+
   function registrarProveedor() {
     const validacionExitosa = Validate.validarCampos(".form-empty");
-    console.log(contratoInicio);
     if (validacionExitosa) {
       fetch(`http://${portConexion}:3000/proveedor/registrar`, {
         method: "POST",
@@ -180,11 +199,9 @@ const proveedor = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status === 200) {
             Sweet.exito(data.message);
             listarProveedor();
-            removeFond();
             if ($.fn.DataTable.isDataTable(tableRef.current)) {
               $(tableRef.current).DataTable().destroy();
             }
@@ -198,28 +215,6 @@ const proveedor = () => {
         });
     }
   }
-  function deshabilitarProveedor(id) {
-    Sweet.confirmacion().then((res) => {
-      if (res.isConfirmed) {
-        fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
-          method: "put",
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            listarProveedor();
-            if (data.status === 200) {
-              Sweet.exito(data.message);
-            } else {
-              Sweet.error(data.message);
-            }
-          });
-      }
-    });
-  }
 
   function editarProveedor(id) {
     document.getElementById("titleSctualizar").classList.remove("d-none");
@@ -230,6 +225,7 @@ const proveedor = () => {
       method: "get",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token"),
       },
     })
       .then((res) => res.json())
@@ -276,7 +272,6 @@ const proveedor = () => {
         if (data.status === 200) {
           Sweet.exito(data.message);
           listarProveedor();
-          removeFond();
         } else {
           if (data.status === 403) {
             Sweet.error(data.error.errors[0].msg);
@@ -353,7 +348,7 @@ const proveedor = () => {
         >
           <thead className="text-center">
             <tr>
-              <th className="th-sm">N°</th>
+              <th className="th-sm">Estado</th>
               <th className="th-sm">Nombre</th>
               <th className="th-sm">Teléfono</th>
               <th className="th-sm">Dirección</th>
@@ -380,7 +375,7 @@ const proveedor = () => {
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
                     {userRoll == "administrador" && (
-                      <td>
+                      <td className="p-0">
                         {element.estado !== 1 ? (
                           "NO DISPONIBLES"
                         ) : (

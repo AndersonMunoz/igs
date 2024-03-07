@@ -141,7 +141,7 @@ const Producto = () => {
            [ 10, 50, 100, -1 ],
            [ '10 Filas', '50 Filas', '100 Filas', 'Ver Todo' ]
         ],
-        order: [[0, 'desc']],
+        order: [[10, 'asc']],
      });
 		}
 	}, [productos]);
@@ -484,7 +484,7 @@ const Producto = () => {
                           'No asignada'
                         )}
                       </td>
-                      <td>
+                      <td className="p-0">
                       {element.estado === 1 ? (
                         <>
                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">

@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 
 export const listarProvedor = async (req, res) => {
     try {
-        const [result] = await pool.query('select * from 	proveedores ORDER BY estado DESC');
+        const [result] = await pool.query('select * from 	proveedores');
         res.status(200).json(result);
     } catch (e) {
         res.status(500).json({ "status": 500, "message": `error en listar proveedores: ${e} en servidor` })

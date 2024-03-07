@@ -379,7 +379,7 @@ const Categoria = () => {
             <tr key={element.id_categoria}>
               <td style={{textTransform: 'capitalize'}}>{element.id_categoria}</td>
               <td style={{textTransform: 'capitalize'}}>{element.nombre_categoria}</td>
-              <td>
+              <td className="p-0">
                 {element.estado === 1   ? (
                   <>
                     <button

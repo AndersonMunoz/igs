@@ -197,6 +197,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => {
@@ -220,6 +221,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => {
@@ -242,6 +244,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => res.json())
@@ -263,6 +266,7 @@ const Movimiento = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
+          token: localStorage.getItem("token")
         },
       }
     )
@@ -287,6 +291,7 @@ const Movimiento = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
+          token: localStorage.getItem("token")
         },
       }
     )
@@ -305,6 +310,7 @@ const Movimiento = () => {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
+        token: localStorage.getItem("token")
       },
     })
       .then((res) => res.json())
@@ -322,7 +328,8 @@ const Movimiento = () => {
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizarSalida/${id}`, {
     method: "PUT",
     headers: {
-      'Content-type': 'application/json'
+      'Content-type': 'application/json',
+      token: localStorage.getItem("token")
     },
     body: JSON.stringify(movimientoSeleccionado),
   })
@@ -374,6 +381,7 @@ const Movimiento = () => {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
+        token: localStorage.getItem("token")
       },
       body: JSON.stringify({cantidad_peso_movimiento, nota_factura,  fk_id_producto, fk_id_usuario, num_lote }),
     })
@@ -417,7 +425,8 @@ const Movimiento = () => {
     fetch(`http://${portConexion}:3000/usuario/listar`, {
       method: "get",
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        token: localStorage.getItem("token")
       }
     }).then((res) => {
       if (res.status === 204) {
@@ -436,6 +445,7 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "content-type": "application/json",
+        token: localStorage.getItem("token")
       },
     }).then((res) => {
       if (res.status === 204) {
@@ -533,7 +543,7 @@ const Movimiento = () => {
                       <td className="p-2 text-center">{element.nota_factura}</td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
 
-                      <td className="p-2 text-center"   >
+                      <td className="p-0 text-center"   >
                         <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
@@ -634,7 +644,7 @@ const Movimiento = () => {
             </div>
           </div>
           <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
-            <div className="modal-dialog">
+            <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header bg text-white">
                   <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
