@@ -6,6 +6,7 @@ import IgsLogo from "../../img/IGS.svg";
 import Fondo1 from "../../img/fondoIGS2.jpg";
 import Fondo2 from "../../img/fondoIGS1.jpg";
 import Fondo3 from "../../img/fondoIGS3.jpg";
+import logoFoter from "../../img/IGS_BLANCO.svg";
 import "bootstrap";
 import "./css/login.css";
 import { dataEncript } from "../components/encryp/encryp";
@@ -17,6 +18,7 @@ const LoginForm = () => {
   const [contrasena, setContrasena] = useState("");
   const [loginSuccesFull, setLoginSuccesFull] = useState(false);
   const [message, setMessage] = useState("");
+  const [year, setYear] = useState(new Date().getFullYear())
 
   function handleSubmitRecuperar() {
     fetch(`http://${portConexion}:3000/usuario/buscarCedula/${documento}`, {
@@ -83,6 +85,7 @@ const LoginForm = () => {
     removeModalBackdrop();
     window.location.reload();
   };
+
 
   return (
     <>
@@ -304,9 +307,20 @@ const LoginForm = () => {
             </div>
           </div>
           <div className="footerContent">
-            <div className="boxFooter1"></div>
-            <div className="boxFooter2"></div>
-            <div className="boxFooter3"></div>
+            <div className="boxFooter1">
+              <div className="conteLogoFooter">
+                <img src={logoFoter} className="logoFoterr" alt="Logo Igs" />
+              </div>
+              <div className="conteTextFoter">
+                <span>Copyright © Todos los Derechos Reservados {year}</span>
+              <span>IGS versión 1.0.0</span>
+              </div> 
+            </div>
+            <div className="boxFooter2">
+              <span>Diseñadores y desarrolladores</span>
+              <span> Aprendices ADSO 2556456 | 2022 - 2024</span>
+            </div>
+        
           </div>
         </>
       )}
