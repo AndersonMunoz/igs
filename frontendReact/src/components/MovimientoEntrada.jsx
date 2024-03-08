@@ -134,9 +134,6 @@ const Movimiento = () => {
   };
   const handleCheckboxChange = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-    if (checkboxNoSeleccionado) {
-      setFechaCaducidad(null); // o undefined, '' según lo prefieras
-    } 
 
   };
   const handleCloseModal = () => {
@@ -484,7 +481,7 @@ const Movimiento = () => {
       .then((data) => {
         if (Array.isArray(data)) {
           setMovimientos(data);
-          console.log(data);
+          //console.log(data);
         }
       })
       .catch((e) => {
