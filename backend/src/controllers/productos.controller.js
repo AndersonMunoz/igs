@@ -64,11 +64,15 @@ export const listarProductos = async (req, res) => {
     JOIN bodega u ON p.fk_id_up = u.id_up
     JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
     JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-    GROUP BY p.id_producto;
-    
-   `
-    );
-    res.status(200).json(result);
+    GROUP BY p.id_producto;`);
+    if (result.length > 0) {
+      res.status(200).json(result);
+  } else {
+      res.status(204).json({
+          "status": 204,
+          "message": "No se Listo los productos"
+      });
+  }
   } catch (er) {
     res.status(500).json({
       status: 500,

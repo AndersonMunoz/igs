@@ -187,14 +187,18 @@ const Producto = () => {
         token: localStorage.getItem("token"),
       },
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setProductos(data);
-      console.log(data);
+    .then((res) => {
+      if (res.status === 204) {
+        console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
     })
-    .catch((e) => {
-      console.log(e);
-    });
+    .then((data) => {
+      if (data !== null) {
+        setProductos(data);
+      }
+    })
   }
   function listarTipo(){
     fetch(`http://${portConexion}:3000/tipo/listarActivo`,{
