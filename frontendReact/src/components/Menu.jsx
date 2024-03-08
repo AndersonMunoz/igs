@@ -253,7 +253,7 @@ export const Menu = () => {
             </li>
             <li>
               <div className="content-nav">
-                <Link to="#">
+                <Link to="/ajustes">
                   <div className="tamañoLateral">
                     <IconSettings className="iconosLaterales" />
                   </div>
@@ -274,9 +274,6 @@ export const Menu = () => {
                 </li>
                 <li>
                   <Link to="#">Ayuda</Link>
-                </li>
-                <li>
-                  <Link to="#">Manual de Usuario</Link>
                 </li>
               </ul>
             </li>
@@ -351,6 +348,7 @@ export const Menu = () => {
           <div className="contSeg">
             <Outlet />
             <div className="espacioBotton"></div>
+            
           </div>
         </div>
       </div>
