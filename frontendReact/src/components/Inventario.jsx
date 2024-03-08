@@ -139,6 +139,7 @@ const Inventario = () => {
       method: "get",
       headers: {
         "Content-type": "application/json",
+        token:localStorage.getItem('token'),
       },
     })
       .then((res) => res.json())
@@ -158,6 +159,7 @@ const Inventario = () => {
       method: "GET",
       headers: {
         "Content-type": "Application/json",
+        token:localStorage.getItem('token'),
       },
     })
       .then((res) => res.json())
@@ -176,21 +178,28 @@ const Inventario = () => {
         <h1 className="text-center">INVENTARIO</h1>
       </div>
       
-      {categories.map((categorie, index) => (
-      <div key={categorie.id_categoria} className="bg-light p-3 mb-3 rounded d-grid">
-        <button
-          type="button"
-          id="modalProducto"
-          className={`btn ${index % 2 === 0 ? 'btn-color' : 'btn-warning'} mb-4`}
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          value={categorie.id_categoria}
-          onClick={() => { handleModalOpen(categorie.nombre_categoria); listarCategoriaItem(categorie.id_categoria) }}
-        >
-          {categorie.nombre_categoria}
-        </button>
+      <div className="container">
+  <div className="row">
+    {categories.map((categorie, index) => (
+      <div key={categorie.id_categoria} className="col-md-6">
+        <div className={`bg-light p-3 mb-3 rounded ${index % 2 === 0 ? 'bg-color' : 'bg-warning'}`}>
+          <button
+            type="button"
+            id="modalProducto"
+            className="btn btn-block"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            value={categorie.id_categoria}
+            onClick={() => { handleModalOpen(categorie.nombre_categoria); listarCategoriaItem(categorie.id_categoria) }}
+          >
+            {categorie.nombre_categoria}
+          </button>
+        </div>
       </div>
     ))}
+  </div>
+</div>
+
 
       <div className="modal fade" data-bs-keyboard="false" id="staticBackdrop" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static">
         <div className="modal-dialog modal-dialog-centered modal-xl">
@@ -268,18 +277,14 @@ const Inventario = () => {
       <div className="d-grid gap-2 col-3 mx-auto mt-4">
         <div className="row">
           <div className="col text-center">
-            <button className="btn btn-primary mb-2 w-100">Kardes</button>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col text-center">
-            <button className="btn btn-danger w-100">
-              <Link to="/producto/caducar">
-                <div className="tamañoLateral">
+            <button className="rounded btn-color" style={{ border: 'none', color: 'white', textDecoration: 'none', textAlign: 'center', width: '100%', padding: '10px' }}>
+              <Link to="/producto/caducar" style={{ textDecoration: 'none', color: 'white' }}>
+                <div>
                   Productos a caducar
                 </div>
               </Link>
             </button>
+
           </div>
         </div>
       </div>
