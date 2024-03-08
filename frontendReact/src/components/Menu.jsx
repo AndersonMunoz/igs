@@ -113,25 +113,17 @@ export const Menu = () => {
               </ul>
             </li>
             <li>
-              <div className="content-nav">
-                <Link to="#">
+                <Link to="/inventario">
                   <div className="tamañoLateral">
                     <IconBuildingStore className="iconosLaterales" />
                   </div>
                   <span className="link_name">Inventario</span>
                 </Link>
-                <div className="container-icon">
-                  <IconChevronDown className="iconoA" />
-                </div>
-              </div>
-              <ul className="sub-menu">
+                <ul className="sub-menu blank">
                 <li>
-                  <Link className="link_name" to="#">
+                  <Link className="link_name" to="/inventario">
                     Inventario
                   </Link>
-                </li>
-                <li>
-                  <Link to="/inventario">Inventario</Link>
                 </li>
               </ul>
             </li>
