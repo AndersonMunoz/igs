@@ -255,7 +255,7 @@ const Tipo = () => {
       return;
     }
 
-    fetch(`http://${portConexion}/tipo/registrar`, {
+    fetch(`http://${portConexion}:3000/tipo/registrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
