@@ -15,6 +15,15 @@ export const guardarMovimientoEntrada = async (req, res) => {
         if (!fecha_caducidad) {
             fecha_caducidad = null;
         }
+		//Este código se usa en caso de que se desee usar un numero de lote individual
+		/* const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
+        const [existingLote] = await pool.query(loteQuery);
+        if (existingLote.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El lote ya está registrado"
+            });
+        } */
         let sql = `
             INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
             VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
