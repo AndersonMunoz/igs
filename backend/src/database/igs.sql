@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-02-2024 a las 17:37:39
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Tiempo de generación: 08-03-2024 a las 01:33:58
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -65,6 +65,14 @@ CREATE TABLE `factura_movimiento` (
   `fk_id_proveedor` int(11) DEFAULT NULL,
   `num_lote` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Disparadores `factura_movimiento`
+--
+DELIMITER $$
+CREATE TRIGGER `increment_lote` BEFORE INSERT ON `factura_movimiento` FOR EACH ROW SET NEW.num_lote = (SELECT IFNULL(MAX(num_lote), 0) + 1 FROM factura_movimiento)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -135,7 +143,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `documento_usuario`, `email_usuario`, `nombre_usuario`, `contrasena_usuario`, `tipo_usuario`, `estado`) VALUES
 (1, 1234567890, 'admin@admin.com', '@Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1),
-(2, 1084259187, 'anderso@gmail.com', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1);
+(2, 1084259187, 'andersons_munoz@soy.sena.edu.co', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1);
 
 --
 -- Índices para tablas volcadas
