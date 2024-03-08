@@ -396,7 +396,6 @@ const Movimiento = () => {
   function registrarMovimiento() {
 
     let fk_id_usuario = userId;
-    let num_lote = document.getElementById('num_lote').value;
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let precio_movimiento = document.getElementById('precio_movimiento').value;
     let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
@@ -416,7 +415,7 @@ const Movimiento = () => {
         "Content-Type": "application/json",
         token: localStorage.getItem("token")
       },
-      body: JSON.stringify({cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote }),
+      body: JSON.stringify({cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor }),
     })
     .then((res) => res.json())
     .then(data => {
@@ -700,15 +699,6 @@ const Movimiento = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese un número válido.
-                          </div>
-                        </div>
-                      </div>
                     </div>
                     <div className="row mb-4">
                       <div className="col">
@@ -791,15 +781,6 @@ const Movimiento = () => {
                           <div className="invalid-feedback is-invalid">
                           Por favor, ingrese una nota mas larga.
                         </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="num_lote">Número lote</label>
-                        <input type="number" id="num_lote" name="num_lote" className="form-control form-update " value={movimientoSeleccionado.num_lote || ''} onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })} />
-                        <div className="invalid-feedback is-invalid">
-                          Por favor, ingrese una cantidad.
                         </div>
                       </div>
                     </div>

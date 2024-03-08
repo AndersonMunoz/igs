@@ -9,25 +9,15 @@ export const guardarMovimientoEntrada = async (req, res) => {
         }
 
         let { cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-            nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote } = req.body;
+            nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor} = req.body;
 
         // Si fecha_caducidad no está definida o es una cadena vacía, establece su valor como null
         if (!fecha_caducidad) {
             fecha_caducidad = null;
         }
-
-        const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
-        const [existingLote] = await pool.query(loteQuery);
-        if (existingLote.length > 0) {
-            return res.status(409).json({
-                "status": 409,
-                "message": "El lote ya está registrado"
-            });
-        }
-
         let sql = `
-            INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote)
-            VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}', '${num_lote}');
+            INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
+            VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
         `;
         let sql3 = `
             UPDATE productos
@@ -67,14 +57,6 @@ export const guardarMovimientoSalida = async (req,res)=> {
            return res.status(403).json({"status": 403 ,error})
         }
 		let {cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, num_lote} = req.body;
-		const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
-        	const [existingLote] = await pool.query(loteQuery);
-        if (existingLote.length > 0) {
-            return res.status(409).json({
-                "status": 409,
-                "message": "El lote ya está registrado"
-            });
-        }
 		let sql4 = `select cantidad_peso_producto from productos where id_producto = ${fk_id_producto}`
 
 			let cantidadPeso = await pool.query(sql4)
@@ -96,9 +78,9 @@ export const guardarMovimientoSalida = async (req,res)=> {
 
 				let sql10 = `
 				INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,
-				nota_factura, fk_id_producto, fk_id_usuario,num_lote)
+				nota_factura, fk_id_producto, fk_id_usuario)
 				VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}',
-				'${fk_id_producto}','${fk_id_usuario}','${num_lote}');`;
+				'${fk_id_producto}','${fk_id_usuario}');`;
 
 				let sql6 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
 				WHERE id_producto = ${fk_id_producto}`
@@ -440,18 +422,9 @@ export const actualizarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario,num_lote } = req.body;
+		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario} = req.body;
 
-		const loteQuery = `SELECT num_lote FROM factura_movimiento WHERE num_lote = '${num_lote}' AND id_factura != ${id}`;
-		const [existingLote] = await pool.query(loteQuery);
-
-		if (existingLote.length > 0 && num_lote !== existingLote[0].num_lote) {
-			return res.status(409).json({
-				"status": 409,
-				"message": "El lote ya está registrado"
-			});
-		}
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}',num_lote='${num_lote}' where id_factura=${id}`;
+		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
 
 		const [rows] = await pool.query(sql);
 
@@ -475,19 +448,8 @@ export const actualizarMovimientoSalida = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let {nota_factura, num_lote} = req.body;
-
-		const loteQuery = `SELECT num_lote FROM factura_movimiento WHERE num_lote = '${num_lote}' AND id_factura != ${id}`;
-		const [existingLote] = await pool.query(loteQuery);
-
-		if (existingLote.length > 0 && num_lote !== existingLote[0].num_lote) {
-			return res.status(409).json({
-				"status": 409,
-				"message": "El lote ya está registrado"
-			});
-		}
-
-		let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',num_lote='${num_lote}' where id_factura=${id}`;
+		let {nota_factura} = req.body;
+		let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}' where id_factura=${id}`;
 
 		const [rows] = await pool.query(sql);
 
