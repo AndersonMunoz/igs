@@ -226,7 +226,7 @@ const LoginForm = () => {
                       </button>
                       <a
                         type="button"
-                        className="blue"
+                        className="olvidoContra"
                         data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop2"
                       >

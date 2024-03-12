@@ -22,7 +22,7 @@ import portConexion from "../const/portConexion";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-
+// Componente Producto
 const Producto = () => {
   const [productos, setProductos] = useState([]);
   const [tipos, setTipo] = useState([]);
@@ -37,6 +37,7 @@ const Producto = () => {
 
   const tableRef = useRef();
 
+  // Función para exportar datos a Excel
   const handleOnExport = () => {
     const wsData = getTableData();
     const wb = xlsx.utils.book_new();
@@ -44,11 +45,11 @@ const Producto = () => {
     xlsx.utils.book_append_sheet(wb, ws, 'ExcelProducto');
     xlsx.writeFile(wb, 'Productos.xlsx');
   };
-
+  // Función para exportar datos a PDF
   const doc= new jsPDF();
   const exportPdfHandler = () => {
     const doc = new jsPDF();
-  
+  // Configuración de las columnas para el PDF
     const columns = [
       { title: 'N°', dataKey: 'id_producto' },
       { title: 'NombreProducto', dataKey: 'NombreProducto' },
@@ -122,7 +123,7 @@ const Producto = () => {
     return wsData;
   };
 
-
+ // Efecto para inicializar la tabla de productos
   useEffect(() => {
 		if (productos.length > 0) {
 			if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -145,14 +146,13 @@ const Producto = () => {
      });
 		}
 	}, [productos]);
-
+  // Efecto para cargar productos, tipos y UP al montar el componente
   useEffect(() => {
       listarProducto();
       listarUp();
       listarTipo();
-      busquedaInventario();
   }, []); 
-
+  // Función para resetear el estado del formulario
   const resetFormState = () => {
     const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -173,12 +173,14 @@ const Producto = () => {
       field.classList.remove('is-invalid');
     });
   };
+    // Función para remover el fondo del modal
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     if (modalBackdrop) {
       modalBackdrop.remove();
     }
   }
+    // Función para listar los productos
   function listarProducto() {
     fetch(`http://${portConexion}:3000/producto/listar`, {
       method: "GET",
@@ -189,7 +191,6 @@ const Producto = () => {
     })
     .then((res) => {
       if (res.status === 204) {
-        console.log("No hay datos disponibles");
         return null;
       }
       return res.json();
@@ -200,6 +201,7 @@ const Producto = () => {
       }
     })
   }
+    // Función para listar los tipos de producto
   function listarTipo(){
     fetch(`http://${portConexion}:3000/tipo/listarActivo`,{
       method: "GET",
@@ -210,7 +212,6 @@ const Producto = () => {
     })
     .then((res) => {
       if (res.status === 204) {
-        console.log("No hay datos disponibles");
         return null;
       }
       return res.json();
@@ -224,6 +225,7 @@ const Producto = () => {
       console.error("Error al procesar la respuesta:", e);
     });
   }
+    // Función para listar las unidades productivas
   function listarUp() {
     fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
@@ -234,7 +236,6 @@ const Producto = () => {
     })
       .then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
           return null;
         }
         return res.json();
@@ -248,14 +249,15 @@ const Producto = () => {
         console.error("Error al procesar la respuesta:", e);
       });
   }
+    // Función para manejar el cambio en la selección del tipo de producto
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
-    console.log(selectedOption);
   };
+    // Función para manejar el cambio en la selección de la unidad productiva
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption);
-    console.log(selectedOption); 
   };
+    // Función para registrar un nuevo producto
   function registrarProducto() {
     const descripcion_producto = document.getElementById('descripcion_producto').value;
     Validate.validarCampos('.form-empty');
@@ -303,6 +305,7 @@ const Producto = () => {
       Sweet.error('Hubo un error al registrar el producto.');
     });
   }
+    // Función para editar un producto
   function editarProducto(id) {
     fetch(`http://${portConexion}:3000/producto/buscar/${id}`, {
       method: 'GET',
@@ -313,7 +316,6 @@ const Producto = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setProductoSeleccionado(data[0]);
         setUpdateModal(true);
       })
@@ -321,6 +323,7 @@ const Producto = () => {
         console.error('Error:', error);
       });
   }
+    // Función para actualizar un producto
   function actualizarProducto(id){
     const validacionExitosa = Validate.validarCampos('.form-update');
       
@@ -340,7 +343,6 @@ const Producto = () => {
       }
       if (data.status == 200) {
         Sweet.exito(data.message);
-        console.log(data);
         listarProducto();
         setUpdateModal(false);
         removeModalBackdrop();
@@ -356,6 +358,7 @@ const Producto = () => {
       
     })
   }
+    // Función para deshabilitar un producto
   function deshabilitarProducto(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -368,7 +371,6 @@ const Producto = () => {
         })
           .then(res => res.json())
           .then(data => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.deshabilitadoExitoso();
             }
@@ -383,12 +385,7 @@ const Producto = () => {
       }
     });
   }
-  function busquedaInventario() {
-    let categoria = localStorage.getItem('category')
-    console.log(categoria);
-    // favor dejar de ultimo...
-    localStorage.removeItem('category');
-  }
+    // Función para activar un producto
   function activarProducto(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
@@ -401,7 +398,6 @@ const Producto = () => {
         })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
           if (data.status === 200) {
             Sweet.habilitadoExitoso();
           }
@@ -468,11 +464,11 @@ const Producto = () => {
                   </div>
                 </td>
               </tr>
-            ) : (                     // <td>{Validate.formatFecha(element.FechaCaducidad)}
+            ) : ( 
               <>
-                {productos.map((element) => (
+                {productos.map((element, index) => (
                     <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
-                      <td>{element.id_producto}</td>
+                      <td>{index + 1}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.NombreCategoria}</td>
                       <td>{element.Peso}</td>
