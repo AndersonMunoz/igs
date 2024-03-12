@@ -15,13 +15,14 @@ const Dashboard = () => {
 	});
 	const [categoriasCount, setCategoriasCount] = useState([]);
 	const [userRoll, setUserRoll] = useState("");
-
+	// useEffect para obtener datos del backend al cargar el componente
 	useEffect(() => {
 		setUserRoll(dataDecript(localStorage.getItem("roll")));
 		obtenerValorTotalProductos();
 		listarUsuario();
 		listarCountCategoria();
 	}, []);
+		// Funciones para obtener la cantidad de categorias
 	function listarCountCategoria() {
 		fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
 			method: "GET",
@@ -38,6 +39,7 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
+		// Funciones para obtener datos de las facturas
 	function obtenerValorTotalProductos() {
 		fetch(`http://${portConexion}:3000/facturamovimiento/listarEntradaSalida`, {
 			method: "GET",
@@ -54,6 +56,7 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
+		// Funciones para obtener lla cantidad de usuarios
 	function listarUsuario() {
 		fetch(`http://${portConexion}:3000/usuario/listarCount`, {
 			method: "get",
@@ -70,6 +73,7 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
+		// Colores para los gráficos
 	const barColors = [
 		"rgba(54, 162, 235, 0.5)",
 		"rgba(255, 99, 132, 0.5)",
@@ -92,7 +96,7 @@ const Dashboard = () => {
 		"rgba(255, 140, 0, 0.5)",
 		"rgba(0, 0, 255, 0.5)",
 	];
-
+	// Colores para los gráficos
 	const doughnutColors = [
 		"rgba(255, 99, 132, 0.5)",
 		"rgba(54, 162, 235, 0.5)",
