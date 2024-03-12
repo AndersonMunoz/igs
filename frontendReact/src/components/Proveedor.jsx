@@ -125,6 +125,10 @@ const proveedor = () => {
       });
     }
   }, [proveedor]);
+  // Define la función didClose fuera del evento onpopstate
+  function didClose() {
+    document.querySelector('[data-bs-dismiss="modal"]');
+  }
 
   useEffect(() => {
 
