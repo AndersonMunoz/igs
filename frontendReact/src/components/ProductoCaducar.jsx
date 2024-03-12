@@ -134,7 +134,7 @@ const ProductoCaducar = () => {
   useEffect(() => {
       listarProducto();
   }, []); 
-
+	// Funciones para obtener datos de los productos
   function listarProducto() {
     fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
       method: "GET",
@@ -148,10 +148,9 @@ const ProductoCaducar = () => {
       const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad !== null);
       const pesoProducto = productosConFechaCaducidad.filter(item=> item.Peso > 0)
       setProductos(pesoProducto);
-      console.log(productosConFechaCaducidad);
     })
     .catch((e) => {
-      console.log(e);
+      console.error('Error:', e);
     });
   }
 

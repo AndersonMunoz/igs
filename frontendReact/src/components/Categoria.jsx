@@ -145,7 +145,6 @@ const Categoria = () => {
       if (data !== null) {
         setcategorias_producto(data);
       }
-      console.log(data)
     })
     .catch((e) => {
       console.log(e);

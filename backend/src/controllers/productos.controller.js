@@ -12,40 +12,39 @@ export const guardarProducto = async (req, res) => {
       fk_id_up,
       fk_id_tipo_producto
     } = req.body;
-    
-    // const tipoQuery = `select t.id_tipo, p.fk_id_tipo_producto from productos p join tipo_productos t on p.fk_id_tipo_producto = t.id_tipo`;
-    // const [existingTipo] = await pool.query(tipoQuery);
-    // if (existingTipo.length > 0) {
-    //   return res.status(409).json({
-    //       "status": 409,
-    //       "message": "El tipo de producto ya existe"
-    //   });
-    // }
-    /* const TipoQuery = `SELECT * FROM tipo_productos WHERE id_tipo = '${fk_id_tipo_producto}'`;
-    const [existingTipo] = await pool.query(TipoQuery);
-    if (existingTipo.length > 0) {
+
+    // Verificar si el fk_id_tipo_producto ya existe en la tabla de productos
+    const [existingProduct] = await pool.query(
+      "SELECT id_producto FROM productos WHERE fk_id_tipo_producto = ?",
+      [fk_id_tipo_producto]
+    );
+
+    if (existingProduct.length > 0) {
       return res.status(409).json({
-          "status": 409,
-          "message": "El tipo de producto ya existe"
+        status: 409,
+        message: "El tipo de producto ya existe, no se pueden registrar datos repetidos."
       });
-    } */
+    }
+
+    // Si el tipo de producto no existe, procedemos con la inserción
     const sql = "INSERT INTO productos (descripcion_producto, fk_id_up, fk_id_tipo_producto) VALUES (?, ?, ?)";
     const [rows] = await pool.query(sql, [descripcion_producto, fk_id_up, fk_id_tipo_producto]);    
     if (rows.affectedRows > 0) {
       res
         .status(200)
-        .json({ status: 200, message: "Se registro con exito el producto" });
+        .json({ status: 200, message: "Se registró con éxito el producto." });
     } else {
       res
         .status(401)
-        .json({ status: 401, message: "No se pudo registrar el producto" });
+        .json({ status: 401, message: "No se pudo registrar el producto." });
     }
   } catch (e) {
     res.status(500).json({ message: "Error en guardarProducto: " + e });
   }
 };
+
 export const listarProductos = async (req, res) => {
-  try { //JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto  f.fecha_caducidad AS FechaCaducidad, 
+  try {
     const [result] = await pool.query(
       `SELECT 
       p.id_producto, 
