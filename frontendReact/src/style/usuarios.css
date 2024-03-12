@@ -1,7 +1,6 @@
 * {
   padding: 0;
   margin: 0;
-  box-sizing: border-box;
 }
 
 .label-bold {
@@ -11,14 +10,9 @@
   justify-items: left;
 }
 
-
-.bnt-color:hover {
-  background-color: rgb(23, 140, 23);
-}
-
 .input-buscar {
   border: none;
-  border-bottom: 2px solid rgb(57, 169, 0);
+  border-bottom: 2px solid rgb(0, 173, 0);
   outline: none;
   padding: 5px;
   transition: border-bottom 0.3s;
@@ -40,38 +34,46 @@
   width: 28px;
 }
 
-.tituloHeaderp{
-  font-size: 120%;
+.tituloHeaderpp{
+  font-size: 1.3em;
+  font-weight: 500;
   color: rgb(0, 0, 0);
+}
+.btn-color22 {
+  background-color: rgb(0, 170, 0) !important;
+  color: #fff !important;
+  font-size: 14px;
+  /* Otros estilos */
 }
 
 .boxBtnContendidoTitulo{
   display: grid;
+  margin-top: 10px;
   width: 100%;
-  height: 100px;
+  height: 80px;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  grid-template: "btnContenido1 btnContenido2 btnContenido3"100%/
+  grid-template: "btnContenido1 btnContenido22 btnContenido3"100%/
                     1fr auto 1fr;
 }
 
 .btnContenido1{
   grid-area: btnContenido1;
-  height: 100px;
+  height: 80px;
   align-items: center;
   display: flex;
 }
-.btnContenido2{
-  grid-area: btnContenido2;
-  height: 100px;
+.btnContenido22{
+  grid-area: btnContenido22;
+  height: 80px;
   align-items: center;
   display: flex;
   justify-content: center;
 }
 .btnContenido3{
   grid-area: btnContenido3;
-  height: 100px;
+  height: 80px;
   align-items: center;
   display: flex;
   justify-content: end;
@@ -81,31 +83,41 @@
   .boxBtnContendidoTitulo{
     display: grid;
     width: 100%;
-    height: auto;
+    height: 85px;
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    grid-template: "btnContenido1 btnContenido3"80px
-                    "btnContenido2 btnContenido2"30px/
-                      1fr 1fr;
+    grid-template: "btnContenido22 btnContenido22"25px
+                    "btnContenido1 btnContenido3"60px/
+                      3fr 1fr;
   }
   
   .btnContenido1{
     grid-area: btnContenido1;
-    height: 80px;
-    align-items: center;
+    height: 50px;
+    width: auto;
     display: flex;
   }
-  .btnContenido2{
-    grid-area: btnContenido2;
-    width: 100%;
-    height:100%;
+  .btn-color22{
+    background-color: red;
   }
+  .btnContenido22{
+    grid-area: btnContenido22;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tituloHeaderpp{
+    font-size: 120%;
+  }
+  
   .btnContenido3{
     grid-area: btnContenido3;
-    height: 100px;
-    align-items: center;
+    height: 50px;
     display: flex;
+    align-items: center;
     justify-content: end;
   }
 }
