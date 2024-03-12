@@ -125,8 +125,19 @@ const proveedor = () => {
       });
     }
   }, [proveedor]);
+  // Define la función didClose fuera del evento onpopstate
+  function didClose() {
+    document.querySelector('[data-bs-dismiss="modal"]');
+  }
 
   useEffect(() => {
+    // Asigna la función al evento onpopstate
+    window.onpopstate = function (event) {
+      didClose(); // Llama a la función cuando se activa el evento
+      console.log("¡Hola! El usuario está intentando ir hacia atrás.");
+      // Aquí puedes ejecutar la función que desees.
+    };
+
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
