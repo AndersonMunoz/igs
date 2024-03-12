@@ -556,9 +556,9 @@ const Movimiento = () => {
                 </tr>
               ) : (
                 <>
-                  {movimientos.map((element) => (
+                  {movimientos.map((element,index) => (
                     <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
-                      <td className="p-2 text-center" >{element.id_factura}</td>
+                      <td className="p-2 text-center" >{index+1}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
                       <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>

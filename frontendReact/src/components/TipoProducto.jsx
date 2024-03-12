@@ -200,7 +200,7 @@ const Tipo = () => {
     })
       .then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
+       
           return null;
         }
         return res.json();
@@ -224,7 +224,6 @@ const Tipo = () => {
     })
       .then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
           return null;
         }
         return res.json();
@@ -304,7 +303,6 @@ const Tipo = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.exito(data.message);
             }

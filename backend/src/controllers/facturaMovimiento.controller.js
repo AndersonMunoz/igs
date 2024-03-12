@@ -91,7 +91,15 @@ export const guardarMovimientoSalida = async (req,res)=> {
 				VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}',
 				'${fk_id_producto}','${fk_id_usuario}');`;
 
-				let sql6 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto -${cantidad_peso_movimiento} 
+				let sql6 = `UPDATE productos 
+				SET cantidad_peso_producto = CASE 
+					WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
+					ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
+				END,
+				precio_producto = CASE 
+					WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
+					ELSE precio_producto
+				END
 				WHERE id_producto = ${fk_id_producto}`
 
 				const [result3, result4] = await Promise.all([
