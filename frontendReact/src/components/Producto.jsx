@@ -492,7 +492,7 @@ const Producto = () => {
             </tr>
           </thead>
           <tbody id="tableProducto" className="text-center">
-            {productos.length == "" ? (
+            {productos.length === 0 ? (
               <tr>
                 <td colSpan={12}>
                   <div className="d-flex justify-content-center">
