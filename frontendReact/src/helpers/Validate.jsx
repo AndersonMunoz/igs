@@ -14,7 +14,6 @@ const Validate = {
     });
   
     if (camposVacios.length > 0) {
-      console.log('Campos vacíos:', camposVacios);
       return false; 
     }
   

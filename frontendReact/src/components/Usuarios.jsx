@@ -35,7 +35,6 @@ const Usuario = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
-  const [registrationEnabled, setRegistrationEnabled] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
 
 
@@ -83,7 +82,6 @@ const Usuario = () => {
     setPassword("");
     setConfirmPassword("");
     setPasswordMatch(false);
-    setRegistrationEnabled(false);
   };
 
   useEffect(() => { }, [passwordMatch]);
@@ -116,10 +114,6 @@ const Usuario = () => {
       newConfirmPassword.trim() === ""
     );
 
-    setRegistrationEnabled(
-      newPassword === newConfirmPassword && isValidPassword
-    );
-
   };
 
   function obtenerContrasena(password, confirmPassword) {
@@ -132,7 +126,6 @@ const Usuario = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-    setInputType(inputType === "password" ? "text" : "password");
   };
 
   const toggleConfirmPasswordVisibility = () => {
@@ -227,7 +220,6 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -268,7 +260,6 @@ const Usuario = () => {
           Sweet.error(data.error.errors[0].msg);
           return;
         }
-        console.log(data);
         handleRegistration();
         listarUsuario();
         setShowModal(false);
@@ -295,7 +286,6 @@ const Usuario = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.deshabilitadoExitoso();
             }
@@ -303,7 +293,6 @@ const Usuario = () => {
               Sweet.deshabilitadoFallido();
             }
 
-            console.log(data);
             listarUsuario();
             setShowModal(false);
             removeModalBackdrop();
@@ -330,7 +319,6 @@ const Usuario = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.habilitadoExitoso();
             }
@@ -355,7 +343,6 @@ const Usuario = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setUsuarioSeleccionado(data[0]);
         setUpdateModal(true);
       })
