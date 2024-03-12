@@ -127,9 +127,17 @@ const proveedor = () => {
   }, [proveedor]);
 
   useEffect(() => {
+
+    window.onpopstate = function(event) {
+      window.location.reload();
+  };
+  
+  
+
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
+
 
   function listarProveedor() {
     fetch(`http://${portConexion}:3000/proveedor/listar`, {
