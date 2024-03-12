@@ -85,7 +85,7 @@ const Usuario = () => {
     setPasswordMatch(false);
     setRegistrationEnabled(false);
   };
-  
+
   useEffect(() => { }, [passwordMatch]);
 
   const handlePasswordChange = (event) => {
@@ -118,7 +118,7 @@ const Usuario = () => {
 
     setRegistrationEnabled(
       newPassword === newConfirmPassword && isValidPassword
-    ); 
+    );
 
   };
 
@@ -128,7 +128,7 @@ const Usuario = () => {
     }
     return password;
   }
-  
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -227,7 +227,7 @@ const Usuario = () => {
     let documento_usuario = document.getElementById("documento_usuario").value;
     let email_usuario = document.getElementById("email_usuario").value;
     let nombre_usuario = document.getElementById("nombre_usuario").value;
-    
+
     let tipo_usuario = document.getElementById("tipo_usuario").value;
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
@@ -367,9 +367,9 @@ const Usuario = () => {
     const validacionExitosa = Validate.validarCampos(".form-update");
 
     const dataToSend = {
-    ...usuarioSeleccionado,
-    contrasena_usuario: contrasenaValue
-  };
+      ...usuarioSeleccionado,
+      contrasena_usuario: contrasenaValue
+    };
 
 
     fetch(`http://${portConexion}:3000/usuario/editar/${id}`, {
@@ -412,51 +412,58 @@ const Usuario = () => {
 
   return (
     <div>
-      <h1 className="text-center modal-title fs-5 m-4">Lista los Usuarios</h1>
-      <div className="d-flex justify-content-between mb-4 mt-4">
-        <button
-          type="button"
-          id="modalUsuario"
-          className="bgfondo btn-color btn mb-4 hg"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          onClick={() => {
-            setShowModal(true);
-            Validate.limpiar(".limpiar");
-            resetFormState();
-            handleRegistration();
-          }}
-        >
-          Registrar Usuario
-        </button>
-        <div
-          className="btn-group"
-          role="group"
-          aria-label="Basic mixed styles example"
-        >
-          <div className="" title="Descargar Excel">
-            <DownloadTableExcel
-              filename="Usuarios Detalles Excel"
-              sheet="Usuarios"
-              currentTableRef={tableRef.current}
-            >
-              <button type="button" className="btn btn-light">
-                <img src={ExelLogo} className="logoExel" />
+
+      <div className="boxBtnContendidoTitulo">
+        <div className="btnContenido1">
+          <button
+            type="button"
+            id="modalUsuario"
+            className="btn-color btn"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            onClick={() => {
+              setShowModal(true);
+              Validate.limpiar(".limpiar");
+              resetFormState();
+              handleRegistration();
+            }}
+          >
+            Registrar Usuario
+          </button>
+        </div>
+        <div className="btnContenido22">
+          <h2 className="tituloHeaderpp">Lista los Usuarios</h2>
+        </div>
+        <div className="btnContenido3">
+          <div
+            className="flex btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <div className="" title="Descargar Excel">
+              <DownloadTableExcel
+                filename="Usuarios Detalles Excel"
+                sheet="Usuarios"
+                currentTableRef={tableRef.current}
+              >
+                <button type="button" className="btn btn-light">
+                  <img src={ExelLogo} className="logoExel" />
+                </button>
+              </DownloadTableExcel>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() =>
+                  generatePDF(tableRef, {
+                    filename: "Usuarios Detalles table.pdf",
+                  })
+                }
+              >
+                <img src={PdfLogo} className="logoExel" />
               </button>
-            </DownloadTableExcel>
-          </div>
-          <div className="" title="Descargar Pdf">
-            <button
-              type="button"
-              className="btn btn-light"
-              onClick={() =>
-                generatePDF(tableRef, {
-                  filename: "Usuarios Detalles table.pdf",
-                })
-              }
-            >
-              <img src={PdfLogo} className="logoExel" />
-            </button>
+            </div>
           </div>
         </div>
       </div>
@@ -728,7 +735,7 @@ const Usuario = () => {
               </button>
               <button
                 type="button"
-               /*  disabled={!registrationEnabled} */
+                /*  disabled={!registrationEnabled} */
                 className="btn btn-color"
                 onClick={registrarUsuario}
               >
