@@ -23,3 +23,6 @@
 .none {
   display: none;
 }
+.btn{
+  font-size: 14px !important;
+}
