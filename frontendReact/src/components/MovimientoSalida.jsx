@@ -184,6 +184,9 @@ const Movimiento = () => {
 
   useEffect(() => {
     setUserId(dataDecript(localStorage.getItem('id')));
+    window.onpopstate = function(event) {
+      window.location.reload();
+    };
     listarMovimiento();
     listarCategoria();
     listarTipo();

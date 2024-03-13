@@ -210,6 +210,9 @@ const Movimiento = () => {
   }
 
   useEffect(() => {
+    window.onpopstate = function(event) {
+      window.location.reload();
+    };
     setUserId(dataDecript(localStorage.getItem('id')));
     listarMovimiento();
     listarCategoria();
