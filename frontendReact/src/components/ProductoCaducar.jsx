@@ -145,7 +145,7 @@ const ProductoCaducar = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad !== null);
+      const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad != null);
       const pesoProducto = productosConFechaCaducidad.filter(item=> item.Peso > 0)
       setProductos(pesoProducto);
     })
@@ -239,7 +239,7 @@ const ProductoCaducar = () => {
                         <td>
                         {element.FechaCaducidad ? (
                           <>
-                            {Validate.formatFecha(element.FechaCaducidad)} - <br/>{mensaje}
+                            {Validate.formatFecha(element.FechaCaducidad)}<br/>{mensaje}
                           </>
                         ) : (
                           'No asignada'

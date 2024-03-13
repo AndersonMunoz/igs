@@ -36,6 +36,7 @@
 .h1Titulo{
   font-weight: 600;
   font-size:2em;
+  caret-color: transparent;
 }
 
 @media screen and (min-width: 100px) and (max-width: 361px) {
@@ -104,6 +105,7 @@
   width: 100%;
 }
 .h222 {
+  caret-color: transparent;
   font-size: 2rem;
   font-weight: bold;
   color: rgb(57, 169, 0);
@@ -131,6 +133,7 @@
   flex-direction: row;
   font-size: 0.9em;
   gap: 10px;
+  caret-color: transparent;
   grid-template: "empty-1 boxFooter1 boxFooter2 empty-2"100%/
                     25% 1fr 1fr 25%;
 }

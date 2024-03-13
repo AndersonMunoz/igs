@@ -305,6 +305,7 @@ const PerfilAjustes = () => {
 								</label>
 								<input
 									type="hidden"
+									name="nombre_usuario"
 									value={usuarioSeleccionado.id_usuario || ""}
 									onChange={(e) =>
 										setUsuarioSeleccionado({
