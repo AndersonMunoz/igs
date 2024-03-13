@@ -116,6 +116,9 @@ const Categoria = () => {
   
 
   useEffect(() => {
+    window.onpopstate = function(event) {
+      window.location.reload();
+  };
     listarCategoria();
   }, []); 
 
@@ -147,7 +150,6 @@ const Categoria = () => {
       }
     })
     .catch((e) => {
-      console.log(e);
     });
   }
   
@@ -186,7 +188,6 @@ const Categoria = () => {
           Sweet.error(data.error.errors[0].msg);
           return;
         }
-        console.log(data);
         listarCategoria();
         setShowModal(false);
         removeModalBackdrop();
@@ -212,7 +213,6 @@ const Categoria = () => {
         })
           .then(res => res.json())
           .then(data => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.exito(data.message);
           
@@ -241,7 +241,6 @@ const Categoria = () => {
         })
           .then(res => res.json())
           .then(data => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.actualizacionExitoso();
             }
@@ -266,7 +265,6 @@ const Categoria = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setcategoriaSeleccionada(data[0]);
         setUpdateModal(true);
       })
@@ -298,7 +296,6 @@ const Categoria = () => {
         Sweet.error(data.errors[0].msg);
     
       }
-      console.log(data);
       listarCategoria();
       setUpdateModal(false);
       removeModalBackdrop();

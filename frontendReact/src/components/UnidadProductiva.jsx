@@ -105,11 +105,15 @@ const Up = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
+        order: [[2, "asc"]],
       });
     }
   }, [unidad_productiva]);
 
   useEffect(() => {
+    window.onpopstate = function(event) {
+      window.location.reload();
+  };
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarUp();
   }, []);
@@ -176,7 +180,6 @@ const Up = () => {
         if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
         }
-        console.log(data);
         listarUp();
         setShowModal(false);
         removeModalBackdrop();
@@ -202,7 +205,6 @@ const Up = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.exito(data.message);
             } else {
@@ -228,7 +230,6 @@ const Up = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.actualizacionExitoso();
             }
@@ -254,7 +255,6 @@ const Up = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setupSeleccionada(data[0]);
         setUpdateModal(true);
       })
@@ -283,7 +283,6 @@ const Up = () => {
         } else {
           Sweet.error(data.errors[0].msg);
         }
-        console.log(data);
         listarUp();
         setUpdateModal(false);
         removeModalBackdrop();
