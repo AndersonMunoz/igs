@@ -23,3 +23,10 @@
 .none {
   display: none;
 }
+.btn{
+  font-size: 14px !important;
+}
+
+h1,h2{
+  caret-color: transparent;
+}

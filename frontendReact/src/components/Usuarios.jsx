@@ -158,6 +158,7 @@ const Usuario = () => {
       field.classList.remove("is-invalid");
     });
   };
+  
 
 
 
@@ -189,6 +190,10 @@ const Usuario = () => {
   }, [usuarios]);
 
   useEffect(() => {
+    window.onpopstate = function(event) {
+      window.location.reload();
+  };
+  
     listarUsuario();
   }, []);
 
@@ -399,7 +404,6 @@ const Usuario = () => {
 
   return (
     <div>
-
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <button

@@ -125,19 +125,11 @@ const proveedor = () => {
       });
     }
   }, [proveedor]);
-  // Define la función didClose fuera del evento onpopstate
-  function didClose() {
-    document.querySelector('[data-bs-dismiss="modal"]');
-  }
 
   useEffect(() => {
-    // Asigna la función al evento onpopstate
     window.onpopstate = function (event) {
-      didClose(); // Llama a la función cuando se activa el evento
-      console.log("¡Hola! El usuario está intentando ir hacia atrás.");
-      // Aquí puedes ejecutar la función que desees.
+      window.location.reload();
     };
-
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
@@ -153,17 +145,47 @@ const proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          setProveedor([]);
-          if (proveedor) {
-            setProveedor(data);
-          }
+          data.forEach((item) => {
+            const fechaActual = new Date();
+            const dia = fechaActual.getDay() - 1;
+            const fechafin = new Date(item.fin_contrato);
+            const diaFin = fechafin.getDay();
+            if (fechafin < fechaActual) {
+              if (dia == diaFin) {
+                if (item.estado == 1) {
+                  vencioProveedor(item.id_proveedores);
+                }
+              }
+            }
+          });
+          setProveedor(data);
         }
         if (data.status === 500) {
           Sweet.error(data.message);
         }
       })
+
       .catch((e) => {
         Sweet.error(e);
+      });
+  }
+
+  function vencioProveedor(id) {
+    fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
+      method: "put",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 200) {
+          Sweet.exito("Proveedor deshabilitado por fecha de fin de contrato");
+          listarProveedor();
+        } else {
+          Sweet.error(data.message);
+        }
       });
   }
 
@@ -294,13 +316,13 @@ const proveedor = () => {
   }
   return (
     <div>
-      <div className="d-flex justify-content-between mt-4">
-        <div>
+      <div className="boxBtnContendidoTitulo">
+        <div className="btnContenido1">
           {userRoll == "administrador" && (
             <button
               type="button"
               id="modalProducto"
-              className="btn-color btn mb-4"
+              className="btn-color btn"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
               onClick={() => {
@@ -324,28 +346,33 @@ const proveedor = () => {
             </button>
           )}
         </div>
-        <div
-          className="btn-group"
-          role="group"
-          aria-label="Basic mixed styles example"
-        >
-          <div className="" title="Descargar Excel">
-            <button
-              onClick={handleOnExport}
-              type="button"
-              className="btn btn-light"
-            >
-              <img src={ExelLogo} className="logoExel" />
-            </button>
-          </div>
-          <div className="" title="Descargar Pdf">
-            <button
-              type="button"
-              className="btn btn-light"
-              onClick={exportPdfHandler}
-            >
-              <img src={PdfLogo} className="logoExel" />
-            </button>
+        <div className="btnContenido22">
+          <h2 className="tituloHeaderpp">Proveedor</h2>
+        </div>
+        <div className="btnContenido3">
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
+            <div className="" title="Descargar Excel">
+              <button
+                onClick={handleOnExport}
+                type="button"
+                className="btn btn-light"
+              >
+                <img src={ExelLogo} className="logoExel" />
+              </button>
+            </div>
+            <div className="" title="Descargar Pdf">
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={exportPdfHandler}
+              >
+                <img src={PdfLogo} className="logoExel" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

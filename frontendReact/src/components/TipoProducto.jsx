@@ -58,7 +58,7 @@ const Tipo = () => {
   const [tiposeleccionado, setTiposeleccionado] = useState({});
   const tableRef = useRef();
   const categoriaRecived = "";
-  console.log(categoriaRecived);
+ 
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -151,11 +151,15 @@ const Tipo = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
+        order: [[2, "asc"]],
       });
     }
   }, [tipos]);
 
   useEffect(() => {
+    window.onpopstate = function(event) {
+      window.location.reload();
+  };
     listarTipo();
     listarCategoria();
   }, []);
@@ -329,7 +333,6 @@ const Tipo = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.status === 200) {
               Sweet.exito(data.message);
             }
@@ -355,7 +358,6 @@ const Tipo = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setTiposeleccionado(data[0]);
         setUpdateModal(true);
       })
@@ -385,7 +387,6 @@ const Tipo = () => {
         if (data.status != 200) {
           Sweet.error(data.errors[0].msg);
         }
-        console.log(data);
         listarTipo();
         setUpdateModal(false);
         removeModalBackdrop();
