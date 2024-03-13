@@ -399,7 +399,6 @@ const Usuario = () => {
 
   return (
     <div>
-
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <button
