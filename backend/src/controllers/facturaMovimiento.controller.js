@@ -15,19 +15,12 @@ export const guardarMovimientoEntrada = async (req, res) => {
         if (!fecha_caducidad) {
             fecha_caducidad = null;
         }
-		//Este código se usa en caso de que se desee usar un numero de lote individual
-		/* const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
-        const [existingLote] = await pool.query(loteQuery);
-        if (existingLote.length > 0) {
-            return res.status(409).json({
-                "status": 409,
-                "message": "El lote ya está registrado"
-            });
-        } */
-        let sql = `
-            INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor)
-            VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
-        `;
+		let precio_total_mov = precio_movimiento * cantidad_peso_movimiento;
+
+		let sql = `
+			INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, precio_total_mov, fk_id_producto, fk_id_usuario, fk_id_proveedor) 
+			VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, ?, '${fk_id_producto}', '${fk_id_usuario}', '${fk_id_proveedor}');
+		`;
         let sql3 = `
             UPDATE productos
             SET cantidad_peso_producto = cantidad_peso_producto + ?,
@@ -36,9 +29,9 @@ export const guardarMovimientoEntrada = async (req, res) => {
         `;
 
         const [result1, result2] = await Promise.all([
-            pool.query(sql, [fecha_caducidad]),
-            pool.query(sql3, [cantidad_peso_movimiento, precio_movimiento, fk_id_producto]),
-        ]);
+			pool.query(sql, [fecha_caducidad, precio_total_mov]),
+			pool.query(sql3, [cantidad_peso_movimiento, precio_movimiento, fk_id_producto]),
+		]);
 
         if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
             res.status(200).json({
@@ -305,7 +298,12 @@ export const listarMovimientos = async (req, res) => {
 		END as fecha_caducidad, CASE 
 			WHEN pr.id_proveedores IS NULL OR pr.id_proveedores = 0 THEN 'No aplica'
 			ELSE pr.nombre_proveedores
-		END as nombre_proveedores,f.num_lote
+		END as nombre_proveedores,f.num_lote,
+
+		CASE 
+			WHEN f.precio_total_mov IS NULL THEN 'No aplica'
+			ELSE f.precio_total_mov
+		END as precio_total_mov
 			FROM factura_movimiento f 
 			JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 			JOIN productos p ON f.fk_id_producto = p.id_producto
@@ -345,7 +343,11 @@ export const listarMovimientosEntrada = async (req, res) => {
 				f.nota_factura,CASE 
 				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
 				ELSE f.fecha_caducidad
-			END as fecha_caducidad, pr.nombre_proveedores,f.num_lote
+			END as fecha_caducidad, pr.nombre_proveedores,f.num_lote,
+			CASE 
+			WHEN f.precio_total_mov IS NULL THEN 'No aplica'
+			ELSE f.precio_total_mov
+		END as precio_total_mov
 					FROM factura_movimiento f 
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto

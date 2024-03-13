@@ -473,7 +473,8 @@ const Movimiento = () => {
       method: "GET",
       headers: {
         "content-type": "application/json",
-        token: localStorage.getItem("token")
+        token: localStorage.getItem("token"),
+        
       },
     }).then((res) => {
       if (res.status === 204) {
@@ -537,7 +538,8 @@ const Movimiento = () => {
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
                 <th className="th-sm">Unidad Peso</th>
-                <th className="th-sm">Precio movimiento</th>
+                <th className="th-sm">Precio individual</th>
+                <th className="th-sm">Precio total</th>
                 <th className="th-sm">Estado producto</th>
                 <th className="th-sm">Nota</th>
                 <th className="th-sm">Fecha de caducidad</th>
@@ -573,6 +575,7 @@ const Movimiento = () => {
                       <td className="p-2 text-center" >
                         {isNaN(Number(element.precio_movimiento)) ? element.precio_movimiento : (Number.isInteger(Number(element.precio_movimiento)) ? Number(element.precio_movimiento) : Number(element.precio_movimiento).toFixed(2))}
                       </td>
+                      <td className="p-2 text-center">{element.precio_total_mov}</td>
                       <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
                       <td className="p-2 text-center">{element.nota_factura}</td>
                       <td>

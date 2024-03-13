@@ -529,6 +529,7 @@ const Movimiento = () => {
                 <th className="th-sm">Fecha de caducidad</th>
                 <th className="th-sm">Usuario que hizo movimiento</th>
                 <th className="th-sm">Proveedor</th>
+                <th className="th-sm">Precio total</th>
               </tr>
             </thead>
             <tbody id="tableMovimiento">
@@ -563,6 +564,7 @@ const Movimiento = () => {
                       <td className="p-2 text-center" >{Validate.formatFecha(element.fecha_caducidad)}</td>
                       <td className="p-2 text-center" >{element.nombre_usuario}</td>
                       <td className="p-2 text-center" >{element.nombre_proveedores}</td>
+                      <td className="p-2 text-center">{element.precio_total_mov}</td>
                     </tr>
                   ))}</>)}
             </tbody>
