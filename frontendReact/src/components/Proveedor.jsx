@@ -350,26 +350,14 @@ const proveedor = () => {
           <h2 className="tituloHeaderpp">Proveedor</h2>
         </div>
         <div className="btnContenido3">
-          <div
-            className="btn-group"
-            role="group"
-            aria-label="Basic mixed styles example"
-          >
+          <div  className="btn-group"  role="group"  aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <button
-                onClick={handleOnExport}
-                type="button"
-                className="btn btn-light"
-              >
+              <button  onClick={handleOnExport}  type="button"  className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
               </button>
             </div>
             <div className="" title="Descargar Pdf">
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={exportPdfHandler}
-              >
+              <button  type="button"  className="btn btn-light"  onClick={exportPdfHandler}>
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
@@ -377,13 +365,7 @@ const proveedor = () => {
         </div>
       </div>
       <div className="container-fluid w-full">
-        <table
-          id="dtBasicExample"
-          className="table table-striped table-bordered border display responsive nowrap b-4"
-          ref={tableRef}
-          cellSpacing={0}
-          width="100%"
-        >
+        <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap b-4" ref={tableRef} cellSpacing={0} width="100%">
           <thead className="text-center">
             <tr>
               <th className="th-sm">Estado</th>
@@ -452,7 +434,6 @@ const proveedor = () => {
                   <div className="d-flex justify-content-center">
                     <div className="alert alert-danger text-center mt-4 w-50">
                       <h2>
-                        {" "}
                         En este momento no contamos con ningún proveedor
                         disponible.😟
                       </h2>

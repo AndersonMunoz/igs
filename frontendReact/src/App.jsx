@@ -15,6 +15,7 @@ import Inventario from "./components/Inventario";
 import ProductoCaducar from "./components/ProductoCaducar";
 import PefilAjustes from "./components/PerfilAjustes";
 import BuscarInventario from "./components/InventarioItem";
+import ReportePorFechas from "./components/ReportePorFechas.jsx"
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/inventario/item" element={<BuscarInventario />} />
           <Route path="/producto/caducar" element={<ProductoCaducar />} />
           <Route path="/ajustes" element={<PefilAjustes />} />
+          <Route path="/reporte-fechas" element={<ReportePorFechas />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
