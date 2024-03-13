@@ -38,7 +38,7 @@ const ProductoCaducar = () => {
       { title: 'N°', dataKey: 'id_producto' },
       { title: 'NombreProducto', dataKey: 'NombreProducto' },
       { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
-      { title: 'Peso', dataKey: 'Peso' },
+      { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
       { title: 'Unidad', dataKey: 'Unidad' },
       { title: 'PrecioIndividual', dataKey: 'PrecioIndividual' },
       { title: 'UnidadProductiva', dataKey: 'UnidadProductiva' },
@@ -51,7 +51,7 @@ const ProductoCaducar = () => {
       id_producto: element.id_producto,
       NombreProducto: element.NombreProducto,
       NombreCategoria: element.NombreCategoria,
-      Peso: element.Peso,
+      Cantidad: element.cantidad_peso_movimiento,
       Unidad: element.Unidad,
       PrecioIndividual: element.PrecioIndividual,
       UnidadProductiva: element.UnidadProductiva,
@@ -79,7 +79,7 @@ const ProductoCaducar = () => {
       'N°',
       'NombreProducto',
       'NombreCategoria',
-      'Peso',
+      'Cantidad',
       'Unidad',
       'PrecioIndividual',
       'UnidadProductiva',
@@ -94,7 +94,7 @@ const ProductoCaducar = () => {
         element.id_producto,
         element.NombreProducto,
         element.NombreCategoria,
-        element.Peso,
+        element.cantidad_peso_movimiento,
         element.Unidad,
         element.PrecioIndividual,
         element.UnidadProductiva,
@@ -145,14 +145,14 @@ const ProductoCaducar = () => {
     })
     .then((res) => res.json())
     .then((data) => {
-      const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad != null);
-      const pesoProducto = productosConFechaCaducidad.filter(item=> item.Peso > 0)
-      setProductos(pesoProducto);
+      const productosConFechaCaducidad = data.filter(item => item.FechaCaducidad !== null && item.cantidad_peso_movimiento > 0);
+      setProductos(productosConFechaCaducidad);
     })
     .catch((e) => {
       console.error('Error:', e);
     });
   }
+  
 
 	return (
     <div>
@@ -179,15 +179,13 @@ const ProductoCaducar = () => {
       <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
         <thead className="text-center text-justify">
           <tr>
-            <th className="th-sm">N°</th>
-            <th className="th-sm">NombreProducto</th>
-            <th className="th-sm">NombreCategoria</th>
-            <th className="th-sm">Peso</th>
+            <th className="th-sm">Número Lote</th>
+            <th className="th-sm">Nombre Producto</th>
+            <th className="th-sm">Nombre Categoria</th>
+            <th className="th-sm">Cantidad</th>
             <th className="th-sm">Unidad</th>
-            <th className="th-sm">PrecioIndividual</th>
-            <th className="th-sm">UnidadProductiva</th>
-            <th className="th-sm">Descripcion</th>
-            <th className="th-sm">PrecioTotal</th>
+            <th className="th-sm">Bodega</th>
+            <th className="th-sm">Precio Total</th>
             <th className="th-sm text-center">Fecha de Caducidad</th>
           </tr>
         </thead>
@@ -204,7 +202,7 @@ const ProductoCaducar = () => {
               </tr>
             ) : (                  
               <>
-                {productos.map((element) => {
+                {productos.map((element,index) => {
                   const fechaActual = new Date();
                   const fechaCaducidad = new Date(element.FechaCaducidad);
 
@@ -226,16 +224,14 @@ const ProductoCaducar = () => {
                   }
 
                   return (
-                    <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
-                      <td>{element.id_producto}</td>
-                      <td>{element.NombreProducto}</td>
-                      <td>{element.NombreCategoria}</td>
-                      <td>{element.Peso}</td>
-                      <td>{element.Unidad}</td>
-                      <td>{element.PrecioIndividual}</td>
-                      <td>{element.UnidadProductiva}</td>
-                      <td>{element.Descripcion}</td>
-                      <td>{element.PrecioTotal.toFixed(2)}</td>
+                    <tr key={index + 1} style={{ textTransform: 'capitalize' }}>
+                      <td className="pt-3">{element.num_lote}</td>
+                      <td className="pt-3">{element.NombreProducto}</td>
+                      <td className="pt-3">{element.NombreCategoria}</td>
+                      <td className="pt-3">{element.cantidad_peso_movimiento}</td>
+                      <td className="pt-3">{element.Unidad}</td>
+                      <td className="pt-3">{element.UnidadProductiva}</td>
+                      <td className="pt-3">{element.PrecioTotal.toFixed(2)}</td>
                         <td>
                         {element.FechaCaducidad ? (
                           <>

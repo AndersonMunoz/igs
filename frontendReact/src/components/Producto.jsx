@@ -146,6 +146,11 @@ const Producto = () => {
      });
 		}
 	}, [productos]);
+  useEffect(() => {
+    window.onpopstate = function(event) {
+      window.location.reload();
+    }
+  }, []); 
   // Efecto para cargar productos, tipos y UP al montar el componente
   useEffect(() => {
       listarProducto();
@@ -415,26 +420,54 @@ const Producto = () => {
 
   return (
     <div>
-      <h1 className="text-center modal-title fs-5 m-4">Lista de Productos</h1>
-      <div className="d-flex justify-content-between mt-4">
-        <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onClick={() => {setShowModal(true);Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedUp(null);}}>
-          Registrar Nuevo Producto
-        </button>
-        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+      <div className="boxBtnContendidoTitulo">
+        <div className="btnContenido1">
+          <button
+              type="button"
+              id="modalProducto"
+              className="btn-color btn mb-4"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              onClick={() => {
+                setShowModal(true);
+                Validate.limpiar(".limpiar");
+                resetFormState();
+                setSelectedTipo(null);
+                setSelectedUp(null);
+              }}
+            >
+              Registrar Nuevo Producto
+            </button>
+        </div>
+        <div className="btnContenido22">
+          <h2 className="tituloHeaderpp">Lista de Productos</h2>
+        </div>
+        <div className="btnContenido3">
+          <div
+            className="flex btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
             <div className="" title="Descargar Excel">
-            <button onClick={handleOnExport} type="button" className="btn btn-light">
+              <button
+                onClick={handleOnExport}
+                type="button"
+                className="btn btn-light"
+              >
                 <img src={ExelLogo} className="logoExel" />
-                </button>
+              </button>
             </div>
             <div className="" title="Descargar Pdf">
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={exportPdfHandler}                >
+                onClick={exportPdfHandler}
+              >
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
           </div>
+        </div>
       </div>
       <div className="wrapper-editor">
       <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>

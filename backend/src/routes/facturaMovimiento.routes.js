@@ -12,7 +12,7 @@ facturaMovimientoRoute.get('/listarEntrada',validarToken,listarMovimientosEntrad
 facturaMovimientoRoute.get('/listarSalida',validarToken,listarMovimientosSalida);
 facturaMovimientoRoute.get('/listarEntradaSalida',validarToken,obtenerValorTotalProductos);
 facturaMovimientoRoute.get('/buscar/:id',validarToken,buscarMovimiento);
-facturaMovimientoRoute.get('/listarCaducados',validarToken, listarProductosCaducar);
+facturaMovimientoRoute.get('/listarCaducados', listarProductosCaducar);
 facturaMovimientoRoute.put('/actualizar/:id',validarToken,validarFacturaMovimientoActu,actualizarMovimiento);
 facturaMovimientoRoute.put('/actualizarSalida/:id',validarToken,validarFacturaMovimientoActuSalida,actualizarMovimientoSalida);
 facturaMovimientoRoute.get('/buscarProCat/:id_categoria',validarToken,obtenerProCategoria);
