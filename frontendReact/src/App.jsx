@@ -14,7 +14,6 @@ import Dashboard from "./components/Dashboard";
 import Inventario from "./components/Inventario";
 import ProductoCaducar from "./components/ProductoCaducar";
 import PefilAjustes from "./components/PerfilAjustes";
-import BuscarInventario from "./components/InventarioItem";
 import ReportePorFechas from "./components/ReportePorFechas.jsx";
 import Kardex from "./components/Kardex.jsx"
 
@@ -34,7 +33,6 @@ const App = () => {
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
           <Route path="/inventario" element={<Inventario />} />
-          <Route path="/inventario/item" element={<BuscarInventario />} />
           <Route path="/producto/caducar" element={<ProductoCaducar />} />
           <Route path="/ajustes" element={<PefilAjustes />} />
           <Route path="/reporte-fechas" element={<ReportePorFechas />} />
