@@ -119,12 +119,19 @@ export const Menu = () => {
                   </div>
                   <span className="link_name">Inventario</span>
                 </Link>
-                <ul className="sub-menu blank">
+                <ul className="sub-menu">
                 <li>
                   <Link className="link_name" to="/inventario">
                     Inventario
                   </Link>
                 </li>
+                <ul className="sub-menu blank">
+                  <li>
+                    <Link className="link_name" to="/kardex">
+                        Kardex
+                    </Link>
+                  </li>
+                </ul>
               </ul>
             </li>
             <li>
