@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 08-03-2024 a las 13:35:26
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 14-03-2024 a las 01:16:47
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -60,10 +60,11 @@ CREATE TABLE `factura_movimiento` (
   `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
   `fecha_caducidad` date DEFAULT NULL,
+  `num_lote` int(100) NOT NULL,
+  `precio_total_mov` float DEFAULT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
-  `fk_id_proveedor` int(11) DEFAULT NULL,
-  `num_lote` int(100) NOT NULL
+  `fk_id_proveedor` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -84,7 +85,7 @@ CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
   `cantidad_peso_producto` float DEFAULT 0,
   `descripcion_producto` varchar(200) NOT NULL,
-  `precio_producto` float NOT NULL DEFAULT 0,
+  `precio_producto` float NOT NULL,
   `fk_id_up` int(11) NOT NULL,
   `fk_id_tipo_producto` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
