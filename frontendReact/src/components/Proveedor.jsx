@@ -19,8 +19,16 @@ import jsPDF from "jspdf";
 import portConexion from "../const/portConexion";
 import { dataDecript } from "./encryp/decryp";
 
+
+const formatDateYYYYMMDD = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const proveedor = () => {
-  const tableRef = useRef();
+  const tableRef = useRef(null);
   const [proveedor, setProveedor] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
@@ -28,7 +36,7 @@ const proveedor = () => {
   const [direccion_proveedores, setDireccion_proveedores] = useState("");
   const [contrato_proveedores, setContrato_proveedores] = useState("");
   const [telefono_proveedores, setTelefono_proveedores] = useState("");
-  const [inicio_contrato, setContratoInicio] = useState("");
+  const [inicio_contrato, setContratoInicio] = useState('');
   const [fin_contrato, setContratoFin] = useState("");
   const [userRoll, setUserRoll] = useState("");
 
@@ -127,12 +135,14 @@ const proveedor = () => {
   }, [proveedor]);
 
   useEffect(() => {
-    window.onpopstate = function (event) {
+    window.onpopstate = function () {
       window.location.reload();
     };
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
+
+
 
   function listarProveedor() {
     fetch(`http://${portConexion}:3000/proveedor/listar`, {
@@ -235,6 +245,7 @@ const proveedor = () => {
           if (data.status === 200) {
             Sweet.exito(data.message);
             listarProveedor();
+            limpiar()
             if ($.fn.DataTable.isDataTable(tableRef.current)) {
               $(tableRef.current).DataTable().destroy();
             }
@@ -265,22 +276,12 @@ const proveedor = () => {
       .then((data) => {
         if (data.length > 0) {
           setSelectedProveedorData(data[0]);
-          document.getElementById("nombresProveedor").value =
-            data[0].nombre_proveedores;
-          document.getElementById("direccionProveedor").value =
-            data[0].direccion_proveedores;
-          document.getElementById("contratoProveedor").value =
-            data[0].contrato_proveedores;
-          document.getElementById("telefonoProveedor").value =
-            data[0].telefono_proveedores;
-          document.getElementById("contratoInicio").value = formtDate(
-            data[0].inicio_contrato
-          );
-          document.getElementById("contratoFin").value = formtDate(
-            data[0].fin_contrato
-          );
-        } else {
-          listarProveedor();
+          setNombre_proveedores(data[0].nombre_proveedores)
+          setDireccion_proveedores(data[0].direccion_proveedores)
+          setContrato_proveedores(data[0].contrato_proveedores)
+          setTelefono_proveedores(data[0].telefono_proveedores)
+          setContratoInicio(formatDateYYYYMMDD( new Date(data[0].inicio_contrato)))
+          setContratoFin(formatDateYYYYMMDD( new Date(data[0].fin_contrato)))
         }
       });
   }
@@ -314,34 +315,27 @@ const proveedor = () => {
         }
       });
   }
+  function limpiar() {
+    setSelectedProveedorData('');
+    setNombre_proveedores('')
+    setDireccion_proveedores('')
+    setContrato_proveedores('')
+    setTelefono_proveedores('')
+    setContratoInicio('')
+    setContratoFin('')
+  }
   return (
     <div>
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           {userRoll == "administrador" && (
-            <button
-              type="button"
-              id="modalProducto"
-              className="btn-color btn"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              onClick={() => {
-                setModal(true);
-                Validate.limpiar(".limpiar");
-                document
-                  .getElementById("titleSctualizar")
-                  .classList.add("d-none");
-                document
-                  .getElementById("titleRegistro")
-                  .classList.remove("d-none");
-                document
-                  .getElementById("btnAgregar")
-                  .classList.remove("d-none");
-                document
-                  .getElementById("btnActualizar")
-                  .classList.add("d-none");
-              }}
-            >
+            <button type="button" id="modalProducto" className="btn-color btn" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+            onClick={() => {
+                document  .getElementById("titleSctualizar")  .classList.add("d-none");
+                document  .getElementById("titleRegistro")  .classList.remove("d-none");
+                document  .getElementById("btnAgregar")  .classList.remove("d-none");
+                document  .getElementById("btnActualizar")  .classList.add("d-none");
+              }}>
               Registrar Nuevo Proveedor
             </button>
           )}
@@ -376,9 +370,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              {userRoll == "administrador" && (
-                <th className="th-sm text-center">Acciones</th>
-              )}
+              <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -394,36 +386,23 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    {userRoll == "administrador" && (
+                    {userRoll == "administrador" ? (   
                       <td className="p-0">
                         {element.estado !== 1 ? (
                           "NO DISPONIBLES"
                         ) : (
                           <>
-                            <button
-                              type="button"
-                              className="btn-color btn mx-2"
-                              data-bs-toggle="modal"
-                              data-bs-target="#exampleModal"
-                              onClick={() => {
-                                setModal(true);
-                                editarProveedor(element.id_proveedores);
-                              }}
-                            >
+                            <button  type="button"  className="btn-color btn mx-2"  data-bs-toggle="modal"  data-bs-target="#exampleModal"  onClick={() => {    setModal(true);    editarProveedor(element.id_proveedores);  }}>
                               <IconEdit />
                             </button>
-                            <button
-                              className="btn btn-danger"
-                              type="button"
-                              onClick={() =>
-                                deshabilitarProveedor(element.id_proveedores)
-                              }
-                            >
+                            <button  className="btn btn-danger"  type="button"  onClick={() =>    deshabilitarProveedor(element.id_proveedores)  }>
                               <IconTrash />
                             </button>
                           </>
                         )}
                       </td>
+                    ):(
+                      <td>No disponible</td>
                     )}
                   </tr>
                 ))}
@@ -446,16 +425,7 @@ const proveedor = () => {
         </table>
       </div>
       {/* desde aqui el modal */}
-      <div
-        className="modal fade"
-        id="exampleModal"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-        style={{ display: modal == true ? "block" : "none" }}
-      >
+      <div  className="modal fade"  id="exampleModal"  data-bs-backdrop="static"  data-bs-keyboard="false"  tabIndex="-1"  aria-labelledby="exampleModalLabel"  aria-hidden="true"  style={{ display: modal == true ? "block" : "none" }}>
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -465,12 +435,7 @@ const proveedor = () => {
               <h1 className="modal-title fs-5 d-none" id="titleSctualizar">
                 Actualizar proveedor
               </h1>
-              <button
-                type="button"
-                className="btn-close text-white bg-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              <button  type="button"  className="btn-close text-white bg-white"  data-bs-dismiss="modal"  aria-label="Close"  onClick={()=>limpiar()}></button>
             </div>
             <div className="modal-body">
               <div className=" d-flex justify-content-center">
@@ -478,33 +443,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="nombresProveedor">Nombres</label>
-                      <input
-                        onChange={(e) => {
-                          setNombre_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        id="nombresProveedor"
-                        name="nombresProveedor"
-                        className="form-control form-empty limpiar"
-                        placeholder="Nombres"
-                        required
-                      ></input>
+                      <input value={nombre_proveedores} onChange={(e) => {setNombre_proveedores(e.target.value); }} type="text" id="nombresProveedor" name="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required/>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="direccionProveedor">Direccion</label>
-                      <input
-                        onChange={(e) => {
-                          setDireccion_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        id="direccionProveedor"
-                        name="direccionProveedor"
-                        className="form-control form-empty limpiar"
-                        placeholder="Direccion"
-                      ></input>
+                      <input value={direccion_proveedores} onChange={(e) => {setDireccion_proveedores(e.target.value);  }}  type="text"  id="direccionProveedor"  name="direccionProveedor"  className="form-control form-empty limpiar"  placeholder="Direccion"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -513,33 +459,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="contratoProveedor">N° Contrato</label>
-                      <input
-                        onChange={(e) => {
-                          setContrato_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        name="contratoProveedor"
-                        id="contratoProveedor"
-                        className="form-control form-empty  limpiar"
-                        placeholder="N° de contrato"
-                      ></input>
+                      <input value={contrato_proveedores}  onChange={(e) => {    setContrato_proveedores(e.target.value);  }}  type="text"  name="contratoProveedor"  id="contratoProveedor"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="">Telefono</label>
-                      <input
-                        onChange={(e) => {
-                          setTelefono_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        name="telefonoProveedor"
-                        id="telefonoProveedor"
-                        className="form-control form-empty limpiar"
-                        placeholder="Telefono"
-                        aria-describedby="defaultRegisterFormPhoneHelpBlock"
-                      ></input>
+                      <input value={telefono_proveedores} onChange={(e) => {    setTelefono_proveedores(e.target.value);  }}  type="text"  name="telefonoProveedor"  id="telefonoProveedor"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -549,33 +476,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="contratoInicio">Inicio de contrato</label>
-                      <input
-                        onChange={(e) => {
-                          setContratoInicio(e.target.value);
-                        }}
-                        type="date"
-                        name="contratoInicio"
-                        id="contratoInicio"
-                        className="form-control form-empty  limpiar"
-                        placeholder="N° de contrato"
-                      ></input>
+                      <input value={inicio_contrato} onChange={(e) => {    setContratoInicio(e.target.value);  }}  type="date"  name="contratoInicio"  id="contratoInicio"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="contratoFin">Fin de contrato</label>
-                      <input
-                        onChange={(e) => {
-                          setContratoFin(e.target.value);
-                        }}
-                        type="date"
-                        name="contratoFin"
-                        id="contratoFin"
-                        className="form-control form-empty limpiar"
-                        placeholder="Telefono"
-                        aria-describedby="defaultRegisterFormPhoneHelpBlock"
-                      ></input>
+                      <input value={fin_contrato} onChange={(e) => {    setContratoFin(e.target.value);  }}  type="date"  name="contratoFin"  id="contratoFin"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -585,29 +493,13 @@ const proveedor = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
+              <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal"  onClick={()=>limpiar()}>
                 Cerrar
               </button>
-              <button
-                id="btnAgregar"
-                type="button"
-                className="btn btn-color"
-                onClick={registrarProveedor}
-              >
+              <button  id="btnAgregar"  type="button"  className="btn btn-color"  onClick={()=>{registrarProveedor();}}>
                 Agregar
               </button>
-              <button
-                id="btnActualizar"
-                type="button"
-                className="btn btn-color d-none"
-                onClick={() =>
-                  actualizarProveedor(selectedProveedorData.id_proveedores)
-                }
-              >
+              <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
                 Actualizar
               </button>
             </div>

@@ -142,4 +142,51 @@ export const activarProducto = async (req, res) => {
     res.status(500).json({ message: "Error en activar: " + e });
   }
 };
+export const obtenerValorTotalProductosFecha = async (req, res) => {
+  try {
+    const [resultEntradas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
+    const [resultSalidas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
 
+    let sql = `SELECT 
+                    t.nombre_tipo AS nombre_producto, 
+                    c.nombre_categoria AS nombre_categoria, 
+                    SUM(f.precio_total_mov) AS precio_total, 
+                    MAX(f.fecha_movimiento) AS ultima_fecha_movimiento, 
+                    u.nombre_usuario AS nombre_usuario,
+                    SUM(CASE WHEN f.tipo_movimiento = 'entrada' THEN 1 ELSE 0 END) AS total_entradas,
+                    SUM(CASE WHEN f.tipo_movimiento = 'salida' THEN 1 ELSE 0 END) AS total_salidas
+                FROM 
+                    factura_movimiento f 
+                JOIN 
+                    productos p ON p.id_producto = f.fk_id_producto 
+                JOIN 
+                    usuarios u ON u.id_usuario = f.id_factura 
+                JOIN 
+                    tipo_productos t ON t.id_tipo = p.fk_id_tipo_producto 
+                JOIN 
+                    categorias_producto c ON c.id_categoria = t.id_tipo 
+                GROUP BY 
+                    t.nombre_tipo, 
+                    c.nombre_categoria, 
+                    u.nombre_usuario`;
+
+    const [rows] = await pool.query(sql);
+    if (rows.length > 0) {
+        const totalEntradas = resultEntradas[0].total_entradas || 0;
+        const totalSalidas = resultSalidas[0].total_salidas || 0;
+
+        const valorTotalProductos = {
+            "entraron": totalEntradas,
+            "salieron": totalSalidas,
+            "productos": rows
+        };
+        res.status(200).json(valorTotalProductos);
+    } else {
+        res.status(401).json({ status: 401, message: "No se encontraron datos" });
+    }
+} catch (error) {
+    console.error("Error al obtener el valor total de los productos:", error);
+    res.status(500).json({ "status": 500, "message": "Error en el servidor" });
+}
+
+};
