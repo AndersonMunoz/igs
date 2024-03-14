@@ -29,6 +29,8 @@ const Up = () => {
   const modalUpdateRef = useRef(null);
   const [upSeleccionada, setupSeleccionada] = useState({});
   const [userRoll, setUserRoll] = useState("");
+  const tableRef = useRef(null);
+
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -80,7 +82,7 @@ const Up = () => {
     return wsData;
   };
 
-  const tableRef = useRef();
+  
 
   useEffect(() => {
     if (unidad_productiva.length > 0) {
@@ -353,9 +355,7 @@ const Up = () => {
             <tr>
               <th className="th-sm">Id</th>
               <th className="th-sm">Nombre bodega</th>
-              {userRoll == "administrador" && (
-                <th className="th-sm"> Botones acciones</th>
-              )}
+              <th className="th-sm"> Botones acciones</th>
             </tr>
           </thead>
           <tbody id="tableunidadProductiva" className="text-center">
@@ -389,37 +389,39 @@ const Up = () => {
                       <td style={{ textTransform: "capitalize" }}>
                         {element.nombre_up}
                       </td>
-                      {userRoll == "administrador" && (
+                      {userRoll == "administrador" ? (
                         <td className="p-0">
-                          {element.estado === 1 ? (
-                            <>
-                              <button
-                                className="btn btn-color mx-2"
-                                onClick={() => {
-                                  setUpdateModal(true);
-                                  editarUp(element.id_up);
-                                }}
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop2"
-                              >
-                                <IconEdit />
-                              </button>
-                              <button
-                                className="btn btn-danger"
-                                onClick={() => deshabilitarUp(element.id_up)}
-                              >
-                                <IconTrash />
-                              </button>
-                            </>
-                          ) : (
+                        {element.estado === 1 ? (
+                          <>
                             <button
-                              className="btn btn-primary"
-                              onClick={() => activarUp(element.id_up)}
+                              className="btn btn-color mx-2"
+                              onClick={() => {
+                                setUpdateModal(true);
+                                editarUp(element.id_up);
+                              }}
+                              data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop2"
                             >
-                              Activar
+                              <IconEdit />
                             </button>
-                          )}
-                        </td>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => deshabilitarUp(element.id_up)}
+                            >
+                              <IconTrash />
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => activarUp(element.id_up)}
+                          >
+                            Activar
+                          </button>
+                        )}
+                      </td>
+                      ):(
+                        <td>No disponible</td>
                       )}
                     </tr>
                   ))}
