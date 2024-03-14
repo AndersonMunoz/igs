@@ -29,13 +29,13 @@ const formatDateYYYYMMDD = (date) => {
 
 const reporte = () => {
   const [title, setTitle] = useState("Reportes por fechas");
-  const [rangoMovInicio, setRangoMovInicio] = useState(
-    "aqui van los rangos de mov de inicio"
-  );
+  const [rangoMovInicio, setRangoMovInicio] = useState(  "aqui van los rangos de mov de inicio");
   const [rangoMovFin, setRangoMovFin] = useState(formatDateYYYYMMDD(new Date()));
   const [expMov, setExpMov] = useState("aqui para exportar");
   const [reporte, setReporte] = useState([]);
-  const tableRef = useRef();
+  const [valEntradas, setValEntradas] = useState('')
+  const [valSalidas, setValSalidas] = useState('')
+  const tableRef = useRef(null);
 
   // falta ver
 
@@ -50,22 +50,24 @@ const reporte = () => {
     const doc = new jsPDF();
 
     const columns = [
-      //   { title: "N°", dataKey: "id_proveedores" },
-      //   { title: "Nombre", dataKey: "nombre_proveedores" },
-      //   { title: "Telefono", dataKey: "telefono_proveedores" },
-      //   { title: "Dirección", dataKey: "direccion_proveedores" },
-      //   { title: "Contrato", dataKey: "contrato_proveedores" },
-      //   { title: "Estado", dataKey: "estado" },
+        { title: "Productos",   dataKey: "nombre_producto" },
+        { title: "Categoría",   dataKey: "nombre_categoria" },
+        { title: "Entradas",    dataKey: "total_entradas" },
+        { title: "Salidas",     dataKey: "total_salidas" },
+        { title: "valor",       dataKey: "precio_total" },
+        { title: "Fecha último movimiento", dataKey: "ultima_fecha_movimiento" },
+        { title: "Usuario",     dataKey: "nombre_usuario" },
     ];
 
     // Obtener los datos de la tabla
     const tableData = reporte.map((element) => ({
-      //   id_proveedores: element.id_proveedores,
-      //   nombre_proveedores: element.nombre_proveedores,
-      //   telefono_proveedores: element.telefono_proveedores,
-      //   direccion_proveedores: element.direccion_proveedores,
-      //   contrato_proveedores: element.contrato_proveedores,
-      //   estado: element.estado,
+      nombre_producto:element.nombre_producto,
+      nombre_categoria:element.nombre_categoria,
+      total_entradas:element.total_entradas,
+      total_salidas:element.total_salidas,
+      precio_total:element.precio_total,
+      ultima_fecha_movimiento:element.ultima_fecha_movimiento,
+      nombre_usuario:element.nombre_usuario,
     }));
 
     // Agregar las columnas y los datos a la tabla del PDF
@@ -85,24 +87,26 @@ const reporte = () => {
 
     // Obtener las columnas
     const columns = [
-      "N°",
-      "Nombre",
-      "Telefono",
-      "Dirección",
-      "Contrato",
-      "Estado",
+      "Productos",
+      "Categoría",
+      "Entradas", 
+      "Salidas",  
+      "valor",    
+      "Fecha último movimiento",
+      "Usuario",  
     ];
     wsData.push(columns);
 
     // Obtener los datos de las filas
     reporte.forEach((element) => {
       const rowData = [
-        // element.id_proveedores,
-        // element.nombre_proveedores,
-        // element.telefono_proveedores,
-        // element.direccion_proveedores,
-        // element.contrato_proveedores,
-        // element.estado,
+        element.nombre_producto,
+        element.nombre_categoria,
+        element.total_entradas,
+        element.total_salidas,
+        element.precio_total,
+        element.ultima_fecha_movimiento,
+        element.nombre_usuario,
       ];
       wsData.push(rowData);
     });
@@ -128,21 +132,19 @@ const reporte = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[8, "asc"]],
+        order: [[6, "asc"]],
       });
     }
   }, [reporte]);
 
   useEffect(()=>{
     setRangoMovFin(formatDateYYYYMMDD(new Date()));
-    console.log(rangoMovFin)
     listarProducto()
-    listarMovimiento()
   },[])
 
       // Función para listar los productos
       function listarProducto() {
-        fetch(`http://${portConexion}:3000/producto/listar`, {
+        fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
           method: "GET",
           headers: {
             "Content-type": "application/json",
@@ -157,33 +159,12 @@ const reporte = () => {
         })
         .then((data) => {
           if (data !== null) {
-            console.log(data);
+            setValEntradas(data.entraron)
+            setValSalidas(data.salieron)
+            setReporte(data.productos)
           }
         })
       }
-      function listarMovimiento() {
-        fetch(`http://${portConexion}:3000/facturamovimiento/listar`, {
-          method: "GET",
-          headers: {
-            "content-type": "application/json",
-            token: localStorage.getItem("token")
-          },
-        }).then((res) => {
-          if (res.status === 204) {
-            return null;
-          }
-          return res.json();
-        })
-          .then((data) => {
-            if (Array.isArray(data)) {
-              console.log(data);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      }
-
   const ponerRango = () => {
     let rangoInicio = document.getElementById("inicio");
     let rangoFin = document.getElementById("");
@@ -193,21 +174,12 @@ const reporte = () => {
     <div>
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
-          <div
-            style={{ width: "200px", marginRight: "20px" }}
-            className="d-flex"
-          >
+          <div  style={{ width: "200px", marginRight: "20px" }}  className="d-flex">
             <input type="date" name="inicio" id="inicio" />
             <h2>Inicio</h2>
           </div>
           <div style={{ width: "200px" }} className="d-flex">
-            <input
-              className="flex"
-              type="date"
-              name="fin"
-              id="fin"
-              defaultValue={rangoMovFin}
-            />
+            <input  className="flex"  type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
             <h2>Fin</h2>
           </div>
           <div>
@@ -218,26 +190,14 @@ const reporte = () => {
           <h2 className="tituloHeaderpp">{title}</h2>
         </div>
         <div className="btnContenido3">
-          <div
-            className="btn-group"
-            role="group"
-            aria-label="Basic mixed styles example"
-          >
+          <div  className="btn-group"  role="group"  aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <button
-                onClick={handleOnExport}
-                type="button"
-                className="btn btn-light"
-              >
+              <button  onClick={handleOnExport}  type="button"  className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
               </button>
             </div>
             <div className="" title="Descargar Pdf">
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={exportPdfHandler}
-              >
+              <button  type="button"  className="btn btn-light"  onClick={exportPdfHandler}>
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
@@ -246,19 +206,13 @@ const reporte = () => {
       </div>
 
       <div className="container-fluid w-full">
-        <table
-          id="dtBasicExample"
-          className="table table-striped table-bordered border display responsive nowrap b-4"
-          ref={tableRef}
-          cellSpacing={0}
-          width="100%"
-        >
+        <table  id="dtBasicExample"  className="table table-striped table-bordered border display responsive nowrap b-4"  ref={tableRef}  cellSpacing={0}  width="100%">
           <thead className="text-center">
             <tr>
               <th className="th-sm">Productos</th>
               <th className="th-sm">Categoría</th>
-              <th className="th-sm">Entradas</th>
-              <th className="th-sm">Salidas</th>
+              <th className="th-sm">Entradas ({valEntradas})</th>
+              <th className="th-sm">Salidas ({valSalidas})</th>
               <th className="th-sm">valor</th>
               <th className="th-sm">Fecha último movimiento</th>
               <th className="th-sm">Usuario</th>
@@ -267,7 +221,17 @@ const reporte = () => {
           <tbody id="tableReportes" className="text-center">
             {reporte.length > 0 ? (
               <>
-                {reporte.map}
+                {reporte.map((element, index)=>(
+                  <tr key={index}>
+                    <td>{element.nombre_producto}</td>
+                    <td>{element.nombre_categoria}</td>
+                    <td>{element.total_entradas}</td>
+                    <td>{element.total_salidas}</td>
+                    <td>{element.precio_total}</td>
+                    <td>{element.ultima_fecha_movimiento}</td>
+                    <td>{element.nombre_usuario}</td>
+                  </tr>
+                ))}
               </>
             ) : (
               <tr>

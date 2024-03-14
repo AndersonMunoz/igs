@@ -282,8 +282,6 @@ const proveedor = () => {
           setTelefono_proveedores(data[0].telefono_proveedores)
           setContratoInicio(formatDateYYYYMMDD( new Date(data[0].inicio_contrato)))
           setContratoFin(formatDateYYYYMMDD( new Date(data[0].fin_contrato)))
-        } else {
-          listarProveedor();
         }
       });
   }
@@ -388,39 +386,21 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    {userRoll == "administrador" ? (
-                      
+                    {userRoll == "administrador" ? (   
                       <td className="p-0">
                         {element.estado !== 1 ? (
                           "NO DISPONIBLES"
                         ) : (
                           <>
-                            <button
-                              type="button"
-                              className="btn-color btn mx-2"
-                              data-bs-toggle="modal"
-                              data-bs-target="#exampleModal"
-                              onClick={() => {
-                                setModal(true);
-                                editarProveedor(element.id_proveedores);
-                              }}
-                            >
+                            <button  type="button"  className="btn-color btn mx-2"  data-bs-toggle="modal"  data-bs-target="#exampleModal"  onClick={() => {    setModal(true);    editarProveedor(element.id_proveedores);  }}>
                               <IconEdit />
                             </button>
-                            <button
-                              className="btn btn-danger"
-                              type="button"
-                              onClick={() =>
-                                deshabilitarProveedor(element.id_proveedores)
-                              }
-                            >
+                            <button  className="btn btn-danger"  type="button"  onClick={() =>    deshabilitarProveedor(element.id_proveedores)  }>
                               <IconTrash />
                             </button>
                           </>
                         )}
                       </td>
-
-
                     ):(
                       <td>No disponible</td>
                     )}

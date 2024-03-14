@@ -152,7 +152,9 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
                     c.nombre_categoria AS nombre_categoria, 
                     SUM(f.precio_total_mov) AS precio_total, 
                     MAX(f.fecha_movimiento) AS ultima_fecha_movimiento, 
-                    u.nombre_usuario AS nombre_usuario 
+                    u.nombre_usuario AS nombre_usuario,
+                    SUM(CASE WHEN f.tipo_movimiento = 'entrada' THEN 1 ELSE 0 END) AS total_entradas,
+                    SUM(CASE WHEN f.tipo_movimiento = 'salida' THEN 1 ELSE 0 END) AS total_salidas
                 FROM 
                     factura_movimiento f 
                 JOIN 
@@ -186,4 +188,5 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
     console.error("Error al obtener el valor total de los productos:", error);
     res.status(500).json({ "status": 500, "message": "Error en el servidor" });
 }
+
 };
