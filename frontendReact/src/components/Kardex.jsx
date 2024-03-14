@@ -41,7 +41,7 @@ const Movimiento = () => {
       { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
       { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
       { title: 'Unidad Peso', dataKey: 'unidad_peso' },
-      { title: 'Precio movimiento', dataKey: 'precio_movimiento' },
+      { title: 'Precio individual', dataKey: 'precio_movimiento' },
       { title: 'Precio total', dataKey: 'precio_total_mov' },
       { title: 'Fecha de caducidad', dataKey: 'fecha_caducidad' }
     ];
@@ -82,7 +82,7 @@ const Movimiento = () => {
       'Tipo de movimiento',
       'Cantidad',
       'Unidad peso',
-      'Precio movimiento',
+      'Precio individual',
       'Precio total',
       'Fecha de caducidad'
     ];
@@ -221,7 +221,7 @@ const Movimiento = () => {
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
                 <th className="th-sm">Unidad Peso</th>
-                <th className="th-sm">Precio movimiento</th>
+                <th className="th-sm">Precio individual</th>
                 <th className="th-sm">Fecha de caducidad</th>
                 <th className="th-sm">Precio total</th>
               </tr>

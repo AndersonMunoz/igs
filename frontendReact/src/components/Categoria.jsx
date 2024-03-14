@@ -82,7 +82,7 @@ const Categoria = () => {
     });
   
     // Guardar el PDF
-    doc.save('Tipodeproducto.pdf');
+    doc.save('Categoria.pdf');
   };
 
   useEffect(() => {
@@ -310,12 +310,33 @@ const Categoria = () => {
 
   return (
     <div >
-      <h1 className="text-center modal-title fs-5 m-4">Lista de Categorias</h1>
-      <div className="d-flex justify-content-between  mt-4">
-      <button type="button" id="modalProducto" className="btn-color btn mb-4" data-bs-toggle="modal"  data-bs-target="#staticBackdrop"onClick={() => {setShowModal(true);Validate.limpiar('.limpiar');}}>
-          Registrar Nueva Categoria
-        </button>
-        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+        <div className="boxBtnContendidoTitulo">
+        <div className="btnContenido1">
+          <button
+            type="button"
+            id="modalUsuario"
+            className="btn-color btn"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            onClick={() => {
+              setShowModal(true);
+              Validate.limpiar(".limpiar");
+              resetFormState();
+              handleRegistration();
+            }}
+          >
+            Registrar Categorias
+          </button>
+        </div>
+        <div className="btnContenido22">
+          <h2 className="tituloHeaderpp">Lista las categorias</h2>
+        </div>
+        <div className="btnContenido3">
+          <div
+            className="flex btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
             <div className="" title="Descargar Excel">
             <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
@@ -331,6 +352,7 @@ const Categoria = () => {
               </button>
             </div>
           </div>
+        </div>
       </div>
       <div className="container-fluid w-full" >
       <table

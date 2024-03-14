@@ -19,7 +19,7 @@ export const registroUnidadProductiva = async (req, res) => {
 		if (existingBodega.length > 0) {
 				return res.status(409).json({
 						"status": 409,
-						"message": "la Bodega ya existe"
+						"message": "la bodega ya existe"
 				});
 		}
 		let sql = `insert into bodega (nombre_up)
@@ -31,7 +31,7 @@ export const registroUnidadProductiva = async (req, res) => {
 
 			res.status(200).json({
 				"status": 200,
-				"menssage": "La Bodega registrada con exito "
+				"menssage": "La bodega registrada con exito "
 			})
 		} else {
 			res.status(403).json({
