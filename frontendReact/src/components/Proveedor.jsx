@@ -28,7 +28,7 @@ const formatDateYYYYMMDD = (date) => {
 };
 
 const proveedor = () => {
-  const tableRef = useRef();
+  const tableRef = useRef(null);
   const [proveedor, setProveedor] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedProveedorData, setSelectedProveedorData] = useState(null);
@@ -135,12 +135,14 @@ const proveedor = () => {
   }, [proveedor]);
 
   useEffect(() => {
-    window.onpopstate = function (event) {
+    window.onpopstate = function () {
       window.location.reload();
     };
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
+
+
 
   function listarProveedor() {
     fetch(`http://${portConexion}:3000/proveedor/listar`, {
@@ -243,6 +245,7 @@ const proveedor = () => {
           if (data.status === 200) {
             Sweet.exito(data.message);
             listarProveedor();
+            limpiar()
             if ($.fn.DataTable.isDataTable(tableRef.current)) {
               $(tableRef.current).DataTable().destroy();
             }
@@ -369,9 +372,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              {userRoll == "administrador" && (
-                <th className="th-sm text-center">Acciones</th>
-              )}
+              <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
           <tbody id="tableProveedores" className="text-center">
@@ -387,7 +388,8 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    {userRoll == "administrador" && (
+                    {userRoll == "administrador" ? (
+                      
                       <td className="p-0">
                         {element.estado !== 1 ? (
                           "NO DISPONIBLES"
@@ -417,6 +419,10 @@ const proveedor = () => {
                           </>
                         )}
                       </td>
+
+
+                    ):(
+                      <td>No disponible</td>
                     )}
                   </tr>
                 ))}
@@ -507,34 +513,13 @@ const proveedor = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-                onClick={()=>limpiar()}
-              >
+              <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal"  onClick={()=>limpiar()}>
                 Cerrar
               </button>
-              <button
-                id="btnAgregar"
-                type="button"
-                className="btn btn-color"
-                onClick={()=>{
-                  registrarProveedor();
-                  limpiar();
-                }}
-              >
+              <button  id="btnAgregar"  type="button"  className="btn btn-color"  onClick={()=>{registrarProveedor();}}>
                 Agregar
               </button>
-              <button
-                id="btnActualizar"
-                type="button"
-                className="btn btn-color d-none"
-                onClick={()=>{
-                  actualizarProveedor(selectedProveedorData.id_proveedores);
-                  limpiar();
-                }}
-              >
+              <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
                 Actualizar
               </button>
             </div>

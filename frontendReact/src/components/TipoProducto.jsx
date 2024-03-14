@@ -423,7 +423,6 @@ const Tipo = () => {
               setShowModal(true);
               Validate.limpiar(".limpiar");
               resetFormState();
-              handleRegistration();
             }}
           >
             Registrar Tipo de producto

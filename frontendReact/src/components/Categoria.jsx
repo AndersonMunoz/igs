@@ -321,8 +321,6 @@ const Categoria = () => {
             onClick={() => {
               setShowModal(true);
               Validate.limpiar(".limpiar");
-              resetFormState();
-              handleRegistration();
             }}
           >
             Registrar Categorias

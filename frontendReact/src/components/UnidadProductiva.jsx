@@ -309,8 +309,6 @@ const Up = () => {
             onClick={() => {
               setShowModal(true);
               Validate.limpiar(".limpiar");
-              resetFormState();
-              handleRegistration();
             }}
           >
             Registrar Bodega
