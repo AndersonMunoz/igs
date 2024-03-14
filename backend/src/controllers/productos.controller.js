@@ -55,7 +55,7 @@ export const listarProductos = async (req, res) => {
       t.unidad_peso AS Unidad,
       p.descripcion_producto AS Descripcion,
       p.precio_producto AS PrecioIndividual, 
-      (p.precio_producto * p.cantidad_peso_producto) AS PrecioTotal, 
+      SUM(precio_total_mov) AS PrecioTotal,
       u.nombre_up AS UnidadProductiva, 
       p.estado AS estado 
     FROM productos p 
