@@ -29,8 +29,8 @@ const formatDateYYYYMMDD = (date) => {
 
 const reporte = () => {
   const [title, setTitle] = useState("Reportes por fechas");
-  const [rangoMovInicio, setRangoMovInicio] = useState(  "aqui van los rangos de mov de inicio");
-  const [rangoMovFin, setRangoMovFin] = useState(formatDateYYYYMMDD(new Date()));
+  const [rangoMovInicio, setRangoMovInicio] = useState();
+  const [rangoMovFin, setRangoMovFin] = useState();
   const [expMov, setExpMov] = useState("aqui para exportar");
   const [reporte, setReporte] = useState([]);
   const [valEntradas, setValEntradas] = useState('')
@@ -162,6 +162,9 @@ const reporte = () => {
             setValEntradas(data.entraron)
             setValSalidas(data.salieron)
             setReporte(data.productos)
+            setRangoMovInicio(formatDateYYYYMMDD(new Date(data.
+              primera_fecha_movimiento_primer_producto)))
+            console.log(data);
           }
         })
       }
@@ -175,11 +178,11 @@ const reporte = () => {
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <div  style={{ width: "200px", marginRight: "20px" }}  className="d-flex">
-            <input type="date" name="inicio" id="inicio" />
+            <input type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
             <h2>Inicio</h2>
           </div>
           <div style={{ width: "200px" }} className="d-flex">
-            <input  className="flex"  type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
+            <input type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
             <h2>Fin</h2>
           </div>
           <div>

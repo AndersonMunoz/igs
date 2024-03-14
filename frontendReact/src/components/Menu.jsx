@@ -224,9 +224,12 @@ export const Menu = () => {
                   <IconChevronDown className="iconoA" />
                 </div>
               </div>
+
+              
+
               <ul className="sub-menu">
                 <li>
-                  <Link className="link_name" to="#">
+                  <Link className="link_name" to="/reporte-fechas">
                     Reportes
                   </Link>
                 </li>
@@ -234,6 +237,7 @@ export const Menu = () => {
                   <Link to="/producto/caducar">Productos a Caducar</Link>
                 </li>
               </ul>
+              
             </li>
             <li>{userRoll == "administrador" &&(
               <Link to="/usuario">

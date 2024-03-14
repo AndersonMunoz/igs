@@ -152,6 +152,7 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
                     c.nombre_categoria AS nombre_categoria, 
                     SUM(f.precio_total_mov) AS precio_total, 
                     MAX(f.fecha_movimiento) AS ultima_fecha_movimiento, 
+                    MIN(f.fecha_movimiento) AS primera_fecha_movimiento,
                     u.nombre_usuario AS nombre_usuario,
                     SUM(CASE WHEN f.tipo_movimiento = 'entrada' THEN 1 ELSE 0 END) AS total_entradas,
                     SUM(CASE WHEN f.tipo_movimiento = 'salida' THEN 1 ELSE 0 END) AS total_salidas
@@ -171,6 +172,7 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
                     u.nombre_usuario`;
 
     const [rows] = await pool.query(sql);
+
     if (rows.length > 0) {
         const totalEntradas = resultEntradas[0].total_entradas || 0;
         const totalSalidas = resultSalidas[0].total_salidas || 0;
@@ -178,6 +180,7 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
         const valorTotalProductos = {
             "entraron": totalEntradas,
             "salieron": totalSalidas,
+            "primera_fecha_movimiento_primer_producto": rows[0].primera_fecha_movimiento,
             "productos": rows
         };
         res.status(200).json(valorTotalProductos);
@@ -188,5 +191,7 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
     console.error("Error al obtener el valor total de los productos:", error);
     res.status(500).json({ "status": 500, "message": "Error en el servidor" });
 }
+
+
 
 };
