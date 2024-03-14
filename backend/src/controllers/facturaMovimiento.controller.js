@@ -23,14 +23,13 @@ export const guardarMovimientoEntrada = async (req, res) => {
 		`;
         let sql3 = `
             UPDATE productos
-            SET cantidad_peso_producto = cantidad_peso_producto + ?,
-                precio_producto = ?
+            SET cantidad_peso_producto = cantidad_peso_producto + ?
             WHERE id_producto = ?
         `;
 
         const [result1, result2] = await Promise.all([
 			pool.query(sql, [fecha_caducidad, precio_total_mov]),
-			pool.query(sql3, [cantidad_peso_movimiento, precio_movimiento, fk_id_producto]),
+			pool.query(sql3, [cantidad_peso_movimiento,fk_id_producto]),
 		]);
 
         if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
@@ -88,10 +87,6 @@ export const guardarMovimientoSalida = async (req,res)=> {
 				SET cantidad_peso_producto = CASE 
 					WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
 					ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
-				END,
-				precio_producto = CASE 
-					WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
-					ELSE precio_producto
 				END
 				WHERE id_producto = ${fk_id_producto}`
 
