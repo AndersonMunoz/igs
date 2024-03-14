@@ -58,7 +58,7 @@ const Up = () => {
       body: tableData,
       margin: { top: 20 },
       styles: { overflow: "linebreak" },
-      headStyles: { fillColor: [100, 100, 100] },
+      headStyles: { fillColor: [0, 100, 0] },
     });
 
     // Guardar el PDF
@@ -317,7 +317,7 @@ const Up = () => {
           </button>
         </div>
         <div className="btnContenido22">
-          <h2 className="tituloHeaderpp">Lista las Bodega</h2>
+          <h2 className="tituloHeaderpp">Lista de bodega</h2>
         </div>
         <div className="btnContenido3">
           <div
@@ -354,9 +354,9 @@ const Up = () => {
           <thead className="text-center text-justify">
             <tr>
               <th className="th-sm">Id</th>
-              <th className="th-sm">Nombre Bodega</th>
+              <th className="th-sm">Nombre bodega</th>
               {userRoll == "administrador" && (
-                <th className="th-sm"> Botones Acciones</th>
+                <th className="th-sm"> Botones acciones</th>
               )}
             </tr>
           </thead>

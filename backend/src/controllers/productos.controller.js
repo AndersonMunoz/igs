@@ -54,7 +54,7 @@ export const listarProductos = async (req, res) => {
       p.cantidad_peso_producto AS Peso, 
       t.unidad_peso AS Unidad,
       p.descripcion_producto AS Descripcion,
-      p.precio_producto AS PrecioIndividual, 
+      f.precio_movimiento AS PrecioIndividual, 
       SUM(precio_total_mov) AS PrecioTotal,
       u.nombre_up AS UnidadProductiva, 
       p.estado AS estado 
@@ -98,8 +98,8 @@ export const actualizarProducto = async (req,res) =>{
        return res.status(403).json({"status": 403 ,error})
     }
 		let id=req.params.id;
-		let {descripcion_producto,precio_producto,fk_id_up,fk_id_tipo_producto} = req.body;
-		let sql = `UPDATE productos SET descripcion_producto='${descripcion_producto}',precio_producto='${precio_producto}',fk_id_up='${fk_id_up}',fk_id_tipo_producto='${fk_id_tipo_producto}' WHERE id_producto=${id}`;
+		let {descripcion_producto,fk_id_up,fk_id_tipo_producto} = req.body;
+		let sql = `UPDATE productos SET descripcion_producto='${descripcion_producto}',fk_id_up='${fk_id_up}',fk_id_tipo_producto='${fk_id_tipo_producto}' WHERE id_producto=${id}`;
 		const [rows] = await pool.query(sql);
 		if(rows.affectedRows > 0){
 			res.status(200).json({"status":200,"message":"Se actualizo con exito el producto"});

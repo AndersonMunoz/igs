@@ -474,12 +474,12 @@ const Producto = () => {
         <thead className="text-center text-justify">
           <tr>
             <th className="th-sm">N°</th>
-            <th className="th-sm">NombreProducto</th>
-            <th className="th-sm">NombreCategoria</th>
+            <th className="th-sm">Nombre producto</th>
+            <th className="th-sm">Nombre categoria</th>
             <th className="th-sm">Peso</th>
             <th className="th-sm">Unidad</th>
-            <th className="th-sm">PrecioIndividual</th>
-            <th className="th-sm">UnidadProductiva</th>
+            <th className="th-sm">Precio individual</th>
+            <th className="th-sm">Unidad productiva</th>
             <th className="th-sm">Descripcion</th>
             <th className="th-sm">PrecioTotal</th>
             <th className="th-sm text-center">Fecha de Caducidad</th>
@@ -506,10 +506,22 @@ const Producto = () => {
                       <td>{element.NombreCategoria}</td>
                       <td>{element.Peso}</td>
                       <td>{element.Unidad}</td>
-                      <td>{element.PrecioIndividual}</td>
+                      <td>
+                        {element.PrecioIndividual ? (
+                          element.PrecioIndividual
+                        ) : (
+                          'No asignada'
+                        )}
+                      </td>
                       <td>{element.UnidadProductiva}</td>
                       <td>{element.Descripcion}</td>
-                      <td>{element.PrecioTotal}</td>
+                      <td>
+                        {element.PrecioTotal ? (
+                          element.PrecioTotal
+                        ) : (
+                          'No asignada'
+                        )}
+                      </td>
                       <td>
                         {element.FechaCaducidad ? (
                           Validate.formatFecha(element.FechaCaducidad)

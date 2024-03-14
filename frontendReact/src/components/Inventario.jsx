@@ -41,8 +41,9 @@ const Inventario = () => {
   
     const columns = [
       { title: 'N°', dataKey: 'id_categoria' },
+      { title: 'NombreProducto', dataKey: 'NombreProducto' },
       { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
-      { title: 'Peso', dataKey: 'Peso' },
+      { title: 'Cantidad', dataKey: 'Cantidad' },
       { title: 'Unidad', dataKey: 'Unidad' },
       { title: 'FechaIngreso', dataKey: 'FechaIngreso' },
       { title: 'FechaCaducidad', dataKey: 'FechaCaducidad' },
@@ -52,8 +53,9 @@ const Inventario = () => {
     // Obtener los datos de la tabla
     const tableData = categoriaItem.map((element) => ({
       id_producto: element.id_categoria,
+      NombreProducto: element.NombreProducto,
       NombreCategoria: element.NombreCategoria,
-      Peso: element.Peso,
+      Cantidad: element.Cantidad,
       Unidad: element.Unidad,
       FechaIngreso: element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada',
       FechaCaducidad: element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada',
@@ -79,7 +81,8 @@ const Inventario = () => {
     const columns = [
       'N°',
       'NombreCategoria',
-      'Peso',
+      'NombreProducto',
+      'Cantidad',
       'Unidad',
       'FechaIngreso',
       'FechaCaducidad',
@@ -91,8 +94,9 @@ const Inventario = () => {
     categoriaItem.forEach(element => {
       const rowData = [
         element.id_categoria,
+        element.NombreProducto,
         element.NombreCategoria,
-        element.Peso,
+        element.Cantidad,
         element.Unidad,
         element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada',
         element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada',
@@ -228,11 +232,12 @@ const Inventario = () => {
                   <thead className="text-center text-justify">
                     <tr>
                       <th className="th-sm">N°</th>
-                      <th className="th-sm">NombreCategoria</th>
-                      <th className="th-sm">Peso</th>
+                      <th className="th-sm">Nombre producto</th>
+                      <th className="th-sm">Nombre categoria</th>
+                      <th className="th-sm">Cantidad</th>
                       <th className="th-sm">Unidad</th>
-                      <th className="th-sm">FechaIngreso</th>
-                      <th className="th-sm">FechaCaducidad</th>
+                      <th className="th-sm">Fecha ingreso</th>
+                      <th className="th-sm">Fecha caducidad</th>
                       <th className="th-sm">Descripcion</th>
                     </tr>
                   </thead>
@@ -252,8 +257,9 @@ const Inventario = () => {
                         {categoriaItem.map((element, index) => (
                           <tr key={index} style={{ textTransform: 'capitalize' }}>
                             <td>{index + 1}</td>
+                            <td>{element.NombreProducto}</td>
                             <td>{element.NombreCategoria}</td>
-                            <td>{element.Peso}</td>
+                            <td>{element.Cantidad}</td>
                             <td>{element.Unidad}</td>
                             <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
                             <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
