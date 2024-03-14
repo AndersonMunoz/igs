@@ -231,7 +231,7 @@ const reporte = () => {
                     <td>{element.total_entradas}</td>
                     <td>{element.total_salidas}</td>
                     <td>{element.precio_total}</td>
-                    <td>{element.ultima_fecha_movimiento}</td>
+                    <td>{formatDateYYYYMMDD(new Date(element.ultima_fecha_movimiento))}</td>
                     <td>{element.nombre_usuario}</td>
                   </tr>
                 ))}
