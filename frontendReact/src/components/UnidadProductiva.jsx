@@ -68,7 +68,7 @@ const Up = () => {
     const wsData = [];
 
     // Obtener las columnas
-    const columnss = ["Id", "Nombre Bodega", "estado"];
+    const columns = ["Id", "Nombre Bodega", "estado"];
     wsData.push(columns);
 
     // Obtener los datos de las filas
@@ -296,41 +296,39 @@ const Up = () => {
   const [search, setSeach] = useState("");
 
   return (
-    <div>
-      <h1 className="text-center modal-title fs-5 m-4">Lista de Bodegas</h1>
-      <div className="d-flex justify-content-between mb-4">
-        <div>
-          {userRoll == "administrador" && (
-            <button
-              type="button"
-              id="modalProducto"
-              className="btn-color btn mt-4"
-              data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop"
-              onClick={() => {
-                setShowModal(true);
-                Validate.limpiar(".limpiar");
-              }}
-            >
-              Registrar Nueva Bodega
-            </button>
-          )}
-        </div>
 
-        <div>
+     <div>
+      <div className="boxBtnContendidoTitulo">
+        <div className="btnContenido1">
+          <button
+            type="button"
+            id="modalUsuario"
+            className="btn-color btn"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            onClick={() => {
+              setShowModal(true);
+              Validate.limpiar(".limpiar");
+              resetFormState();
+              handleRegistration();
+            }}
+          >
+            Registrar Bodega
+          </button>
+        </div>
+        <div className="btnContenido22">
+          <h2 className="tituloHeaderpp">Lista las Bodega</h2>
+        </div>
+        <div className="btnContenido3">
           <div
-            className="btn-group"
+            className="flex btn-group"
             role="group"
             aria-label="Basic mixed styles example"
           >
             <div className="" title="Descargar Excel">
-              <button
-                onClick={handleOnExport}
-                type="button"
-                className="btn btn-light"
-              >
+            <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
-              </button>
+                </button>
             </div>
             <div className="" title="Descargar Pdf">
               <button
@@ -344,6 +342,7 @@ const Up = () => {
           </div>
         </div>
       </div>
+   
       <div className="container-fluid w-full">
         <table
           id="dtBasicExample"

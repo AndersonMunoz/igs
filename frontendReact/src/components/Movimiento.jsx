@@ -55,6 +55,7 @@ const Movimiento = () => {
       { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
       { title: 'Unidad Peso', dataKey: 'unidad_peso' },
       { title: 'Precio movimiento', dataKey: 'precio_movimiento' },
+      { title: 'Precio total', dataKey: 'precio_total_mov' },
       { title: 'Estado producto', dataKey: 'estado_producto_movimiento' },
       { title: 'Nota', dataKey: 'nota_factura' },
       { title: 'Fecha de caducidad', dataKey: 'fecha_caducidad' },
@@ -71,6 +72,7 @@ const Movimiento = () => {
       cantidad_peso_movimiento: element.cantidad_peso_movimiento,
       unidad_peso: element.unidad_peso,
       precio_movimiento: element.precio_movimiento,
+      precio_total_mov: element.precio_total_mov,
       estado_producto_movimiento: element.estado_producto_movimiento,
       nota_factura: element.nota_factura,
       fecha_caducidad: Validate.formatFecha(element.fecha_caducidad),
@@ -101,7 +103,8 @@ const Movimiento = () => {
       'Tipo de movimiento',
       'Cantidad',
       'Unidad Peso',
-      'Precio movimiento',
+      'Precio individual',
+      'Precio total',
       'Estado producto',
       'Nota',
       'Fecha de caducidad',
@@ -120,6 +123,7 @@ const Movimiento = () => {
         element.cantidad_peso_movimiento,
         element.unidad_peso,
         element.precio_movimiento,
+        element.precio_total_mov,
         element.estado_producto_movimiento,
         element.nota_factura,
         Validate.formatFecha(element.fecha_caducidad),
@@ -522,8 +526,8 @@ const Movimiento = () => {
                 <th className="th-sm">Fecha del movimiento</th>
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
-                <th className="th-sm">Unidad Peso</th>
-                <th className="th-sm">Precio movimiento</th>
+                <th className="th-sm">Unidad</th>
+                <th className="th-sm">Precio individual</th>
                 <th className="th-sm">Estado producto</th>
                 <th className="th-sm">Nota</th>
                 <th className="th-sm">Fecha de caducidad</th>

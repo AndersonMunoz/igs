@@ -411,22 +411,33 @@ const Tipo = () => {
 
   return (
     <div>
-      <h1 className="text-center modal-title fs-5 m-4">Lista de Tipos de Productos</h1>
-      <div className="d-flex justify-content-between mb-4">
-        <button
-          type="button"
-          id="modalProducto"
-          className="btn-color btn mt-4"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-          onClick={() => {
-            setShowModal(true);
-            Validate.limpiar(".limpiar");resetFormState();setSelectedCategoria(null);
-          }}
-        >
-          Registrar Nuevo Tipo de Producto
-        </button>
-        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+       <div className="boxBtnContendidoTitulo">
+        <div className="btnContenido1">
+          <button
+            type="button"
+            id="modalUsuario"
+            className="btn-color btn"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"
+            onClick={() => {
+              setShowModal(true);
+              Validate.limpiar(".limpiar");
+              resetFormState();
+              handleRegistration();
+            }}
+          >
+            Registrar Tipo de producto
+          </button>
+        </div>
+        <div className="btnContenido22">
+          <h2 className="tituloHeaderpp">Lista de tipo de productos</h2>
+        </div>
+        <div className="btnContenido3">
+          <div
+            className="flex btn-group"
+            role="group"
+            aria-label="Basic mixed styles example"
+          >
             <div className="" title="Descargar Excel">
             <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
@@ -436,11 +447,13 @@ const Tipo = () => {
               <button
                 type="button"
                 className="btn btn-light"
-                onClick={exportPdfHandler}                >
+                onClick={exportPdfHandler}
+              >
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
           </div>
+        </div>
       </div>
       <div className="container-fluid w-full">
         <table
