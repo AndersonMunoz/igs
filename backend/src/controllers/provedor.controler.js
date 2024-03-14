@@ -92,9 +92,10 @@ export const actualizarProvedor = async (req, res) => {
             return res.status(403).json({ "status": 403, error })
         }
         let id = req.params.id;
-        let { nombre_proveedores, telefono_proveedores, contrato_proveedores, direccion_proveedores, inicio_contrato ,fin_contrato } = req.body;
+let { nombre_proveedores, telefono_proveedores, contrato_proveedores, direccion_proveedores, inicio_contrato ,fin_contrato } = req.body;
 
-        let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
+let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores + " AND id_proveedores != " + id;
+
         const [userExist] = await pool.query(selectUser)
 
         if (!userExist.length > 0) {

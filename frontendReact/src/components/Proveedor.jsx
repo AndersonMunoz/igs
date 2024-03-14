@@ -19,6 +19,14 @@ import jsPDF from "jspdf";
 import portConexion from "../const/portConexion";
 import { dataDecript } from "./encryp/decryp";
 
+
+const formatDateYYYYMMDD = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const proveedor = () => {
   const tableRef = useRef();
   const [proveedor, setProveedor] = useState([]);
@@ -28,7 +36,7 @@ const proveedor = () => {
   const [direccion_proveedores, setDireccion_proveedores] = useState("");
   const [contrato_proveedores, setContrato_proveedores] = useState("");
   const [telefono_proveedores, setTelefono_proveedores] = useState("");
-  const [inicio_contrato, setContratoInicio] = useState("");
+  const [inicio_contrato, setContratoInicio] = useState('');
   const [fin_contrato, setContratoFin] = useState("");
   const [userRoll, setUserRoll] = useState("");
 
@@ -265,20 +273,12 @@ const proveedor = () => {
       .then((data) => {
         if (data.length > 0) {
           setSelectedProveedorData(data[0]);
-          document.getElementById("nombresProveedor").value =
-            data[0].nombre_proveedores;
-          document.getElementById("direccionProveedor").value =
-            data[0].direccion_proveedores;
-          document.getElementById("contratoProveedor").value =
-            data[0].contrato_proveedores;
-          document.getElementById("telefonoProveedor").value =
-            data[0].telefono_proveedores;
-          document.getElementById("contratoInicio").value = formtDate(
-            data[0].inicio_contrato
-          );
-          document.getElementById("contratoFin").value = formtDate(
-            data[0].fin_contrato
-          );
+          setNombre_proveedores(data[0].nombre_proveedores)
+          setDireccion_proveedores(data[0].direccion_proveedores)
+          setContrato_proveedores(data[0].contrato_proveedores)
+          setTelefono_proveedores(data[0].telefono_proveedores)
+          setContratoInicio(formatDateYYYYMMDD( new Date(data[0].inicio_contrato)))
+          setContratoFin(formatDateYYYYMMDD( new Date(data[0].fin_contrato)))
         } else {
           listarProveedor();
         }
@@ -314,34 +314,27 @@ const proveedor = () => {
         }
       });
   }
+  function limpiar() {
+    setSelectedProveedorData('');
+    setNombre_proveedores('')
+    setDireccion_proveedores('')
+    setContrato_proveedores('')
+    setTelefono_proveedores('')
+    setContratoInicio('')
+    setContratoFin('')
+  }
   return (
     <div>
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           {userRoll == "administrador" && (
-            <button
-              type="button"
-              id="modalProducto"
-              className="btn-color btn"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              onClick={() => {
-                setModal(true);
-                Validate.limpiar(".limpiar");
-                document
-                  .getElementById("titleSctualizar")
-                  .classList.add("d-none");
-                document
-                  .getElementById("titleRegistro")
-                  .classList.remove("d-none");
-                document
-                  .getElementById("btnAgregar")
-                  .classList.remove("d-none");
-                document
-                  .getElementById("btnActualizar")
-                  .classList.add("d-none");
-              }}
-            >
+            <button type="button" id="modalProducto" className="btn-color btn" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+            onClick={() => {
+                document  .getElementById("titleSctualizar")  .classList.add("d-none");
+                document  .getElementById("titleRegistro")  .classList.remove("d-none");
+                document  .getElementById("btnAgregar")  .classList.remove("d-none");
+                document  .getElementById("btnActualizar")  .classList.add("d-none");
+              }}>
               Registrar Nuevo Proveedor
             </button>
           )}
@@ -446,16 +439,7 @@ const proveedor = () => {
         </table>
       </div>
       {/* desde aqui el modal */}
-      <div
-        className="modal fade"
-        id="exampleModal"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-        style={{ display: modal == true ? "block" : "none" }}
-      >
+      <div  className="modal fade"  id="exampleModal"  data-bs-backdrop="static"  data-bs-keyboard="false"  tabIndex="-1"  aria-labelledby="exampleModalLabel"  aria-hidden="true"  style={{ display: modal == true ? "block" : "none" }}>
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -465,12 +449,7 @@ const proveedor = () => {
               <h1 className="modal-title fs-5 d-none" id="titleSctualizar">
                 Actualizar proveedor
               </h1>
-              <button
-                type="button"
-                className="btn-close text-white bg-white"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              <button  type="button"  className="btn-close text-white bg-white"  data-bs-dismiss="modal"  aria-label="Close"  onClick={()=>limpiar()}></button>
             </div>
             <div className="modal-body">
               <div className=" d-flex justify-content-center">
@@ -478,33 +457,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="nombresProveedor">Nombres</label>
-                      <input
-                        onChange={(e) => {
-                          setNombre_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        id="nombresProveedor"
-                        name="nombresProveedor"
-                        className="form-control form-empty limpiar"
-                        placeholder="Nombres"
-                        required
-                      ></input>
+                      <input value={nombre_proveedores} onChange={(e) => {setNombre_proveedores(e.target.value); }} type="text" id="nombresProveedor" name="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required/>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="direccionProveedor">Direccion</label>
-                      <input
-                        onChange={(e) => {
-                          setDireccion_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        id="direccionProveedor"
-                        name="direccionProveedor"
-                        className="form-control form-empty limpiar"
-                        placeholder="Direccion"
-                      ></input>
+                      <input value={direccion_proveedores} onChange={(e) => {setDireccion_proveedores(e.target.value);  }}  type="text"  id="direccionProveedor"  name="direccionProveedor"  className="form-control form-empty limpiar"  placeholder="Direccion"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -513,33 +473,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="contratoProveedor">N° Contrato</label>
-                      <input
-                        onChange={(e) => {
-                          setContrato_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        name="contratoProveedor"
-                        id="contratoProveedor"
-                        className="form-control form-empty  limpiar"
-                        placeholder="N° de contrato"
-                      ></input>
+                      <input value={contrato_proveedores}  onChange={(e) => {    setContrato_proveedores(e.target.value);  }}  type="text"  name="contratoProveedor"  id="contratoProveedor"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="">Telefono</label>
-                      <input
-                        onChange={(e) => {
-                          setTelefono_proveedores(e.target.value);
-                        }}
-                        type="text"
-                        name="telefonoProveedor"
-                        id="telefonoProveedor"
-                        className="form-control form-empty limpiar"
-                        placeholder="Telefono"
-                        aria-describedby="defaultRegisterFormPhoneHelpBlock"
-                      ></input>
+                      <input value={telefono_proveedores} onChange={(e) => {    setTelefono_proveedores(e.target.value);  }}  type="text"  name="telefonoProveedor"  id="telefonoProveedor"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -549,33 +490,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="contratoInicio">Inicio de contrato</label>
-                      <input
-                        onChange={(e) => {
-                          setContratoInicio(e.target.value);
-                        }}
-                        type="date"
-                        name="contratoInicio"
-                        id="contratoInicio"
-                        className="form-control form-empty  limpiar"
-                        placeholder="N° de contrato"
-                      ></input>
+                      <input value={inicio_contrato} onChange={(e) => {    setContratoInicio(e.target.value);  }}  type="date"  name="contratoInicio"  id="contratoInicio"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="contratoFin">Fin de contrato</label>
-                      <input
-                        onChange={(e) => {
-                          setContratoFin(e.target.value);
-                        }}
-                        type="date"
-                        name="contratoFin"
-                        id="contratoFin"
-                        className="form-control form-empty limpiar"
-                        placeholder="Telefono"
-                        aria-describedby="defaultRegisterFormPhoneHelpBlock"
-                      ></input>
+                      <input value={fin_contrato} onChange={(e) => {    setContratoFin(e.target.value);  }}  type="date"  name="contratoFin"  id="contratoFin"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -589,6 +511,7 @@ const proveedor = () => {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={()=>limpiar()}
               >
                 Cerrar
               </button>
@@ -596,7 +519,10 @@ const proveedor = () => {
                 id="btnAgregar"
                 type="button"
                 className="btn btn-color"
-                onClick={registrarProveedor}
+                onClick={()=>{
+                  registrarProveedor();
+                  limpiar();
+                }}
               >
                 Agregar
               </button>
@@ -604,9 +530,10 @@ const proveedor = () => {
                 id="btnActualizar"
                 type="button"
                 className="btn btn-color d-none"
-                onClick={() =>
-                  actualizarProveedor(selectedProveedorData.id_proveedores)
-                }
+                onClick={()=>{
+                  actualizarProveedor(selectedProveedorData.id_proveedores);
+                  limpiar();
+                }}
               >
                 Actualizar
               </button>
