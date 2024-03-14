@@ -92,7 +92,7 @@ const Movimiento = () => {
       'Fecha del movimiento',
       'Tipo de movimiento',
       'Cantidad',
-      'Unidad Peso',
+      'Unidad',
       'Nota',
       'Usuario que hizo movimiento'
     ];
@@ -512,7 +512,7 @@ const Movimiento = () => {
                 <th className="th-sm">Fecha del movimiento</th>
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
-                <th className="th-sm">Unidad Peso</th>
+                <th className="th-sm">Unidad</th>
                 <th className="th-sm">Nota</th>
                 <th className="th-sm">Usuario que hizo movimiento</th>
                 <th className="th-sm">Editar</th>
