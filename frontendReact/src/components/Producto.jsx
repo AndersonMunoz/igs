@@ -21,6 +21,7 @@ import * as xlsx from 'xlsx';
 import portConexion from "../const/portConexion";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { dataDecript } from "./encryp/decryp";
 
 // Componente Producto
 const Producto = () => {
@@ -34,6 +35,7 @@ const Producto = () => {
   const [productoSeleccionado, setProductoSeleccionado] = useState({});
   const [selectedTipo, setSelectedTipo] = useState(null);
   const [selectedUp, setSelectedUp] = useState(null);
+  const [userRoll, setUserRoll] = useState("");
 
   const tableRef = useRef();
 
@@ -147,12 +149,14 @@ const Producto = () => {
 		}
 	}, [productos]);
   useEffect(() => {
+    
     window.onpopstate = function(event) {
       window.location.reload();
     }
   }, []); 
   // Efecto para cargar productos, tipos y UP al montar el componente
   useEffect(() => {
+    setUserRoll(dataDecript(localStorage.getItem("roll")));
       listarProducto();
       listarUp();
       listarTipo();
@@ -529,18 +533,22 @@ const Producto = () => {
                           'No asignada'
                         )}
                       </td>
-                      <td className="p-0">
-                      {element.estado === 1 ? (
-                        <>
-                          <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
-                          <IconEdit /> 
-                          </button>
-                          <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
-                        </>
-                      ): (
-                          <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
-                      )}
-                      </td>
+                     {userRoll == "administrador"?(
+                       <td className="p-0">
+                       {element.estado === 1 ? (
+                         <>
+                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                           <IconEdit /> 
+                           </button>
+                           <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
+                         </>
+                       ): (
+                           <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
+                       )}
+                       </td>
+                     ):(
+                      <td>No disponible</td>
+                     )}
                     </tr>
                   ))}
               </>

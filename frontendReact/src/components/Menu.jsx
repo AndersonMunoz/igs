@@ -279,7 +279,7 @@ export const Menu = () => {
                   <Link to="/ajustes">Perfil</Link>
                 </li>
                 <li>
-                  <Link to="#">Ayuda</Link>
+                  <Link to="/ajustes/ayuda">Ayuda</Link>
                 </li>
               </ul>
             </li>

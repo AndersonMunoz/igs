@@ -18,3 +18,15 @@
 .btn-white:hover {
     background-color: rgb(219, 219, 219);
 }
+
+.btnContenido11{
+    margin-left: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.inputFechaReporte{
+    border-radius: 8px;
+    border: 1px solid gray;
+    padding: 3px;
+}
