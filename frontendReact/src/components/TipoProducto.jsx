@@ -21,6 +21,9 @@ import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
 import portConexion from "../const/portConexion";
 import autoTable from 'jspdf-autotable';
+import { dataDecript } from "./encryp/decryp";
+
+
 
 
 
@@ -54,6 +57,7 @@ const Tipo = () => {
   const modalProductoRef = useRef(null);
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
+  const [userRoll, setUserRoll] = useState("");
   const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [tiposeleccionado, setTiposeleccionado] = useState({});
   const tableRef = useRef();
@@ -160,6 +164,7 @@ const Tipo = () => {
     window.onpopstate = function(event) {
       window.location.reload();
   };
+  setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarTipo();
     listarCategoria();
   }, []);
@@ -508,7 +513,8 @@ const Tipo = () => {
                       <td style={{ textTransform: "capitalize" }}>
                         {element.UnidadPeso}
                       </td>
-                      <td className="p-0">
+                    {userRoll== "administrador"?(
+                        <td className="p-0">
                         {element.estado === 1 ? (
                           <>
                             <button
@@ -539,6 +545,9 @@ const Tipo = () => {
                           </button>
                         )}
                       </td>
+                    ):(
+                      <td>no disponible</td>
+                    )}
                     </tr>
                   ))}
               </>
