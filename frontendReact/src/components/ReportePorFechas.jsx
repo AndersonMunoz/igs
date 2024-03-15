@@ -132,7 +132,7 @@ const reporte = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[6, "asc"]],
+        order: [[5, "asc"]],
       });
     }
   }, [reporte]);
@@ -218,9 +218,8 @@ const reporte = () => {
               <th className="th-sm">Categoría</th>
               <th className="th-sm">Entradas ({valEntradas})</th>
               <th className="th-sm">Salidas ({valSalidas})</th>
-              <th className="th-sm">valor</th>
+              <th className="th-sm">Valor</th>
               <th className="th-sm">Fecha último movimiento</th>
-              <th className="th-sm">Usuario</th>
             </tr>
           </thead>
           <tbody id="tableReportes" className="text-center">
@@ -234,7 +233,6 @@ const reporte = () => {
                     <td>{element.total_salidas}</td>
                     <td>{element.precio_total}</td>
                     <td>{formatDateYYYYMMDD(new Date(element.ultima_fecha_movimiento))}</td>
-                    <td>{element.nombre_usuario}</td>
                   </tr>
                 ))}
               </>
