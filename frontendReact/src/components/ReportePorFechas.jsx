@@ -29,8 +29,8 @@ const formatDateYYYYMMDD = (date) => {
 
 const reporte = () => {
   const [title, setTitle] = useState("Reportes por fechas");
-  const [rangoMovInicio, setRangoMovInicio] = useState(  "aqui van los rangos de mov de inicio");
-  const [rangoMovFin, setRangoMovFin] = useState(formatDateYYYYMMDD(new Date()));
+  const [rangoMovInicio, setRangoMovInicio] = useState();
+  const [rangoMovFin, setRangoMovFin] = useState();
   const [expMov, setExpMov] = useState("aqui para exportar");
   const [reporte, setReporte] = useState([]);
   const [valEntradas, setValEntradas] = useState('')
@@ -132,7 +132,7 @@ const reporte = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[6, "asc"]],
+        order: [[5, "asc"]],
       });
     }
   }, [reporte]);
@@ -162,6 +162,9 @@ const reporte = () => {
             setValEntradas(data.entraron)
             setValSalidas(data.salieron)
             setReporte(data.productos)
+            setRangoMovInicio(formatDateYYYYMMDD(new Date(data.
+              primera_fecha_movimiento_primer_producto)))
+            console.log(data);
           }
         })
       }
@@ -173,19 +176,21 @@ const reporte = () => {
   return (
     <div>
       <div className="boxBtnContendidoTitulo">
-        <div className="btnContenido1">
-          <div  style={{ width: "200px", marginRight: "20px" }}  className="d-flex">
-            <input type="date" name="inicio" id="inicio" />
-            <h2>Inicio</h2>
+
+        <div className="btnContenido11">
+          <div  style={{ width: "200px", marginRight: "10px", gap:"20px" }}  className="d-flex">
+            <input className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
+            <h5 className="mt-1">Inicio</h5>
           </div>
-          <div style={{ width: "200px" }} className="d-flex">
-            <input  className="flex"  type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
-            <h2>Fin</h2>
+          <div style={{ width: "180px", height:"35px", gap:"20px"}} className="d-flex">
+            <input className="inputFechaReporte" type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
+            <h5 className="mt-1">Fin</h5>
           </div>
           <div>
-            <button onClick={() => {}}>buscar</button>
+            <button className="btn btn-color" onClick={() => {}}>buscar</button>
           </div>
         </div>
+        
         <div className="btnContenido22">
           <h2 className="tituloHeaderpp">{title}</h2>
         </div>
@@ -213,9 +218,8 @@ const reporte = () => {
               <th className="th-sm">Categoría</th>
               <th className="th-sm">Entradas ({valEntradas})</th>
               <th className="th-sm">Salidas ({valSalidas})</th>
-              <th className="th-sm">valor</th>
+              <th className="th-sm">Valor</th>
               <th className="th-sm">Fecha último movimiento</th>
-              <th className="th-sm">Usuario</th>
             </tr>
           </thead>
           <tbody id="tableReportes" className="text-center">
@@ -228,8 +232,7 @@ const reporte = () => {
                     <td>{element.total_entradas}</td>
                     <td>{element.total_salidas}</td>
                     <td>{element.precio_total}</td>
-                    <td>{element.ultima_fecha_movimiento}</td>
-                    <td>{element.nombre_usuario}</td>
+                    <td>{formatDateYYYYMMDD(new Date(element.ultima_fecha_movimiento))}</td>
                   </tr>
                 ))}
               </>

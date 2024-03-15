@@ -541,7 +541,7 @@ const Movimiento = () => {
                 <th className="th-sm">Fecha del movimiento</th>
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
-                <th className="th-sm">Unidad Peso</th>
+                <th className="th-sm">Unidad peso</th>
                 <th className="th-sm">Precio individual</th>
                 <th className="th-sm">Precio total</th>
                 <th className="th-sm">Estado producto</th>
