@@ -20,6 +20,7 @@ import {
   IconUserOff,
   IconBuildingWarehouse,
   IconBrandProducthunt,
+  IconBell
 } from "@tabler/icons-react";
 
 export const Menu = () => {
@@ -45,6 +46,7 @@ export const Menu = () => {
     sidebarBtn.addEventListener("click", () => {
       sidebar.classList.toggle("close");
     });
+    /* modal cerrar secion */
 
     let modalUser = document.getElementById("userAlert");
     let modal = document.querySelector(".modalClose");
@@ -58,6 +60,21 @@ export const Menu = () => {
     closeX.addEventListener("click", () => {
       modal.classList.remove("modalUser");
       modal.classList.add("modalClose");
+    });
+
+    /* modal notificaciones */
+    let modalNoti = document.getElementById("notiAlert");
+    let modalX = document.querySelector(".modalCloseNoti");
+    let closeNoti = document.getElementById("closeNoti");
+
+    modalNoti.addEventListener("click", () => {
+      modalX.classList.toggle("modalNotificaciones");
+      modalX.classList.toggle("modalCloseNoti");
+    });
+
+    closeNoti.addEventListener("click", () => {
+      modalX.classList.remove("modalNotificaciones");
+      modalX.classList.add("modalCloseNoti");
     });
   }, []);
   return (
@@ -128,7 +145,7 @@ export const Menu = () => {
               <ul className="sub-menu">
                 <li>
                   <Link className="link_name" to="/inventario">
-                  Inventario
+                    Inventario
                   </Link>
                 </li>
                 <li>
@@ -136,7 +153,7 @@ export const Menu = () => {
                 </li>
               </ul>
             </li>
-          
+
             <li>
               <Link to="/producto">
                 <div className="tamañoLateral">
@@ -225,7 +242,7 @@ export const Menu = () => {
                 </div>
               </div>
 
-              
+
 
               <ul className="sub-menu">
                 <li>
@@ -237,25 +254,25 @@ export const Menu = () => {
                   <Link to="/producto/caducar">Productos a Caducar</Link>
                 </li>
               </ul>
-              
+
             </li>
-            <li>{userRoll == "administrador" &&(
+            <li>{userRoll == "administrador" && (
               <Link to="/usuario">
                 <div className="tamañoLateral">
                   <IconUser className="iconosLaterales" />
                 </div>
                 <span className="link_name">Usuarios</span>
               </Link>
-              )}
-                <ul className="sub-menu blank">
+            )}
+              <ul className="sub-menu blank">
                 <li>
                   <Link className="link_name" to="/usuario">
                     Usuarios
                   </Link>
                 </li>
               </ul>
-              
-              
+
+
             </li>
             <li>
               <div className="content-nav">
@@ -324,6 +341,13 @@ export const Menu = () => {
               />
             </svg>
           </div>
+          <div id="notiAlert" className="boxNotificaciones">
+            <div className="boxcontadorNoti">
+              <span>2</span> {/* contador de notoficaciones */}
+            </div>
+            <IconBell className="iconAlert" />
+          </div>
+          
           <div id="userAlert" className="usuario">
             <IconUser className="user1" />
             <div className="cargoUser">
@@ -331,6 +355,16 @@ export const Menu = () => {
               <span className="tamañocargoUsuario">Cargo: {userRoll}</span>
             </div>
           </div>
+        </div>
+        {/* caja de notificaciones */}
+        <div className="modalCloseNoti">
+            <div className="notificacionesSpace">
+              <div className="contentXsalir">
+                <IconX className="closeUser" id="closeNoti" />
+              </div>
+
+            </div>
+
         </div>
         <div className="modalClose">
           <div className="userSpace">
@@ -354,7 +388,7 @@ export const Menu = () => {
           <div className="contSeg">
             <Outlet />
             <div className="espacioBotton"></div>
-            
+
           </div>
         </div>
       </div>
