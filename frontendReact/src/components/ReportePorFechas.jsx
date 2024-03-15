@@ -176,19 +176,21 @@ const reporte = () => {
   return (
     <div>
       <div className="boxBtnContendidoTitulo">
-        <div className="btnContenido1">
-          <div  style={{ width: "200px", marginRight: "20px" }}  className="d-flex">
-            <input type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
-            <h2>Inicio</h2>
+
+        <div className="btnContenido11">
+          <div  style={{ width: "200px", marginRight: "10px", gap:"20px" }}  className="d-flex">
+            <input className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
+            <h5 className="mt-1">Inicio</h5>
           </div>
-          <div style={{ width: "200px" }} className="d-flex">
-            <input type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
-            <h2>Fin</h2>
+          <div style={{ width: "180px", height:"35px", gap:"20px"}} className="d-flex">
+            <input className="inputFechaReporte" type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
+            <h5 className="mt-1">Fin</h5>
           </div>
           <div>
-            <button onClick={() => {}}>buscar</button>
+            <button className="btn btn-color" onClick={() => {}}>buscar</button>
           </div>
         </div>
+        
         <div className="btnContenido22">
           <h2 className="tituloHeaderpp">{title}</h2>
         </div>

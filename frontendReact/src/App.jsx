@@ -15,7 +15,9 @@ import Inventario from "./components/Inventario";
 import ProductoCaducar from "./components/ProductoCaducar";
 import PefilAjustes from "./components/PerfilAjustes";
 import ReportePorFechas from "./components/ReportePorFechas.jsx";
-import Kardex from "./components/Kardex.jsx"
+import Kardex from "./components/Kardex.jsx";
+import Ayuda from "./components/Ayuda.jsx";
+
 
 const App = () => {
   return (
@@ -37,6 +39,7 @@ const App = () => {
           <Route path="/ajustes" element={<PefilAjustes />} />
           <Route path="/reporte-fechas" element={<ReportePorFechas />} />
           <Route path="/kardex" element={<Kardex />} />
+          <Route path="/ajustes/ayuda" element={<Ayuda/>}/>
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
