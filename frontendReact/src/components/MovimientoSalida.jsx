@@ -655,6 +655,15 @@ const Movimiento = () => {
                         </div>
                         </div>
                       </div>
+                      <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
+                          <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.cantidad_peso_movimiento || ''} name="cantidad_peso_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, cantidad_peso_movimiento: e.target.value })} />
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese una cantidad.
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </form>
                 </div>

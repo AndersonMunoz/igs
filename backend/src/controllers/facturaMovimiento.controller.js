@@ -436,13 +436,18 @@ export const actualizarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let { estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario} = req.body;
+		let { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad,cantidad_peso_movimiento, fk_id_producto, fk_id_usuario} = req.body;
 
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
+		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',precio_movimiento='${precio_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',cantidad_peso_movimiento='${cantidad_peso_movimiento}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
 
+		let sql2 = `UPDATE factura_movimiento set precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento where id_factura=${id} `
+		const [result1, result2] = await Promise.all([
+			pool.query(sql, [estado_producto_movimiento,precio_movimiento, nota_factura,fecha_caducidad,cantidad_peso_movimiento]),
+			pool.query(sql2, [cantidad_peso_movimiento,precio_movimiento,id]),
+		]);
 		const [rows] = await pool.query(sql);
-
-		if (rows.affectedRows > 0) {
+		
+		if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0) {
 			res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
 		} else {
 			res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
@@ -462,8 +467,8 @@ export const actualizarMovimientoSalida = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let {nota_factura} = req.body;
-		let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}' where id_factura=${id}`;
+		let {nota_factura,cantidad_peso_movimiento} = req.body;
+		let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',cantidad_peso_movimiento='${cantidad_peso_movimiento}' where id_factura=${id}`;
 
 		const [rows] = await pool.query(sql);
 
