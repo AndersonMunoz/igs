@@ -153,23 +153,21 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
                     SUM(f.precio_total_mov) AS precio_total, 
                     MAX(f.fecha_movimiento) AS ultima_fecha_movimiento, 
                     MIN(f.fecha_movimiento) AS primera_fecha_movimiento,
-                    u.nombre_usuario AS nombre_usuario,
                     SUM(CASE WHEN f.tipo_movimiento = 'entrada' THEN 1 ELSE 0 END) AS total_entradas,
                     SUM(CASE WHEN f.tipo_movimiento = 'salida' THEN 1 ELSE 0 END) AS total_salidas
                 FROM 
                     factura_movimiento f 
-                JOIN 
+                LEFT JOIN 
                     productos p ON p.id_producto = f.fk_id_producto 
-                JOIN 
+                    LEFT JOIN 
                     usuarios u ON u.id_usuario = f.id_factura 
-                JOIN 
+                    LEFT JOIN 
                     tipo_productos t ON t.id_tipo = p.fk_id_tipo_producto 
-                JOIN 
+                    LEFT JOIN 
                     categorias_producto c ON c.id_categoria = t.id_tipo 
                 GROUP BY 
                     t.nombre_tipo, 
-                    c.nombre_categoria, 
-                    u.nombre_usuario`;
+                    c.nombre_categoria`;
 
     const [rows] = await pool.query(sql);
 
