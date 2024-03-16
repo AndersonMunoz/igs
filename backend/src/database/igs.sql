@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 14-03-2024 a las 19:49:33
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.1.17
+-- Servidor: localhost
+-- Tiempo de generación: 16-03-2024 a las 16:14:05
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -104,8 +104,16 @@ CREATE TABLE `proveedores` (
   `contrato_proveedores` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `inicio_contrato` date NOT NULL,
-  `fin_contrato` date NOT NULL
+  `fin_contrato` date NOT NULL,
+  `detalles_contrato` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `proveedores`
+--
+
+INSERT INTO `proveedores` (`id_proveedores`, `nombre_proveedores`, `telefono_proveedores`, `direccion_proveedores`, `contrato_proveedores`, `estado`, `inicio_contrato`, `fin_contrato`, `detalles_contrato`) VALUES
+(1, 'Mercatodo', '3108840302', 'Pitalito', 1, 1, '2020-03-02', '2020-03-02', NULL);
 
 -- --------------------------------------------------------
 
@@ -230,7 +238,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_productos`
