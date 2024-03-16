@@ -79,7 +79,7 @@ export const registrarProvedor = async (req, res) => {
   }
 }
 
-// Endpoint para registrar proveedor con multer
+// Endpoint para registrar proveedor con multer eeeeeeeeeeeeeeeeeeeee
 export const registrarProvedorWithPDF = [
   upload.single('contrato_proveedores'), // Campo del formulario que contendrá el archivo PDF
   registrarProvedor
