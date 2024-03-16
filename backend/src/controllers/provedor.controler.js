@@ -33,50 +33,57 @@ export const buscarProvedor = async (req, res) => {
     }
 }
 
+// Configuración de multer para almacenar archivos en disco
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../public/PDFContrato') // Directorio donde se guardarán los archivos
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + '.pdf')
+  }
+})
+
+const upload = multer({ storage: storage });
+
 export const registrarProvedor = async (req, res) => {
-    try {
-      let error = validationResult(req);
-      if (!error.isEmpty()) {
-        return res.status(403).json({ "status": 403, error });
-      }
-      let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores, inicio_contrato, fin_contrato } = req.body;
-      let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores;
-      const [rows] = await pool.query(selectUser);
-      if (rows.length > 0) {
-        res.status(409).json({
-          "status": 409, "message": "Duplicidad en contratos"
+  try {
+    let error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(403).json({ "status": 403, error })
+    }
+    let { nombre_proveedores, telefono_proveedores, direccion_proveedores, inicio_contrato, fin_contrato } = req.body;
+    let contrato_proveedores = req.file.filename; // Nombre del archivo PDF
+
+    let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
+    const [rows] = await pool.query(selectUser)
+    if (rows.length > 0) {
+      res.status(409).json({
+        "status": 409, "message": "Duplicidad en contratos"
+      });
+    } else {
+      let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores,inicio_contrato, fin_contrato)
+          values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}','${inicio_contrato}','${fin_contrato}')`;
+      const [rows] = await pool.query(sql);
+      if (rows.affectedRows > 0) {
+        res.status(200).json({
+          "status": 200, "message": "Se registró con éxito el Proveedor"
         });
       } else {
-        let sql = `INSERT INTO proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores,inicio_contrato, fin_contrato) 
-                   VALUES ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}','${inicio_contrato}','${fin_contrato}')`;
-        const [rows] = await pool.query(sql);
-        if (rows.affectedRows > 0) {
-          res.status(200).json({
-            "status": 200, "message": "Se registró con éxito el Proveedor"
-          });
-        } else {
-          res.status(401).json({
-            "status": 401, "message": "No se registró el Proveedor"
-          });
-        }
+        res.status(401).json({
+          "status": 401, "message": "No se registró el Proveedor"
+        });
       }
-    } catch (e) {
-      res.status(500).json({ message: 'Error en guardar Provedor: ' + e });
     }
-  };
+  } catch (e) {
+    res.status(500).json({ message: 'Error en guardar Provedor: ' + e })
+  }
+}
 
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Directorio donde se guardarán los archivos
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname); // Mantener el nombre original del archivo
-    }
-  });
-  const upload = multer({ storage: storage });
-  
-  export const uploadPDF = upload.single('pdfFile');
-
+// Endpoint para registrar proveedor con multer
+export const registrarProvedorWithPDF = [
+  upload.single('contrato_proveedores'), // Campo del formulario que contendrá el archivo PDF
+  registrarProvedor
+];
   
 export const eliminarProvedor = async (req, res) => {
     try {
