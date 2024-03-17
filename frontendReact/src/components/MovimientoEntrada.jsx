@@ -359,7 +359,6 @@ const Movimiento = () => {
   }
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
-    
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
       method: "PUT",
       headers: {
@@ -374,7 +373,6 @@ const Movimiento = () => {
       return res.json();})
       .then((data) => {
         Sweet.exito(data.message);
-        //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
         removeModalBackdrop();
@@ -846,7 +844,7 @@ const Movimiento = () => {
                 
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
-                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); handleCloseModal2()}}>Actualizar</button>
+                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura)}}>Actualizar</button>
                 </div>
               </div>
             </div>
