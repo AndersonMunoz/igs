@@ -2,17 +2,18 @@ import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
 
 export const registroInstructor = async (req, res) => {
-
+ 
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
             return res.status(400).json(error)
         }
         let { documento_instructor, fk_id_titulado ,nombre_instructor} = req.body;
-        const InstructorQuery = `SELECT * FROM    instructores  WHERE documento_instructor = '${documento_instructor}'`;
-        const [existingTipo] = await pool.query(InstructorQuery);
+        const documento_instructorQuery = `SELECT * FROM    instructores  WHERE documento_instructor = '${documento_instructor}'`;
+        const [existingInstructor] = await pool.query(documento_instructorQuery);
         
-        if (existingTipo.length > 0) {
+        
+        if (existingInstructor.length > 0) {
             return res.status(409).json({
                 "status": 409,
                 "message": "El instructor ya  esta registrado"
