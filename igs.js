@@ -8,6 +8,8 @@ import usuarioRouter from './backend/src/routes/usuario.routes.js';
 import tipo_productoRouter from './backend/src/routes/tipo_producto.routes.js';
 import categoria_productoRouter from './backend/src/routes/categoria_producto.routes.js';
 import unidadProductiva from './backend/src/routes/unidadProductiva.routes.js';
+import titulado from './backend/src/routes/titulado.routes.js';
+import instructores from './backend/src/routes/instructores.routes.js';
 import autRouter from './backend/src/routes/autentificacion.routes.js';
 
 const port = 3000;
@@ -60,6 +62,10 @@ igs.use('/categoria', categoria_productoRouter);
 
 igs.use('/up', unidadProductiva);
 
+igs.use('/titulado',titulado)
+
+igs.use('/instructor',instructores)
+instructores
 igs.use('/aut', autRouter);
 
 igs.listen(port,()=>{
