@@ -206,9 +206,9 @@ export const editarUsuario = async (req, res) => {
 
         let id = req.params.id;
 
-        let { documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario } = req.body;
+        let { documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario , stock_minimo} = req.body;
 
-        let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario FROM usuarios WHERE id_usuario = ${id}`;
+        let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario, stock_minimo FROM usuarios WHERE id_usuario = ${id}`;
         const [existingUser] = await pool.query(sql);
 
         // Verificar si el usuario existe
@@ -246,10 +246,12 @@ export const editarUsuario = async (req, res) => {
         }
 
         sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}',
+            stock_minimo = '${stock_minimo}',
             email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}',
             contrasena_usuario = '${contrasena_usuario = dataEncript(contrasena_usuario)}', tipo_usuario = '${tipo_usuario}'
             WHERE id_usuario = ${id}`;
 
+            console.log(sql);
         const [rows] = await pool.query(sql);
 
         if (rows.affectedRows > 0) {
@@ -279,9 +281,9 @@ export const editarUsuarioAjustes = async (req, res) => {
 
         let id = req.params.id;
 
-        let { documento_usuario, email_usuario, nombre_usuario } = req.body;
+        let { documento_usuario, email_usuario, nombre_usuario, stock_minimo } = req.body;
 
-        let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario FROM usuarios WHERE id_usuario = ${id}`;
+        let sql = `SELECT documento_usuario, email_usuario, contrasena_usuario, nombre_usuario, tipo_usuario, stock_minimo FROM usuarios WHERE id_usuario = ${id}`;
         const [existingUser] = await pool.query(sql);
 
         // Verificar si el usuario existe
@@ -318,7 +320,7 @@ export const editarUsuarioAjustes = async (req, res) => {
             }
         }
 
-        sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}',
+        sql = `UPDATE usuarios SET documento_usuario = '${documento_usuario}', stock_minimo = '${stock_minimo}',
             email_usuario = '${email_usuario}', nombre_usuario = '${nombre_usuario}' WHERE id_usuario = ${id}`;
 
         const [rows] = await pool.query(sql);

@@ -94,24 +94,7 @@ export const buscarTipoProducto = async (req, res) => {
       }
   }
 
-/* export const listarTipo_producto = async (req, res) => {
-    try {
-        const [result] = await pool.query('select * from tipo_productos');
-        if (result.length > 0) {
-            res.status(200).json(result);
-        } else {
-            res.status(401).json({ 
-                "status": 401,
-                "message": "No se pudo listar los tipos de productos  " });
-        }
 
-    } catch (err) {
-        res.status(500).json({
-            massage: 'error en servidor:' + err
-        })
-    }
-
-}; */
 export const editarTipo_producto = async (req, res) => {
     try {
         let error = validationResult(req);
