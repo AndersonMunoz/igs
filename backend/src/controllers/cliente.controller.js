@@ -272,7 +272,7 @@ export const editarUsuario = async (req, res) => {
         });
     }
 };
-export const editarUsuarioAjustes = async (req, res) => {
+export const s = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
