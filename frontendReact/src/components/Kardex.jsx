@@ -142,6 +142,7 @@ const Movimiento = () => {
     }
   }
 
+  
   useEffect(() => {
     window.onpopstate = function(event) {
       window.location.reload();
