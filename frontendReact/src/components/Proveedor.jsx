@@ -39,6 +39,7 @@ const proveedor = () => {
   const [inicio_contrato, setContratoInicio] = useState('');
   const [fin_contrato, setContratoFin] = useState("");
   const [userRoll, setUserRoll] = useState("");
+  const [filename, setfilename] = useState('');
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -155,6 +156,7 @@ const proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
+          console.log(data);
           data.forEach((item) => {
             const fechaActual = new Date();
             const dia = fechaActual.getDay() - 1;
@@ -225,27 +227,28 @@ const proveedor = () => {
   function registrarProveedor() {
     const validacionExitosa = Validate.validarCampos(".form-empty");
     if (validacionExitosa) {
+      const formData = new FormData();
+      formData.append('nombre_proveedores', nombre_proveedores);
+      formData.append('telefono_proveedores', telefono_proveedores);
+      formData.append('direccion_proveedores', direccion_proveedores);
+      formData.append('inicio_contrato', inicio_contrato);
+      formData.append('fin_contrato', fin_contrato);
+      formData.append('contrato_proveedores', contrato_proveedores);
+  
       fetch(`http://${portConexion}:3000/proveedor/registrar`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           token: localStorage.getItem("token"),
         },
-        body: JSON.stringify({
-          nombre_proveedores,
-          direccion_proveedores,
-          contrato_proveedores,
-          telefono_proveedores,
-          inicio_contrato,
-          fin_contrato,
-        }),
+        body: formData,
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.status === 200) {
             Sweet.exito(data.message);
             listarProveedor();
-            limpiar()
+            limpiar();
             if ($.fn.DataTable.isDataTable(tableRef.current)) {
               $(tableRef.current).DataTable().destroy();
             }
@@ -256,9 +259,13 @@ const proveedor = () => {
               Sweet.error(data.message);
             }
           }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
         });
     }
   }
+  
 
   function editarProveedor(id) {
     document.getElementById("titleSctualizar").classList.remove("d-none");
@@ -370,6 +377,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
+              <th className="th-sm">Documento</th>
               <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
@@ -386,6 +394,7 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
+                    <td>{element.detalles_contrato}</td>
                     {userRoll == "administrador" ? (   
                       <td className="p-0">
                         {element.estado !== 1 ? (
@@ -484,6 +493,29 @@ const proveedor = () => {
                     <div className="col ms-3">
                       <label htmlFor="contratoFin">Fin de contrato</label>
                       <input value={fin_contrato} onChange={(e) => {    setContratoFin(e.target.value);  }}  type="date"  name="contratoFin"  id="contratoFin"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <div className="invalid-feedback is-invalid">
+                        Este campo es obligatorio.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex form-row mb-1">
+                    <div className="col">
+                      <label htmlFor="documentoContrato">Documento de contrato</label>
+                      
+                      <input 
+  onChange={(e) => { 
+    const { value } = e.target; 
+    setfilename(value); 
+  }} 
+  type="file" 
+  name="documentoContrato" 
+  id="documentoContrato" 
+  className="form-control form-empty limpiar" 
+  placeholder="file Pdf"
+/>
+
+                      
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
