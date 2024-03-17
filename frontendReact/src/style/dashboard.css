@@ -41,6 +41,13 @@
   height: 50px;
 }
 
+.valAlert{
+  display: flex;
+  justify-content: right;
+  margin-bottom: -6px;
+  margin-right: -5px;
+}
+
 .sidebar .logo-details .logo_name {
   padding-left: 20px;
   font-size: 1.5em;
@@ -239,8 +246,8 @@
   display: grid;
   height: 60px;
   transition: all 0.5s ease;
-  grid-template: "empty-1 box-menu-hader sena empty-2 usuario empty-3" 100%/
-    5px 50px 70px 1fr auto 1.5%;
+  grid-template: "empty-1     box-menu-hader  sena    empty-2   notify   usuario   empty-3" 100%/
+                  5px         50px            70px    1fr       50px      auto       1.5%;
 }
 
 .box-menu-hader {
@@ -279,8 +286,25 @@
   padding: 10px;
   text-transform: capitalize;
 }
+.notify{
+  grid-area: notify;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  text-transform: capitalize;
+}
 
-.usuario:hover {
+.usuario:hover{
+  background-color: rgb(108, 206, 119);
+  border-radius: 12px;
+}
+.notify:hover{
   background-color: rgb(108, 206, 119);
   border-radius: 12px;
 }
@@ -308,8 +332,8 @@
     display: grid;
     height: 60px;
     transition: all 0.5s ease;
-    grid-template: "empty-1 box-menu-hader sena empty-2 usuario empty-3" 100%/
-      5px 50px 45px 1fr auto 1%;
+    grid-template: "empty-1         box-menu-hader  sena          empty-2   notify       usuario         empty-3" 100%/
+                    5px             50px            45px          1fr       50px         auto            1%;
   }
   .cargoUser{
     display: flex;

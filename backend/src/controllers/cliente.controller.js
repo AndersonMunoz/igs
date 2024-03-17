@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import CryptoJs from "crypto-js";
 import { dataEncript } from "./encryp/encryp.js";
 import { secretKey } from "../const/keys.js";
-import nodemailer from 'nodemailer'
+import nodemailer from 'nodemailer';
 
 
 export const registroUsuario = async (req, res) => {
@@ -272,7 +272,7 @@ export const editarUsuario = async (req, res) => {
         });
     }
 };
-export const s = async (req, res) => {
+export const editarUsuarioAjustes = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {

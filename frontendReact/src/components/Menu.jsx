@@ -21,10 +21,16 @@ import {
   IconBuildingWarehouse,
   IconBrandProducthunt,
 } from "@tabler/icons-react";
+import portConexion from "../const/portConexion";
+
 
 export const Menu = () => {
   const [userName, setUserName] = useState("");
   const [userRoll, setUserRoll] = useState("");
+  const [id, setId]= useState(dataDecript(localStorage.getItem("id")))
+  const [alert, setAlert] = useState('');
+  const [elementoAlmacenado, setElemento]= useState([])
+  const [stockMin, setStockMin] = useState('')
 
 
   useEffect(() => {
@@ -59,7 +65,54 @@ export const Menu = () => {
       modal.classList.remove("modalUser");
       modal.classList.add("modalClose");
     });
+    listartMen(id);
   }, []);
+
+	function listartMen(id_usuario) {
+		fetch(`http://${portConexion}:3000/usuario/buscar/${id_usuario}`,{
+			method: "get",
+			headers: {
+				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
+			},
+		})
+		.then((res)=> res.json())
+		.then((data)=>{
+      setStockMin(data[0].stock_minimo)
+      calcularMIn((data[0].stock_minimo),)
+		})
+	}
+
+  function calcularMIn(stockMin) {
+    fetch(`http://${portConexion}:3000/producto/listar`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+    .then((res) => {
+      if (res.status === 204) {
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      let cont = 0;
+      if (data !== null) {
+        data.forEach(elemento => {
+          if (stockMin > elemento.Peso) {
+            cont = cont +1;
+            setAlert(cont)
+            setElemento(elemento)
+          }else{
+            setAlert(cont)
+          }
+        });
+      }
+    })
+  }
+
   return (
     <>
       <div className="main-container">
@@ -324,6 +377,63 @@ export const Menu = () => {
               />
             </svg>
           </div>
+          <div className="notify">
+            <div className="ml-3">
+              <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#modalAlert">
+                <span className="text-white valAlert">{alert}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#ffffff" className="bi bi-bell" viewBox="0 0 16 16">
+                  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          {/* modal de notificacion */}
+                <div  className="modal fade"  id="modalAlert"  aria-labelledby="exampleModalLabel"  aria-hidden="true">
+                  <div className="modal-dialog">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="exampleModalLabel">
+                          Quedan pocas unidades de:
+                        </h1>
+                        <button  type="button"  className="btn-close"  data-bs-dismiss="modal"  aria-label="Close"/>
+                      </div>
+                      <div className="modal-body">
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Categoria</th>
+                              <th scope="col">Nombre</th>
+                              <th scope="col">Stock</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {alert > 0 ? (
+                            <>
+                              {[elementoAlmacenado].map((element, index) => (
+                                <tr key={index}>
+                                  <td>{element.NombreCategoria}</td>
+                                  <td>{element.NombreProducto}</td>
+                                  <td>{element.Peso}</td>
+                                </tr>
+                              ))}
+                            </>
+                          ) : (
+                            <tr>
+                              <td className="text-center" colSpan={3}>Nada por mostrar</td>
+                            </tr>                              
+                          )}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="modal-footer">
+                        <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal">
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
           <div id="userAlert" className="usuario">
             <IconUser className="user1" />
             <div className="cargoUser">
