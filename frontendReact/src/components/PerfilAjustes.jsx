@@ -13,13 +13,14 @@ const PerfilAjustes = () => {
 	const [userName, setUserName] = useState('');
 	const [userRoll, setUserRoll] = useState('');
 	const [updateModal, setUpdateModal] = useState(false);
+	const [stock_minimo, setStockMin] = useState('')
 
-
-	useEffect(() => {
+	useEffect(() => {	
 		setUserName(dataDecript(localStorage.getItem('name')));
 		setUserRoll(dataDecript(localStorage.getItem('roll')));
 		const userId = dataDecript(localStorage.getItem('id'));
 		editarUsuario(userId);
+		listartMen(userId)
 	}, []);
 
 
@@ -101,9 +102,10 @@ const PerfilAjustes = () => {
 		const dataToSend = {
 			nombre_usuario: usuarioSeleccionado.nombre_usuario,
 			documento_usuario: usuarioSeleccionado.documento_usuario,
-			email_usuario: usuarioSeleccionado.email_usuario
+			email_usuario: usuarioSeleccionado.email_usuario,
+			stock_minimo: stock_minimo
+			
 		};
-
 		fetch(`http://${portConexion}:3000/usuario/editarajustes/${userId}`, {
 			method: "PUT",
 			headers: {
@@ -180,6 +182,20 @@ const PerfilAjustes = () => {
 			.catch((error) => {
 				console.error("Error:", error);
 			});
+	}
+
+	function listartMen(id_usuario) {
+		fetch(`http://${portConexion}:3000/usuario/buscar/${id_usuario}`,{
+			method: "get",
+			headers: {
+				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
+			},
+		})
+		.then((res)=> res.json())
+		.then((data)=>{
+			setStockMin(data[0].stock_minimo)
+		})
 	}
 
 
@@ -384,6 +400,31 @@ const PerfilAjustes = () => {
 									}
 								/>
 							</div>
+							<div className="col">
+								<label htmlFor="nombre_usuario" className="label-bold fw-bold mb-2">
+									Stock minimo
+								</label>
+								<input
+									type="hidden"
+									value={usuarioSeleccionado.documento_usuario || ""}
+									onChange={(e) =>
+										setUsuarioSeleccionado({
+											...usuarioSeleccionado,
+											id_usuario: e.target.value,
+										})
+									}
+								/>
+								<input
+								    type="number"
+								    defaultValue={stock_minimo}
+								    className="form-control form-update"
+								    placeholder="Ingrese su stock mínimo"
+								    onChange={(e) => setStockMin(e.target.value)}
+								/>
+
+							</div>
+						</div>
+						<div className="row mt-4">
 							<div className="col d-flex justify-content-start">
 								<button
 									onClick={() => {
@@ -394,7 +435,9 @@ const PerfilAjustes = () => {
 									Guardar Datos
 								</button>
 							</div>
-						</div>
+						</div>	
+							
+						
 					</form>
 				</div>
 

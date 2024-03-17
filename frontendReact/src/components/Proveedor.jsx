@@ -272,7 +272,7 @@ const proveedor = () => {
     document.getElementById("titleRegistro").classList.add("d-none");
     document.getElementById("btnAgregar").classList.add("d-none");
     document.getElementById("btnActualizar").classList.remove("d-none");
-    fetch(`http://localhost:3000/proveedor/buscar/${id}`, {
+    fetch(`http://${portConexion}:3000/proveedor/buscar/${id}`, {
       method: "get",
       headers: {
         "Content-type": "application/json",

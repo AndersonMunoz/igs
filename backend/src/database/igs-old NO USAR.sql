@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-03-2024 a las 23:24:18
+-- Tiempo de generación: 14-03-2024 a las 19:49:33
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -48,19 +48,6 @@ CREATE TABLE `categorias_producto` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `detalles`
---
-
-CREATE TABLE `detalles` (
-  `id_detalle` int(11) NOT NULL,
-  `destino_movimiento` enum('taller','produccion','evento') DEFAULT NULL,
-  `fk_id_movimiento` int(11) DEFAULT NULL,
-  `fk_id_instructor` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `factura_movimiento`
 --
 
@@ -70,28 +57,23 @@ CREATE TABLE `factura_movimiento` (
   `tipo_movimiento` enum('entrada','salida') NOT NULL,
   `cantidad_peso_movimiento` float NOT NULL,
   `precio_movimiento` float NOT NULL,
-  `estado_producto_movimiento` enum('optimo','deficiente') NOT NULL,
+  `estado_producto_movimiento` enum('bueno','regular','malo') NOT NULL,
   `nota_factura` varchar(300) NOT NULL,
   `fecha_caducidad` date DEFAULT NULL,
+  `num_lote` int(100) NOT NULL,
   `precio_total_mov` float DEFAULT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
-  `fk_id_proveedor` int(11) NOT NULL
+  `fk_id_proveedor` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `instructores`
+-- Disparadores `factura_movimiento`
 --
-
-CREATE TABLE `instructores` (
-  `id_instructores` int(11) NOT NULL,
-  `documento_instructor` int(10) UNSIGNED NOT NULL,
-  `nombre_instructor` varchar(45) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `fk_id_titulado` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DELIMITER $$
+CREATE TRIGGER `increment_lote` BEFORE INSERT ON `factura_movimiento` FOR EACH ROW SET NEW.num_lote = (SELECT IFNULL(MAX(num_lote), 0) + 1 FROM factura_movimiento)
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -103,10 +85,9 @@ CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
   `cantidad_peso_producto` float DEFAULT 0,
   `descripcion_producto` varchar(200) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `num_lote` int(11) NOT NULL,
   `fk_id_up` int(11) NOT NULL,
-  `fk_id_tipo_producto` int(11) NOT NULL
+  `fk_id_tipo_producto` int(11) NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -123,16 +104,8 @@ CREATE TABLE `proveedores` (
   `contrato_proveedores` int(11) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `inicio_contrato` date NOT NULL,
-  `fin_contrato` date NOT NULL,
-  `archivo_contrato` varchar(45) NOT NULL
+  `fin_contrato` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `proveedores`
---
-
-INSERT INTO `proveedores` (`id_proveedores`, `nombre_proveedores`, `telefono_proveedores`, `direccion_proveedores`, `contrato_proveedores`, `estado`, `inicio_contrato`, `fin_contrato`, `detalles_contrato`) VALUES
-(1, 'Mercatodo', '3108840302', 'Pitalito', 1, 1, '2020-03-02', '2020-03-02', NULL);
 
 -- --------------------------------------------------------
 
@@ -143,21 +116,8 @@ INSERT INTO `proveedores` (`id_proveedores`, `nombre_proveedores`, `telefono_pro
 CREATE TABLE `tipo_productos` (
   `id_tipo` int(11) NOT NULL,
   `nombre_tipo` varchar(45) NOT NULL,
-  `fk_categoria_pro` int(11) NOT NULL,
+  `fk_categoria_pro` int(11) DEFAULT NULL,
   `unidad_peso` enum('kg','lb','gr','lt','ml','oz','unidad(es)') NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `titulados`
---
-
-CREATE TABLE `titulados` (
-  `id_titulado` int(11) NOT NULL,
-  `nombre_titulado` varchar(45) NOT NULL,
-  `id_ficha` varchar(45) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -174,17 +134,16 @@ CREATE TABLE `usuarios` (
   `nombre_usuario` varchar(45) NOT NULL,
   `contrasena_usuario` varchar(45) NOT NULL,
   `tipo_usuario` enum('administrador','coadministrador') NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `stock_minimo` int(11) DEFAULT 10
+  `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `documento_usuario`, `email_usuario`, `nombre_usuario`, `contrasena_usuario`, `tipo_usuario`, `estado`, `stock_minimo`) VALUES
-(1, 1234567890, 'admin@admin.com', 'Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1, 10),
-(2, 1084259187, 'andersons_munoz@soy.sena.edu.co', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1, 10);
+INSERT INTO `usuarios` (`id_usuario`, `documento_usuario`, `email_usuario`, `nombre_usuario`, `contrasena_usuario`, `tipo_usuario`, `estado`) VALUES
+(1, 1234567890, 'admin@admin.com', '@Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1),
+(2, 1084259187, 'andersons_munoz@soy.sena.edu.co', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1);
 
 --
 -- Índices para tablas volcadas
@@ -203,28 +162,14 @@ ALTER TABLE `categorias_producto`
   ADD PRIMARY KEY (`id_categoria`);
 
 --
--- Indices de la tabla `detalles`
---
-ALTER TABLE `detalles`
-  ADD PRIMARY KEY (`id_detalle`),
-  ADD KEY `fk_id_movimiento_idx` (`fk_id_movimiento`),
-  ADD KEY `fk_id_instructor_idx` (`fk_id_instructor`);
-
---
 -- Indices de la tabla `factura_movimiento`
 --
 ALTER TABLE `factura_movimiento`
   ADD PRIMARY KEY (`id_factura`),
+  ADD UNIQUE KEY `num_lote` (`num_lote`),
   ADD KEY `tener5` (`fk_id_producto`),
   ADD KEY `tener6` (`fk_id_usuario`),
   ADD KEY `tener99` (`fk_id_proveedor`);
-
---
--- Indices de la tabla `instructores`
---
-ALTER TABLE `instructores`
-  ADD PRIMARY KEY (`id_instructores`),
-  ADD KEY `fk_id_titulado_idx` (`fk_id_titulado`);
 
 --
 -- Indices de la tabla `productos`
@@ -246,12 +191,6 @@ ALTER TABLE `proveedores`
 ALTER TABLE `tipo_productos`
   ADD PRIMARY KEY (`id_tipo`),
   ADD KEY `nada` (`fk_categoria_pro`);
-
---
--- Indices de la tabla `titulados`
---
-ALTER TABLE `titulados`
-  ADD PRIMARY KEY (`id_titulado`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -276,12 +215,6 @@ ALTER TABLE `categorias_producto`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `detalles`
---
-ALTER TABLE `detalles`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `factura_movimiento`
 --
 ALTER TABLE `factura_movimiento`
@@ -297,7 +230,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_productos`
@@ -306,27 +239,14 @@ ALTER TABLE `tipo_productos`
   MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `titulados`
---
-ALTER TABLE `titulados`
-  MODIFY `id_titulado` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `detalles`
---
-ALTER TABLE `detalles`
-  ADD CONSTRAINT `fk_id_instructor` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_id_movimiento` FOREIGN KEY (`fk_id_movimiento`) REFERENCES `factura_movimiento` (`id_factura`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `factura_movimiento`
@@ -335,12 +255,6 @@ ALTER TABLE `factura_movimiento`
   ADD CONSTRAINT `factura_movimiento_ibfk_1` FOREIGN KEY (`fk_id_producto`) REFERENCES `productos` (`id_producto`),
   ADD CONSTRAINT `factura_movimiento_ibfk_2` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `factura_movimiento_ibfk_3` FOREIGN KEY (`fk_id_proveedor`) REFERENCES `proveedores` (`id_proveedores`);
-
---
--- Filtros para la tabla `instructores`
---
-ALTER TABLE `instructores`
-  ADD CONSTRAINT `fk_id_titulado` FOREIGN KEY (`fk_id_titulado`) REFERENCES `titulados` (`id_titulado`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `productos`
