@@ -12,19 +12,10 @@ export const registroTitulado = async (req, res) => {
 
 
 		let { nombre_titulado,id_ficha } = req.body;
-		const tituladosQuery = `SELECT * FROM titulados WHERE nombre_titulado = '${nombre_titulado}'`;
-		const [existingtitulados] = await pool.query(tituladosQuery);
         const id_fichaQuery = `SELECT * FROM titulados WHERE id_ficha = '${id_ficha}'`;
 		const [existingid_ficha] = await pool.query(id_fichaQuery);
 		
-	 
-		if (existingtitulados.length > 0) {
-				return res.status(409).json({
-						"status": 409
-                        ,
-						"message": "El  titulado   ya existe"
-				});    
-		}
+
         if (existingid_ficha.length > 0) {
             return res.status(409).json({
                 "status": 409,
@@ -44,13 +35,12 @@ export const registroTitulado = async (req, res) => {
 				"menssage": "El titulado se  registrada con exito "
 			})
 		} else {
-			res.status(403).json({
-				"status": 403,
-				"menssage": "titulado no se puedo registrar"
-			})
-
+			res.status(204).json({
+				"status": 204,
+				"message": "No se Listo el titulado "
+			});
 		}
-	} catch (error) {
+		} catch (error) {
 		res.status(500).json({
 			"status": 500,
 			"status": "Error interno, intente nuevamente" + error
