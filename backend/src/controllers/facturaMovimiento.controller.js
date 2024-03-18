@@ -467,12 +467,12 @@ export const actualizarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad,cantidad_peso_movimiento, fk_id_producto, fk_id_usuario} = req.body;
+		let { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad,cantidad_peso_movimiento} = req.body;
 		let sqlPrev = `SELECT cantidad_peso_movimiento, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
 		let resultPrev = await pool.query(sqlPrev,id);
 		let prevMovimiento = Number(resultPrev[0][0].cantidad_peso_movimiento);
 		let lote = Number(resultPrev[0][0].num_lote);
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',precio_movimiento='${precio_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',cantidad_peso_movimiento='${cantidad_peso_movimiento}',fk_id_producto='${fk_id_producto}',fk_id_usuario='${fk_id_usuario}' where id_factura=${id}`;
+		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',precio_movimiento='${precio_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',cantidad_peso_movimiento='${cantidad_peso_movimiento}'where id_factura=${id}`;
 
 		let sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=${id}`;
 		let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
@@ -480,7 +480,7 @@ export const actualizarMovimiento = async (req, res) => {
 		const [result1, result2,result3] = await Promise.all([
 			pool.query(sql, [estado_producto_movimiento,precio_movimiento, nota_factura,fecha_caducidad,cantidad_peso_movimiento]),
 			pool.query(sql2, [cantidad_peso_movimiento,precio_movimiento,id]),
-			pool.query(sql3, [fk_id_producto]),
+			pool.query(sql3),
 		]);
 		
 		if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0  && result3[0].affectedRows > 0) {
@@ -503,17 +503,20 @@ export const actualizarMovimientoSalida = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let {nota_factura,cantidad_peso_movimiento} = req.body;
-		let sqlPrev = `SELECT cantidad_peso_movimiento,fk_id_producto FROM factura_movimiento WHERE id_factura=${id}`;
+		let {nota_factura,cantidad_peso_movimiento,destino_movimiento,fk_id_instructor,fk_id_titulado} = req.body;
+		let sqlPrev = `SELECT cantidad_peso_movimiento,fk_id_producto, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
 		let resultPrev = await pool.query(sqlPrev,id);
 		let prevMovimiento = Number(resultPrev[0][0].cantidad_peso_movimiento);
 		let fk_id_producto = Number(resultPrev[0][0].fk_id_producto);
+		let num_lote = Number(resultPrev[0][0].num_lote);
 		let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',cantidad_peso_movimiento='${cantidad_peso_movimiento}' where id_factura=${id}`;
 		let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
-		let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento} WHERE id_producto=${fk_id_producto}`;
+		let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento}  WHERE num_lote='${num_lote}'`;
+		let sql3 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
 		const [result1, result2] = await Promise.all([
 			pool.query(sql, [nota_factura,cantidad_peso_movimiento,id]),
 			pool.query(sql2, [fk_id_producto]),
+			pool.query(sql3),
 		]);
 		
 
