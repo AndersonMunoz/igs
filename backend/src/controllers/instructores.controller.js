@@ -8,7 +8,7 @@ export const registroInstructor = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(400).json(error)
         }
-        let { documento_instructor, fk_id_titulado ,nombre_instructor} = req.body;
+        let { documento_instructor,nombre_instructor} = req.body;
         const documento_instructorQuery = `SELECT * FROM    instructores  WHERE documento_instructor = '${documento_instructor}'`;
         const [existingInstructor] = await pool.query(documento_instructorQuery);
         
@@ -19,7 +19,7 @@ export const registroInstructor = async (req, res) => {
                 "message": "El instructor ya  esta registrado"
             });
         }
-        let sql = `insert into instructores (documento_instructor,fk_id_titulado,nombre_instructor) values('${documento_instructor}','${fk_id_titulado}','${nombre_instructor}')`;
+        let sql = `insert into instructores (documento_instructor,nombre_instructor) values('${documento_instructor}','${nombre_instructor}')`;
       
         const [rows] = await pool.query(sql);
 
@@ -45,7 +45,7 @@ export const registroInstructor = async (req, res) => {
 export const listarInstructor = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT i.estado, i.id_instructores AS id, i.documento_instructor AS Documento,i.nombre_instructor AS Nombre, t.nombre_titulado AS titulados FROM instructores i JOIN titulados t ON i.fk_id_titulado = t.id_titulado ORDER BY t.estado DESC');
+            ('SELECT i.estado, i.id_instructores AS id, i.documento_instructor AS Documento,i.nombre_instructor AS Nombre FROM instructores i ');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
@@ -65,7 +65,7 @@ export const listarInstructor = async (req, res) => {
 export const listarActivoInstructor = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT i.estado, i.id_instructores AS id, i.documento_instructor AS Documento,i.nombre_instructor AS nombre, t.nombre_titulado AS titulado FROM instructores i JOIN titulados t ON i.fk_id_titulado = t.id_titulado WHERE i.estado = 1 ORDER BY t.estado  DESC');
+            ('SELECT i.estado, i.id_instructores AS id, i.documento_instructor AS Documento,i.nombre_instructor AS nombre FROM instructores i');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
@@ -103,9 +103,9 @@ export const editarInstructor = async (req, res) => {
             return res.status(400).json(error)
         }
         let id = req.params.id;
-        let { documento_instructor, fk_id_titulado , nombre_instructor} = req.body;
+        let { documento_instructor , nombre_instructor} = req.body;
 
-        let sql = `update instructores SET documento_instructor = '${documento_instructor}', fk_id_titulado= '${fk_id_titulado}' , nombre_instructor= '${nombre_instructor}'
+        let sql = `update instructores SET documento_instructor = '${documento_instructor}' , nombre_instructor= '${nombre_instructor}'
         where id_instructores = ${id} `;
         console.log(sql)
 
