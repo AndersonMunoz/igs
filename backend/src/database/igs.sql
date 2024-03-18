@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-03-2024 a las 01:59:03
+-- Tiempo de generación: 18-03-2024 a las 03:24:03
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -54,7 +54,8 @@ CREATE TABLE `categorias_producto` (
 CREATE TABLE `detalles` (
   `id_detalle` int(11) NOT NULL,
   `destino_movimiento` enum('taller','produccion','evento') DEFAULT NULL,
-  `fk_id_movimiento` int(11) DEFAULT NULL,
+  `fk_id_movimiento` int(11) NOT NULL,
+  `fk_id_titulado` int(11) DEFAULT NULL,
   `fk_id_instructor` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -74,6 +75,7 @@ CREATE TABLE `factura_movimiento` (
   `nota_factura` varchar(300) NOT NULL,
   `fecha_caducidad` date DEFAULT NULL,
   `precio_total_mov` float DEFAULT NULL,
+  `num_lote` int(11) NOT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) NOT NULL
@@ -89,8 +91,7 @@ CREATE TABLE `instructores` (
   `id_instructores` int(11) NOT NULL,
   `documento_instructor` int(10) UNSIGNED NOT NULL,
   `nombre_instructor` varchar(45) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `fk_id_titulado` int(11) NOT NULL
+  `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -201,7 +202,8 @@ ALTER TABLE `categorias_producto`
 ALTER TABLE `detalles`
   ADD PRIMARY KEY (`id_detalle`),
   ADD KEY `fk_id_movimiento_idx` (`fk_id_movimiento`),
-  ADD KEY `fk_id_instructor_idx` (`fk_id_instructor`);
+  ADD KEY `fk_id_instructor_idx` (`fk_id_titulado`),
+  ADD KEY `fk_id_instructor_idx1` (`fk_id_instructor`);
 
 --
 -- Indices de la tabla `factura_movimiento`
@@ -216,8 +218,7 @@ ALTER TABLE `factura_movimiento`
 -- Indices de la tabla `instructores`
 --
 ALTER TABLE `instructores`
-  ADD PRIMARY KEY (`id_instructores`),
-  ADD KEY `fk_id_titulado_idx` (`fk_id_titulado`);
+  ADD PRIMARY KEY (`id_instructores`);
 
 --
 -- Indices de la tabla `productos`
@@ -324,7 +325,8 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  ADD CONSTRAINT `detalles_ibfk_1` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`),
+  ADD CONSTRAINT `detalles_ibfk_1` FOREIGN KEY (`fk_id_titulado`) REFERENCES `titulados` (`id_titulado`),
+  ADD CONSTRAINT `fk_id_instructor` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_id_movimiento` FOREIGN KEY (`fk_id_movimiento`) REFERENCES `factura_movimiento` (`id_factura`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -334,12 +336,6 @@ ALTER TABLE `factura_movimiento`
   ADD CONSTRAINT `factura_movimiento_ibfk_1` FOREIGN KEY (`fk_id_producto`) REFERENCES `productos` (`id_producto`),
   ADD CONSTRAINT `factura_movimiento_ibfk_2` FOREIGN KEY (`fk_id_usuario`) REFERENCES `usuarios` (`id_usuario`),
   ADD CONSTRAINT `factura_movimiento_ibfk_3` FOREIGN KEY (`fk_id_proveedor`) REFERENCES `proveedores` (`id_proveedores`);
-
---
--- Filtros para la tabla `instructores`
---
-ALTER TABLE `instructores`
-  ADD CONSTRAINT `fk_id_titulado` FOREIGN KEY (`fk_id_titulado`) REFERENCES `titulados` (`id_titulado`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `productos`
