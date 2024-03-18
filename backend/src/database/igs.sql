@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-03-2024 a las 23:24:18
+-- Tiempo de generación: 18-03-2024 a las 01:59:03
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -126,13 +126,6 @@ CREATE TABLE `proveedores` (
   `fin_contrato` date NOT NULL,
   `archivo_contrato` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `proveedores`
---
-
-INSERT INTO `proveedores` (`id_proveedores`, `nombre_proveedores`, `telefono_proveedores`, `direccion_proveedores`, `contrato_proveedores`, `estado`, `inicio_contrato`, `fin_contrato`, `detalles_contrato`) VALUES
-(1, 'Mercatodo', '3108840302', 'Pitalito', 1, 1, '2020-03-02', '2020-03-02', NULL);
 
 -- --------------------------------------------------------
 
@@ -288,6 +281,12 @@ ALTER TABLE `factura_movimiento`
   MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `instructores`
+--
+ALTER TABLE `instructores`
+  MODIFY `id_instructores` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
@@ -297,7 +296,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_productos`
@@ -325,7 +324,7 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  ADD CONSTRAINT `fk_id_instructor` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `detalles_ibfk_1` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`),
   ADD CONSTRAINT `fk_id_movimiento` FOREIGN KEY (`fk_id_movimiento`) REFERENCES `factura_movimiento` (`id_factura`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
