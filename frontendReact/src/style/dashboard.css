@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .sidebar {
   top: 0;
@@ -41,7 +41,7 @@
   height: 50px;
 }
 
-.valAlert{
+.valAlert {
   display: flex;
   justify-content: right;
   margin-bottom: -6px;
@@ -114,7 +114,7 @@
   align-items: center;
 }
 
-.sidebar .nav-links li .tamañoLateral  {
+.sidebar .nav-links li .tamañoLateral {
   height: 50px;
   min-width: 55px;
   color: #ffffff;
@@ -125,15 +125,15 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.iconosLaterales{
+.iconosLaterales {
   width: 32px;
   height: 32px;
 }
 
-.sidebar .nav-links li.showMenu .iconoA{
+.sidebar .nav-links li.showMenu .iconoA {
   transform: rotate(-180deg);
 }
-.iconoA{
+.iconoA {
   pointer-events: none;
   color: #ffffffd1;
 }
@@ -246,8 +246,9 @@
   display: grid;
   height: 60px;
   transition: all 0.5s ease;
-  grid-template: "empty-1     box-menu-hader  sena    empty-2   notify   usuario   empty-3" 100%/
-                  5px         50px            70px    1fr       50px      auto       1.5%;
+  grid-template:
+    "empty-1 box-menu-hader sena empty-2 boxNotificaciones usuario empty-3" 100%/
+    5px 50px 70px 1fr 50px auto 1%;
 }
 
 .box-menu-hader {
@@ -272,6 +273,18 @@
   height: 30px;
   cursor: pointer;
 }
+.boxNotificaciones {
+  grid-area: boxNotificaciones;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconAlert {
+  width: 35px;
+  height: 35px;
+  color: #fff;
+}
 
 .usuario {
   grid-area: usuario;
@@ -285,33 +298,39 @@
   height: 100%;
   padding: 10px;
   text-transform: capitalize;
+  user-select: none;
 }
-.notify{
-  grid-area: notify;
+
+.usuario:hover {
+  background-color: rgb(108, 206, 119);
+  border-radius: 12px;
+}
+
+.boxNotificaciones:hover {
+  background-color: rgb(108, 206, 119);
+  border-radius: 12px;
+}
+.boxcontadorNoti {
+  width: 17px;
+  height: 17px;
+  user-select: none;
+  background-color: rgb(255, 53, 53);
+  position: fixed;
+  border-radius: 60px;
+  margin-top: -15px;
+  margin-left: 17px;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
   align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  text-transform: capitalize;
+  justify-content: center;
+  font-size: 10px;
+  color: #ffffff;
+  font-weight: 600;
+  caret-color: transparent;
 }
 
-.usuario:hover{
-  background-color: rgb(108, 206, 119);
-  border-radius: 12px;
-}
-.notify:hover{
-  background-color: rgb(108, 206, 119);
-  border-radius: 12px;
-}
 
-@media screen and  (min-width: 150px) and (max-width: 500px) {
-
-  .tamañocargoUsuario{
+@media screen and (min-width: 150px) and (max-width: 500px) {
+  .tamañocargoUsuario {
     font-size: 0.7em;
   }
   .usuario {
@@ -332,10 +351,11 @@
     display: grid;
     height: 60px;
     transition: all 0.5s ease;
-    grid-template: "empty-1         box-menu-hader  sena          empty-2   notify       usuario         empty-3" 100%/
-                    5px             50px            45px          1fr       50px         auto            1%;
+    grid-template:
+      "empty-1         box-menu-hader  sena          empty-2   boxNotificaciones       usuario         empty-3" 100%/
+      5px 50px 45px 1fr 50px auto 1%;
   }
-  .cargoUser{
+  .cargoUser {
     display: flex;
     flex-direction: column;
     line-height: 22px;
@@ -343,8 +363,6 @@
     text-align: justify;
     margin-top: 8px;
   }
-
-
 }
 
 .user1 {
@@ -352,7 +370,7 @@
   width: 35px;
   height: 35px;
 }
-.cargoUser{
+.cargoUser {
   display: flex;
   flex-direction: column;
   line-height: 18px;
@@ -361,11 +379,11 @@
   margin-top: 8px;
 }
 
-.nombreTamañousuario{
+.nombreTamañousuario {
   font-size: 1.3em;
   caret-color: transparent;
 }
-.tamañocargoUsuario{
+.tamañocargoUsuario {
   font-size: 0.66em;
   caret-color: transparent;
 }
@@ -374,6 +392,46 @@
   color: white;
   width: 40px;
 }
+.modalNotificaciones {
+  position: fixed;
+  display: flex;
+  z-index: 80;
+  background-color: #ededed;
+  right: 0;
+  margin-right: 195px;
+  width: auto;
+  height: auto;
+  top: 65px;
+  border-radius: 12px;
+  border: 0.5px solid rgba(188, 188, 188, 0.845);
+}
+.modalCloseNoti {
+  display: none;
+}
+
+.notificacionesSpace {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  padding: 5px;
+  height: 100%;
+  caret-color: transparent;
+}
+.tituloNotify {
+  grid-area: tituloNotify;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: rgb(188, 11, 11);
+}
+.tamañoTextNoti {
+  font-size: 1.2em;
+}
+.table22{
+  --bs-table-bg: #ededed !important;
+}
+
 
 /*CSS MODAL CERRAR SESION */
 .modalUser {
@@ -383,18 +441,17 @@
   background-color: #ededed;
   right: 0;
   margin-right: 10px;
-  width: 200px;
+  width: auto;
   height: 120px;
   top: 65px;
   border-radius: 12px;
   border: 0.5px solid rgba(188, 188, 188, 0.845);
-
 }
 .modalClose {
   display: none;
 }
 
-.contentXsalir{
+.contentXsalirUser{
   width: 100%;
   height: 30px;
   display: flex;
@@ -403,7 +460,30 @@
   align-items: center;
 }
 
+.contentXsalir {
+  width: 100%;
+  height: 35px;
+  display: grid;
+  align-items: center;
+  grid-template:
+    "empty tituloNotify boxCloserIcon" 100%/
+    1fr 1fr 1fr;
+  padding-right: 5px;
+  align-items: center;
+}
+.boxCloserIcon {
+  grid-area: boxCloserIcon;
+  display: flex;
+  justify-content: right;
+}
+
 .closeUser {
+  color: rgb(126, 121, 121);
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+.closeNotii {
   color: rgb(126, 121, 121);
   width: 25px;
   height: 25px;
@@ -420,13 +500,16 @@
   cursor: pointer;
 }
 
-  .letraUser, .letraCerrarSesion {
+.letraUser,
+.letraCerrarSesion {
   display: flex;
   width: 100%;
   height: 45px;
   padding-left: 10px;
   color: #5b5b5b;
-  font-size: 1.195em;
+  font-size: 1.1em;
+  font-weight: 500;
+  padding-right: 10px;
   align-items: center;
   text-decoration: none;
 }
@@ -444,34 +527,33 @@
   height: 30px;
 }
 
-
 .contenido {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  overflow: auto;    /* DESCONEMNTAR PARA VER ACTIVAR EL PVERFLOW */
+  overflow: auto; /* DESCONEMNTAR PARA VER ACTIVAR EL PVERFLOW */
 }
-.contSeg{
+.contSeg {
   width: 98%;
   height: 100%;
   justify-content: center;
   position: relative;
 }
-.main-container{
+.main-container {
   height: 100vh;
   overflow: hidden;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
 }
-.sidebar{
+.sidebar {
   height: 100%;
   grid-row-start: 1;
   grid-row-end: 3;
 }
 
-.espacioBotton{
+.espacioBotton {
   width: 100%;
   height: 10px;
   background-color: rgb(255, 255, 255);
