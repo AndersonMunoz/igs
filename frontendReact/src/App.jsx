@@ -17,6 +17,8 @@ import PefilAjustes from "./components/PerfilAjustes";
 import ReportePorFechas from "./components/ReportePorFechas.jsx";
 import Kardex from "./components/Kardex.jsx";
 import Ayuda from "./components/Ayuda.jsx";
+import Instructores from "./components/Instructores.jsx";
+import Titulados from "./components/Titulados.jsx";
 
 
 const App = () => {
@@ -34,6 +36,8 @@ const App = () => {
           <Route path="/up" element={<UnidadProductiva />} />
           <Route path="/proveedor" element={<Proveedor />} />
           <Route path="/usuario" element={<Usuario />} />
+          <Route path="/usuario/instructores" element={<Instructores />} />
+          <Route path="/usuario/titulados" element={<Titulados />} />
           <Route path="/inventario" element={<Inventario />} />
           <Route path="/producto/caducar" element={<ProductoCaducar />} />
           <Route path="/ajustes" element={<PefilAjustes />} />

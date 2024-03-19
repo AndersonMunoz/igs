@@ -28,9 +28,9 @@ import portConexion from "../const/portConexion";
 export const Menu = () => {
   const [userName, setUserName] = useState("");
   const [userRoll, setUserRoll] = useState("");
-  const [id, setId]= useState(dataDecript(localStorage.getItem("id")))
+  const [id, setId] = useState(dataDecript(localStorage.getItem("id")))
   const [alert, setAlert] = useState('');
-  const [elementoAlmacenado, setElemento]= useState([])
+  const [elementoAlmacenado, setElemento] = useState([])
   const [stockMin, setStockMin] = useState('')
 
 
@@ -67,39 +67,54 @@ export const Menu = () => {
       modal.classList.remove("modalUser");
       modal.classList.add("modalClose");
     });
+
+    /* modal notificaciones */
+    let modalNoti = document.getElementById("notiAlerta");
+    let modalX = document.querySelector(".modalCloseNoti");
+    let closeNoti = document.getElementById("closeNoti");
+
+    modalNoti.addEventListener("click", () => {
+      modalX.classList.toggle("modalNotificaciones");
+      modalX.classList.toggle("modalCloseNoti");
+    });
+
+    closeNoti.addEventListener("click", () => {
+      modalX.classList.remove("modalNotificaciones");
+      modalX.classList.add("modalCloseNoti");
+    });
+
+    //  if (alert.length > 0) {
+    //    modalX.classList.remove("boxcontadorNoti2")
+    //    modalX.classList.add("boxcontadorNoti")
+    //  }else{
+    //    modalX.classList.remove("boxcontadorNoti")
+    //    modalX.classList.add("boxcontadorNoti2")
+
+    //  }
+
+
     listartMen(id);
   }, []);
-   /* modal notificaciones */
-   let modalNoti = document.getElementById("notiAlert");
-   let modalX = document.querySelector(".modalCloseNoti");
-   let closeNoti = document.getElementById("closeNoti");
-
-   modalNoti.addEventListener("click", () => {
-     modalX.classList.toggle("modalNotificaciones");
-     modalX.classList.toggle("modalCloseNoti");
-   });
-
-   closeNoti.addEventListener("click", () => {
-     modalX.classList.remove("modalNotificaciones");
-     modalX.classList.add("modalCloseNoti");
-   });
 
 
 
-	function listartMen(id_usuario) {
-		fetch(`http://${portConexion}:3000/usuario/buscar/${id_usuario}`,{
-			method: "get",
-			headers: {
-				"Content-type": "application/json",
-				token: localStorage.getItem("token"),
-			},
-		})
-		.then((res)=> res.json())
-		.then((data)=>{
-      setStockMin(data[0].stock_minimo)
-      calcularMIn((data[0].stock_minimo),)
-		})
-	}
+
+
+
+  function listartMen(id_usuario) {
+    fetch(`http://${portConexion}:3000/usuario/buscar/${id_usuario}`, {
+      method: "get",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setStockMin(data[0].stock_minimo)
+        calcularMIn((data[0].stock_minimo),)
+      })
+  }
 
   function calcularMIn(stockMin) {
     fetch(`http://${portConexion}:3000/producto/listar`, {
@@ -109,26 +124,26 @@ export const Menu = () => {
         token: localStorage.getItem("token"),
       },
     })
-    .then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      let cont = 0;
-      if (data !== null) {
-        data.forEach(elemento => {
-          if (stockMin > elemento.Peso) {
-            cont = cont +1;
-            setAlert(cont)
-            setElemento(elemento)
-          }else{
-            setAlert(cont)
-          }
-        });
-      }
-    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        let cont = 0;
+        if (data !== null) {
+          data.forEach(elemento => {
+            if (stockMin > elemento.Peso) {
+              cont = cont + 1;
+              setAlert(cont)
+              setElemento(elemento)
+            } else {
+              setAlert(cont)
+            }
+          });
+        }
+      })
   }
 
   return (
@@ -310,24 +325,68 @@ export const Menu = () => {
               </ul>
 
             </li>
-            <li>{userRoll == "administrador" && (
-              <Link to="/usuario">
-                <div className="tamañoLateral">
-                  <IconUser className="iconosLaterales" />
-                </div>
-                <span className="link_name">Usuarios</span>
-              </Link>
-            )}
-              <ul className="sub-menu blank">
+            {userRoll === "administrador" ? (
+              <>
                 <li>
-                  <Link className="link_name" to="/usuario">
-                    Usuarios
-                  </Link>
+                  <div className="content-nav">
+                    <Link to="/usuario">
+                      <div className="tamañoLateral">
+                        <IconUser className="iconosLaterales" />
+                      </div>
+                      <span className="link_name">Usuarios</span>
+                    </Link>
+                    <div className="container-icon">
+                      <IconChevronDown className="iconoA" />
+                    </div>
+                  </div>
+
+                  <ul className="sub-menu">
+                    <li>
+                      <Link className="link_name" to="/usuario">
+                        Usuarios
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/usuario/instructores">Instructores</Link>
+                    </li>
+                    <li>
+                      <Link to="/usuario/titulados">Titulados</Link>
+                    </li>
+                  </ul>
                 </li>
-              </ul>
+              </>
+            ) : (
+              <>
+                <li className="d-none">
+                  <div className="content-nav">
+                    <Link to="/usuario">
+                      <div className="tamañoLateral">
+                        <IconUser className="iconosLaterales" />
+                      </div>
+                      <span className="link_name">Usuarios</span>
+                    </Link>
+                    <div className="container-icon">
+                      <IconChevronDown className="iconoA" />
+                    </div>
+                  </div>
 
+                  <ul className="sub-menu">
+                    <li>
+                      <Link className="link_name" to="/usuario">
+                        Usuarios
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/usuario/instructores">Instructores</Link>
+                    </li>
+                    <li>
+                      <Link to="/usuario/titulados">Titulados</Link>
+                    </li>
+                  </ul>
+                </li>
 
-            </li>
+              </>
+            )}
             <li>
               <div className="content-nav">
                 <Link to="/ajustes">
@@ -395,68 +454,70 @@ export const Menu = () => {
               />
             </svg>
           </div>
-          <div id="notiAlert" className="boxNotificaciones">
-            <div className="boxcontadorNoti">
-              <span>2</span> {/* contador de notoficaciones */}
+          {alert === 0 ? (
+            <div id="notiAlerta" className="boxNotificaciones">
+
+              <IconBell className="iconAlert" />
             </div>
-            <IconBell className="iconAlert" />
-          </div>
-          <div className="notify">
-            <div className="ml-3">
-              <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#modalAlert">
-                <span className="text-white valAlert">{alert}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#ffffff" className="bi bi-bell" viewBox="0 0 16 16">
-                  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
-                </svg>
-              </button>
+          ) : (
+            <>
+            <div id="notiAlerta" className="boxNotificaciones">
+              <div className="boxcontadorNoti">
+                <span>{alert}</span> {/* contador de notoficaciones */}
+              </div>
+              <IconBell className="iconAlert" />
             </div>
-          </div>
-          {/* modal de notificacion */}
-                <div  className="modal fade"  id="modalAlert"  aria-labelledby="exampleModalLabel"  aria-hidden="true">
-                  <div className="modal-dialog">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="exampleModalLabel">
-                          Quedan pocas unidades de:
-                        </h1>
-                        <button  type="button"  className="btn-close"  data-bs-dismiss="modal"  aria-label="Close"/>
-                      </div>
-                      <div className="modal-body">
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th scope="col">Categoria</th>
-                              <th scope="col">Nombre</th>
-                              <th scope="col">Stock</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                          {alert > 0 ? (
-                            <>
-                              {[elementoAlmacenado].map((element, index) => (
-                                <tr key={index}>
-                                  <td>{element.NombreCategoria}</td>
-                                  <td>{element.NombreProducto}</td>
-                                  <td>{element.Peso}</td>
-                                </tr>
-                              ))}
-                            </>
-                          ) : (
-                            <tr>
-                              <td className="text-center" colSpan={3}>Nada por mostrar</td>
-                            </tr>                              
-                          )}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="modal-footer">
-                        <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal">
-                          Close
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+            </>
+          )}
+
+
+
+
+          {/* caja de notificaciones */}
+          <div className="modalCloseNoti">
+            <div className="notificacionesSpace">
+
+              <div className="contentXsalir">
+                <div className="tituloNotify">
+                  <h3 className="tamañoTextNoti">¡Aviso!</h3>
                 </div>
+                <div className="boxCloserIcon">
+                  <IconX className="closeNotii" id="closeNoti" />
+                </div>
+              </div>
+              <div className="TableNoti">
+                <table className="table table22">
+                  <thead>
+                    <tr>
+                      <th scope="col">Quedan pocas unidades de:</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {alert > 0 ? (
+                      <>
+                        {[elementoAlmacenado].map((element, index) => (
+
+                          <tr key={index}>
+
+
+                            <td>{element.NombreProducto} su stock actual es {element.Peso} de categoria {element.NombreCategoria}</td>
+
+                          </tr>
+                        ))}
+                      </>
+                    ) : (
+                      <tr>
+                        <td className="text-center" colSpan={3}>Nada por mostrar</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+
 
 
 
@@ -469,19 +530,12 @@ export const Menu = () => {
             </div>
           </div>
         </div>
-        {/* caja de notificaciones */}
-        <div className="modalCloseNoti">
-            <div className="notificacionesSpace">
-              <div className="contentXsalir">
-                <IconX className="closeUser" id="closeNoti" />
-              </div>
 
-            </div>
 
-        </div>
+
         <div className="modalClose">
           <div className="userSpace">
-            <div className="contentXsalir">
+            <div className="contentXsalirUser">
               <IconX className="closeUser" id="closeX" />
             </div>
             <Link to="/ajustes" className="letraUser ax">
@@ -497,6 +551,8 @@ export const Menu = () => {
             </Link>
           </div>
         </div>
+
+
         <div className="contenido">
           <div className="contSeg">
             <Outlet />
@@ -504,7 +560,8 @@ export const Menu = () => {
 
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };
+export default Menu;
