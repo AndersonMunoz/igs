@@ -359,7 +359,6 @@ const Movimiento = () => {
   }
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
-    
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
       method: "PUT",
       headers: {
@@ -374,7 +373,6 @@ const Movimiento = () => {
       return res.json();})
       .then((data) => {
         Sweet.exito(data.message);
-        //console.log(data);
         listarMovimiento();
         setUpdateModal(false);
         removeModalBackdrop();
@@ -779,12 +777,30 @@ const Movimiento = () => {
                           </select>
                         </div>
                       </div>
+                      <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="precio_movimiento">Precio</label>
+                          <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.precio_movimiento || ''} name="precio_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, precio_movimiento: e.target.value })} />
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese un precio individual.
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div className="row mb-4">
+                    <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
+                          <input type="text" className="form-control form-update limpiar" placeholder="Cantidad" value={movimientoSeleccionado.cantidad_peso_movimiento || ''} name="cantidad_peso_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, cantidad_peso_movimiento: e.target.value })} />
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese una cantidad.
+                          </div>
+                        </div>
+                      </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="nota_factura">Nota</label>
-                          <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
+                          <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
                           <div className="invalid-feedback is-invalid">
                           Por favor, ingrese una nota mas larga.
                         </div>
@@ -828,7 +844,7 @@ const Movimiento = () => {
                 
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
-                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura); handleCloseModal2()}}>Actualizar</button>
+                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura)}}>Actualizar</button>
                 </div>
               </div>
             </div>
