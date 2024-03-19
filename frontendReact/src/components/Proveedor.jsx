@@ -39,6 +39,7 @@ const proveedor = () => {
   const [inicio_contrato, setContratoInicio] = useState('');
   const [fin_contrato, setContratoFin] = useState("");
   const [userRoll, setUserRoll] = useState("");
+  const [archivo_contrato, setArchivo_contrato] = useState(null);
   const [filename, setfilename] = useState('');
 
   const handleOnExport = () => {
@@ -130,7 +131,7 @@ const proveedor = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[8, "asc"]],
+        order: [[9, "asc"]],
       });
     }
   }, [proveedor]);
@@ -156,7 +157,6 @@ const proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          console.log(data);
           data.forEach((item) => {
             const fechaActual = new Date();
             const dia = fechaActual.getDay() - 1;
@@ -223,7 +223,6 @@ const proveedor = () => {
       }
     });
   }
-
   function registrarProveedor() {
     const validacionExitosa = Validate.validarCampos(".form-empty");
     if (validacionExitosa) {
@@ -234,10 +233,12 @@ const proveedor = () => {
       formData.append('inicio_contrato', inicio_contrato);
       formData.append('fin_contrato', fin_contrato);
       formData.append('contrato_proveedores', contrato_proveedores);
-  
+      formData.append('archivo_contrato',archivo_contrato);
+      console.log(formData);
       fetch(`http://${portConexion}:3000/proveedor/registrar`, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           token: localStorage.getItem("token"),
         },
         body: formData,
@@ -265,6 +266,7 @@ const proveedor = () => {
         });
     }
   }
+  
   
 
   function editarProveedor(id) {
@@ -377,7 +379,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              <th className="th-sm">Documento</th>
+              <th className="th-sm">Archivo Contrato</th>
               <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
@@ -394,7 +396,7 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    <td>{element.detalles_contrato}</td>
+                    <td>{element.archivo_contrato}</td>
                     {userRoll == "administrador" ? (   
                       <td className="p-0">
                         {element.estado !== 1 ? (
@@ -448,7 +450,7 @@ const proveedor = () => {
             </div>
             <div className="modal-body">
               <div className=" d-flex justify-content-center">
-                <form className="text-center border border-light" action="#!">
+                <form className="text-center border border-light" encType='multipart/form-data'>
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="nombresProveedor">Nombres</label>
@@ -501,16 +503,16 @@ const proveedor = () => {
 
                   <div className="d-flex form-row mb-1">
                     <div className="col">
-                      <label htmlFor="documentoContrato">Documento de contrato</label>
+                      <label htmlFor="archivo_contrato">Archivo de contrato</label>
                       
                       <input 
   onChange={(e) => { 
     const { value } = e.target; 
-    setfilename(value); 
+    setArchivo_contrato(value); 
   }} 
   type="file" 
-  name="documentoContrato" 
-  id="documentoContrato" 
+  name="archivo_contrato" 
+  id="archivo_contrato" 
   className="form-control form-empty limpiar" 
   placeholder="file Pdf"
 />
