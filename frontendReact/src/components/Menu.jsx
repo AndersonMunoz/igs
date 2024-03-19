@@ -61,12 +61,17 @@ export const Menu = () => {
     modalUser.addEventListener("click", () => {
       modal.classList.toggle("modalUser");
       modal.classList.toggle("modalClose");
+
+      modalX.classList.remove("modalNotificaciones");
+      modalX.classList.add("modalCloseNoti");
+
     });
 
     closeX.addEventListener("click", () => {
       modal.classList.remove("modalUser");
       modal.classList.add("modalClose");
     });
+
 
     /* modal notificaciones */
     let modalNoti = document.getElementById("notiAlerta");
@@ -76,21 +81,19 @@ export const Menu = () => {
     modalNoti.addEventListener("click", () => {
       modalX.classList.toggle("modalNotificaciones");
       modalX.classList.toggle("modalCloseNoti");
+
+      modal.classList.remove("modalUser");
+      modal.classList.add("modalClose");
+
+
     });
 
     closeNoti.addEventListener("click", () => {
-      modalX.classList.remove("modalNotificaciones");
+
       modalX.classList.add("modalCloseNoti");
+      modalX.classList.remove("modalNotificaciones");
     });
 
-    //  if (alert.length > 0) {
-    //    modalX.classList.remove("boxcontadorNoti2")
-    //    modalX.classList.add("boxcontadorNoti")
-    //  }else{
-    //    modalX.classList.remove("boxcontadorNoti")
-    //    modalX.classList.add("boxcontadorNoti2")
-
-    //  }
 
 
     listartMen(id);
@@ -454,72 +457,14 @@ export const Menu = () => {
               />
             </svg>
           </div>
-          {alert === 0 ? (
-            <div id="notiAlerta" className="boxNotificaciones">
-
-              <IconBell className="iconAlert" />
-            </div>
-          ) : (
-            <>
-            <div id="notiAlerta" className="boxNotificaciones">
+          <div id="notiAlerta" className="boxNotificaciones">
+            {alert !== 0 && (
               <div className="boxcontadorNoti">
                 <span>{alert}</span> {/* contador de notoficaciones */}
               </div>
-              <IconBell className="iconAlert" />
-            </div>
-            </>
-          )}
-
-
-
-
-          {/* caja de notificaciones */}
-          <div className="modalCloseNoti">
-            <div className="notificacionesSpace">
-
-              <div className="contentXsalir">
-                <div className="tituloNotify">
-                  <h3 className="tamañoTextNoti">¡Aviso!</h3>
-                </div>
-                <div className="boxCloserIcon">
-                  <IconX className="closeNotii" id="closeNoti" />
-                </div>
-              </div>
-              <div className="TableNoti">
-                <table className="table table22">
-                  <thead>
-                    <tr>
-                      <th scope="col">Quedan pocas unidades de:</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {alert > 0 ? (
-                      <>
-                        {[elementoAlmacenado].map((element, index) => (
-
-                          <tr key={index}>
-
-
-                            <td>{element.NombreProducto} su stock actual es {element.Peso} de categoria {element.NombreCategoria}</td>
-
-                          </tr>
-                        ))}
-                      </>
-                    ) : (
-                      <tr>
-                        <td className="text-center" colSpan={3}>Nada por mostrar</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            )}
+            <IconBell className="iconAlert" />
           </div>
-
-
-
-
-
 
 
           <div id="userAlert" className="usuario">
@@ -527,6 +472,47 @@ export const Menu = () => {
             <div className="cargoUser">
               <span className="nombreTamañousuario">{userName}</span>
               <span className="tamañocargoUsuario">Cargo: {userRoll}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* caja de notificaciones */}
+        <div className="modalCloseNoti">
+          <div className="notificacionesSpace">
+            <div className="contentXsalir">
+              <div className="tituloNotify">
+                <h3 className="tamañoTextNoti">¡Aviso!</h3>
+              </div>
+              <div className="boxCloserIcon">
+                <IconX className="closeNotii" id="closeNoti" />
+              </div>
+            </div>
+            <div className="TableNoti">
+              <table className="table table22">
+                <thead>
+                  <tr>
+                    <th scope="col">Quedan pocas unidades de:</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {alert > 0 ? (
+                    <>
+                      {[elementoAlmacenado].map((element, index) => (
+
+                        <tr key={index}>
+
+                          <td>{element.NombreProducto} su stock actual es {element.Peso} de categoria {element.NombreCategoria}</td>
+
+                        </tr>
+                      ))}
+                    </>
+                  ) : (
+                    <tr>
+                      <td className="text-center" colSpan={3}>Nada por mostrar</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
