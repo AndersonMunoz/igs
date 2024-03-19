@@ -40,7 +40,6 @@ const proveedor = () => {
   const [fin_contrato, setContratoFin] = useState("");
   const [userRoll, setUserRoll] = useState("");
   const [archivo_contrato, setArchivo_contrato] = useState(null);
-  const [filename, setfilename] = useState('');
 
   const handleOnExport = () => {
     const wsData = getTableData();
