@@ -200,7 +200,7 @@ const proveedor = () => {
         }
       });
   }
-
+    
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
       if (res.isConfirmed) {
