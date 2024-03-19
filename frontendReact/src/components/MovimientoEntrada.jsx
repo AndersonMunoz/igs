@@ -20,6 +20,7 @@ import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import portConexion from "../const/portConexion";
+import Select from 'react-select'
 
 const Movimiento = () => {
   const [userId, setUserId] = useState('');
@@ -36,6 +37,10 @@ const Movimiento = () => {
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
+  const [up, setUp] = useState([]);
+  const [selectedUp, setSelectedUp] = useState(null);
+  const [selectedTipo, setSelectedTipo] = useState(null);
+  const [selectedCategoria, setSelectedCategoria] = useState(null);
   
   const tableRef = useRef(null);
   const handleOnExport = () => {
@@ -145,6 +150,16 @@ const Movimiento = () => {
     setAplicaFechaCaducidad(false); // Asegura que el estado del checkbox se restablezca
     resetFormState(); // Llama a la función para restablecer el formulario
   };
+  const handleCategoria = (selectedOption) => {
+    setSelectedCategoria(selectedOption); 
+    setSelectedTipo(null); 
+  };
+  const handleTipo = (selectedOption) => {
+    setSelectedTipo(selectedOption); 
+  };
+  const handleUp = (selectedOption) => {
+    setSelectedUp(selectedOption);
+  };
   const fkIdUsuarioRef = useRef(null);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
@@ -223,9 +238,38 @@ const Movimiento = () => {
     listarTipo();
     listarProveedor();
     listarUsuario();
-
-  }, []);
-
+    listarUp();
+    if (selectedCategoria) {
+      listarProductoCategoria(selectedCategoria.value);
+    }
+    if (selectedTipo) {
+      listarUnidadesPro(selectedTipo.value)
+    }
+  listarUnidadesPro()
+}, [selectedCategoria]);
+  function listarUp() {
+    fetch(`http://${portConexion}:3000/up/listar`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          setUp(data);
+        }
+      })
+      .catch((e) => {
+        console.error("Error al procesar la respuesta:", e);
+      });
+  }
   function listarCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listarActivo`, {
       method: "GET",
@@ -250,28 +294,28 @@ const Movimiento = () => {
         console.log(e);
       });
   }
-  function listarTipo() {
-    fetch(`http://${portConexion}:3000/tipo/listar`, {
+  function listarTipo(){
+    fetch(`http://${portConexion}:3000/tipo/listarActivo`,{
       method: "GET",
-      headers: {
+      headers:{
         "Content-type": "application/json",
-        token: localStorage.getItem("token")
+        token: localStorage.getItem("token"),
       },
     })
-      .then((res) => {
-        if (res.status === 204) {
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setTipo(data);
-        }
-      })
-      .catch((e) => {
-        console.error("Error al procesar la respuesta:", e);
-      });
+    .then((res) => {
+      if (res.status === 204) {
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
+        setTipo(data);
+      }
+    })
+    .catch((e) => {
+      console.error("Error al procesar la respuesta:", e);
+    });
   }
   function listarProveedor() {
     fetch(`http://${portConexion}:3000/proveedor/listarActivo`, {
@@ -417,7 +461,7 @@ const Movimiento = () => {
         "Content-Type": "application/json",
         token: localStorage.getItem("token")
       },
-      body: JSON.stringify({cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor }),
+      body: JSON.stringify({cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor,fk_id_up: selectedUp.value,fk_id_tipo_producto: selectedTipo.valu }),
     })
     .then((res) => res.json())
     .then(data => {
@@ -503,7 +547,7 @@ const Movimiento = () => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos de Entrada</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();resetFormState()}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();resetFormState();setSelectedTipo(null);setSelectedUp(null);setSelectedCategoria(null);}}>
             Registrar nuevo movimiento de Entrada
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
@@ -614,7 +658,7 @@ const Movimiento = () => {
                   <form>
 
                     <div className="row mb-4">
-                      <div className="col">
+                      {/* <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="categoria">Categoria</label>
                           <select onChange={(e)=>{listarProductoCategoria(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
@@ -628,8 +672,23 @@ const Movimiento = () => {
                             Por favor, seleccione una categoria.
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col">
+                      <label className="form-label" htmlFor="categoria">Categoria</label>
+                        <Select
+                        className="react-select-container  form-empt my-custom-class"
+                        classNamePrefix="react-select"
+                        options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
+                        placeholder="Selecciona..."
+                        onChange={handleCategoria}
+                        value={selectedCategoria}
+                        id="categoria"
+                          />
+                        <div className="invalid-feedback is-invalid">
+                          Por favor, seleccione una categoria.
+                        </div>
+                      </div>
+                      {/* <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                           <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
@@ -642,7 +701,37 @@ const Movimiento = () => {
                             Por favor, seleccione un producto.
                           </div>
                         </div>
+                      </div> */}
+                      <div className="col">
+                        <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Producto</label>
+                        <Select
+                          className="react-select-container form-empt my-custom-class"
+                          classNamePrefix="react-select"
+                          options={selectedCategoria ? productosCategoria.map(element => ({ key: element.id_tipo, value: element.id_tipo, label: element.nombre_tipo })) : []}
+                          placeholder="Selecciona..."
+                          onChange={handleTipo}
+                          value={selectedTipo}
+                          id="fk_id_tipo_producto"
+                        />
+                        <div className="invalid-feedback is-invalid">
+                          Por favor, seleccione un producto.
+                        </div>
                       </div>
+                      <div className="col">
+                    <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
+                    <Select
+                        className="react-select-container  form-empt my-custom-class"
+                        classNamePrefix="react-select"
+                        options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
+                        placeholder="Selecciona..."
+                        onChange={handleUp}
+                        value={selectedUp}
+                        id="fk_id_up"
+                      />
+                    <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione una bodega.
+                    </div>
+                  </div>
                     </div>
                     <div className="row mb-4">
                       <div className="col">
@@ -671,9 +760,6 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="unidad_peso_movimiento">Unidad</label><br></br>
-                          
-                            
-
                           {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
                               <input type="text"  id="unidad_peso_movimiento" className="form-control form-empty limpiar" disabled="true "name="unidad_peso_movimiento" key={element.id_tipo} defaultValue={element.unidad_peso}/>
                               )): "No hay unidad de medida"}
@@ -692,12 +778,20 @@ const Movimiento = () => {
                       </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
+                          <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese un número válido.
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col">
+                        <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
                           <select defaultValue="" className="form-select form-empty limpiar" id="estado_producto_movimiento" name="estado_producto_movimiento" aria-label="Default select example">
                             <option value="">Seleccione una opción</option>
-                            <option value="bueno">Bueno</option>
-                            <option value="regular">Regular</option>
-                            <option value="malo">Malo</option>
+                            <option value="optimo">Óptimo</option>
+                            <option value="deficiente">Deficiente</option>
                           </select>
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un estado.
@@ -771,9 +865,8 @@ const Movimiento = () => {
                           <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
                           <select className="form-control limpiar form-update" value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
                             <option value="">Seleccione una opción</option>
-                            <option value="bueno">Bueno</option>
-                            <option value="regular">Regular</option>
-                            <option value="malo">Malo</option>
+                            <option value="optimo">Óptimo</option>
+                            <option value="deficiente">Deficiente</option>
                           </select>
                         </div>
                       </div>

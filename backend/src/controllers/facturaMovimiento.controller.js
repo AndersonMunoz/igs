@@ -537,7 +537,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
 export const obtenerProCategoria = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT pro.id_producto, pro.cantidad_peso_producto, pr.nombre_tipo, pr.unidad_peso  FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id} and pro.estado=1;`;
+		let sql = `SELECT pr.id_tipo, pr.nombre_tipo, pr.unidad_peso FROM tipo_productos pr JOIN categorias_producto cat ON cat.id_categoria = pr.fk_categoria_pro where cat.id_categoria= ${id} and pr.estado=1;`;
 
 		const [rows] = await pool.query(sql);
 
