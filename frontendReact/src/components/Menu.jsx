@@ -28,10 +28,10 @@ import portConexion from "../const/portConexion";
 export const Menu = () => {
   const [userName, setUserName] = useState("");
   const [userRoll, setUserRoll] = useState("");
-  const [id, setId] = useState(dataDecript(localStorage.getItem("id")))
-  const [alert, setAlert] = useState('');
-  const [elementoAlmacenado, setElemento] = useState([])
-  const [stockMin, setStockMin] = useState('')
+  const [id, setId] = useState(dataDecript(localStorage.getItem("id")));
+  const [alert, setAlert] = useState(0); // Inicializar alert con 0
+  const [elementoAlmacenado, setElemento] = useState([]); // Inicializar elementoAlmacenado con un array vacío
+  const [stockMin, setStockMin] = useState('');
 
 
   useEffect(() => {
@@ -114,7 +114,7 @@ export const Menu = () => {
       .then((res) => res.json())
       .then((data) => {
         setStockMin(data[0].stock_minimo)
-        calcularMIn((data[0].stock_minimo),)
+        calcularMIn((data[0].stock_minimo))
       })
   }
 
@@ -126,29 +126,26 @@ export const Menu = () => {
         token: localStorage.getItem("token"),
       },
     })
-      .then((res) => {
-        if (res.status === 204) {
-          return null;
+    .then((res) => {
+      if (res.status === 204) {
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      let cont = 0;
+      let menores = [];
+      if (data !== null) {
+        for (let index = 0; index < data.length; index++) {
+          if (stockMin > data[index].Cantidad) {
+            cont = cont + 1;
+            menores.push(data[index]);
+          }
         }
-        return res.json();
-      })
-      .then((data) => {
-        let cont = 0;
-        let menores = [];
-        if (data !== null) {
-          data.map(elemento => {
-            if (stockMin > elemento.Peso) {
-              cont = cont + 1;
-              setAlert(cont)
-              menores.push(elemento)
-              setElemento(menores[0]);
-              console.log(menores[0]);
-            }
-          });
-        }
-        
-        ;
-      })
+        setAlert(cont);
+        setElemento(menores);
+      }
+    });
   }
 
   return (
@@ -496,13 +493,13 @@ export const Menu = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {alert > 0 ? (
+                    {alert > 0 ? (
                     <>
-                      {[elementoAlmacenado].map((element, index) => (
+                      {elementoAlmacenado.map((element, index) => (
                         <tr key={index}>
                           <td>{element.NombreProducto} </td>
                           <td>{element.NombreCategoria}</td>
-                          <td>{element.Peso}</td>
+                          <td className="text-center">{element.Cantidad}</td>
                         </tr>
                       ))}
                     </>
