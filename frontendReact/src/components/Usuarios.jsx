@@ -957,7 +957,7 @@ const Usuario = () => {
           </div>
         </div>
       </div >
-    </div >
+    </div>
   );
 };
 
