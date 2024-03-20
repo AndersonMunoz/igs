@@ -6,7 +6,7 @@ import { validarToken } from "../controllers/autentificacion.controller.js";
 const productoRouter = Router();
 
 productoRouter.post('/registrar', validarToken,validatorProducto,  guardarProducto);
-productoRouter.get('/listar',validarToken,listarProductos);
+productoRouter.get('/listar',listarProductos);
 productoRouter.get('/listarProductoTotal', obtenerValorTotalProductosFecha);
 productoRouter.get('/buscar/:id',validarToken,buscarProducto);
 productoRouter.put('/actualizar/:id',validarToken, validatorProducto ,actualizarProducto);

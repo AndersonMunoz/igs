@@ -56,7 +56,7 @@ const Producto = () => {
       { title: 'N°', dataKey: 'id_producto' },
       { title: 'NombreProducto', dataKey: 'NombreProducto' },
       { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
-      { title: 'Peso', dataKey: 'Peso' },
+      { title: 'Cantidad', dataKey: 'Cantidad' },
       { title: 'Unidad', dataKey: 'Unidad' },
       { title: 'PrecioIndividual', dataKey: 'PrecioIndividual' },
       { title: 'UnidadProductiva', dataKey: 'UnidadProductiva' },
@@ -69,7 +69,7 @@ const Producto = () => {
       id_producto: element.id_producto,
       NombreProducto: element.NombreProducto,
       NombreCategoria: element.NombreCategoria,
-      Peso: element.Peso,
+      Cantidad: element.Cantidad,
       Unidad: element.Unidad,
       PrecioIndividual: element.PrecioIndividual,
       UnidadProductiva: element.UnidadProductiva,
@@ -97,7 +97,7 @@ const Producto = () => {
       'N°',
       'NombreProducto',
       'NombreCategoria',
-      'Peso',
+      'Cantidad',
       'Unidad',
       'PrecioIndividual',
       'UnidadProductiva',
@@ -112,7 +112,7 @@ const Producto = () => {
         element.id_producto,
         element.NombreProducto,
         element.NombreCategoria,
-        element.Peso,
+        element.Cantidad,
         element.Unidad,
         element.PrecioIndividual,
         element.UnidadProductiva,
@@ -352,10 +352,10 @@ const Producto = () => {
       <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
         <thead className="text-center text-justify">
           <tr>
-            <th className="th-sm">N°</th>
+            <th className="th-sm">#Lote</th>
             <th className="th-sm">Nombre producto</th>
             <th className="th-sm">Nombre categoria</th>
-            <th className="th-sm">Peso</th>
+            <th className="th-sm">Cantidad</th>
             <th className="th-sm">Unidad</th>
             <th className="th-sm">Precio individual</th>
             <th className="th-sm">Unidad productiva</th>
@@ -380,10 +380,10 @@ const Producto = () => {
               <>
                 {productos.map((element, index) => (
                     <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
-                      <td>{index + 1}</td>
+                      <td>{element.Lote}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.NombreCategoria}</td>
-                      <td>{element.Peso}</td>
+                      <td>{element.Cantidad}</td>
                       <td>{element.Unidad}</td>
                       <td>
                         {element.PrecioIndividual ? (
