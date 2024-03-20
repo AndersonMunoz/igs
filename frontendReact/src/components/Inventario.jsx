@@ -206,10 +206,10 @@ const Inventario = () => {
 
 
       <div className="modal fade" data-bs-keyboard="false" id="staticBackdrop" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div className="modal-dialog modal-dialog-centered modal-xl">
+        <div className="modal-dialog  modal-dialog-centered modal-xl">
           <div className="modal-content">
-            <div className="modal-header bg txt-color">
-              <h1 className="modal-title fs-5">Categoria {selectedCategoriaNombre}</h1>
+            <div className="modal-header bg txt-color ">
+              <h1 className="modal-title fs-5 ">Categoria {selectedCategoriaNombre}</h1>
               <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal"></button>
             </div>
             <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -227,8 +227,8 @@ const Inventario = () => {
               </button>
             </div>
           </div>
-            <div className="modal-body">
-                <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
+            <div className="modal-body  ">
+                <table id="dtBasicExample max-width-5" className="table table-striped table-bordered border display responsive nowrap " cellSpacing={0} width="100%" ref={tableRef}>
                   <thead className="text-center text-justify">
                     <tr>
                       <th className="th-sm">N°</th>
@@ -263,7 +263,9 @@ const Inventario = () => {
                             <td>{element.Unidad}</td>
                             <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
                             <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
-                            <td>{element.Descripcion}</td>
+                            <td style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {element.Descripcion}
+                        </td>
                           </tr>
                         ))}
                       </>
