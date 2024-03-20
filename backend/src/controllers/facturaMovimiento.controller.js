@@ -489,61 +489,59 @@ export const buscarMovimiento = async (req, res) => {
 };
 
 export const actualizarMovimiento = async (req, res) => {
-	try {
-		let error = validationResult(req);
-		if (!error.isEmpty()) {
-			return res.status(400).json(error);
-		}
-		let id = req.params.id;
-		let { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad,cantidad_peso_movimiento,num_lote} = req.body;
-		let sqlPrev = `SELECT cantidad_peso_movimiento, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
-		let resultPrev = await pool.query(sqlPrev,id);
-		let prevMovimiento = Number(resultPrev[0][0].cantidad_peso_movimiento);
-		let lote = Number(resultPrev[0][0].num_lote);
-
-        const [existingLote] = await pool.query(sqlPrev);
-	        if (existingLote.length === 0) {
+    try {
+        let error = validationResult(req);
+        if (!error.isEmpty()) {
+            return res.status(400).json(error);
+        }
+        
+        const id = req.params.id;
+        const { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad, cantidad_peso_movimiento, num_lote } = req.body;
+        
+        // Verificar si el número de lote ya existe en la tabla
+        const [existingLote] = await pool.query(`SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}' AND id_factura != ${id}`);
+        if (existingLote.length > 0) {
             return res.status(409).json({
-                "status": 404,
-                "message": "El lote no existe"
+                "status": 409,
+                "message": "El lote ya está registrado"
             });
         }
-
-        // Verificar duplicidad de documento solo si el documento se está actualizando
-        if (num_lote !== existingLote[0].num_lote) {
-            const documentQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}' AND id_factura != ${id}`;
-            const [existingLotee] = await pool.query(documentQuery);
-
-            if (existingLotee.length > 0) {
-                return res.status(409).json({
-                    "status": 409,
-                    "message": "El lote ya esta registrado"
-                });
-            }
+        
+        // Verificar si la factura con el id proporcionado existe
+        const [prevMovimiento] = await pool.query(`SELECT cantidad_peso_movimiento, num_lote FROM factura_movimiento WHERE id_factura = ${id}`);
+        if (prevMovimiento.length === 0) {
+            return res.status(409).json({
+                "status": 404,
+                "message": "La factura no existe"
+            });
         }
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',precio_movimiento='${precio_movimiento}',nota_factura='${nota_factura}',num_lote='${num_lote}',fecha_caducidad='${fecha_caducidad}',cantidad_peso_movimiento='${cantidad_peso_movimiento}'where id_factura=${id}`;
+        
+        // Realizar la actualización del movimiento
+        const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=?`;
+        const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
+        const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ?, num_lote=? WHERE num_lote=?`;
 
-		let sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=${id}`;
-		let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
-		let sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ${diffMovimiento}, num_lote='${num_lote}' WHERE num_lote=${lote}`;
-		const [result1, result2,result3] = await Promise.all([
-			pool.query(sql, [estado_producto_movimiento,precio_movimiento, nota_factura,fecha_caducidad,cantidad_peso_movimiento]),
-			pool.query(sql2, [cantidad_peso_movimiento,precio_movimiento,id]),
-			pool.query(sql3),
-		]);
-		
-		if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0  && result3[0].affectedRows > 0) {
-			res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
-		} else {
-			res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
-		}
-	} catch (e) {
-		res.status(500).json({
-			"status": 500,
-			"message": "Error en el servidor" + e
-		});
-	}
+        const [result1, result2, result3] = await Promise.all([
+            pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id]),
+            pool.query(sql2, [id]),
+            pool.query(sql3, [cantidad_peso_movimiento - prevMovimiento[0].cantidad_peso_movimiento, num_lote, prevMovimiento[0].num_lote]),
+        ]);
+
+        if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows > 0) {
+            res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
+        } else {
+            res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
+        }
+    } catch (e) {
+        console.error("Error en el servidor:", e);
+        res.status(500).json({
+            "status": 500,
+            "message": "Error en el servidor"
+        });
+    }
 };
+
+
 
 export const actualizarMovimientoSalida = async (req, res) => {
 	try {

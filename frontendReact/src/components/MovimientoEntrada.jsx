@@ -414,8 +414,6 @@ const Movimiento = () => {
   }
   function actualizarMovimiento(id) {
     let fecha_caducidad = null;
-
-    // Verificar si se debe actualizar la fecha de caducidad
     if (aplicaFechaCaducidad2 && fechaCaducidadModificada && movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
         const fechaSeleccionada = new Date(movimientoSeleccionado.fecha_caducidad);
         fechaSeleccionada.setDate(fechaSeleccionada.getDate() + 1);
@@ -423,18 +421,10 @@ const Movimiento = () => {
     } else if (movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
         fecha_caducidad = movimientoSeleccionado.fecha_caducidad;
     }
-
-    console.log("Fecha de caducidad seleccionada:", fecha_caducidad); // Depuración: Verificar la fecha de caducidad
-
-    // Preparar el cuerpo de la solicitud
     let body = { ...movimientoSeleccionado };
     if (fecha_caducidad !== null) {
         body.fecha_caducidad = fecha_caducidad;
     }
-
-    console.log("Cuerpo de la solicitud:", body); // Depuración: Verificar el cuerpo de la solicitud
-
-    // Realizar la solicitud de actualización al servidor
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
         method: "PUT",
         headers: {
@@ -458,13 +448,14 @@ const Movimiento = () => {
         if (modalBackdrop) {
             modalBackdrop.remove();
         }
-        // Restablecer movimientoSeleccionado a un objeto vacío
         setMovimientoSeleccionado({});
     })
     .catch((error) => {
         error.json().then((body) => {
-            if (body.status === 409) {
-                Sweet.error('El número de lote ya está registrado');
+            if (body.status === 404) {
+                Sweet.error(body.message);
+            } else if (body.status === 409) {
+                Sweet.error(body.message);
             } else if (body.errors) {
                 body.errors.forEach((err) => {
                     Sweet.error(err.msg);
@@ -475,6 +466,7 @@ const Movimiento = () => {
         });
     });
 }
+
 
   function registrarMovimiento() {
 
