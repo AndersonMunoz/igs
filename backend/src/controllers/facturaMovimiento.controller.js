@@ -557,7 +557,7 @@ export const obtenerProCategoria = async (req, res) => {
 export const obtenerUnidad = async (req, res) => {
 	try {
 		let id = req.params.id_producto;
-		let sql = `SELECT pr.id_tipo, pr.unidad_peso, pr.nombre_tipo FROM productos pro JOIN tipo_productos pr on pr.id_tipo = pro.fk_id_tipo_producto JOIN categorias_producto cat on cat.id_categoria = pr.fk_categoria_pro where pro.id_producto= ${id};`;
+		let sql = `SELECT pr.id_tipo, pr.unidad_peso, pr.nombre_tipo FROM tipo_productos pr where pr.id_tipo= ${id};`;
 
 		const [rows] = await pool.query(sql);
 

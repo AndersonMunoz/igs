@@ -5,10 +5,11 @@ export const validarFacturaMovimiento = [
     check('precio_movimiento','Ingrese un precio válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('estado_producto_movimiento','Ingrese un estado válido en minúscula. Valores válidos: optimo y deficiente').matches(/^(optimo|deficiente)$/).notEmpty(),
     check('nota_factura','Ingrese un descripción válida, máximo 300 caracteres y mínimo 3').isLength({min: 3,max:300}).notEmpty(),
-/*     check('fk_id_producto','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(), */
     check('fk_id_usuario','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
-    check('fk_id_proveedor','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),/* 
-    check('num_lote','Ingrese un número de lote válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(), */
+    check('fk_id_proveedor','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
+    check('fk_id_up','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
+    check('fk_id_tipo_producto','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
+    check('num_lote','Ingrese un número de lote válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
 ]
 
 export const validarFacturaMovimientoSalida = [

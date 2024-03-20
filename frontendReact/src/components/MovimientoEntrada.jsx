@@ -41,6 +41,7 @@ const Movimiento = () => {
   const [selectedUp, setSelectedUp] = useState(null);
   const [selectedTipo, setSelectedTipo] = useState(null);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
+  const [fechaCaducidadModificada, setFechaCaducidadModificada] = useState(false);
   
   const tableRef = useRef(null);
   const handleOnExport = () => {
@@ -156,16 +157,18 @@ const Movimiento = () => {
   };
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
+    console.log(selectedOption);
   };
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption);
+    console.log(selectedOption);
   };
   const fkIdUsuarioRef = useRef(null);
 
   const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
 
   const handleCheckboxChange2 = () => {
-    setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
+    setAplicaFechaCaducidad2(prevState => !prevState);
   };
 
   const handleCloseModal2 = () => {
@@ -173,8 +176,13 @@ const Movimiento = () => {
     setAplicaFechaCaducidad2(false); // Asegura que el estado del checkbox se restablezca
     resetFormState(); // Llama a la función para restablecer el formulario
   };
+
+  const handleFechaCaducidadChange = (e) => {
+    setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value });
+    setFechaCaducidadModificada(true); // Marca la fecha de caducidad como modificada
+};
   const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
     formFields.forEach(field => {
       if (field.type === 'checkbox') {
@@ -227,7 +235,12 @@ const Movimiento = () => {
       modalBackdrop.remove();
     }
   }
-
+  useEffect(() => {
+    // Restablecer movimientoSeleccionado cuando el modal se abre
+    if (updateModal) {
+        setMovimientoSeleccionado({});
+    }
+}, [updateModal]);
   useEffect(() => {
     window.onpopstate = function(event) {
       window.location.reload();
@@ -237,7 +250,6 @@ const Movimiento = () => {
     listarCategoria();
     listarTipo();
     listarProveedor();
-    listarUsuario();
     listarUp();
     if (selectedCategoria) {
       listarProductoCategoria(selectedCategoria.value);
@@ -245,8 +257,7 @@ const Movimiento = () => {
     if (selectedTipo) {
       listarUnidadesPro(selectedTipo.value)
     }
-  listarUnidadesPro()
-}, [selectedCategoria]);
+}, [selectedCategoria,selectedTipo]);
   function listarUp() {
     fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
@@ -364,7 +375,7 @@ const Movimiento = () => {
   function listarUnidadesPro(id_producto) {
 
     fetch(
-      `http://${portConexion}:3000/facturamovimiento//buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
+      `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
       {
         method: "GET",
         headers: {
@@ -402,43 +413,69 @@ const Movimiento = () => {
       });
   }
   function actualizarMovimiento(id) {
-    const validacionExitosa = Validate.validarCampos('.form-update');
+    let fecha_caducidad = null;
+
+    // Verificar si se debe actualizar la fecha de caducidad
+    if (aplicaFechaCaducidad2 && fechaCaducidadModificada && movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
+        const fechaSeleccionada = new Date(movimientoSeleccionado.fecha_caducidad);
+        fechaSeleccionada.setDate(fechaSeleccionada.getDate() + 1);
+        fecha_caducidad = fechaSeleccionada.toISOString().split('T')[0];
+    } else if (movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
+        fecha_caducidad = movimientoSeleccionado.fecha_caducidad;
+    }
+
+    console.log("Fecha de caducidad seleccionada:", fecha_caducidad); // Depuración: Verificar la fecha de caducidad
+
+    // Preparar el cuerpo de la solicitud
+    let body = { ...movimientoSeleccionado };
+    if (fecha_caducidad !== null) {
+        body.fecha_caducidad = fecha_caducidad;
+    }
+
+    console.log("Cuerpo de la solicitud:", body); // Depuración: Verificar el cuerpo de la solicitud
+
+    // Realizar la solicitud de actualización al servidor
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
-      method: "PUT",
-      headers: {
-        'Content-type': 'application/json',
-        token: localStorage.getItem("token"),
-      },
-      body: JSON.stringify(movimientoSeleccionado),
+        method: "PUT",
+        headers: {
+            'Content-type': 'application/json',
+            token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify(body),
     })
-      .then((res) => {if (!res.ok) {
-        throw res;
-      }
-      return res.json();})
-      .then((data) => {
+    .then((res) => {
+        if (!res.ok) {
+            throw res;
+        }
+        return res.json();
+    })
+    .then((data) => {
         Sweet.exito(data.message);
         listarMovimiento();
         setUpdateModal(false);
         removeModalBackdrop();
         const modalBackdrop = document.querySelector('.modal-backdrop');
         if (modalBackdrop) {
-          modalBackdrop.remove();
+            modalBackdrop.remove();
         }
-      })
-      .catch((error) => {
+        // Restablecer movimientoSeleccionado a un objeto vacío
+        setMovimientoSeleccionado({});
+    })
+    .catch((error) => {
         error.json().then((body) => {
-          if (body.status === 409) {
-            Sweet.error('El número de lote ya está registrado');
-          } else if (body.errors) {
-            body.errors.forEach((err) => {
-              Sweet.error(err.msg);
-            });
-          } else {
-            Sweet.error('Error en el servidor');
-          }
+            if (body.status === 409) {
+                Sweet.error('El número de lote ya está registrado');
+            } else if (body.errors) {
+                body.errors.forEach((err) => {
+                    Sweet.error(err.msg);
+                });
+            } else {
+                Sweet.error('Error en el servidor');
+            }
         });
-      });
-  }
+    });
+}
+
   function registrarMovimiento() {
 
     let fk_id_usuario = userId;
@@ -446,22 +483,23 @@ const Movimiento = () => {
     let precio_movimiento = document.getElementById('precio_movimiento').value;
     let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
     let nota_factura = document.getElementById('nota_factura').value;
+    let num_lote = document.getElementById('num_lote').value;
     let fecha_caducidad = null;
-    let fk_id_producto = document.getElementById('fk_id_producto').value;
     let fk_id_proveedor = document.getElementById('fk_id_proveedor').value;
+    let fk_id_tipo_producto = selectedTipo ? selectedTipo.value : null;
+    let fk_id_up = selectedUp ? selectedUp.value : null;
     if (aplicaFechaCaducidad) {
       fecha_caducidad = document.getElementById('fecha_caducidad').value;
     }
 
     const validacionExitosa = Validate.validarCampos('.form-empty');
-
     fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
         token: localStorage.getItem("token")
       },
-      body: JSON.stringify({cantidad_peso_movimiento,  precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_producto, fk_id_usuario, fk_id_proveedor,fk_id_up: selectedUp.value,fk_id_tipo_producto: selectedTipo.valu }),
+      body: JSON.stringify({ fk_id_usuario,cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura,num_lote, fecha_caducidad, fk_id_proveedor,fk_id_up,fk_id_tipo_producto}),
     })
     .then((res) => res.json())
     .then(data => {
@@ -494,24 +532,6 @@ const Movimiento = () => {
       console.error('Error:', error);
     })
     //console.log(document.getElementById('fecha_caducidad'));
-  }
-  function listarUsuario() {
-    fetch(`http://${portConexion}:3000/usuario/listar`, {
-      method: "get",
-      headers: {
-        "content-type": "application/json",
-        token: localStorage.getItem("token")
-      }
-    }).then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-      .then(data => {
-        setUsuario(data);
-      })
-      .catch(e => { console.log(e); })
   }
 
   function listarMovimiento() {
@@ -547,7 +567,7 @@ const Movimiento = () => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos de Entrada</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();resetFormState();setSelectedTipo(null);setSelectedUp(null);setSelectedCategoria(null);}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedUp(null);setSelectedCategoria(null);}}>
             Registrar nuevo movimiento de Entrada
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
@@ -587,7 +607,7 @@ const Movimiento = () => {
                 <th className="th-sm">Precio individual</th>
                 <th className="th-sm">Precio total</th>
                 <th className="th-sm">Estado producto</th>
-                <th className="th-sm">Nota</th>
+                <th className="th-sm">Descripción</th>
                 <th className="th-sm">Fecha de caducidad</th>
                 <th className="th-sm">Usuario que hizo movimiento</th>
                 <th className="th-sm">Proveedor</th>
@@ -622,13 +642,18 @@ const Movimiento = () => {
                         {isNaN(Number(element.precio_movimiento)) ? element.precio_movimiento : (Number.isInteger(Number(element.precio_movimiento)) ? Number(element.precio_movimiento) : Number(element.precio_movimiento).toFixed(2))}
                       </td>
                       <td className="p-2 text-center">{element.precio_total_mov}</td>
-                      <td className="p-2 text-center">{element.estado_producto_movimiento}</td>
-                      <td className="p-2 text-center">{element.nota_factura}</td>
+                      <td className="p-2 text-center">
+  {element.estado_producto_movimiento === 'optimo' ? 'Óptimo' : element.estado_producto_movimiento.charAt(0).toUpperCase() + element.estado_producto_movimiento.slice(1).toLowerCase()}
+</td>
+
+                      <td className="p-2 text-center">
+                        {element.nota_factura.charAt(0).toUpperCase() + element.nota_factura.slice(1).toLowerCase()}
+                      </td>
                       <td>
                         {element.fecha_caducidad ? (
                           Validate.formatFecha(element.fecha_caducidad)
                         ) : (
-                          'No asignada'
+                          'No aplica'
                         )}
                       </td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
@@ -656,82 +681,54 @@ const Movimiento = () => {
                 </div>
                 <div className="modal-body">
                   <form>
-
                     <div className="row mb-4">
-                      {/* <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="categoria">Categoria</label>
-                          <select onChange={(e)=>{listarProductoCategoria(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
-                            <option value="">Selecciona una categoria</option>
-                            {categoria_list.map((element) => (
-                              
-                              <option  key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione una categoria.
-                          </div>
-                        </div>
-                      </div> */}
                       <div className="col">
-                      <label className="form-label" htmlFor="categoria">Categoria</label>
-                        <Select
-                        className="react-select-container  form-empt my-custom-class"
-                        classNamePrefix="react-select"
-                        options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
-                        placeholder="Selecciona..."
-                        onChange={handleCategoria}
-                        value={selectedCategoria}
-                        id="categoria"
+                        <label className="form-label" htmlFor="categoria">Categoria</label>
+                          <Select
+                            className="react-select-container  form-empty my-custom-class"
+                            classNamePrefix="react-select"
+                            options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
+                            placeholder="Selecciona..."
+                            onChange={handleCategoria}
+                            value={selectedCategoria}
+                            id="categoria"
                           />
                         <div className="invalid-feedback is-invalid">
-                          Por favor, seleccione una categoria.
-                        </div>
+                      Por favor, seleccione un tipo de producto.
+                    </div>
                       </div>
-                      {/* <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="fk_id_producto">Producto</label>
-                          <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
-                            <option value="">Seleccione una opción</option>
-                            {productosCategoria.length > 0 ? productosCategoria.map((element) => (
-                              <option key={element.id_producto} value={element.id_producto}>{element.nombre_tipo}</option>
-                            )): ""}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione un producto.
-                          </div>
-                        </div>
-                      </div> */}
                       <div className="col">
                         <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Producto</label>
                         <Select
-                          className="react-select-container form-empt my-custom-class"
+                          className="react-select-container  form-empty my-custom-class"
                           classNamePrefix="react-select"
                           options={selectedCategoria ? productosCategoria.map(element => ({ key: element.id_tipo, value: element.id_tipo, label: element.nombre_tipo })) : []}
                           placeholder="Selecciona..."
                           onChange={handleTipo}
                           value={selectedTipo}
                           id="fk_id_tipo_producto"
+                          name="fk_id_tipo_producto"
                         />
                         <div className="invalid-feedback is-invalid">
                           Por favor, seleccione un producto.
                         </div>
                       </div>
                       <div className="col">
-                    <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
-                    <Select
-                        className="react-select-container  form-empt my-custom-class"
-                        classNamePrefix="react-select"
-                        options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
-                        placeholder="Selecciona..."
-                        onChange={handleUp}
-                        value={selectedUp}
-                        id="fk_id_up"
-                      />
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione una bodega.
-                    </div>
-                  </div>
+                        <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
+                        <Select
+                            className="react-select-container form-empty my-custom-class"
+                            classNamePrefix="react-select"
+                            options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
+                            placeholder="Selecciona..."
+                            onChange={handleUp}
+                            value={selectedUp}
+                            id="fk_id_up"
+                            name="fk_id_up"
+                          />
+                        <div className="invalid-feedback is-invalid">
+                          Por favor, seleccione una bodega.
+                        </div>
+                      </div>
                     </div>
                     <div className="row mb-4">
                       <div className="col">
@@ -802,8 +799,11 @@ const Movimiento = () => {
                     <div className="row mb-4">
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="nota_factura">Nota</label>
+                          <label className="form-label" htmlFor="nota_factura">Descripción</label>
                           <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese una descripción válida.
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -845,103 +845,119 @@ const Movimiento = () => {
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>Cerrar</button>
-                  <button type="button" className="btn-color btn" onClick={registrarMovimiento}>Registrar</button>
+                  <button type="button" className="btn-color btn" onClick={() =>{registrarMovimiento()}}>Registrar</button>
                 </div>
               </div>
             </div>
           </div>
-          <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header bg text-white">
-                  <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
-                  <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal2}></button>
-                </div>
-                <div className="modal-body">
-                  <form>
-                    <div className="row mb-4">
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
-                          <select className="form-control limpiar form-update" value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
-                            <option value="">Seleccione una opción</option>
-                            <option value="optimo">Óptimo</option>
-                            <option value="deficiente">Deficiente</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="precio_movimiento">Precio</label>
-                          <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.precio_movimiento || ''} name="precio_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, precio_movimiento: e.target.value })} />
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese un precio individual.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row mb-4">
-                    <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                          <input type="text" className="form-control form-update limpiar" placeholder="Cantidad" value={movimientoSeleccionado.cantidad_peso_movimiento || ''} name="cantidad_peso_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, cantidad_peso_movimiento: e.target.value })} />
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese una cantidad.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="nota_factura">Nota</label>
-                          <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
-                          <div className="invalid-feedback is-invalid">
-                          Por favor, ingrese una nota mas larga.
-                        </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="row mb-4">
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <p>¿Deseas editar la fecha de caducidad?</p>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input form-update "
-                              type="checkbox"
-                              value={aplicaFechaCaducidad2}
-                              id="flexCheckDefault2"
-                              onChange={handleCheckboxChange2}
-                            />
-                            <label className="form-check-label" htmlFor="flexCheckDefault2">
-                              Si
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      {aplicaFechaCaducidad2 && (
+            <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header bg text-white">
+                    <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
+                    <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal2}></button>
+                  </div>
+                  <div className="modal-body">
+                    <form>
+                      <div className="row mb-4">
                         <div className="col">
-                          <label className="form-label" htmlFor="fecha_caducidad">
-                            Fecha caducidad
-                          </label>
-                          <input
-                            type="date"
-                            id="fecha_caducidad"
-                            className="width: 20% form-control form-update"
-                            value={movimientoSeleccionado.fecha_caducidad || ''} name="fecha_caducidad" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value })}
-                          />
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="estado_producto_movimiento">Estado</label>
+                            <select className="form-control limpiar form-update" value={movimientoSeleccionado.estado_producto_movimiento || ''} name="estado_producto_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, estado_producto_movimiento: e.target.value })}>
+                              <option value="">Seleccione una opción</option>
+                              <option value="optimo">Óptimo</option>
+                              <option value="deficiente">Deficiente</option>
+                            </select>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </form>
-                </div>
-                
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
-                  <button type="button" className="btn btn-color" onClick={() => { actualizarMovimiento(movimientoSeleccionado.id_factura)}}>Actualizar</button>
+                        <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="precio_movimiento">Precio</label>
+                            <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.precio_movimiento || ''} name="precio_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, precio_movimiento: e.target.value })} />
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, ingrese un precio individual.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mb-4">
+                      <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
+                            <input type="text" className="form-control form-update limpiar" placeholder="Cantidad" value={movimientoSeleccionado.cantidad_peso_movimiento || ''} name="cantidad_peso_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, cantidad_peso_movimiento: e.target.value })} />
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, ingrese una cantidad.
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="nota_factura">Descripción</label>
+                            <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
+                            <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese una nota mas larga.
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row mb-4">
+                        <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <p>¿Deseas editar la fecha de caducidad?</p>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input form-update "
+                                type="checkbox"
+                                value={aplicaFechaCaducidad2}
+                                id="flexCheckDefault2"
+                                onChange={handleCheckboxChange2}
+                              />
+                              <label className="form-check-label" htmlFor="flexCheckDefault2">
+                                Si
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        {aplicaFechaCaducidad2 && (
+                          <div className="col">
+                            <label className="form-label" htmlFor="fecha_caducidad">
+                              Fecha caducidad
+                            </label>
+                            <input
+                              type="date"
+                              id="fecha_caducidad"
+                              className="width: 20% form-control form-update"
+                              value={movimientoSeleccionado.fecha_caducidad || ''} 
+                              name="fecha_caducidad" 
+                              onChange={(e) => {
+                                setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value });
+                                setFechaCaducidadModificada(true);
+                              }}
+                            />
+
+                          </div>
+                        )}
+                      </div>
+                    </form>
+                  </div>
+                  
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
+                    <button
+                      type="button"
+                      className="btn btn-color"
+                      onClick={() => {
+                        actualizarMovimiento(movimientoSeleccionado.id_factura);
+                        handleCloseModal2();
+                      }}
+                    >
+                      Actualizar
+                    </button>
+
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
         </div>
       </div>
 
