@@ -35,6 +35,7 @@ export const Menu = () => {
 
 
   useEffect(() => {
+
     let arrow = document.querySelectorAll(".container-icon");
     for (let i = 0; i < arrow.length; i++) {
       arrow[i].addEventListener("click", (e) => {
@@ -84,12 +85,9 @@ export const Menu = () => {
 
       modal.classList.remove("modalUser");
       modal.classList.add("modalClose");
-
-
     });
 
     closeNoti.addEventListener("click", () => {
-
       modalX.classList.add("modalCloseNoti");
       modalX.classList.remove("modalNotificaciones");
     });
@@ -389,7 +387,7 @@ export const Menu = () => {
             )}
             <li>
               <div className="content-nav">
-                <Link to="/ajustes">
+                <Link>
                   <div className="tamañoLateral">
                     <IconSettings className="iconosLaterales" />
                   </div>
@@ -401,7 +399,7 @@ export const Menu = () => {
               </div>
               <ul className="sub-menu">
                 <li>
-                  <Link className="link_name" to="/ajustes">
+                  <Link className="link_name">
                     Ajustes
                   </Link>
                 </li>
