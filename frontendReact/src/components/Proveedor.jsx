@@ -291,20 +291,20 @@ const proveedor = () => {
       });
   }
   function actualizarProveedor(id) {
+    const formData = new FormData();
+        formData.append('nombre_proveedores', nombre_proveedores)
+        formData.append('telefono_proveedores',telefono_proveedores)
+        formData.append('direccion_proveedores',direccion_proveedores)
+        formData.append('inicio_contrato',inicio_contrato)
+        formData.append('fin_contrato',fin_contrato)
+        formData.append('contrato_proveedores',contrato_proveedores)
+        formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
     fetch(`http://${portConexion}:3000/proveedor/actualizar/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         token: localStorage.getItem("token"),
       },
-      body: JSON.stringify({
-        nombre_proveedores,
-        direccion_proveedores,
-        contrato_proveedores,
-        telefono_proveedores,
-        inicio_contrato,
-        fin_contrato,
-      }),
+      body: formData,
     })
       .then((res) => res.json())
       .then((data) => {
@@ -447,7 +447,7 @@ const proveedor = () => {
             <div className="modal-body">
               <div className=" d-flex justify-content-center">
                 <form  className="text-center border border-light" encType='multipart/form-data' onSubmit={registrarProveedor}>
-                  <div className="d-flex form-row mb-4">'
+                  <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="nombre_proveedores">Nombres</label>
                       <input value={nombre_proveedores} onChange={(e) => {setNombre_proveedores(e.target.value); }} type="text" id="nombre_proveedores" name="nombre_proveedores" className="form-control form-empty limpiar" placeholder="Nombres" required/>
@@ -508,7 +508,8 @@ const proveedor = () => {
                   </div>
                   <div className="d-flex gap-1 justify-content-end mt-3">
                     
-                    <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
+                    <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  
+                    onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
                       Actualizar
                     </button>
                     
