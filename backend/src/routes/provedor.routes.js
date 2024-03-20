@@ -6,12 +6,12 @@ import { validarProvedor } from "../validation/validatorProvedor.js";
 
 const provedorRouter = Router();
 
-provedorRouter.get('/listar', validarToken, listarProvedor);
+provedorRouter.get('/listar',  listarProvedor);
 provedorRouter.get('/listarActivo', validarToken, listarProvedorActivo);
 provedorRouter.get('/buscar/:id', validarToken,buscarProvedor);
-provedorRouter.post('/registrar' ,validarToken, cargarImagen,registrarProvedor);
+provedorRouter.post('/registrar' ,cargarImagen,validarProvedor,registrarProvedor);
 provedorRouter.put('/eliminar/:id' ,validarToken , eliminarProvedor);
-provedorRouter.put('/actualizar/:id',validarToken ,cargarImagen,actualizarProvedor);
+provedorRouter.put('/actualizar/:id' ,validarProvedor,validarToken,actualizarProvedor);
 
 
 export default provedorRouter;

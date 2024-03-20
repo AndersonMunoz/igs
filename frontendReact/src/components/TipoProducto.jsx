@@ -155,7 +155,7 @@ const Tipo = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[2, "asc"]],
+        order: [[4, "asc"]],
       });
     }
   }, [tipos]);
@@ -501,9 +501,9 @@ const Tipo = () => {
                       : item.Categoría.toLowerCase().includes(search);
                   })
 
-                  .map((element) => (
+                  .map((element,index) => (
                     <tr key={element.id}>
-                      <td>{element.id}</td>
+                      <td>{index + 1}</td>
                       <td style={{ textTransform: "capitalize" }}>
                         {element.NombreProducto}
                       </td>
