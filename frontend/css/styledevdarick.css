@@ -1,0 +1,180 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body{
+  background-image: url(../img/fondomio.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.container-nav {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 15vw;
+  background-color: #c4c4c4;
+  color: #333;
+}
+
+.container-ul{
+  margin-top: 10vh;
+}
+.sidebar li {
+  padding: 1.5vh;
+}
+
+.sidebar li a {
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar li i {
+  margin-right: .5vw;
+}
+
+.submenu {
+  background-color: #f2f2f2;
+  display: none;
+  transition: 1s;
+}
+
+
+.subsub-invisible {
+  color: rgb(189, 188, 188);
+  transition: 1s;
+}
+ul i{
+  font-size: 1.4vw;
+}
+.content h1 {
+  margin-bottom: 20px;
+}
+.nav-row{
+  background-color: rgb(1, 151, 1);
+  height: 10vh;
+  display: grid;
+  grid-template: "logo   empty1 search empty2 content-nav"/
+                  14%    1fr    25%    1fr 18%   ;
+}
+.burger {
+  color: #fcfcfc;
+  display: flex;
+  align-items: center;
+  font-size: 1.6vw;
+  cursor: pointer;
+  margin: 4vh 1vw 0vw 1vw;
+  float: right;
+}
+
+.logo {
+  grid-area: logo;
+  display: flex;
+  align-items: center;
+  font-size: 2vw;
+  margin: 1vw;
+  gap: 1vw;
+}
+.logo i{
+  cursor: pointer;
+}
+
+.search {
+  grid-area: search;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search input {
+  padding: 8px;
+  border-radius: 4px;
+  margin: .2vw;
+  width: 15vw;
+  height: 4vh;
+  outline: none;
+  border: none;
+}
+.search i{
+    color: #707070;
+    cursor: pointer;
+    position: relative;
+    right: 2vw;
+}
+.content-nav{
+  display: flex;
+  grid-area: content-nav;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: 1.3vw;
+}
+.exit{
+    display: flex;
+    gap: 1vw;
+    cursor: pointer;
+    color: #cecece;
+}
+.user{
+    display: flex;
+    gap: 1vw;
+    background-color:#f2f2f2;
+    color: #5c5c5c;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+h2{
+    height: 6vh;
+    width: 5vw;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    font-size: .8em;
+    display: grid;
+    place-content: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(3, 129, 13);
+}
+a{
+  font-size: 1vw;
+}
+          /* js */
+.sidebar-hidden{
+  position: relative;
+  width: 3.3vw;
+  transition: 1s;
+}
+
+ul {
+  width: 100%;
+  list-style: none;
+}
+
+.subsub{
+  display: none;
+}
+.subsub-invisible {
+  margin-top: 10px;
+  margin-bottom: -15px;
+  color: rgb(189, 188, 188);
+  transition: 500ms;
+}
+
+
+.nav-hidden {
+  height: 100vh;
+  background: linear-gradient(90deg, rgb(0, 155, 0),transparent); 
+  color: rgb(224, 224, 224);
+  transition: .8s;
+  margin-left: -11vw;
+}
+.nav-vi{
+  height: 100vh;
+  background: linear-gradient(90deg, rgb(0, 155, 0),transparent); 
+  color: rgb(224, 224, 224);
+  transition: .8s;
+}

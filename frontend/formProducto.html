@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/formProducto.css">
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+</head>
+<body>
+	<div class="box-grancontainer">
+			<div class="container">
+					<form action="" id="nuevoProducto">
+					<div class="row g-3">
+							<div class="col">
+									<label for="N-lote">Producto</label>
+									<input id="producto" name="producto" type="text" class="form-control" placeholder="Nombre Producto" required>
+							</div>
+							<div class="col">
+									<label for="caducidad">Fecha de caducidad</label>
+									<input type="date" id="fechaCaducidad" class="form-control" placeholder="Fecha de caducidad" required>
+							</div>
+					</div>
+					<div class="row g-3">
+							<div class="col">
+									<label for="caducidad">Unidad de medina</label>
+									<select class="form-select" id="selectPeso" aria-label="Default select example">
+											<option selected>Seleccione</option>
+											<option value="kg">Kilogramo</option>
+											<option value="2">Libra</option>
+											<option value="3">Gramo</option>
+										</select>
+							</div>
+					</div>
+					<div class="mb-3">
+							<label for="exampleFormControlTextarea1" class="form-label">Descripcion del producto</label>
+							<textarea class="form-control" id="descripcion" rows="3"></textarea>
+					</div>
+					<div class="row g-3">
+							<div class="col">
+									<label for="precio">Precio</label>
+									<input id="precio" name="precio" type="number" class="form-control" placeholder="Precio del producto" required>
+							</div>
+							<div class="col">
+									<label for="categoria">Seleccione categoria</label>
+									<select class="form-select" id="selectCategory" aria-label="Default select example">
+											<option selected>Seleccione</option>
+											<option value="1">Granos</option>
+											<option value="2">Carne</option>
+											<option value="3">Cereales</option>
+									</select>            
+							</div>
+					</div>
+					<div class="row g-3">
+							<div class="col">
+									<label for="bodega">Seleccione almacenamiento</label>
+									<select class="form-select" id="selectAlmacen" aria-label="Default select example">
+											<option selected>seleccione</option>
+											<option value="1">Almacen 1</option>
+											<option value="2">Almacen 2</option>
+											<option value="3">Almacen 3</option>
+									</select> 
+							</div>
+							<div class="col">
+									<label for="categoria">Seleccione el tipo</label>
+									<select class="form-select" id="selectTipo" aria-label="Default select example">
+											<option selected>Seleccione</option>
+											<option value="1">Tipo 1</option>
+											<option value="2">Tipo 2</option>
+											<option value="3">Tipo 3</option>
+									</select>            
+							</div>
+					</div>
+					<div class="boton"> 
+					<input class="btn btn-success" type="submit" value="Submit" onclick="registroProducto()">
+			</div>
+				</form>
+			</div>
+			
+	</div>
+
+
+
+
+	<script src="js/formProducto.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

@@ -35,12 +35,12 @@ export const buscarProvedor = async (req, res) => {
 
 // Configuración de multer para almacenar archivos en disco
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, "backend/src/public/filePDF");
-  },
-  filename: function (req, file, cb) {
-      cb(null, file.originalname+ '-' + Date.now()+'.pdf');
-  }
+    destination: function (req, file, cb) {
+        cb(null, "backend/src/public/filePDF");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname + '-' + Date.now() + '.pdf');
+    }
 });
 
 const upload = multer({ storage: storage });
@@ -48,46 +48,39 @@ const upload = multer({ storage: storage });
 export const cargarImagen = upload.single('archivo_contrato');
 
 export const registrarProvedor = async (req, res) => {
-  try {
-    let error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(403).json({ "status": 403, error })
-    }
-    let { nombre_proveedores, telefono_proveedores, direccion_proveedores,contrato_proveedores, inicio_contrato, fin_contrato } = req.body;
-    let archivo_contrato =req.file.originalname;
-    console.log(archivo_contrato);
+    try {
+        let error = validationResult(req);
+        if (!error.isEmpty()) {
+            return res.status(403).json({ "status": 403, error })
+        }
+        let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores, inicio_contrato, fin_contrato } = req.body;
+        let archivo_contrato = req.file.originalname;
 
-    let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
-    const [rows] = await pool.query(selectUser)
-    if (rows.length > 0) {
-      res.status(409).json({
-        "status": 409, "message": "Duplicidad en contratos"
-      });
-    } else {
-      let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores,inicio_contrato, fin_contrato,archivo_contrato)
+        let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
+        const [rows] = await pool.query(selectUser)
+        if (rows.length > 0) {
+            res.status(409).json({
+                "status": 409, "message": "Duplicidad en contratos"
+            });
+        } else {
+            let sql = `insert into proveedores (nombre_proveedores,telefono_proveedores,direccion_proveedores,contrato_proveedores,inicio_contrato, fin_contrato,archivo_contrato)
           values ('${nombre_proveedores}','${telefono_proveedores}','${direccion_proveedores}','${contrato_proveedores}','${inicio_contrato}','${fin_contrato}','${archivo_contrato}')`;
-      const [rows] = await pool.query(sql);
-      if (rows.affectedRows > 0) {
-        res.status(200).json({
-          "status": 200, "message": "Se registró con éxito el Proveedor"
-        });
-      } else {
-        res.status(401).json({
-          "status": 401, "message": "No se registró el Proveedor"
-        });
-      }
+            const [rows] = await pool.query(sql);
+            if (rows.affectedRows > 0) {
+                res.status(200).json({
+                    "status": 200, "message": "Se registró con éxito el Proveedor"
+                });
+            } else {
+                res.status(401).json({
+                    "status": 401, "message": "No se registró el Proveedor"
+                });
+            }
+        }
+    } catch (e) {
+        res.status(500).json({ message: 'Error en guardar Provedor: ' + e })
     }
-  } catch (e) {
-    res.status(500).json({ message: 'Error en guardar Provedor: ' + e })
-  }
 }
 
-// Endpoint para registrar proveedor con multer eeeeeeeeeeeeeeeeeeeee
-// export const registrarProvedorWithPDF = [
-//   upload.single('archivo_contrato'), // Campo del formulario que contendrá el archivo PDF
-//   registrarProvedor
-// ];
-  
 export const eliminarProvedor = async (req, res) => {
     try {
         let id = req.params.id;
@@ -107,8 +100,6 @@ export const eliminarProvedor = async (req, res) => {
     }
 }
 
-
-
 export const actualizarProvedor = async (req, res) => {
     try {
         let error = validationResult(req);
@@ -116,14 +107,14 @@ export const actualizarProvedor = async (req, res) => {
             return res.status(403).json({ "status": 403, error })
         }
         let id = req.params.id;
-let { nombre_proveedores, telefono_proveedores, archivo_contrato, direccion_proveedores, inicio_contrato ,fin_contrato } = req.body;
-
-let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE archivo_contrato= " + archivo_contrato + " AND id_proveedores != " + id;
+        let { nombre_proveedores, telefono_proveedores, contrato_proveedores, direccion_proveedores, inicio_contrato, fin_contrato } = req.body;
+        let archivo_contrato =req.file.originalname;
+        let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores + " AND id_proveedores != " + id;
 
         const [userExist] = await pool.query(selectUser)
 
         if (!userExist.length > 0) {
-            let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',archivo_contrato='${archivo_contrato}', direccion_proveedores='${direccion_proveedores}', inicio_contrato='${inicio_contrato}',fin_contrato='${fin_contrato}' where id_proveedores= ${id}`;
+            let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}', inicio_contrato='${inicio_contrato}',fin_contrato='${fin_contrato}',archivo_contrato='${archivo_contrato}' where id_proveedores= ${id}`;
             const [rows] = await pool.query(sql);
             if (rows.affectedRows > 0) {
                 res.status(200).json({
@@ -135,7 +126,7 @@ let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE archivo_contr
                 })
             }
         }
-        else{
+        else {
             res.status(409).json({
                 "status": 409, "message": "Duplicidad en contratos"
             });

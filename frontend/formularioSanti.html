@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | IGS</title>
+    <link rel="stylesheet" href="css/formularioSanti.css">
+</head>
+
+<body>
+    <img class="fondo" src="img/fruit-171671.jpg" alt="">
+
+    <section class="modal" id="modal">
+        <div class="modal_cont">
+            <img class="cancel" src="img/status_browser_negative_error_icon_220289.png" alt="">
+            <h2 class="modal_titulo">UpSsss!!!</h2>
+            <p class="modal_parrafo">Por favor rellenar los campos requeridos</p>
+            <a href="#" class="modal_close" id="cerrarModal">Cerrar</a>
+        </div>
+    </section>
+
+    <section class="modal2" id="modal2">
+        <div class="modal_cont2">
+            <img class="cancel2" src="img/status_browser_positive_done_checked_check_success_icon_220284.png" alt="">
+            <h2 class="modal_titulo">Registro existoso!!!</h2>
+            <p class="modal_parrafo">Todos los campos completados correctamente.</p>
+            <a href="#" class="modal_close2" id="cerrarModal2">Cerrar</a>
+        </div>
+    </section>
+
+    
+
+        </div>
+        <div class="boxarea">
+            <div class="imgLogo">
+                <img src="img/_b49393d1-e9fc-4a1d-8083-8f42a60634a2.jpeg" alt="">
+            </div>
+            <form id="formulario" target="_top">
+                <h1>Registro IGS</h1>
+
+                <label for="doc" id="tipoDoc">Ingrese su tipo de Documento</label>
+                <select id="doc" >
+                    <option value="">Seleccionar tipo de documento</option>
+                    <option value="tarjeta">Tarjeta de Identidad</option>
+                    <option value="cedula">Cedula de Identidad</option>
+                    <option value="cedulaExtranjera">Cedula Extranjera</option>
+                </select>
+
+                <label for="documento" id="docLabel">Documento:</label>
+                <input type="text" id="documento" placeholder="Ingrese su numero de documento" >
+
+                <label for="nombre" id="nombreLabel">Nombre:</label>
+                <input type="text" id="nombre" placeholder="Ingrese su nombre(s)" >
+
+                <label for="apellido" id="apeLabel">Apellidos:</label>
+                <input type="text" id="apellido" placeholder="Ingrese sus Apellido(s)">
+                    <label for="instructor" id="tipoUsuario">Tipo de Usuario:</label>
+                    <div class="radi">
+                        <input type="radio" name="instructor" id="instructor" value="1" ><span>Instructor</span>
+                        <input type="radio" name="instructor" id="encargado" value="2" ><span>Encargado</span>
+                    </div>
+                <input type="submit" value="REGISTRAR" id="enviar">
+            </form>
+        </div>
+
+    <script src="js/jssanti.js"></script>
+</body>
+
+</html>

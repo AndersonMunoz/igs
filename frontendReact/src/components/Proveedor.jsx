@@ -311,6 +311,7 @@ const proveedor = () => {
         if (data.status === 200) {
           Sweet.exito(data.message);
           listarProveedor();
+          limpiar();  
         } else {
           if (data.status === 403) {
             Sweet.error(data.error.errors[0].msg);
@@ -509,7 +510,7 @@ const proveedor = () => {
                   <div className="d-flex gap-1 justify-content-end mt-3">
                     
                     <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  
-                    onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
+                    onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);}}>
                       Actualizar
                     </button>
                     
