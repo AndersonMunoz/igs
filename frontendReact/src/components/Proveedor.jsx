@@ -232,13 +232,6 @@ const proveedor = () => {
         formData.append('inicio_contrato',inicio_contrato)
         formData.append('fin_contrato',fin_contrato)
         formData.append('contrato_proveedores',contrato_proveedores)
-        
-        //formData.append('nombre_proveedores', document.getElementById//('nombre_proveedores').value);
-        //formData.append('telefono_proveedores', document.getElementById//('telefono_proveedores').value);
-        //formData.append('direccion_proveedores', document.getElementById//('direccion_proveedores').value);
-        //formData.append('inicio_contrato', document.getElementById//('inicio_contrato').value);
-        //formData.append('fin_contrato', document.getElementById('fin_contrato').//value);
-        //formData.append('contrato_proveedores', document.getElementById//('contrato_proveedores').value);
         formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
         
         fetch(`http://${portConexion}:3000/proveedor/registrar`, {
