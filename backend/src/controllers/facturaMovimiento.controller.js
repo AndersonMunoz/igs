@@ -189,7 +189,9 @@ export const listarProductosCaducar = async (req, res) => {
     JOIN bodega u ON p.fk_id_up = u.id_up
     JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
     JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-    GROUP BY f.num_lote ORDER BY FechaCaducidad ASC `
+    WHERE f.fecha_caducidad <> '1899-11-30'
+GROUP BY f.num_lote 
+ORDER BY FechaCaducidad ASC `
     );
     res.status(200).json(result);
   } catch (er) {
@@ -320,6 +322,7 @@ export const listarMovimientos = async (req, res) => {
 			f.nota_factura,CASE 
 			WHEN f.fecha_caducidad IS NULL THEN 'No aplica'
 			WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
+			WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
 			ELSE f.fecha_caducidad
 		END as fecha_caducidad, CASE 
 			WHEN pr.id_proveedores IS NULL OR pr.id_proveedores = 0 THEN 'No aplica'
@@ -368,6 +371,7 @@ export const listarMovimientosEntrada = async (req, res) => {
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
 				f.nota_factura,CASE 
 				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
+				WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
 				ELSE f.fecha_caducidad
 			END as fecha_caducidad, pr.nombre_proveedores,f.num_lote,
 			CASE 
