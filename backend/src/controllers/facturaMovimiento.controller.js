@@ -311,36 +311,61 @@ export const listarMovimientos = async (req, res) => {
         }
 		const [result] = await pool.query
 		(
-			`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, CASE 
-			WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica'
-			ELSE CAST(f.precio_movimiento AS CHAR)
-		END as precio_movimiento, CASE 
-			WHEN f.tipo_movimiento = 'salida' OR f.tipo_movimiento IS NULL THEN 'No aplica'
-			ELSE f.estado_producto_movimiento
-		END as estado_producto_movimiento,
+			`SELECT 
+			f.id_factura,
+			us.nombre_usuario,
+			f.tipo_movimiento,
+			t.nombre_tipo,
+			c.nombre_categoria,
+			f.fecha_movimiento,
+			f.cantidad_peso_movimiento,
+			t.unidad_peso,
+			CASE 
+				WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica'
+				ELSE CAST(f.precio_movimiento AS CHAR)
+			END AS precio_movimiento,
+			CASE 
+				WHEN f.tipo_movimiento = 'salida' OR f.tipo_movimiento IS NULL THEN 'No aplica'
+				ELSE f.estado_producto_movimiento
+			END AS estado_producto_movimiento,
 			(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
-			f.nota_factura,CASE 
-			WHEN f.fecha_caducidad IS NULL THEN 'No aplica'
-			WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
-			WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
-			ELSE f.fecha_caducidad
-		END as fecha_caducidad, CASE 
-			WHEN pr.id_proveedores IS NULL OR pr.id_proveedores = 0 THEN 'No aplica'
-			ELSE pr.nombre_proveedores
-		END as nombre_proveedores,f.num_lote,
-
-		CASE 
-			WHEN f.precio_total_mov IS NULL THEN 'No aplica'
-			ELSE f.precio_total_mov
-		END as precio_total_mov
-			FROM factura_movimiento f 
-			JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
-			JOIN productos p ON f.fk_id_producto = p.id_producto
-			LEFT JOIN proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
-			JOIN bodega u ON p.fk_id_up = u.id_up	
-			JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-			JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-			ORDER BY f.id_factura DESC`
+			f.nota_factura,
+			CASE 
+				WHEN f.fecha_caducidad IS NULL THEN 'No aplica'
+				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
+				WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
+				ELSE f.fecha_caducidad
+			END AS fecha_caducidad,
+			CASE 
+				WHEN pr.id_proveedores IS NULL OR pr.id_proveedores = 0 THEN 'No aplica'
+				ELSE pr.nombre_proveedores
+			END AS nombre_proveedores,
+			f.num_lote,
+			CASE 
+				WHEN f.precio_total_mov IS NULL THEN 'No aplica'
+				ELSE f.precio_total_mov
+			END AS precio_total_mov
+		FROM 
+			factura_movimiento f 
+		JOIN 
+			usuarios us ON f.fk_id_usuario = us.id_usuario
+		JOIN 
+			productos p ON f.fk_id_producto = p.id_producto
+		LEFT JOIN 
+			proveedores pr ON f.fk_id_proveedor = pr.id_proveedores
+		JOIN 
+			bodega u ON p.fk_id_up = u.id_up    
+		JOIN 
+			tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+		JOIN 
+			categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+		ORDER BY 
+			CASE 
+				WHEN f.fecha_caducidad = '1899-11-30' THEN 1 
+				ELSE 0 
+			END,
+			f.id_factura DESC;
+		`
 		);
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -371,7 +396,6 @@ export const listarMovimientosEntrada = async (req, res) => {
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
 				f.nota_factura,CASE 
 				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
-				WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
 				ELSE f.fecha_caducidad
 			END as fecha_caducidad, pr.nombre_proveedores,f.num_lote,
 			CASE 

@@ -33,8 +33,8 @@ const Validate = {
     });
     return validacionExitosa;
   },
-  formatFecha: (fecha) => { // function para hacer que cualquier fecha sea legible
-    if (fecha === 'No aplica') {
+  formatFecha: (fecha) => {
+    if (fecha === 'No aplica' || fecha === '1899-11-30') {
         return 'No aplica';
     }
     const fechaObj = new Date(fecha);
@@ -42,7 +42,8 @@ const Validate = {
     const month = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
     const day = fechaObj.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-},
+}
+,
   limpiar: (limpiar) => {//funcion para limpiar los campos del formulario
     let limpiarElemento = document.querySelectorAll(`${limpiar}`);
     limpiarElemento.forEach((element) => {
