@@ -36,7 +36,7 @@ export const buscarProvedor = async (req, res) => {
 // Configuración de multer para almacenar archivos en disco
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      cb(null, "uploads");
+      cb(null, "backend/src/public/filePDF");
   },
   filename: function (req, file, cb) {
       cb(null, file.originalname+ '-' + Date.now()+'.pdf');
@@ -45,7 +45,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-export const cargarImagen = upload.single('img');
+export const cargarImagen = upload.single('archivo_contrato');
 
 export const registrarProvedor = async (req, res) => {
   try {
@@ -54,7 +54,8 @@ export const registrarProvedor = async (req, res) => {
       return res.status(403).json({ "status": 403, error })
     }
     let { nombre_proveedores, telefono_proveedores, direccion_proveedores,contrato_proveedores, inicio_contrato, fin_contrato } = req.body;
-    let archivo_contrato = req.file ? req.file.originalname : '';
+    let archivo_contrato =req.file.originalname;
+    console.log(archivo_contrato);
 
     let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
     const [rows] = await pool.query(selectUser)
