@@ -491,7 +491,7 @@ const Movimiento = () => {
     if (aplicaFechaCaducidad) {
       fecha_caducidad = document.getElementById('fecha_caducidad').value;
     }
-    
+    Validate.validarCampos('.form-empty');
     const validacionExitosa = Validate.validarSelect('.form-empt');
 
     if (!validacionExitosa) {

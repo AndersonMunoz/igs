@@ -25,7 +25,7 @@ export const guardarMovimientoEntrada = async (req, res) => {
             });
         }
 
-        const sql2 = `INSERT INTO productos (num_lote, fk_id_up, fk_id_tipo_producto) VALUES ('${nota_factura}','${num_lote}', '${fk_id_up}', '${fk_id_tipo_producto}')`;
+        const sql2 = `INSERT INTO productos (num_lote, fk_id_up, fk_id_tipo_producto) VALUES ('${num_lote}', '${fk_id_up}', '${fk_id_tipo_producto}')`;
         const resultInsertProductos = await pool.query(sql2).catch(err => console.log(err));
 
         const newIdProducto = resultInsertProductos[0].insertId;
