@@ -8,15 +8,15 @@ export const registroInstructor = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(400).json(error)
         }
-        let { documento_instructor,nombre_instructor} = req.body;
-        const documento_instructorQuery = `SELECT * FROM    instructores  WHERE documento_instructor = '${documento_instructor}'`;
+        let {documento_instructor, nombre_instructor} = req.body;
+        const documento_instructorQuery = `SELECT * FROM  instructores  WHERE documento_instructor = '${documento_instructor}'`;
         const [existingInstructor] = await pool.query(documento_instructorQuery);
         
         
         if (existingInstructor.length > 0) {
             return res.status(409).json({
                 "status": 409,
-                "message": "El instructor ya  esta registrado"
+                "message": "El documento ya esta registrado"
             });
         }
         let sql = `insert into instructores (documento_instructor,nombre_instructor) values('${documento_instructor}','${nombre_instructor}')`;
@@ -26,12 +26,12 @@ export const registroInstructor = async (req, res) => {
         if (rows.affectedRows > 0) {
             res.status(200).json({
                 "status": 200,
-                "menssage": " El instructor fue  registrado  con exito "
+                "menssage": " El Instructor fue  registrado  con exito "
             })
         } else {
             res.status(403).json({
                 "status": 403,
-                "menssage": "El instructor no se puedo registrar"
+                "menssage": "El Instructor no se puedo registrar"
             })
 
         }
@@ -45,7 +45,7 @@ export const registroInstructor = async (req, res) => {
 export const listarInstructor = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT i.estado, i.id_instructores AS id, i.documento_instructor AS Documento,i.nombre_instructor AS Nombre FROM instructores i ');
+            ('SELECT estado, id_instructores, documento_instructor, nombre_instructor FROM instructores');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
