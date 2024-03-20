@@ -488,9 +488,9 @@ export const Menu = () => {
               <table className="table table22">
                 <thead>
                   <tr>
-                    <th scope="col">cantidad</th>
-                    <th scope="col">peso</th>
-                    <th scope="col">producto</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Cantidad</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -499,9 +499,10 @@ export const Menu = () => {
                       {[elementoAlmacenado].map((element, index) => (
 
                         <tr key={index}>
+                          <td>{element.NombreProducto} </td>
                           <td>{element.NombreCategoria}</td>
                           <td>{element.Peso}</td>
-                          <td>{element.NombreProducto} </td>
+                          
                         </tr>
                       ))}
                     </>
