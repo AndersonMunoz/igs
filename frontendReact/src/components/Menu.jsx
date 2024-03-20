@@ -97,6 +97,7 @@ export const Menu = () => {
 
 
     listartMen(id);
+
   }, []);
 
 
@@ -135,17 +136,20 @@ export const Menu = () => {
       })
       .then((data) => {
         let cont = 0;
+        let menores = [];
         if (data !== null) {
-          data.forEach(elemento => {
+          data.map(elemento => {
             if (stockMin > elemento.Peso) {
               cont = cont + 1;
               setAlert(cont)
-              setElemento(elemento)
-            } else {
-              setAlert(cont)
+              menores.push(elemento)
+              setElemento(menores[0]);
+              console.log(menores[0]);
             }
           });
         }
+        
+        ;
       })
   }
 
@@ -497,12 +501,10 @@ export const Menu = () => {
                   {alert > 0 ? (
                     <>
                       {[elementoAlmacenado].map((element, index) => (
-
                         <tr key={index}>
                           <td>{element.NombreProducto} </td>
                           <td>{element.NombreCategoria}</td>
                           <td>{element.Peso}</td>
-                          
                         </tr>
                       ))}
                     </>
