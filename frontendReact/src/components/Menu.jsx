@@ -310,9 +310,6 @@ export const Menu = () => {
                   <IconChevronDown className="iconoA" />
                 </div>
               </div>
-
-
-
               <ul className="sub-menu">
                 <li>
                   <Link className="link_name" to="/reporte-fechas">
@@ -461,12 +458,12 @@ export const Menu = () => {
             </div>
           ) : (
             <>
-            <div id="notiAlerta" className="boxNotificaciones">
-              <div className="boxcontadorNoti">
-                <span>{alert}</span> {/* contador de notoficaciones */}
+              <div id="notiAlerta" className="boxNotificaciones">
+                <div className="boxcontadorNoti">
+                  <span>{alert}</span> {/* contador de notoficaciones */}
+                </div>
+                <IconBell className="iconAlert" />
               </div>
-              <IconBell className="iconAlert" />
-            </div>
             </>
           )}
 
