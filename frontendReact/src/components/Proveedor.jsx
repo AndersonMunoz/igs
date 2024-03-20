@@ -506,9 +506,7 @@ const proveedor = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="d-flex justify-content-between form-row mb-1">
-                    
-                      <button id="btnAgregar" type="submit"  className="btn btn-color">Enviar</button>
+                  <div className="d-flex gap-1 justify-content-end mt-3">
                     
                     <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
                       Actualizar
@@ -517,6 +515,8 @@ const proveedor = () => {
                     <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal"  onClick={()=>limpiar()}>
                       Cerrar
                     </button>
+
+                    <button id="btnAgregar" type="submit"  className="btn btn-color">Enviar</button>
                     
                   </div>
                 </form>
