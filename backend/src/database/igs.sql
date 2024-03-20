@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-03-2024 a las 00:13:34
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.1.17
+-- Tiempo de generación: 20-03-2024 a las 16:26:30
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -75,7 +75,7 @@ CREATE TABLE `factura_movimiento` (
   `nota_factura` varchar(300) NOT NULL,
   `fecha_caducidad` date DEFAULT NULL,
   `precio_total_mov` float DEFAULT NULL,
-  `num_lote` int(11) NOT NULL,
+  `num_lote` varchar(11) NOT NULL,
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) DEFAULT NULL
@@ -103,7 +103,6 @@ CREATE TABLE `instructores` (
 CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
   `cantidad_peso_producto` float DEFAULT 0,
-  `descripcion_producto` varchar(200) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `num_lote` int(11) NOT NULL,
   `fk_id_up` int(11) NOT NULL,
