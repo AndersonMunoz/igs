@@ -9,7 +9,7 @@ export const guardarMovimientoEntrada = async (req, res) => {
         }
 
         let { cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-            nota_factura, fecha_caducidad, fk_id_usuario, fk_id_proveedor, num_lote, fk_id_up, fk_id_tipo_producto, descripcion_producto } = req.body;
+            nota_factura, fecha_caducidad, fk_id_usuario, fk_id_proveedor, num_lote, fk_id_up, fk_id_tipo_producto} = req.body;
 
         // Si fecha_caducidad no está definida o es una cadena vacía, establece su valor como null
         if (!fecha_caducidad) {
@@ -25,7 +25,7 @@ export const guardarMovimientoEntrada = async (req, res) => {
             });
         }
 
-        const sql2 = `INSERT INTO productos (descripcion_producto,num_lote, fk_id_up, fk_id_tipo_producto) VALUES ('${nota_factura}','${num_lote}', '${fk_id_up}', '${fk_id_tipo_producto}')`;
+        const sql2 = `INSERT INTO productos (num_lote, fk_id_up, fk_id_tipo_producto) VALUES ('${nota_factura}','${num_lote}', '${fk_id_up}', '${fk_id_tipo_producto}')`;
         const resultInsertProductos = await pool.query(sql2).catch(err => console.log(err));
 
         const newIdProducto = resultInsertProductos[0].insertId;
@@ -180,7 +180,7 @@ export const listarProductosCaducar = async (req, res) => {
       c.nombre_categoria AS NombreCategoria,
       f.cantidad_peso_movimiento,
       t.unidad_peso AS Unidad,
-      p.descripcion_producto AS Descripcion,
+      f.nota_factura AS Descripcion,
       (f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotal, 
       u.nombre_up AS UnidadProductiva, 
       p.estado AS estado 
@@ -495,16 +495,37 @@ export const actualizarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		let { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad,cantidad_peso_movimiento} = req.body;
+		let { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad,cantidad_peso_movimiento,num_lote} = req.body;
 		let sqlPrev = `SELECT cantidad_peso_movimiento, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
 		let resultPrev = await pool.query(sqlPrev,id);
 		let prevMovimiento = Number(resultPrev[0][0].cantidad_peso_movimiento);
 		let lote = Number(resultPrev[0][0].num_lote);
-		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',precio_movimiento='${precio_movimiento}',nota_factura='${nota_factura}',fecha_caducidad='${fecha_caducidad}',cantidad_peso_movimiento='${cantidad_peso_movimiento}'where id_factura=${id}`;
+
+        const [existingLote] = await pool.query(sqlPrev);
+	        if (existingLote.length === 0) {
+            return res.status(409).json({
+                "status": 404,
+                "message": "El lote no existe"
+            });
+        }
+
+        // Verificar duplicidad de documento solo si el documento se está actualizando
+        if (num_lote !== existingLote[0].num_lote) {
+            const documentQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}' AND id_factura != ${id}`;
+            const [existingLotee] = await pool.query(documentQuery);
+
+            if (existingLotee.length > 0) {
+                return res.status(409).json({
+                    "status": 409,
+                    "message": "El lote ya esta registrado"
+                });
+            }
+        }
+		let sql = `UPDATE factura_movimiento SET estado_producto_movimiento='${estado_producto_movimiento}',precio_movimiento='${precio_movimiento}',nota_factura='${nota_factura}',num_lote='${num_lote}',fecha_caducidad='${fecha_caducidad}',cantidad_peso_movimiento='${cantidad_peso_movimiento}'where id_factura=${id}`;
 
 		let sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=${id}`;
 		let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
-		let sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ${diffMovimiento} WHERE num_lote=${lote}`;
+		let sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ${diffMovimiento}, num_lote='${num_lote}' WHERE num_lote=${lote}`;
 		const [result1, result2,result3] = await Promise.all([
 			pool.query(sql, [estado_producto_movimiento,precio_movimiento, nota_factura,fecha_caducidad,cantidad_peso_movimiento]),
 			pool.query(sql2, [cantidad_peso_movimiento,precio_movimiento,id]),

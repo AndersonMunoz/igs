@@ -9,15 +9,23 @@ export const validarFacturaMovimiento = [
     check('fk_id_proveedor','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('fk_id_up','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('fk_id_tipo_producto','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
-    check('num_lote','Ingrese un número de lote válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
+    check('num_lote', 'Ingrese un número de lote válido, solo letras del alfabeto español y números enteros')
+        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/)
+        .withMessage('El número de lote solo puede contener letras del alfabeto español y números enteros')
+        .notEmpty()
+        .withMessage('El número de lote no puede estar vacío')
 ]
 
 export const validarFacturaMovimientoSalida = [
     check('cantidad_peso_movimiento','Ingrese una cantidad válida, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('nota_factura','Ingrese un descripción válida, máximo 300 caracteres y mínimo 3').isLength({min: 3,max:300}).notEmpty(),
     check('fk_id_producto','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
-    check('fk_id_usuario','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),/* 
-    check('num_lote','Ingrese un número de lote válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty() */
+    check('fk_id_usuario','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
+    check('num_lote', 'Ingrese un número de lote válido, solo letras del alfabeto español y números enteros')
+        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/)
+        .withMessage('El número de lote solo puede contener letras del alfabeto español y números enteros')
+        .notEmpty()
+        .withMessage('El número de lote no puede estar vacío')
 ]
 
 
@@ -27,7 +35,11 @@ export const validarFacturaMovimientoActu = [
     check('cantidad_peso_movimiento','Ingrese una cantidad válida, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('nota_factura','Ingrese un descripción válida, máximo 300 caracteres y mínimo 3').isLength({min: 3,max:300}).notEmpty(),
     check('precio_movimiento','Ingrese un precio válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
-    /* check('num_lote','Ingrese un número de lote válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(), */
+    check('num_lote', 'Ingrese un número de lote válido, solo letras del alfabeto español y números enteros')
+        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/)
+        .withMessage('El número de lote solo puede contener letras del alfabeto español y números enteros')
+        .notEmpty()
+        .withMessage('El número de lote no puede estar vacío')
 ]
 
 export const validarFacturaMovimientoActuSalida = [

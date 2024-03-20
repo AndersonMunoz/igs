@@ -491,8 +491,13 @@ const Movimiento = () => {
     if (aplicaFechaCaducidad) {
       fecha_caducidad = document.getElementById('fecha_caducidad').value;
     }
+    
+    const validacionExitosa = Validate.validarSelect('.form-empt');
 
-    const validacionExitosa = Validate.validarCampos('.form-empty');
+    if (!validacionExitosa) {
+      Sweet.registroFallido();
+      return;
+    }
     fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
       method: 'POST',
       headers: {
@@ -643,9 +648,8 @@ const Movimiento = () => {
                       </td>
                       <td className="p-2 text-center">{element.precio_total_mov}</td>
                       <td className="p-2 text-center">
-  {element.estado_producto_movimiento === 'optimo' ? 'Óptimo' : element.estado_producto_movimiento.charAt(0).toUpperCase() + element.estado_producto_movimiento.slice(1).toLowerCase()}
-</td>
-
+                        {element.estado_producto_movimiento === 'optimo' ? 'Óptimo' : element.estado_producto_movimiento.charAt(0).toUpperCase() + element.estado_producto_movimiento.slice(1).toLowerCase()}
+                      </td>
                       <td className="p-2 text-center">
                         {element.nota_factura.charAt(0).toUpperCase() + element.nota_factura.slice(1).toLowerCase()}
                       </td>
@@ -685,7 +689,7 @@ const Movimiento = () => {
                       <div className="col">
                         <label className="form-label" htmlFor="categoria">Categoria</label>
                           <Select
-                            className="react-select-container  form-empty my-custom-class"
+                            className="react-select-container  form-empt my-custom-class"
                             classNamePrefix="react-select"
                             options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
                             placeholder="Selecciona..."
@@ -700,7 +704,7 @@ const Movimiento = () => {
                       <div className="col">
                         <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Producto</label>
                         <Select
-                          className="react-select-container  form-empty my-custom-class"
+                          className="react-select-container  form-empt my-custom-class"
                           classNamePrefix="react-select"
                           options={selectedCategoria ? productosCategoria.map(element => ({ key: element.id_tipo, value: element.id_tipo, label: element.nombre_tipo })) : []}
                           placeholder="Selecciona..."
@@ -716,7 +720,7 @@ const Movimiento = () => {
                       <div className="col">
                         <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
                         <Select
-                            className="react-select-container form-empty my-custom-class"
+                            className="react-select-container form-empt my-custom-class"
                             classNamePrefix="react-select"
                             options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
                             placeholder="Selecciona..."
@@ -776,7 +780,7 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
+                          <input type="text" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
                           </div>
@@ -899,6 +903,15 @@ const Movimiento = () => {
                           </div>
                           </div>
                         </div>
+                        <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
+                          <input type="text" id="num_lote" value={movimientoSeleccionado.num_lote || ''} name="num_lote" className="form-control form-empty limpiar" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese un número válido.
+                          </div>
+                        </div>
+                      </div>
                       </div>
                       <div className="row mb-4">
                         <div className="col">
@@ -942,13 +955,12 @@ const Movimiento = () => {
                   </div>
                   
                   <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState()}}>Cerrar</button>
                     <button
                       type="button"
                       className="btn btn-color"
                       onClick={() => {
-                        actualizarMovimiento(movimientoSeleccionado.id_factura);
-                        handleCloseModal2();
+                        actualizarMovimiento(movimientoSeleccionado.id_factura)
                       }}
                     >
                       Actualizar
