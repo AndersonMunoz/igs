@@ -1,5 +1,5 @@
 import React from "react";
-import PdfManual1 from "../../public/Manual_técnico_IGS.pdf"
+import PdfManual1 from "/Manual_técnico_IGS.pdf"
 
 
 const Ayuda = () => {

@@ -9,9 +9,9 @@ export const registroDetalles = async (req, res) => {
         if (!error.isEmpty()) {
            return res.status(403).json({"status": 403 ,error})
         }
-    let { destino_movimiento,fk_id_movimiento,fk_id_instructor } = req.body;
-		let sql = `insert into detalles (destino_movimiento,fk_id_movimiento,fk_id_instructor	)
-        values('${destino_movimiento}','${fk_id_movimiento}','${fk_id_instructor}')`;
+    let { destino_movimiento,fk_id_movimiento,fk_id_titulado,fk_id_instructor } = req.body;
+		let sql = `INSERT INTO detalles (destino_movimiento,fk_id_movimiento,fk_id_titulado,fk_id_instructor)
+        values('${destino_movimiento}','${fk_id_movimiento}','${fk_id_titulado}','${fk_id_instructor}')`;
 
 		const [rows] = await pool.query(sql);
 
@@ -37,16 +37,18 @@ export const registroDetalles = async (req, res) => {
 export const listarDetalles = async (req, res) => {
 	try {
 		const [result] = await pool.query(`SELECT
-		i.nombre_instructor AS NombreInstructor, i.documento_instructor AS Documento,
-		d.destino_movimiento AS Detalle,
-		f.fecha_movimiento AS Fecha, f.cantidad_peso_movimiento AS Cantidad,
-		p.num_lote AS Lote,
-		t.nombre_titulado AS Titulado, t.id_ficha AS Ficha
+		t.nombre_tipo AS NombreProducto,
+		c.nombre_categoria AS NombreCategoria,
+		p.num_lote AS NumeroLote,
+		p.descripcion_producto AS Descripcion,
+		b.nombre_up AS Bodega,
+		f.precio_total_mov
 		FROM detalles d
-		JOIN instructores i ON d.fk_id_movimiento = i.id_instructores
-		JOIN titulados t ON i.fk_id_titulado = t.id_titulado
 		JOIN factura_movimiento f ON d.fk_id_movimiento = f.id_factura
 		JOIN productos p ON f.fk_id_producto = p.id_producto
+		JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+		JOIn categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+		JOIN bodega b ON p.fk_id_up = b.id_up
     `);
 		if (result.length > 0) {
 			res.status(200).json(result);

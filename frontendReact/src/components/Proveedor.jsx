@@ -36,10 +36,10 @@ const proveedor = () => {
   const [direccion_proveedores, setDireccion_proveedores] = useState("");
   const [contrato_proveedores, setContrato_proveedores] = useState("");
   const [telefono_proveedores, setTelefono_proveedores] = useState("");
-  const [inicio_contrato, setContratoInicio] = useState('');
-  const [fin_contrato, setContratoFin] = useState("");
+  const [inicio_contrato, setinicio_contrato] = useState('');
+  const [fin_contrato, setfin_contrato] = useState("");
   const [userRoll, setUserRoll] = useState("");
-  const [filename, setfilename] = useState('');
+  const [archivo_contrato, setArchivo_contrato] = useState(null);
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -130,7 +130,7 @@ const proveedor = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[8, "asc"]],
+        order: [[9, "asc"]],
       });
     }
   }, [proveedor]);
@@ -143,8 +143,6 @@ const proveedor = () => {
     listarProveedor();
   }, []);
 
-
-
   function listarProveedor() {
     fetch(`http://${portConexion}:3000/proveedor/listar`, {
       method: "get",
@@ -156,7 +154,6 @@ const proveedor = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          console.log(data);
           data.forEach((item) => {
             const fechaActual = new Date();
             const dia = fechaActual.getDay() - 1;
@@ -200,7 +197,7 @@ const proveedor = () => {
         }
       });
   }
-
+    
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
       if (res.isConfirmed) {
@@ -224,48 +221,49 @@ const proveedor = () => {
     });
   }
 
-  function registrarProveedor() {
+ function registrarProveedor(e) {
+    e.preventDefault();
     const validacionExitosa = Validate.validarCampos(".form-empty");
     if (validacionExitosa) {
-      const formData = new FormData();
-      formData.append('nombre_proveedores', nombre_proveedores);
-      formData.append('telefono_proveedores', telefono_proveedores);
-      formData.append('direccion_proveedores', direccion_proveedores);
-      formData.append('inicio_contrato', inicio_contrato);
-      formData.append('fin_contrato', fin_contrato);
-      formData.append('contrato_proveedores', contrato_proveedores);
-  
-      fetch(`http://${portConexion}:3000/proveedor/registrar`, {
-        method: "POST",
-        headers: {
-          token: localStorage.getItem("token"),
-        },
-        body: formData,
-      })
+        const formData = new FormData();
+        formData.append('nombre_proveedores', nombre_proveedores)
+        formData.append('telefono_proveedores',telefono_proveedores)
+        formData.append('direccion_proveedores',direccion_proveedores)
+        formData.append('inicio_contrato',inicio_contrato)
+        formData.append('fin_contrato',fin_contrato)
+        formData.append('contrato_proveedores',contrato_proveedores)
+        formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
+        
+        fetch(`http://${portConexion}:3000/proveedor/registrar`, {
+            method: "POST",
+            headers: {
+                "token": localStorage.getItem("token")
+            },
+            body: formData,
+        })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-          if (data.status === 200) {
-            Sweet.exito(data.message);
-            listarProveedor();
-            limpiar();
-            if ($.fn.DataTable.isDataTable(tableRef.current)) {
-              $(tableRef.current).DataTable().destroy();
-            }
-          } else {
-            if (data.status === 403) {
-              Sweet.error(data.error.errors[0].msg);
+            console.log(data);
+            if (data.status === 200) {
+                Sweet.exito(data.message);
+                listarProveedor();
+                limpiar();
+                if ($.fn.DataTable.isDataTable(tableRef.current)) {
+                    $(tableRef.current).DataTable().destroy();
+                }
             } else {
-              Sweet.error(data.message);
+                if (data.status === 403) {
+                    Sweet.error(data.error.errors[0].msg);
+                } else {
+                    Sweet.error(data.message);
+                }
             }
-          }
         })
         .catch((error) => {
-          console.error('Error:', error);
+            console.error('Error:', error);
         });
     }
-  }
-  
+}
 
   function editarProveedor(id) {
     document.getElementById("titleSctualizar").classList.remove("d-none");
@@ -287,8 +285,8 @@ const proveedor = () => {
           setDireccion_proveedores(data[0].direccion_proveedores)
           setContrato_proveedores(data[0].contrato_proveedores)
           setTelefono_proveedores(data[0].telefono_proveedores)
-          setContratoInicio(formatDateYYYYMMDD( new Date(data[0].inicio_contrato)))
-          setContratoFin(formatDateYYYYMMDD( new Date(data[0].fin_contrato)))
+          setinicio_contrato(formatDateYYYYMMDD( new Date(data[0].inicio_contrato)))
+          setfin_contrato(formatDateYYYYMMDD( new Date(data[0].fin_contrato)))
         }
       });
   }
@@ -328,8 +326,8 @@ const proveedor = () => {
     setDireccion_proveedores('')
     setContrato_proveedores('')
     setTelefono_proveedores('')
-    setContratoInicio('')
-    setContratoFin('')
+    setinicio_contrato('')
+    setfin_contrato('')
   }
   return (
     <div>
@@ -377,7 +375,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              <th className="th-sm">Documento</th>
+              <th className="th-sm">Archivo Contrato</th>
               <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
@@ -394,7 +392,7 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    <td>{element.detalles_contrato}</td>
+                    <td>{element.archivo_contrato}</td>
                     {userRoll == "administrador" ? (   
                       <td className="p-0">
                         {element.estado !== 1 ? (
@@ -448,18 +446,18 @@ const proveedor = () => {
             </div>
             <div className="modal-body">
               <div className=" d-flex justify-content-center">
-                <form className="text-center border border-light" action="#!">
-                  <div className="d-flex form-row mb-4">
+                <form  className="text-center border border-light" encType='multipart/form-data' onSubmit={registrarProveedor}>
+                  <div className="d-flex form-row mb-4">'
                     <div className="col">
-                      <label htmlFor="nombresProveedor">Nombres</label>
-                      <input value={nombre_proveedores} onChange={(e) => {setNombre_proveedores(e.target.value); }} type="text" id="nombresProveedor" name="nombresProveedor" className="form-control form-empty limpiar" placeholder="Nombres" required/>
+                      <label htmlFor="nombre_proveedores">Nombres</label>
+                      <input value={nombre_proveedores} onChange={(e) => {setNombre_proveedores(e.target.value); }} type="text" id="nombre_proveedores" name="nombre_proveedores" className="form-control form-empty limpiar" placeholder="Nombres" required/>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
-                      <label htmlFor="direccionProveedor">Direccion</label>
-                      <input value={direccion_proveedores} onChange={(e) => {setDireccion_proveedores(e.target.value);  }}  type="text"  id="direccionProveedor"  name="direccionProveedor"  className="form-control form-empty limpiar"  placeholder="Direccion"></input>
+                      <label htmlFor="direccion_proveedores">Direccion</label>
+                      <input value={direccion_proveedores} onChange={(e) => {setDireccion_proveedores(e.target.value);  }}  type="text"  id="direccion_proveedores"  name="direccion_proveedores"  className="form-control form-empty limpiar"  placeholder="Direccion"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -467,15 +465,15 @@ const proveedor = () => {
                   </div>
                   <div className="d-flex form-row mb-4">
                     <div className="col">
-                      <label htmlFor="contratoProveedor">N° Contrato</label>
-                      <input value={contrato_proveedores}  onChange={(e) => {    setContrato_proveedores(e.target.value);  }}  type="text"  name="contratoProveedor"  id="contratoProveedor"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
+                      <label htmlFor="contrato_proveedores">N° Contrato</label>
+                      <input value={contrato_proveedores}  onChange={(e) => {    setContrato_proveedores(e.target.value);  }}  type="text"  name="contrato_proveedores"  id="contrato_proveedores"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
-                      <label htmlFor="">Telefono</label>
-                      <input value={telefono_proveedores} onChange={(e) => {    setTelefono_proveedores(e.target.value);  }}  type="text"  name="telefonoProveedor"  id="telefonoProveedor"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <label htmlFor="telefono_proveedores">Telefono</label>
+                      <input value={telefono_proveedores} onChange={(e) => {    setTelefono_proveedores(e.target.value);  }}  type="text"  name="telefono_proveedores"  id="telefono_proveedores"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -484,15 +482,15 @@ const proveedor = () => {
 
                   <div className="d-flex form-row mb-1">
                     <div className="col">
-                      <label htmlFor="contratoInicio">Inicio de contrato</label>
-                      <input value={inicio_contrato} onChange={(e) => {    setContratoInicio(e.target.value);  }}  type="date"  name="contratoInicio"  id="contratoInicio"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
+                      <label htmlFor="inicio_contrato">Inicio de contrato</label>
+                      <input value={inicio_contrato} onChange={(e) => {    setinicio_contrato(e.target.value);  }}  type="date"  name="inicio_contrato"  id="inicio_contrato"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
-                      <label htmlFor="contratoFin">Fin de contrato</label>
-                      <input value={fin_contrato} onChange={(e) => {    setContratoFin(e.target.value);  }}  type="date"  name="contratoFin"  id="contratoFin"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <label htmlFor="fin_contrato">Fin de contrato</label>
+                      <input value={fin_contrato} onChange={(e) => {    setfin_contrato(e.target.value);  }}  type="date"  name="fin_contrato"  id="fin_contrato"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -501,39 +499,31 @@ const proveedor = () => {
 
                   <div className="d-flex form-row mb-1">
                     <div className="col">
-                      <label htmlFor="documentoContrato">Documento de contrato</label>
-                      
-                      <input 
-  onChange={(e) => { 
-    const { value } = e.target; 
-    setfilename(value); 
-  }} 
-  type="file" 
-  name="documentoContrato" 
-  id="documentoContrato" 
-  className="form-control form-empty limpiar" 
-  placeholder="file Pdf"
-/>
-
-                      
+                      <label htmlFor="archivo_contrato">Archivo de contrato</label>
+                      <input   onChange={(e) => {     const { value } = e.target;     setArchivo_contrato(value);   }}   type="file"   name="archivo_contrato"   id="archivo_contrato"   className="form-control form-empty limpiar"   placeholder="file Pdf"/>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
+                  </div>
+                  <div className="d-flex justify-content-between form-row mb-1">
+                    
+                      <button id="btnAgregar" type="submit"  className="btn btn-color">Enviar</button>
+                    
+                    <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
+                      Actualizar
+                    </button>
+                    
+                    <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal"  onClick={()=>limpiar()}>
+                      Cerrar
+                    </button>
+                    
                   </div>
                 </form>
               </div>
             </div>
             <div className="modal-footer">
-              <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal"  onClick={()=>limpiar()}>
-                Cerrar
-              </button>
-              <button  id="btnAgregar"  type="button"  className="btn btn-color"  onClick={()=>{registrarProveedor();}}>
-                Agregar
-              </button>
-              <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);    limpiar();  }}>
-                Actualizar
-              </button>
+              
             </div>
           </div>
         </div>
