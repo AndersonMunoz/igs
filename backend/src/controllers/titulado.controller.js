@@ -54,7 +54,7 @@ export const listarTitulado = async (req, res) => {
 		if (result.length > 0) {
 			res.status(200).json(result);
 		} else {
-			res.status(204).json({ "status": 204, "message": "No se pudo listar tituladoss" });
+			res.status(204).json({ "status": 204, "message": "No se pudo listar titulados" });
 		}
 
 	} catch (err) {

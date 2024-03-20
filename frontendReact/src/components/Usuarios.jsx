@@ -423,7 +423,7 @@ const Usuario = () => {
           </button>
         </div>
         <div className="btnContenido22">
-          <h2 className="tituloHeaderpp">Lista los Usuarios</h2>
+          <h2 className="tituloHeaderpp">Lista de Usuarios</h2>
         </div>
         <div className="btnContenido3">
           <div
