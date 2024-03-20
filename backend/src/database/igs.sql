@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-03-2024 a las 16:26:30
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Tiempo de generación: 20-03-2024 a las 21:52:44
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -104,7 +104,7 @@ CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
   `cantidad_peso_producto` float DEFAULT 0,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `num_lote` int(11) NOT NULL,
+  `num_lote` varchar(11) NOT NULL,
   `fk_id_up` int(11) NOT NULL,
   `fk_id_tipo_producto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

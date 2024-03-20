@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-03-2024 a las 16:26:52
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Tiempo de generación: 20-03-2024 a las 21:52:11
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -90,7 +90,10 @@ INSERT INTO `detalles` (`id_detalle`, `destino_movimiento`, `fk_id_movimiento`, 
 (10, NULL, 10, NULL, NULL),
 (11, NULL, 11, NULL, NULL),
 (12, NULL, 12, NULL, NULL),
-(13, NULL, 13, NULL, NULL);
+(13, NULL, 13, NULL, NULL),
+(14, NULL, 14, NULL, NULL),
+(15, NULL, 15, NULL, NULL),
+(16, NULL, 16, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -126,12 +129,15 @@ INSERT INTO `factura_movimiento` (`id_factura`, `fecha_movimiento`, `tipo_movimi
 (5, '2024-03-20 12:22:43', 'entrada', 1, 1000, 'optimo', 'sdfsdfsdfsdfsdf', '2024-05-10', 1000, '3', 3, 1, 1),
 (6, '2024-03-20 13:33:53', 'entrada', 76, 5000, 'optimo', 'Prueba de edicion de lote', '2024-03-20', 380000, '6', 4, 1, 1),
 (7, '2024-03-20 12:31:32', 'entrada', 5, 400, 'optimo', 'sdfsdfsdfsdfsdf', '2024-03-24', 2000, '4', 5, 1, 1),
-(8, '2024-03-20 13:20:14', 'entrada', 3, 4555, 'optimo', 'sdfsdfsdfsdfsdf', '2024-04-07', 13665, '5', 6, 1, 1),
+(8, '2024-03-20 20:11:36', 'entrada', 3, 4555, 'optimo', 'sdfsdfsdfsdfsdf', '2024-04-08', 13665, '5', 6, 1, 1),
 (9, '2024-03-20 14:42:29', 'entrada', 34, 5666, 'optimo', 'sdfsdfsdfsdfsdf', '2024-03-27', 192644, '7', 7, 1, 1),
-(10, '2024-03-20 14:43:41', 'entrada', 4, 100, 'optimo', 'sdfsdfsdfsdfsdf', NULL, 400, '8', 8, 1, 1),
+(10, '2024-03-20 20:26:03', 'entrada', 4, 100, 'optimo', 'sdfsdfsdfsdfsdf', '0000-00-00', 400, '8', 8, 1, 1),
 (11, '2024-03-20 15:12:55', 'entrada', 5, 100, 'optimo', 'sdfsdfsdfsdfsdf', '1899-11-30', 500, '9', 9, 1, 1),
 (12, '2024-03-20 14:54:27', 'entrada', 13, 12, 'deficiente', 'dsadsad', '2024-03-28', 156, '1324', 11, 1, 1),
-(13, '2024-03-20 15:22:03', 'entrada', 5, 100, 'optimo', 'Yogurt alpinasssss', '2023-11-17', 500, '10ms', 12, 1, 1);
+(13, '2024-03-20 20:11:29', 'entrada', 5, 100, 'optimo', 'Yogurt alpinasssss', '2024-04-13', 500, '10ms', 12, 1, 1),
+(14, '2024-03-20 20:39:49', 'entrada', 3, 5000, 'optimo', 'Prueba data table6', '1899-11-30', 15000, '10qwq', 13, 1, 1),
+(15, '2024-03-20 20:50:45', 'entrada', 434, 5000, 'optimo', 'Prueba data table3', '0000-00-00', 2170000, 'ssd444', 14, 1, 1),
+(16, '2024-03-20 20:50:50', 'entrada', 343, 5000, 'optimo', 'Prueba data table3', '1899-11-30', 1715000, '456445mf', 15, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -163,7 +169,7 @@ CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
   `cantidad_peso_producto` float DEFAULT 0,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `num_lote` int(11) NOT NULL,
+  `num_lote` varchar(11) NOT NULL,
   `fk_id_up` int(11) NOT NULL,
   `fk_id_tipo_producto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -173,18 +179,21 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id_producto`, `cantidad_peso_producto`, `estado`, `num_lote`, `fk_id_up`, `fk_id_tipo_producto`) VALUES
-(1, 1, 1, 1, 1, 1),
-(2, 2, 1, 2, 1, 2),
-(3, 1, 1, 3, 1, 2),
-(4, 76, 1, 6, 1, 2),
-(5, 5, 1, 4, 1, 2),
-(6, 3, 1, 5, 1, 3),
-(7, 34, 1, 7, 1, 3),
-(8, 4, 1, 8, 1, 3),
-(9, 5, 1, 9, 1, 2),
-(10, 0, 1, 0, 1, 5),
-(11, 13, 1, 1324, 1, 1),
-(12, 5, 1, 10, 1, 1);
+(1, 1, 1, '1', 1, 1),
+(2, 2, 1, '2', 1, 2),
+(3, 1, 1, '3', 1, 2),
+(4, 76, 1, '6', 1, 2),
+(5, 5, 1, '4', 1, 2),
+(6, 3, 1, '5', 1, 3),
+(7, 34, 1, '7', 1, 3),
+(8, 4, 1, '8', 1, 3),
+(9, 5, 1, '9', 1, 2),
+(10, 434, 1, '0', 1, 5),
+(11, 13, 1, '1324', 1, 1),
+(12, 5, 1, '10', 1, 1),
+(13, 3, 1, '10', 1, 4),
+(14, 434, 1, '0', 1, 3),
+(15, 343, 1, '456445mf', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -374,13 +383,13 @@ ALTER TABLE `categorias_producto`
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_movimiento`
 --
 ALTER TABLE `factura_movimiento`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `instructores`
@@ -392,7 +401,7 @@ ALTER TABLE `instructores`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
