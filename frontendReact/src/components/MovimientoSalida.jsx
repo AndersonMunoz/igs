@@ -21,6 +21,7 @@ import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import portConexion from "../const/portConexion";
+import Select from 'react-select'
 
 const Movimiento = () => {
   const [userId, setUserId] = useState('');
@@ -35,6 +36,8 @@ const Movimiento = () => {
   const [showModal, setShowModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
+  const [selectedTipo, setSelectedTipo] = useState(null);
+  const [selectedCategoria, setSelectedCategoria] = useState(null);
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
   const handleOnExport = () => {
@@ -119,6 +122,15 @@ const Movimiento = () => {
     setAplicaFechaCaducidad(!aplicaFechaCaducidad);
 
   };
+  const handleCategoria = (selectedOption) => {
+    setSelectedCategoria(selectedOption); 
+    setSelectedTipo(null); 
+  };
+  const handleTipo = (selectedOption) => {
+    setSelectedTipo(selectedOption); 
+    console.log(selectedOption.value.id_producto);
+    console.log(selectedOption.value.num_lote);
+  };
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
@@ -192,8 +204,13 @@ const Movimiento = () => {
     listarTipo();
     listarProveedor();
     listarUsuario();
-
-  }, []);
+    if (selectedCategoria) {
+      listarProductoCategoria(selectedCategoria.value);
+    }
+    if (selectedTipo) {
+      listarUnidadesPro(selectedTipo.value)
+    }
+  }, [selectedCategoria,selectedTipo]);
 
   function listarCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listar`, {
@@ -264,7 +281,7 @@ const Movimiento = () => {
   function listarProductoCategoria(id_categoria) {
 
     fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+      `http://${portConexion}:3000/facturamovimiento/buscarProPro/${id_categoria == '' ? 0 : id_categoria}`,
       {
         method: "GET",
         headers: {
@@ -372,7 +389,7 @@ const Movimiento = () => {
     let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
     let nota_factura = document.getElementById('nota_factura').value;
     let fecha_caducidad = null;
-    let fk_id_producto = document.getElementById('fk_id_producto').value;
+    let fk_id_producto = selectedTipo ? selectedTipo.value : null;
     if (aplicaFechaCaducidad) {
       fecha_caducidad = document.getElementById('fecha_caducidad').value;
     }
@@ -408,7 +425,6 @@ const Movimiento = () => {
         Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
         return;
       }
-      /* console.log(data); */
       listarMovimiento();
       setShowModal(false);
       removeModalBackdrop(true );
@@ -473,7 +489,7 @@ const Movimiento = () => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos de Salida</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedCategoria(null)}}>
             Registrar nuevo movimiento de Salida
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
@@ -569,30 +585,36 @@ const Movimiento = () => {
                   <form>
                     <div className="row mb-4">
                       <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="categoria">Categoria</label>
-                          <select onChange={(e)=>{listarProductoCategoria(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
-                            <option value="">Selecciona una categoria</option>
-                            {categoria_list.map((element) => (
-                              
-                              <option  key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione una categoria.
-                          </div>
+                        <label className="form-label" htmlFor="categoria">Categoria</label>
+                          <Select
+                            className="react-select-container  form-empt my-custom-class"
+                            classNamePrefix="react-select"
+                            options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
+                            placeholder="Selecciona..."
+                            onChange={handleCategoria}
+                            value={selectedCategoria}
+                            id="categoria"
+                          />
+                        <div className="invalid-feedback is-invalid">
+                          Por favor, seleccione un tipo de producto.
                         </div>
                       </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="fk_id_producto">Producto</label>
-                          <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
-                            <option value="">Seleccione una opción</option>
-                            {productosCategoria.length > 0 ? productosCategoria.map((element) => (
-                              <option key={element.id_producto} value={element.id_producto}>
-                                {element.nombre_tipo} - {element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}</option>
-                            )): ""}
-                          </select>
+                          <Select
+                            className="react-select-container form-empty limpiar my-custom-class"
+                            classNamePrefix="react-select"
+                            options={productosCategoria ? productosCategoria.map(element => ({ 
+                              value: { id_producto: element.id_producto, num_lote: element.num_lote }, 
+                              label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` 
+                            })) : []}
+                            placeholder="Selecciona..."
+                            onChange={handleTipo}
+                            value={selectedTipo}
+                            id="fk_id_producto"
+                            name="fk_id_producto"
+                          />
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un producto.
                           </div>

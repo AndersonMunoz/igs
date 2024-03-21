@@ -714,4 +714,24 @@ export const obtenerUnidad = async (req, res) => {
 	}
 };
 
+export const obtenerProProductos = async (req, res) => {
+	try {
+		let id = req.params.id_categoria;
+		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,p.num_lote FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
+
+		const [rows] = await pool.query(sql);
+
+		if (rows.length > 0) {
+			res.status(200).json(rows);
+		} else {
+			res.status(200).json({ "status": 401 , "message":"No se listaron productos"});
+		}
+	} catch (e) {
+		res.status(500).json({
+			"status": 500,
+			"message": "Error en el servidor" + e
+		});
+	}
+};
+
 

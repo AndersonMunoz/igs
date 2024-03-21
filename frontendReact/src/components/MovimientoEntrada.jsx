@@ -692,8 +692,8 @@ const Movimiento = () => {
                             id="categoria"
                           />
                         <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un tipo de producto.
-                    </div>
+                          Por favor, seleccione un tipo de producto.
+                        </div>
                       </div>
                       <div className="col">
                         <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Producto</label>
@@ -798,7 +798,8 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                          <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
+                          <textarea id="nota_factura" name="nota_factura" className="form-control form-empty limpiar"></textarea>
+
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese una descripción válida.
                           </div>
@@ -902,7 +903,7 @@ const Movimiento = () => {
                       <div className="col">
                           <div data-mdb-input-init className="form-outline">
                             <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                            <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
+                            <textarea className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
                             <div className="invalid-feedback is-invalid">
                               Por favor, ingrese una nota mas larga.
                             </div>
