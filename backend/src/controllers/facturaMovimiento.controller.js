@@ -497,13 +497,17 @@ export const actualizarMovimiento = async (req, res) => {
         
         const id = req.params.id;
         const { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad, cantidad_peso_movimiento, num_lote } = req.body;
-		const nuevoNumLote = `${num_lote}`;
+        const nuevoNumLote = `${num_lote}`;
+
+        // Obtener el número de lote inicial del movimiento seleccionado
         const [movimientoInicial] = await pool.query(`SELECT cantidad_peso_movimiento, num_lote FROM factura_movimiento WHERE id_factura = ${id}`);
         const cantidadMovimientoInicial = movimientoInicial[0].cantidad_peso_movimiento;
 
+        // Verificar si el número de lote ha sido modificado
         const numLoteModificado = num_lote !== movimientoInicial[0].num_lote;
 
         if (numLoteModificado) {
+            // Verificar si el nuevo número de lote ya existe en la base de datos
             const [existingLote] = await pool.query(`SELECT num_lote FROM productos WHERE num_lote = ${num_lote}`);
             if (existingLote.length > 0) {
                 return res.status(409).json({
@@ -513,39 +517,44 @@ export const actualizarMovimiento = async (req, res) => {
             }
         }
 
+        // Calcular la diferencia entre la nueva cantidad de movimiento y la cantidad inicial de movimiento
         const diferenciaMovimiento = cantidadMovimientoInicial - cantidad_peso_movimiento;
 
+        // Obtener la cantidad actual del producto
         const [productoActual] = await pool.query(`SELECT cantidad_peso_producto FROM productos WHERE num_lote = ${movimientoInicial[0].num_lote}`);
         const cantidadProductoActual = productoActual[0].cantidad_peso_producto;
 
         if (diferenciaMovimiento > 0 && cantidadProductoActual - diferenciaMovimiento >= 0) {
-			const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
-			const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
-			const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ?, num_lote=? WHERE num_lote=?`;
-			const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`
+            // Si la diferencia es positiva y la resta no resulta en un valor negativo, realizar la actualización del movimiento y de la tabla de productos
+            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
+            const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
+            const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ?, num_lote=? WHERE num_lote=?`;
+            const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`;
+
             const [result1, result2, result3,result4] = await Promise.all([
-                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id]),
+                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id, movimientoInicial[0].num_lote]),
                 pool.query(sql2, [id]),
                 pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
-				pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
+                pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
             ]);
-		
-			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0 && result4[0].affectedRows >= 0 ) {
-				res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
-			} else {
-				res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
-			}
-		}
-		else if (diferenciaMovimiento < 0 && cantidadProductoActual + diferenciaMovimiento >= 0) {
-            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=?`;
+
+            if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0 && result4[0].affectedRows >= 0) {
+                res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
+            } else {
+                res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
+            }
+        } else if (diferenciaMovimiento < 0 && cantidadProductoActual + diferenciaMovimiento >= 0) {
+            // Si la diferencia es negativa y la suma no resulta en un valor negativo, realizar la actualización del movimiento y sumar la diferencia a la tabla de productos
+            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
             const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
             const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ?, num_lote=? WHERE num_lote=?`;
-			const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`
+            const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`;
+
             const [result1, result2, result3,result4] = await Promise.all([
-                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id]),
+                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id, movimientoInicial[0].num_lote]),
                 pool.query(sql2, [id]),
                 pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
-				pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
+                pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
             ]);
 
             if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0 && result4[0].affectedRows >= 0) {
@@ -554,15 +563,17 @@ export const actualizarMovimiento = async (req, res) => {
                 res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
             }
         } else if (diferenciaMovimiento === 0) {
-            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=?`;
+            // Si la diferencia es cero, realizar la actualización del movimiento
+            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
             const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
-			const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ?, num_lote=? WHERE num_lote=?`;
-			const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`
+            const sql3 = `UPDATE productos SET num_lote=? WHERE num_lote=?`;
+            const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`;
+
             const [result1, result2, result3,result4] = await Promise.all([
-                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id]),
+                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id, movimientoInicial[0].num_lote]),
                 pool.query(sql2, [id]),
-                pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
-				pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
+                pool.query(sql3, [nuevoNumLote, movimientoInicial[0].num_lote]),
+                pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
             ]);
 
             if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0 && result4[0].affectedRows >= 0) {
@@ -571,6 +582,7 @@ export const actualizarMovimiento = async (req, res) => {
                 res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
             }
         } else {
+            // Si la suma o resta resulta en un valor negativo, no realizar ninguna actualización en la tabla de productos ni en el movimiento
             res.status(409).json({ "status": 409, "message": "No se realizó ninguna actualización ya que la cantidad de movimiento resultaría en un valor negativo." });
         }
     } catch (e) {
@@ -581,8 +593,6 @@ export const actualizarMovimiento = async (req, res) => {
         });
     }
 };
-
-
 
 
 export const actualizarMovimientoSalida = async (req, res) => {
