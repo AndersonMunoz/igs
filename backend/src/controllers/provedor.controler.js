@@ -33,14 +33,16 @@ export const buscarProvedor = async (req, res) => {
     }
 }
 
-// Configuración de multer para almacenar archivos en disco
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, "backend/src/public/filePDF");
-  },
-  filename: function (req, file, cb) {
-      cb(null, file.originalname+ '-' + Date.now()+'.pdf');
-  }
+    destination: function (req, file, cb) {
+        cb(null, "frontendReact/public/filePDF");
+    },
+    filename: function (req, file, cb) {
+        const nombreProveedor = req.body.nombre_proveedores;
+        const numeroContrato = req.body.contrato_proveedores;
+        const nombreArchivo = `${nombreProveedor}${numeroContrato}.pdf`;
+        cb(null, nombreArchivo);
+    }
 });
 
 const upload = multer({ storage: storage });
