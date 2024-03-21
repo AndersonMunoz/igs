@@ -128,8 +128,7 @@ const Movimiento = () => {
   };
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
-    console.log(selectedOption.value.id_producto);
-    console.log(selectedOption.value.num_lote);
+    //onsole.log(selectedOption);
   };
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
@@ -605,10 +604,7 @@ const Movimiento = () => {
                           <Select
                             className="react-select-container form-empty limpiar my-custom-class"
                             classNamePrefix="react-select"
-                            options={productosCategoria ? productosCategoria.map(element => ({ 
-                              value: { id_producto: element.id_producto, num_lote: element.num_lote }, 
-                              label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` 
-                            })) : []}
+                            options={productosCategoria  ? productosCategoria.map(element => ({ key: element.id_producto, value: element.id_producto, label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` })) : []}
                             placeholder="Selecciona..."
                             onChange={handleTipo}
                             value={selectedTipo}

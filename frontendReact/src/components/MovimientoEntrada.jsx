@@ -692,7 +692,7 @@ const Movimiento = () => {
                             id="categoria"
                           />
                         <div className="invalid-feedback is-invalid">
-                          Por favor, seleccione un tipo de producto.
+                        Por favor, seleccione un tipo de producto.
                         </div>
                       </div>
                       <div className="col">
