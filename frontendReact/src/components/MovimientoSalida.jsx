@@ -24,7 +24,6 @@ import portConexion from "../const/portConexion";
 import Select from 'react-select'
 
 const Movimiento = () => {
-  const destinoMovimientoRef = useRef();
   const [userId, setUserId] = useState('');
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
@@ -41,6 +40,8 @@ const Movimiento = () => {
   const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [selectedLote, setSelectedLote] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptionTit, setSelectedOptionTit] = useState(null);
+  const [selectedOptionIns, setSelectedOptionIns] = useState(null);
   const [destinoMovimiento, setDestinoMovimiento] = useState('');
   const [tituladoList,setTitulado] = useState(null);
   const [selectedTitulado, setSelectedTitulado] = useState(null);
@@ -126,33 +127,34 @@ const Movimiento = () => {
 
     return wsData;
   };
-  const handleCheckboxChange = () => {
-    setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-
-  };
   const handleCategoria = (selectedOption) => {
     setSelectedCategoria(selectedOption); 
     setSelectedTipo(null); 
   };
 
-  const handleTitulado = (selectedOption) => {
-    setSelectedTitulado(selectedOption); // Actualiza el estado del titulado seleccionado
+  const handleTitulado = (selectedOptionTit) => {
+    setSelectedOptionTit(selectedOptionTit);
+    setSelectedTitulado(selectedOptionTit.value); 
+    //console.log(" titulado id: "+selectedOptionTit.value);// Actualiza el estado del titulado seleccionado
 };
 
-const handleInstructor = (selectedOption) => {
-    setSelectedInstructor(selectedOption); // Actualiza el estado del instructor seleccionado
+const handleInstructor = (selectedOptionIns) => {
+    setSelectedOptionIns(selectedOptionIns);
+    setSelectedInstructor(selectedOptionIns.value); 
+    //console.log("oinstructor id:"+selectedOptionIns.value);// Actualiza el estado del instructor seleccionado
 };
   
   const handleDestino = (event) => {
     setDestinoMovimiento(event.target.value);
+    console.log("destino id: "+event.target.value)
 };
 
   const handleTipo = (selectedOption) => {
     setSelectedOption(selectedOption);
     setSelectedTipo(selectedOption.value.id_producto);
-    console.log(selectedOption.value.id_producto);
+    //console.log(selectedOption.value.id_producto);
     setSelectedLote(selectedOption.value.num_lote);
-    console.log(selectedOption.value.num_lote);
+    //console.log(selectedOption.value.num_lote);
   };
   
   
@@ -165,7 +167,7 @@ const handleInstructor = (selectedOption) => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
   const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
     formFields.forEach(field => {
       if (field.type === 'checkbox') {
@@ -493,101 +495,56 @@ const handleInstructor = (selectedOption) => {
     let fk_id_titulado = null;
     let fk_id_instructor = null;
 
-    // Si se selecciona "Producción", no es necesario enviar los valores de los campos "fk_id_titulado" y "fk_id_instructor"
-    if (destino_movimiento === "produccion") {
-        const validacionExitosa = Validate.validarCampos('.form-empty');
-
-        fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                token: localStorage.getItem("token")
-            },
-            body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, num_lote, destino_movimiento, fk_id_producto, fk_id_usuario }),
-        })
-            .then((res) => res.json())
-            .then(data => {
-              if (data.status === 200) {
-                Sweet.exito(data.message);
-                if ($.fn.DataTable.isDataTable(tableRef.current)) {
-                  $(tableRef.current).DataTable().destroy();
-                }
-                listarMovimiento();
-              }
-              if (data.status === 403) {
-                Sweet.error(data.error.errors[0].msg);
-                return;
-              }
-              if (data.status === 402) {
-                Sweet.error(data.mensaje); // El mensaje de error debe estar en data.mensaje
-                return;
-              }
-              if (data.status === 409) {
-                Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
-                return;
-              }
-              listarMovimiento();
-              setShowModal(false);
-              removeModalBackdrop(true );
-              const modalBackdrop = document.querySelector('.modal-backdrop');
-              if (modalBackdrop) {
-                modalBackdrop.remove();
-              }
-        
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    } else {
-        // Si se selecciona "Taller" o "Evento", se deben obtener los valores de los campos "fk_id_titulado" y "fk_id_instructor"
-        let fk_id_titulado = document.getElementById('fk_id_titulado').value;
-        let fk_id_instructor = document.getElementById('fk_id_instructor').value;
-
-        const validacionExitosa = Validate.validarCampos('.form-empty');
-
-        fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                token: localStorage.getItem("token")
-            },
-            body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, num_lote, destino_movimiento, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
-        })
-            .then((res) => res.json())
-            .then(data => {
-              if (data.status === 200) {
-                Sweet.exito(data.message);
-                if ($.fn.DataTable.isDataTable(tableRef.current)) {
-                  $(tableRef.current).DataTable().destroy();
-                }
-                listarMovimiento();
-              }
-              if (data.status === 403) {
-                Sweet.error(data.error.errors[0].msg);
-                return;
-              }
-              if (data.status === 402) {
-                Sweet.error(data.mensaje); // El mensaje de error debe estar en data.mensaje
-                return;
-              }
-              if (data.status === 409) {
-                Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
-                return;
-              }
-              listarMovimiento();
-              setShowModal(false);
-              removeModalBackdrop(true );
-              const modalBackdrop = document.querySelector('.modal-backdrop');
-              if (modalBackdrop) {
-                modalBackdrop.remove();
-              }
-        
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    // Si el destino es "Taller" o "Evento", obtener los valores de los campos "fk_id_titulado" y "fk_id_instructor"
+    if (destino_movimiento === "taller" || destino_movimiento === "evento") {
+        fk_id_titulado = document.getElementById('fk_id_titulado').value;
+        fk_id_instructor = document.getElementById('fk_id_instructor').value;
     }
+
+    const validacionExitosa = Validate.validarCampos('.form-empty');
+
+    fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, num_lote, destino_movimiento, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
+    })
+    .then((res) => res.json())
+    .then(data => {
+        if (data.status === 200) {
+            Sweet.exito(data.message);
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+                $(tableRef.current).DataTable().destroy();
+            }
+            listarMovimiento();
+        }
+        if (data.status === 403) {
+            Sweet.error(data.error.errors[0].msg);
+            return;
+        }
+        if (data.status === 402) {
+            Sweet.error(data.mensaje); // El mensaje de error debe estar en data.mensaje
+            return;
+        }
+        if (data.status === 409) {
+            Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
+            return;
+        }
+        listarMovimiento();
+        setShowModal(false);
+        removeModalBackdrop(true );
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+            modalBackdrop.remove();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
+
 
 
   function listarMovimiento() {
@@ -719,7 +676,7 @@ const handleInstructor = (selectedOption) => {
                       <div className="col">
                         <label className="form-label" htmlFor="categoria">Categoria</label>
                           <Select
-                            className="react-select-container  form-empt my-custom-class"
+                            className="react-select-container  form-empt limpiar my-custom-class"
                             classNamePrefix="react-select"
                             options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
                             placeholder="Selecciona..."
@@ -728,7 +685,7 @@ const handleInstructor = (selectedOption) => {
                             id="categoria"
                           />
                         <div className="invalid-feedback is-invalid">
-                          Por favor, seleccione un tipo de producto.
+                          Por favor, seleccione una categoria.
                         </div>
                       </div>
                       <div className="col">
@@ -740,7 +697,7 @@ const handleInstructor = (selectedOption) => {
                             options={productosCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_producto, value: { id_producto: element.id_producto, num_lote: element.num_lote }, label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` })) : [{ value: '', label: 'No hay productos disponibles' }]}
                             placeholder="Selecciona..."
                             onChange={handleTipo}
-                            value={selectedOption} // Aquí es donde cambiamos selectedTipo a selectedOption
+                            value={selectedOption } // Aquí es donde cambiamos selectedTipo a selectedOption
                             id="fk_id_producto"
                             name="fk_id_producto"
                           />
@@ -772,7 +729,7 @@ const handleInstructor = (selectedOption) => {
                     <div className="col">
                           <div data-mdb-input-init className="form-outline">
                               <label className="form-label" htmlFor="destino_movimiento">Destino</label>
-                              <select defaultValue=""  className="form-select form-empty limpiar" id="destino_movimiento" name="destino_movimiento" aria-label="Default select example" onChange={handleDestino} value={destinoMovimiento}>
+                              <select  className="form-select form-empty limpiar" id="destino_movimiento" name="destino_movimiento" aria-label="Default select example" onChange={handleDestino} value={destinoMovimiento}>
                                   <option value="">Seleccione una opción</option>
                                   <option value="taller">Taller</option>
                                   <option value="produccion">Producción</option>
@@ -795,7 +752,7 @@ const handleInstructor = (selectedOption) => {
                                         options={tituladoList.map(element => ({ value: element.id_titulado, label: `${element.nombre_titulado} - ${element.id_ficha}`}))}
                                         placeholder="Selecciona..."
                                         onChange={handleTitulado}
-                                        value={selectedTitulado}
+                                        value={selectedOptionTit}
                                         id="fk_id_titulado"
                                       />
                                       <div className="invalid-feedback is-invalid">
@@ -812,7 +769,7 @@ const handleInstructor = (selectedOption) => {
                                         options={instructorList.map(element => ({ value: element.id, label: element.nombre}))}
                                         placeholder="Selecciona..."
                                         onChange={handleInstructor}
-                                        value={selectedInstructor}
+                                        value={selectedOptionIns}
                                         id="fk_id_instructor"
                                       />
                                       <div className="invalid-feedback is-invalid">

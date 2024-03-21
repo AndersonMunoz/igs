@@ -47,8 +47,9 @@ export const guardarMovimientoEntrada = async (req, res) => {
 
 		let resultPrev = await pool.query('SELECT LAST_INSERT_ID() as id from factura_movimiento');
 		let newIdFactura = resultPrev[0][0].id;
-		let sql7 = `INSERT INTO detalles (fk_id_movimiento) VALUES ('${newIdFactura}') `;
+		let sql7 = `INSERT INTO detalles (fk_id_movimiento) VALUES (?)`;
 		const resultInsertarDetalles = await pool.query(sql7, [newIdFactura]);
+
 
         if (resultInsertProductos[0].affectedRows > 0 && resultInsertFacturaMovimiento[0].affectedRows > 0 && resultUpdateProductos[0].affectedRows > 0 && resultInsertarDetalles[0].affectedRows > 0 ) {
             res.status(200).json({
@@ -62,11 +63,12 @@ export const guardarMovimientoEntrada = async (req, res) => {
             });
         }
     } catch (e) {
-        res.status(500).json({
-            "status": 500,
-            "message": "Error en el servidor" + e
-        });
-    }
+		console.error(e); // Imprime el error en la consola del servidor
+		res.status(500).json({
+		  "status": 500,
+		  "message": "Error en el servidor" + e
+		});
+	  }
 }
 
 
