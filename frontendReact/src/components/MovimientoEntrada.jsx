@@ -71,21 +71,24 @@ const Movimiento = () => {
     ];
   
     // Obtener los datos de la tabla
-    const tableData = movimientos.map((element) => ({
-      nombre_tipo: element.nombre_tipo,
-      num_lote: element.num_lote,
-      fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
-      tipo_movimiento: element.tipo_movimiento,
-      cantidad_peso_movimiento: element.cantidad_peso_movimiento,
-      unidad_peso: element.unidad_peso,
-      precio_movimiento: element.precio_movimiento,
-      precio_total_mov: element.precio_total_mov,
-      estado_producto_movimiento: element.estado_producto_movimiento,
-      nota_factura: element.nota_factura,
-      fecha_caducidad: Validate.formatFecha(element.fecha_caducidad),
-      nombre_usuario: element.nombre_usuario,
-      nombre_proveedores: element.nombre_proveedores,
-    }));
+    const tableData = movimientos.map((element) => {
+      const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
+      return {
+        nombre_tipo: element.nombre_tipo,
+        num_lote: element.num_lote,
+        fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
+        tipo_movimiento: element.tipo_movimiento,
+        cantidad_peso_movimiento: element.cantidad_peso_movimiento,
+        unidad_peso: element.unidad_peso,
+        precio_movimiento: element.precio_movimiento,
+        precio_total_mov: element.precio_total_mov,
+        estado_producto_movimiento: element.estado_producto_movimiento,
+        nota_factura: element.nota_factura,
+        fecha_caducidad: fechaCaducidad,
+        nombre_usuario: element.nombre_usuario,
+        nombre_proveedores: element.nombre_proveedores,
+      };
+    });
   
     // Agregar las columnas y los datos a la tabla del PDF
     doc.autoTable({
@@ -122,6 +125,7 @@ const Movimiento = () => {
 
     // Obtener los datos de las filas
     movimientos.forEach(element => {
+      const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       const rowData = [
         element.nombre_tipo,
         element.num_lote,
@@ -133,7 +137,7 @@ const Movimiento = () => {
         element.precio_total_mov,
         element.estado_producto_movimiento,
         element.nota_factura,
-        Validate.formatFecha(element.fecha_caducidad),
+        fechaCaducidad,
         element.nombre_usuario,
         element.nombre_proveedores
       ];
@@ -157,11 +161,9 @@ const Movimiento = () => {
   };
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
-    console.log(selectedOption);
   };
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption);
-    console.log(selectedOption);
   };
   const fkIdUsuarioRef = useRef(null);
 
@@ -456,7 +458,7 @@ const Movimiento = () => {
                 Sweet.error(body.message);
             } else if (body.status === 409) {
                 Sweet.error(body.message);
-            } else if (body.errors) {
+            }   else if (body.errors) {
                 body.errors.forEach((err) => {
                     Sweet.error(err.msg);
                 });
@@ -772,7 +774,7 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="text" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
+                          <input type="text" id="num_lote" maxLength={6} name="num_lote" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
                           </div>
@@ -887,23 +889,25 @@ const Movimiento = () => {
                           </div>
                         </div>
                         <div className="col">
-                          <div data-mdb-input-init className="form-outline">
-                            <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                            <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
-                            <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese una nota mas larga.
-                          </div>
-                          </div>
-                        </div>
-                        <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="text" id="num_lote" value={movimientoSeleccionado.num_lote || ''} name="num_lote" className="form-control form-empty limpiar" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
+                          <input type="text" id="num_lote" value={movimientoSeleccionado.num_lote || ''} maxLength={6} name="num_lote" className="form-control form-empty limpiar" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
                           </div>
                         </div>
                       </div>
+                      </div>
+                      <div className="row mb-4">
+                      <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="nota_factura">Descripción</label>
+                            <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, ingrese una nota mas larga.
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div className="row mb-4">
                         <div className="col">
