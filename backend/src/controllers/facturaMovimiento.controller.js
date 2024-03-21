@@ -522,13 +522,15 @@ export const actualizarMovimiento = async (req, res) => {
 			const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
 			const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
 			const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ?, num_lote=? WHERE num_lote=?`;
-			const [result1, result2, result3] = await Promise.all([
-				pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id]),
-				pool.query(sql2, [id]),
-				pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
-			]);
+			const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`
+            const [result1, result2, result3,result4] = await Promise.all([
+                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id]),
+                pool.query(sql2, [id]),
+                pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
+				pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]),
+            ]);
 		
-			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0) {
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0 && result4[0].affectedRows >= 0 ) {
 				res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
 			} else {
 				res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
