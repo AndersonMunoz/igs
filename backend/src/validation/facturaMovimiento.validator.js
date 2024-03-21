@@ -24,8 +24,8 @@ export const validarFacturaMovimientoSalida = [
     check('num_lote')
     .notEmpty().withMessage('El número de lote no puede estar vacío')
     .matches(/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s]*$/).withMessage('El número de lote solo puede contener letras del alfabeto español y números enteros')
-    .isLength({ min: 1, max: 6 }).withMessage('El número de lote debe tener entre 1 y 6 caracteres')
-
+    .isLength({ min: 1, max: 6 }).withMessage('El número de lote debe tener entre 1 y 6 caracteres'),
+    check('destino_movimiento','Ingrese un estado válido en minúscula. Valores válidos: taller, produccion o evento').matches(/^(taller|produccion|evento)$/).notEmpty(),
 ]
 
 
