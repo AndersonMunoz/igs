@@ -32,7 +32,7 @@ export const registroTitulado = async (req, res) => {
 
 			res.status(200).json({
 				"status": 200,
-				"menssage": "El titulado se  registrada con exito "
+				"menssage": "El titulado se registro con exito "
 			})
 		} else {
 			res.status(204).json({
