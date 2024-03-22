@@ -49,14 +49,14 @@
 .small-container6 {
   grid-area: small-container6;
   grid-template:
-    "contInterno contInterno2" 110px
+    "contInterno contInterno2" 120px
     "linkContenido linkContenido" 40px
     / 70% 30%;
 }
 .small-container7 {
   grid-area: small-container7;
   grid-template:
-    "contInterno contInterno2" 110px
+    "contInterno contInterno2" 120px
     "linkContenido linkContenido" 40px
     / 70% 30%;
 }
@@ -184,9 +184,8 @@
   justify-content: center;
 }
 .container-wrapper2 {
-  margin-top: 15px;
   width: 100%;
-  height: 600px;
+  height: 500px;
   gap: 15px;
   position: relative;
   flex-direction: row;
@@ -320,9 +319,9 @@
       100%;
   }
   .container-wrapper2 {
-    margin-top: 15px;
+    margin-bottom: 20px;
     width: 100%;
-    height: 430px;
+    height: 300px;
     gap: 15px;
     flex-direction: column;
     align-items: center;
@@ -352,10 +351,11 @@
     text-decoration: none;
     font-size: 0.8em;
   }
+  
 }
 @media screen and (min-width: 150px) and (max-width: 870px) {
   .container-wrapper2 {
-    margin-top: 15px;
+    margin-top: 10px;
     width: 100%;
     height: 620px;
     gap: 15px;
@@ -393,16 +393,32 @@
     border-radius: 10px;
     text-align: center;
   }
-  .container-wrapper3 {
+
+
+  .containerWrapper3 {
+    margin-top: 8px !important;
+    gap: 3px !important;
     width: 98%;
-    height: auto;
+    height: 170px;
     font-weight: 700;
     display: grid;
+    flex-direction: row;
     justify-content: center;
-    grid-template:
-      "small-container6" 110px
-      "small-container7" 110px/
-      100%;
+    grid-template: 
+      "small-container6 " 170px
+      " small-container7" 170px/
+      100% !important;
+  }
+  .tamañoLateral2{
+    font-size: 1.2em !important;
+  }
+  .usuarioTitiii2{
+    font-size: 1.4em !important;
+    color: #f0f0f0;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  
   }
   
 }
@@ -412,11 +428,10 @@
   width: 100%;
   height: 100%;
 }
-.container-wrapper3 {
-  margin-top: 15px;
-  gap: 5px;
+.containerWrapper3 {
+  gap: 15px;
   width: 98%;
-  height: auto;
+  height: 170px;
   font-weight: 700;
   display: grid;
   flex-direction: row;
@@ -424,5 +439,13 @@
   grid-template:
     "small-container6 small-container7" 170px/
     50% 50%;
+}
+.usuarioTitiii2{
+  font-size: 1.2em !important;
+  color: #f0f0f0;
+align-items: center;
+display: flex;
+justify-content: center;
+
 }
 
