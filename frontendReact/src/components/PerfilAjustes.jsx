@@ -424,7 +424,7 @@ const PerfilAjustes = () => {
 
 							</div>
 						</div>
-						<div className="row mt-4">
+						<div className="row mt-2">
 							<div className="col d-flex justify-content-start">
 								<button
 									onClick={() => {

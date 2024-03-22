@@ -462,7 +462,7 @@ const Usuario = () => {
       <div className="container-fluid w-full">
         <table
           id="dtBasicExample"
-          className="table table-striped table-bordered border display responsive nowrap b-4"
+          className="table table-striped table-hover rouden-3 overflow-hidden shadow table-bordered  display responsive nowrap b-4"
           ref={tableRef}
           cellSpacing={0}
           width="100%"
