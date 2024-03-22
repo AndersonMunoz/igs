@@ -644,6 +644,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
         let cantidadMovEntrada = result5[0][0].cantidad_peso_movimiento;
 
 
+
         let nuevaCantidadPesoProducto = cantidadMovEntrada -  cantidadNueva;
         if (nuevaCantidadPesoProducto < 0) {
             return res.status(402).json({
@@ -655,11 +656,18 @@ export const actualizarMovimientoSalida = async (req, res) => {
             let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',cantidad_peso_movimiento='${cantidad_peso_movimiento}' where id_factura=${id}`;
             let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
             let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento}  WHERE num_lote='${num_lote}'`;
-            let sql3 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
+
+			let sql7;
+
+            if (destino_movimiento === "taller" || destino_movimiento === "evento") {
+                sql7 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
+            } else if (destino_movimiento === "produccion") {
+                sql7 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = NULL, fk_id_titulado = NULL WHERE fk_id_movimiento=${id}`;
+            }
             const [result1, result2, result3] = await Promise.all([
                 pool.query(sql, [nota_factura, cantidad_peso_movimiento, id]),
                 pool.query(sql2, [fk_id_producto]),
-                pool.query(sql3),
+                pool.query(sql7),
             ]);
 
             if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows > 0) {
@@ -667,6 +675,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
             } else {
                 res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
             }
+
         }
     } catch (e) {
         res.status(500).json({
