@@ -169,22 +169,6 @@ const handleInstructor = (selectedOptionIns) => {
   const resetFormState = () => {
     const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    formFields.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-    formFields2.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
   };
   useEffect(() => {
     if (movimientos.length > 0) {
@@ -518,6 +502,12 @@ const handleInstructor = (selectedOptionIns) => {
     .then(data => {
         if (data.status === 200) {
             Sweet.exito(data.message);
+            setShowModal(false);
+            removeModalBackdrop(true);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
             if ($.fn.DataTable.isDataTable(tableRef.current)) {
                 $(tableRef.current).DataTable().destroy();
             }
@@ -542,7 +532,6 @@ const handleInstructor = (selectedOptionIns) => {
         console.error('Error:', error);
     });
 }
-
 
   function listarMovimiento() {
     fetch(`http://${portConexion}:3000/facturamovimiento/listarSalida`, {
@@ -575,7 +564,7 @@ const handleInstructor = (selectedOptionIns) => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos de Salida</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedCategoria(null);setTitulado(null);setInstrucor(null)}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedCategoria(null);setSelectedOptionIns(null);setSelectedOptionTit(null);setSelectedOption(null)}}>
             Registrar nuevo movimiento de Salida
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
