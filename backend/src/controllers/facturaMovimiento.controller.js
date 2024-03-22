@@ -491,6 +491,30 @@ export const buscarMovimiento = async (req, res) => {
 	}
 };
 
+export const buscarMovimientoDetalle = async (req, res) => {
+	try {
+		let error = validationResult(req);
+		if (!error.isEmpty()) {
+			return res.status(400).json(error);
+		}
+		let id = req.params.id;
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN detalles d ON d.fk_id_movimiento = f.id_factura JOIN instructores i ON d.fk_id_instructor = i.id_instructores JOIN titulados t ON d.fk_id_titulado = t.id_titulado WHERE f.id_factura = ?', [id]);
+
+		if (result.length > 0) {
+			res.status(200).json(result);
+		} else {
+			res.status(404).json({
+				status: 404,
+				message: "No existe un movimiento con el ID proporcionado."
+			});
+		}
+	} catch (err) {
+		res.status(500).json({
+			message: 'Error en buscar movimiento :(' + err
+		});
+	}
+};
+
 export const actualizarMovimiento = async (req, res) => {
     try {
         let error = validationResult(req);

@@ -412,8 +412,9 @@ const handleDestino = (event) => {
         console.error('Error:', error);
       });
   }
-  function editarMovimiento(id) {
-    fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
+
+  function editarDetalleDestino(id) {
+    fetch(`http://${portConexion}:3000/facturamovimiento/buscarDetalleMovimiento/${id}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
@@ -430,6 +431,7 @@ const handleDestino = (event) => {
         console.error('Error:', error);
       });
   }
+
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizarSalida/${id}`, {
@@ -654,7 +656,7 @@ const handleDestino = (event) => {
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
 
                       <td className="p-0 text-center"   >
-                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true);editarDetalleDestino(element.id_factura); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
 
