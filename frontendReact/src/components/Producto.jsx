@@ -36,7 +36,7 @@ const Producto = () => {
   const [selectedTipo, setSelectedTipo] = useState(null);
   const [selectedUp, setSelectedUp] = useState(null);
   const [userRoll, setUserRoll] = useState("");
-
+  const [errors, setErrros] = useState([]);
   const tableRef = useRef();
 
   // Función para exportar datos a Excel
@@ -157,28 +157,32 @@ const Producto = () => {
   useEffect(() => {
     setUserRoll(dataDecript(localStorage.getItem("roll")));
       listarProducto();
+      listarUp();
   }, []); 
-  // Función para resetear el estado del formulario
-  const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    formFields.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-    formFields2.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-  };
+  function listarUp() {
+    fetch(`http://${portConexion}:3000/up/listar`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          setUp(data);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
     // Función para remover el fondo del modal
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
@@ -412,7 +416,7 @@ const Producto = () => {
                        <td className="p-0">
                        {element.estado === 1 ? (
                          <>
-                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); resetFormState();}} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
                            <IconEdit /> 
                            </button>
                            <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
@@ -443,20 +447,8 @@ const Producto = () => {
               <form>
 
                 <div className="row mb-3">
-                  <div className="col-md-6">
-                    <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Tipo Producto</label>
-                    <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_tipo_producto || ''}onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_tipo_producto: e.target.value })} id="fk_id_tipo_producto"name="fk_id_tipo_producto">
-                    <option value="">Selecciona...</option>
-                    {tipos.map((option) => (
-                      <option key={option.id} value={option.id}>{option.NombreProducto}</option>
-                    ))}
-                  </select>
-                    <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un tipo de producto.
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
+                  <div className="col-md-12">
+                    <label htmlFor="fk_id_up" className="label-bold mb-2 text-xl">Bodega</label>
                     <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_up || ''}onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} id="fk_id_up" name="fk_id_up">
                     <option value="">Selecciona...</option>
                     {up.map((option) => (
@@ -466,16 +458,6 @@ const Producto = () => {
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una bodega.
                     </div>
-                  </div>
-
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="descripcionProducto" className="label-bold mb-2">Descripción</label>
-                  <textarea className="form-control form-update" placeholder="Descripción del Producto" name="descripcion_producto" rows="4" value={productoSeleccionado.descripcion_producto || ''} onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, descripcion_producto: e.target.value })}
-                  ></textarea>
-                  <div className="invalid-feedback is-invalid">
-                    Por favor, ingrese una descripción del producto.
                   </div>
                 </div>
               </form>

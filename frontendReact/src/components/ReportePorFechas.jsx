@@ -164,14 +164,51 @@ const reporte = () => {
             setReporte(data.productos)
             setRangoMovInicio(formatDateYYYYMMDD(new Date(data.
               primera_fecha_movimiento_primer_producto)))
-            console.log(data);
           }
         })
       }
-  const ponerRango = () => {
-    let rangoInicio = document.getElementById("inicio");
-    let rangoFin = document.getElementById("");
-  };
+  function ListartPorRango(inicio, fin) {
+    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if (res.status === 204) {
+            return null;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data !== null) {
+            let valEntradas= 0;
+            let valSalidas = 0;
+            let Reporte = [];
+            //tal ves haya una mejor logica, Pero esta es la mia
+            let fechaInicio = new Date (inicio);
+            let diaInicio = fechaInicio.getDate();
+            let mesInicio = fechaInicio.getMonth() + 1;
+            let añoInicio = fechaInicio.getFullYear();
+            let fechaFin = new Date (fin)
+            let diaFin = fechaFin.getDate();
+            let mesFin = fechaFin.getMonth() + 1;
+            let añoFin = fechaFin.getFullYear();
+            data.productos.forEach(element=>{
+              let fechaDeProduto = new Date (element.primera_fecha_movimiento)
+              let dia = fechaDeProduto.getDate();
+              let mes = fechaDeProduto.getMonth() + 1;
+              let año = fechaDeProduto.getFullYear();
+              if ((fechaDeProduto >= fechaInicio)&&(fechaDeProduto <= fechaFin)) {
+                console.log(element);
+              }
+              
+            })
+           
+          }
+        })
+  }
 
   return (
     <div>
@@ -187,7 +224,7 @@ const reporte = () => {
             <h5 className="mt-1">Fin</h5>
           </div>
           <div>
-            <button className="btn btn-color" onClick={() => {}}>buscar</button>
+            <button className="btn btn-color" onClick={() => {ListartPorRango(rangoMovInicio, rangoMovFin)}}>buscar</button>
           </div>
         </div>
         
