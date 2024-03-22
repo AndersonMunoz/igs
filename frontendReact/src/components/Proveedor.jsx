@@ -270,6 +270,7 @@ const proveedor = () => {
     document.getElementById("titleRegistro").classList.add("d-none");
     document.getElementById("btnAgregar").classList.add("d-none");
     document.getElementById("btnActualizar").classList.remove("d-none");
+    document  .getElementById("pdfFile")  .classList.add("d-none");
     fetch(`http://${portConexion}:3000/proveedor/buscar/${id}`, {
       method: "get",
       headers: {
@@ -348,6 +349,7 @@ const proveedor = () => {
                 document  .getElementById("titleRegistro")  .classList.remove("d-none");
                 document  .getElementById("btnAgregar")  .classList.remove("d-none");
                 document  .getElementById("btnActualizar")  .classList.add("d-none");
+                document  .getElementById("pdfFile")  .classList.remove("d-none");
               }}>
               Registrar Nuevo Proveedor
             </button>
@@ -509,10 +511,10 @@ const proveedor = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex form-row mb-1">
+                  <div id="pdfFile" className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="archivo_contrato">Archivo de contrato</label>
-                      <input value={archivo_contrato}   onChange={(e) => {     const { value } = e.target;     setArchivo_contrato(value);   }}   type="file"   name="archivo_contrato"   id="archivo_contrato"   className="form-control form-empty limpiar" accept="application/pdf"   placeholder="file Pdf"/>
+                      <input value={archivo_contrato}    onChange={(e) => {     const { value } = e.target;     setArchivo_contrato(value);   }}   type="file"   name="archivo_contrato"   id="archivo_contrato"   className="form-control form-empty limpiar" accept="application/pdf"   placeholder="file Pdf"/>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
