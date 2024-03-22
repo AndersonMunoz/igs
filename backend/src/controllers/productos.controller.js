@@ -148,27 +148,33 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
     const [resultEntradas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
     const [resultSalidas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_salidas FROM factura_movimiento WHERE tipo_movimiento = 'salida'`);
 
-    let sql = `SELECT 
-                    t.nombre_tipo AS nombre_producto, 
-                    c.nombre_categoria AS nombre_categoria, 
-                    SUM(f.precio_total_mov) AS precio_total, 
-                    MAX(f.fecha_movimiento) AS ultima_fecha_movimiento, 
-                    MIN(f.fecha_movimiento) AS primera_fecha_movimiento,
-                    SUM(CASE WHEN f.tipo_movimiento = 'entrada' THEN 1 ELSE 0 END) AS total_entradas,
-                    SUM(CASE WHEN f.tipo_movimiento = 'salida' THEN 1 ELSE 0 END) AS total_salidas
-                FROM 
-                    factura_movimiento f 
-                LEFT JOIN 
-                    productos p ON p.id_producto = f.fk_id_producto 
-                    LEFT JOIN 
-                    usuarios u ON u.id_usuario = f.id_factura 
-                    LEFT JOIN 
-                    tipo_productos t ON t.id_tipo = p.fk_id_tipo_producto 
-                    LEFT JOIN 
-                    categorias_producto c ON c.id_categoria = t.id_tipo 
-                GROUP BY 
-                    t.nombre_tipo, 
-                    c.nombre_categoria`;
+    let sql = `
+    SELECT 
+    p.id_producto,
+    p.num_lote AS Lote,
+    t.nombre_tipo AS nombre_producto, 
+    c.nombre_categoria AS nombre_categoria, 
+    SUM(f.precio_total_mov) AS precio_total, 
+    f.fecha_movimiento AS ultima_fecha_movimiento,
+    GROUP_CONCAT(f.fecha_movimiento ORDER BY f.fecha_movimiento) AS todas_fechas_movimiento,
+    SUM(CASE WHEN f.tipo_movimiento = 'entrada' THEN 1 ELSE 0 END) AS total_entradas,
+    SUM(CASE WHEN f.tipo_movimiento = 'salida' THEN 1 ELSE 0 END) AS total_salidas
+FROM 
+    factura_movimiento f 
+LEFT JOIN 
+    productos p ON p.id_producto = f.fk_id_producto 
+LEFT JOIN 
+    usuarios u ON u.id_usuario = f.id_factura 
+LEFT JOIN 
+    tipo_productos t ON t.id_tipo = p.fk_id_tipo_producto 
+LEFT JOIN 
+    categorias_producto c ON c.id_categoria = t.fk_categoria_pro
+GROUP BY Lote
+
+
+
+
+                    `;
 
     const [rows] = await pool.query(sql);
 
@@ -184,7 +190,7 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
         };
         res.status(200).json(valorTotalProductos);
     } else {
-        res.status(401).json({ status: 401, message: "No se encontraron datos" });
+        res.status(204).json({ status: 204, message: "No se encontraron datos" });
     }
 } catch (error) {
     console.error("Error al obtener el valor total de los productos:", error);
