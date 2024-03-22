@@ -72,83 +72,84 @@ export const guardarMovimientoEntrada = async (req, res) => {
 }
 
 
-export const guardarMovimientoSalida = async (req,res)=> {
-	try {
-		let error = validationResult(req);
+export const guardarMovimientoSalida = async (req, res) => {
+    try {
+        let error = validationResult(req);
         if (!error.isEmpty()) {
-           return res.status(403).json({"status": 403 ,error})
+            return res.status(403).json({ "status": 403, error });
         }
-		let {cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, num_lote,destino_movimiento,fk_id_titulado,fk_id_instructor} = req.body;
-		let sql4 = `select cantidad_peso_producto from productos where num_lote = ${num_lote}`
+        let { cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, num_lote, destino_movimiento, fk_id_titulado, fk_id_instructor } = req.body;
+        let sql4 = `SELECT cantidad_peso_producto FROM productos WHERE num_lote = ${num_lote}`;
 
-			let cantidadPeso = await pool.query(sql4)
+        let cantidadPeso = await pool.query(sql4);
+        let cantidadPeso2 = cantidadPeso[0];
+        let cantidad3 = cantidadPeso2[0];
+        let cantidadPesoTotal = cantidad3.cantidad_peso_producto;
 
-			let cantidadPeso2 = cantidadPeso[0]
+        if (cantidadPesoTotal < cantidad_peso_movimiento) {
+            return res.status(402).json({
+                "status": 402,
+                "mensaje": "Ya no hay suficiente stock del producto"
+            });
+        } else if (cantidadPesoTotal >= 0) {
+            let sql10 = `
+                INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,
+                nota_factura, num_lote, fk_id_producto, fk_id_usuario)
+                VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}','${num_lote}',
+                '${fk_id_producto}','${fk_id_usuario}');`;
 
-			let cantidad3 = cantidadPeso2[0]
+            let sql6 = `UPDATE productos 
+                SET cantidad_peso_producto = CASE 
+                    WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
+                    ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
+                END
+                WHERE num_lote = ${num_lote}`;
 
-			let cantidadPesoTotal = cantidad3.cantidad_peso_producto
+            let result10 = await pool.query(sql10);
+            if (result10.affectedRows == 0) {
+                return res.status(401).json({
+                    "status": 401,
+                    "message": "¡No se pudo insertar el movimiento de salida en factura_movimiento!"
+                });
+            }
 
-			//console.log(cantidadPesoTotal)
+            let resultPrev = await pool.query('SELECT LAST_INSERT_ID() as id');
+            let newIdFactura = resultPrev[0][0].id;
 
-			if (cantidadPesoTotal < cantidad_peso_movimiento) {
-				return res.status(402).json({
-					"status":402,
-					"mensaje":"Ya no hay suficiente stock del producto"
-				})
-			} else if (cantidadPesoTotal >= 0) {
+            let sql7;
 
-				let sql10 = `
-				INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,
-				nota_factura, num_lote, fk_id_producto, fk_id_usuario)
-				VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}','${num_lote}',
-				'${fk_id_producto}','${fk_id_usuario}');`;
+            if (destino_movimiento === "taller" || destino_movimiento === "evento") {
+                sql7 = `INSERT INTO detalles (destino_movimiento,fk_id_movimiento,fk_id_titulado,fk_id_instructor) VALUES ('${destino_movimiento}','${newIdFactura}','${fk_id_titulado}','${fk_id_instructor}') `;
+            } else if (destino_movimiento === "produccion") {
+                sql7 = `INSERT INTO detalles (destino_movimiento,fk_id_movimiento) VALUES ('${destino_movimiento}','${newIdFactura}') `;
+            }
 
-				let sql6 = `UPDATE productos 
-				SET cantidad_peso_producto = CASE 
-					WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
-					ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
-				END
-				WHERE num_lote = ${num_lote}`;
+            let [result6, result7] = await Promise.all([
+                pool.query(sql6),
+                pool.query(sql7)
+            ]);
 
-				let result10 = await pool.query(sql10);
-				if (result10.affectedRows == 0) {
-					return res.status(401).json({
-						"status": 401,
-						"message": "¡No se pudo insertar el movimiento de salida en factura_movimiento!"
-					});
-				}
+            if (result6.affectedRows == 0 || result7.affectedRows == 0) {
+                return res.status(401).json({
+                    "status": 401,
+                    "message": "¡No se pudo insertar los detalles del movimiento de salida!"
+                });
+            }
 
-				let resultPrev = await pool.query('SELECT LAST_INSERT_ID() as id');
-				let newIdFactura = resultPrev[0][0].id;
-
-				let sql7 = `INSERT INTO detalles (destino_movimiento,fk_id_movimiento,fk_id_titulado,fk_id_instructor) VALUES ('${destino_movimiento}','${newIdFactura}','${fk_id_titulado}','${fk_id_instructor}') `;
-
-				let [result6, result7] = await Promise.all([
-					pool.query(sql6),
-					pool.query(sql7)
-				]);
-
-				if (result6.affectedRows == 0 || result7.affectedRows == 0) {
-					return res.status(401).json({
-						"status": 401,
-						"message": "¡No se pudo insertar los detalles del movimiento de salida!"
-					});
-				}
-
-
-				res.status(200).json({
-					"status": 200,
-					"message": "¡Se registró el movimiento de salida!"
-				});
-			}
-	} catch (e) {
-		res.status(500).json({
-			"status": 500,
-			"message": "Error en el servidor" + e
-		});
-	}
+            res.status(200).json({
+                "status": 200,
+                "message": "¡Se registró el movimiento de salida!"
+            });
+        }
+    } catch (e) {
+        res.status(500).json({
+            "status": 500,
+            "message": "Error en el servidor" + e
+        });
+    }
 }
+
+
 export const obtenerValorTotalProductos = async (req, res) => {
 	try {
 			const [resultEntradas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);

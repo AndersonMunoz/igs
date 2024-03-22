@@ -497,11 +497,11 @@ const handleInstructor = (selectedOptionIns) => {
 
     // Si el destino es "Taller" o "Evento", obtener los valores de los campos "fk_id_titulado" y "fk_id_instructor"
     if (destino_movimiento === "taller" || destino_movimiento === "evento") {
-        fk_id_titulado = document.getElementById('fk_id_titulado').value;
-        fk_id_instructor = document.getElementById('fk_id_instructor').value;
+        fk_id_titulado = selectedOptionTit.value; // Obtener el valor del campo seleccionado para fk_id_titulado
+        fk_id_instructor = selectedOptionIns.value; // Obtener el valor del campo seleccionado para fk_id_instructor
     }
 
-    const validacionExitosa = Validate.validarCampos('.form-empty');
+    // Validación de campos aquí...
 
     fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
         method: 'POST',
@@ -511,7 +511,10 @@ const handleInstructor = (selectedOptionIns) => {
         },
         body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, num_lote, destino_movimiento, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
     })
-    .then((res) => res.json())
+    .then((res) => {
+        console.log(res); // Imprime la respuesta completa del servidor
+        return res.json();
+    })
     .then(data => {
         if (data.status === 200) {
             Sweet.exito(data.message);
@@ -519,32 +522,26 @@ const handleInstructor = (selectedOptionIns) => {
                 $(tableRef.current).DataTable().destroy();
             }
             listarMovimiento();
-        }
-        if (data.status === 403) {
+        } else if (data.status === 403) {
             Sweet.error(data.error.errors[0].msg);
-            return;
-        }
-        if (data.status === 402) {
-            Sweet.error(data.mensaje); // El mensaje de error debe estar en data.mensaje
-            return;
-        }
-        if (data.status === 409) {
-            Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
-            return;
-        }
-        listarMovimiento();
-        setShowModal(false);
-        removeModalBackdrop(true );
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-        if (modalBackdrop) {
-            modalBackdrop.remove();
+        } else if (data.status === 402) {
+            Sweet.error(data.mensaje);
+        } else if (data.status === 409) {
+            Sweet.error(data.message);
+        } else {
+            listarMovimiento();
+            setShowModal(false);
+            removeModalBackdrop(true);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
         }
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
-
 
 
   function listarMovimiento() {
@@ -674,18 +671,20 @@ const handleInstructor = (selectedOptionIns) => {
                   <form>
                     <div className="row mb-4">
                       <div className="col">
-                        <label className="form-label" htmlFor="categoria">Categoria</label>
-                          <Select
-                            className="react-select-container  form-empt limpiar my-custom-class"
-                            classNamePrefix="react-select"
-                            options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
-                            placeholder="Selecciona..."
-                            onChange={handleCategoria}
-                            value={selectedCategoria}
-                            id="categoria"
-                          />
-                        <div className="invalid-feedback is-invalid">
-                          Por favor, seleccione una categoria.
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="categoria">Categoria</label>
+                              <Select
+                                className="react-select-container form-empty limpiar my-custom-clas"
+                                classNamePrefix="react-select"
+                                options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
+                                placeholder="Selecciona..."
+                                onChange={handleCategoria}
+                                value={selectedCategoria}
+                                id="categoria"
+                              />
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, seleccione una categoria.
+                            </div>
                         </div>
                       </div>
                       <div className="col">
@@ -736,7 +735,7 @@ const handleInstructor = (selectedOptionIns) => {
                                   <option value="evento">Evento</option>
                               </select>
                               <div className="invalid-feedback is-invalid">
-                                  Por favor, seleccione un estado.
+                                  Por favor, seleccione un destino.
                               </div>
                           </div>
                       </div>
@@ -760,48 +759,48 @@ const handleInstructor = (selectedOptionIns) => {
                                       </div>
                                   </div>
                               </div>
-                              <div className="col">
-                                  <div data-mdb-input-init className="form-outline">
-                                      <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
-                                      <Select
-                                        className="react-select-container  form-empt my-custom-class"
-                                        classNamePrefix="react-select"
-                                        options={instructorList.map(element => ({ value: element.id, label: element.nombre}))}
-                                        placeholder="Selecciona..."
-                                        onChange={handleInstructor}
-                                        value={selectedOptionIns}
-                                        id="fk_id_instructor"
-                                      />
-                                      <div className="invalid-feedback is-invalid">
-                                          Por favor, seleccione un instructor.
-                                      </div>
-                                  </div>
-                              </div>
-                          </>
-                      ) : null}
-                    </div>
-                    <div className="row mb-4">
-                    <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                          <textarea id="nota_factura" name="nota_factura" className="form-control form-empty limpiar"></textarea>
+                                <div className="col">
+                                    <div data-mdb-input-init className="form-outline">
+                                        <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
+                                        <Select
+                                          className="react-select-container  form-empt my-custom-class"
+                                          classNamePrefix="react-select"
+                                          options={instructorList.map(element => ({ value: element.id, label: element.nombre}))}
+                                          placeholder="Selecciona..."
+                                          onChange={handleInstructor}
+                                          value={selectedOptionIns}
+                                          id="fk_id_instructor"
+                                        />
+                                        <div className="invalid-feedback is-invalid">
+                                            Por favor, seleccione un instructor.
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                      </div>
+                      <div className="row mb-4">
+                      <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="nota_factura">Descripción</label>
+                            <textarea id="nota_factura" name="nota_factura" className="form-control form-empty limpiar"></textarea>
 
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese una descripción válida.
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, ingrese una descripción válida.
+                            </div>
                           </div>
                         </div>
+                        
                       </div>
-                      
-                    </div>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                  <button type="button" className="btn-color btn" onClick={registrarMovimientoSalida}>Registrar</button>
+                    </form>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" className="btn-color btn" onClick={registrarMovimientoSalida}>Registrar</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
