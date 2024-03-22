@@ -126,26 +126,26 @@ export const Menu = () => {
         token: localStorage.getItem("token"),
       },
     })
-    .then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      let cont = 0;
-      let menores = [];
-      if (data !== null) {
-        for (let index = 0; index < data.length; index++) {
-          if (stockMin > data[index].Cantidad) {
-            cont = cont + 1;
-            menores.push(data[index]);
-          }
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
         }
-        setAlert(cont);
-        setElemento(menores);
-      }
-    });
+        return res.json();
+      })
+      .then((data) => {
+        let cont = 0;
+        let menores = [];
+        if (data !== null) {
+          for (let index = 0; index < data.length; index++) {
+            if (stockMin > data[index].Cantidad) {
+              cont = cont + 1;
+              menores.push(data[index]);
+            }
+          }
+          setAlert(cont);
+          setElemento(menores);
+        }
+      });
   }
 
   return (
@@ -241,21 +241,6 @@ export const Menu = () => {
               </ul>
             </li>
             <li>
-              <Link to="/categoria">
-                <div className="tamañoLateral">
-                  <IconBoxMultiple className="iconosLaterales" />
-                </div>
-                <span className="link_name">Categoria</span>
-              </Link>
-              <ul className="sub-menu blank">
-                <li>
-                  <Link className="link_name" to="/categoria">
-                    Categoria
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li>
               <Link to="/tipoproducto">
                 <div className="tamañoLateral">
                   <IconApple className="iconosLaterales" />
@@ -270,6 +255,22 @@ export const Menu = () => {
                 </li>
               </ul>
             </li>
+            <li>
+              <Link to="/categoria">
+                <div className="tamañoLateral">
+                  <IconBoxMultiple className="iconosLaterales" />
+                </div>
+                <span className="link_name">Categoria</span>
+              </Link>
+              <ul className="sub-menu blank">
+                <li>
+                  <Link className="link_name" to="/categoria">
+                    Categoria
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
             <li>
               <Link to="/up">
                 <div className="tamañoLateral">
@@ -483,22 +484,25 @@ export const Menu = () => {
                 <IconX className="closeNotii" id="closeNoti" />
               </div>
             </div>
+            <div className="textModalNoti">
+              <span>Quedan Pocas Unidades de:</span>
+            </div>
             <div className="TableNoti">
               <table className="table table22">
                 <thead>
-                  <tr>
+                  <tr className="textTituloNoti">
                     <th scope="col">Producto</th>
                     <th scope="col">Categoria</th>
                     <th scope="col">Cantidad</th>
                   </tr>
                 </thead>
                 <tbody>
-                    {alert > 0 ? (
+                  {alert > 0 ? (
                     <>
                       {elementoAlmacenado.map((element, index) => (
-                        <tr key={index}>
-                          <td>{element.NombreProducto} </td>
-                          <td>{element.NombreCategoria}</td>
+                        <tr key={index} className="textContenidoNoti">
+                          <td style={{ textTransform: 'capitalize' }}>{element.NombreProducto} </td>
+                          <td style={{ textTransform: 'capitalize' }}>{element.NombreCategoria}</td>
                           <td className="text-center">{element.Cantidad}</td>
                         </tr>
                       ))}

@@ -3,12 +3,14 @@ import { Chart as Chartjs } from "chart.js/auto";
 import { Bar, Doughnut } from "react-chartjs-2";
 import "../style/dashboardContent.css";
 import { Outlet, Link } from "react-router-dom";
-import { IconArrowBigRightFilled } from "@tabler/icons-react";
+import { IconArrowBigRightFilled, IconUsersGroup } from "@tabler/icons-react";
 import { dataDecript } from "./encryp/decryp";
 import portConexion from "../const/portConexion";
 
 const Dashboard = () => {
 	const [usuariosCount, setUsuariosCount] = useState(0);
+	const [tituladoCount, setTituladoCount] = useState(0);
+	const [instructorCount, setInstructorCount] = useState(0);
 	const [entradaSalida, setEntradaSalida] = useState({
 		entraron: 0,
 		salieron: 0,
@@ -20,9 +22,11 @@ const Dashboard = () => {
 		setUserRoll(dataDecript(localStorage.getItem("roll")));
 		obtenerValorTotalProductos();
 		listarUsuario();
+		listarTitulado();
+		listarInstructor();
 		listarCountCategoria();
 	}, []);
-		// Funciones para obtener la cantidad de categorias
+	// Funciones para obtener la cantidad de categorias
 	function listarCountCategoria() {
 		fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
 			method: "GET",
@@ -39,7 +43,7 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
-		// Funciones para obtener datos de las facturas
+	// Funciones para obtener datos de las facturas
 	function obtenerValorTotalProductos() {
 		fetch(`http://${portConexion}:3000/facturamovimiento/listarEntradaSalida`, {
 			method: "GET",
@@ -56,7 +60,7 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
-		// Funciones para obtener lla cantidad de usuarios
+	// Funciones para obtener lla cantidad de usuarios
 	function listarUsuario() {
 		fetch(`http://${portConexion}:3000/usuario/listarCount`, {
 			method: "get",
@@ -73,7 +77,39 @@ const Dashboard = () => {
 				console.log(e);
 			});
 	}
-		// Colores para los gráficos
+	function listarTitulado() {
+		fetch(`http://${portConexion}:3000/titulado/listarCount`, {
+			method: "get",
+			headers: {
+				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setTituladoCount(data.count);
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	}
+	function listarInstructor() {
+		fetch(`http://${portConexion}:3000/instructor/listarCount`, {
+			method: "get",
+			headers: {
+				"Content-type": "application/json",
+				token: localStorage.getItem("token"),
+			},
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				setInstructorCount(data.count);
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	}
+	// Colores para los gráficos
 	const barColors = [
 		"rgba(54, 162, 235, 0.5)",
 		"rgba(255, 99, 132, 0.5)",
@@ -121,7 +157,7 @@ const Dashboard = () => {
 	];
 
 	return (
-		<div className="dashboard-container mt-4">
+		<div className="dashboard-container">
 			<div className="container-wrapper">
 				<div className="small-container1">
 					<div className="contInterno contcolor">
@@ -266,10 +302,10 @@ const Dashboard = () => {
 				</div>
 			</div>
 
-			
+
 			<div className="container-wrapper2">
 				<div className="conteEstadistica1">
-					<Doughnut
+					<Doughnut 
 						data={{
 							labels: categoriasCount.map((count) => count.Categoria),
 							datasets: [
@@ -297,7 +333,7 @@ const Dashboard = () => {
 					/>
 				</div>
 				<div className="conteEstadistica2">
-					<Bar
+					<Bar className="estadisticaAuto"
 						data={{
 							labels: ["Entraron", "Salieron"],
 							datasets: [
@@ -337,6 +373,50 @@ const Dashboard = () => {
 						}}
 					/>
 				</div>
+			</div>
+			<div className="container-wrapper3">
+				<div className="small-container6">
+					<div className="contInterno contcolor6">
+						<span className="usuarioTitiii">
+							Instructores Registrados: {instructorCount}
+						</span>
+					</div>
+					<div className="contInterno2 contcolor6">
+						<svg xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 640 512"
+							className="ssssIconoss"
+							fill="#ffffff">
+							<path d="m208 352c-2.39 0-4.78.35-7.06 1.09-12.96 4.21-26.59 6.91-40.94 6.91s-27.98-2.7-40.95-6.91c-2.28-.74-4.66-1.09-7.05-1.09-62.06 0-112.33 50.48-112 112.62.14 26.26 21.73 47.38 48 47.38h224c26.27 0 47.86-21.12 48-47.38.33-62.14-49.94-112.62-112-112.62zm-48-32c53.02 0 96-42.98 96-96s-42.98-96-96-96-96 42.98-96 96 42.98 96 96 96zm432-320h-384c-26.47 0-48 22.25-48 49.59v46.41c23.42 0 45.1 6.78 64 17.8v-49.8h352v288h-64v-64h-128v64h-76.24c19.1 16.69 33.12 38.73 39.69 64h244.55c26.47 0 48-22.25 48-49.59v-316.82c0-27.34-21.53-49.59-48-49.59z" />
+						</svg>
+					</div>
+					<Link className="linkContenido linkColor6" to="/usuario/instructores">
+						<div className="tamañoLateral">
+							<span className="">Ver Instructores</span>
+							<IconArrowBigRightFilled className="iconosDashboard" />
+						</div>
+					</Link>
+				</div>
+				<div className="small-container7">
+					<div className="contInterno contcolor7">
+						<span className="usuarioTitiii">
+							Titulados Registrados: {tituladoCount}
+						</span>
+					</div>
+					<div className="contInterno2 contcolor7">
+						<svg xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 448 512"
+							className="ssssIconoss"
+							fill="#ffffff">
+							<path d="m319.4 320.6-95.4 95.4-95.4-95.4c-71.5 3.1-128.6 61.6-128.6 133.8v9.6c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-9.6c0-72.2-57.1-130.7-128.6-133.8zm-305.8-240.8 6.4 1.5v58.4c-7 4.2-12 11.5-12 20.3 0 8.4 4.6 15.4 11.1 19.7l-15.6 62.3c-1.7 6.9 2.1 14 7.6 14h41.8c5.5 0 9.3-7.1 7.6-14l-15.6-62.3c6.5-4.3 11.1-11.3 11.1-19.7 0-8.8-5-16.1-12-20.3v-52.6l66 15.9c-8.6 17.2-14 36.4-14 57 0 70.7 57.3 128 128 128s128-57.3 128-128c0-20.6-5.3-39.8-14-57l96.3-23.2c18.2-4.4 18.2-27.1 0-31.5l-190.4-46c-13-3.1-26.7-3.1-39.7 0l-190.6 45.9c-18.1 4.4-18.1 27.2 0 31.6z" /></svg>
+					</div>
+					<Link className="linkContenido linkColor7" to="/usuario/titulados">
+						<div className="tamañoLateral">
+							<span className="">Ver Titulados</span>
+							<IconArrowBigRightFilled className="iconosDashboard" />
+						</div>
+					</Link>
+				</div>
+
 			</div>
 		</div>
 	);

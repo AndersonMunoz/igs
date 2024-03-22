@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../style/Style.css";
 import Sweet from "../helpers/Sweet";
 import Validate from "../helpers/Validate";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash, IconFileDescription } from "@tabler/icons-react";
 import esES from "../languages/es-ES.json";
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
@@ -197,7 +197,7 @@ const proveedor = () => {
         }
       });
   }
-    
+
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
       if (res.isConfirmed) {
@@ -221,49 +221,49 @@ const proveedor = () => {
     });
   }
 
- function registrarProveedor(e) {
+  function registrarProveedor(e) {
     e.preventDefault();
     const validacionExitosa = Validate.validarCampos(".form-empty");
     if (validacionExitosa) {
-        const formData = new FormData();
-        formData.append('nombre_proveedores', nombre_proveedores)
-        formData.append('telefono_proveedores',telefono_proveedores)
-        formData.append('direccion_proveedores',direccion_proveedores)
-        formData.append('inicio_contrato',inicio_contrato)
-        formData.append('fin_contrato',fin_contrato)
-        formData.append('contrato_proveedores',contrato_proveedores)
-        formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
-        
-        fetch(`http://${portConexion}:3000/proveedor/registrar`, {
-            method: "POST",
-            headers: {
-                "token": localStorage.getItem("token")
-            },
-            body: formData,
-        })
+      const formData = new FormData();
+      formData.append('nombre_proveedores', nombre_proveedores)
+      formData.append('telefono_proveedores', telefono_proveedores)
+      formData.append('direccion_proveedores', direccion_proveedores)
+      formData.append('inicio_contrato', inicio_contrato)
+      formData.append('fin_contrato', fin_contrato)
+      formData.append('contrato_proveedores', contrato_proveedores)
+      formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
+
+      fetch(`http://${portConexion}:3000/proveedor/registrar`, {
+        method: "POST",
+        headers: {
+          "token": localStorage.getItem("token")
+        },
+        body: formData,
+      })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
-            if (data.status === 200) {
-                Sweet.exito(data.message);
-                listarProveedor();
-                limpiar();
-                if ($.fn.DataTable.isDataTable(tableRef.current)) {
-                    $(tableRef.current).DataTable().destroy();
-                }
-            } else {
-                if (data.status === 403) {
-                    Sweet.error(data.error.errors[0].msg);
-                } else {
-                    Sweet.error(data.message);
-                }
+          console.log(data);
+          if (data.status === 200) {
+            Sweet.exito(data.message);
+            listarProveedor();
+            limpiar();
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+              $(tableRef.current).DataTable().destroy();
             }
+          } else {
+            if (data.status === 403) {
+              Sweet.error(data.error.errors[0].msg);
+            } else {
+              Sweet.error(data.message);
+            }
+          }
         })
         .catch((error) => {
-            console.error('Error:', error);
+          console.error('Error:', error);
         });
     }
-}
+  }
 
   function editarProveedor(id) {
     document.getElementById("titleSctualizar").classList.remove("d-none");
@@ -285,20 +285,20 @@ const proveedor = () => {
           setDireccion_proveedores(data[0].direccion_proveedores)
           setContrato_proveedores(data[0].contrato_proveedores)
           setTelefono_proveedores(data[0].telefono_proveedores)
-          setinicio_contrato(formatDateYYYYMMDD( new Date(data[0].inicio_contrato)))
-          setfin_contrato(formatDateYYYYMMDD( new Date(data[0].fin_contrato)))
+          setinicio_contrato(formatDateYYYYMMDD(new Date(data[0].inicio_contrato)))
+          setfin_contrato(formatDateYYYYMMDD(new Date(data[0].fin_contrato)))
         }
       });
   }
   function actualizarProveedor(id) {
     const formData = new FormData();
-        formData.append('nombre_proveedores', nombre_proveedores)
-        formData.append('telefono_proveedores',telefono_proveedores)
-        formData.append('direccion_proveedores',direccion_proveedores)
-        formData.append('inicio_contrato',inicio_contrato)
-        formData.append('fin_contrato',fin_contrato)
-        formData.append('contrato_proveedores',contrato_proveedores)
-        formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
+    formData.append('nombre_proveedores', nombre_proveedores)
+    formData.append('telefono_proveedores', telefono_proveedores)
+    formData.append('direccion_proveedores', direccion_proveedores)
+    formData.append('inicio_contrato', inicio_contrato)
+    formData.append('fin_contrato', fin_contrato)
+    formData.append('contrato_proveedores', contrato_proveedores)
+    formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
     fetch(`http://${portConexion}:3000/proveedor/actualizar/${id}`, {
       method: "PUT",
       headers: {
@@ -335,19 +335,19 @@ const proveedor = () => {
     // Realiza cualquier lógica necesaria para generar la URL
     const url = `../../public/filePDF/${element.nombre_proveedores}${element.contrato_proveedores}.pdf`;
     return url;
-}
+  }
 
   return (
     <div>
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           {userRoll == "administrador" && (
-            <button type="button" id="modalProducto" className="btn-color btn" data-bs-toggle="modal" data-bs-target="#exampleModal" 
-            onClick={() => {
-                document  .getElementById("titleSctualizar")  .classList.add("d-none");
-                document  .getElementById("titleRegistro")  .classList.remove("d-none");
-                document  .getElementById("btnAgregar")  .classList.remove("d-none");
-                document  .getElementById("btnActualizar")  .classList.add("d-none");
+            <button type="button" id="modalProducto" className="btn-color btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+              onClick={() => {
+                document.getElementById("titleSctualizar").classList.add("d-none");
+                document.getElementById("titleRegistro").classList.remove("d-none");
+                document.getElementById("btnAgregar").classList.remove("d-none");
+                document.getElementById("btnActualizar").classList.add("d-none");
               }}>
               Registrar Nuevo Proveedor
             </button>
@@ -357,14 +357,14 @@ const proveedor = () => {
           <h2 className="tituloHeaderpp">Proveedor</h2>
         </div>
         <div className="btnContenido3">
-          <div  className="btn-group"  role="group"  aria-label="Basic mixed styles example">
+          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <button  onClick={handleOnExport}  type="button"  className="btn btn-light">
+              <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
               </button>
             </div>
             <div className="" title="Descargar Pdf">
-              <button  type="button"  className="btn btn-light"  onClick={exportPdfHandler}>
+              <button type="button" className="btn btn-light" onClick={exportPdfHandler}>
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
@@ -383,7 +383,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              
+
               <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
@@ -400,27 +400,40 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    {userRoll == "administrador" ? (   
+                    {userRoll == "administrador" ? (
                       <td className="p-0">
                         {element.estado !== 1 ? (
-                            <div>
-                                <a href={generarURL(element)}> <img src={PdfLogo} className="logoExel" alt="PDF" /> </a>
-                                <span>NO DISPONIBLES</span>
-                            </div>
-                          
+                          <div>
+                            <button
+                              className="btn btn-primary"
+                              type="button"
+                              onClick={() => window.open(generarURL(element), '_blank')}
+                            >
+                              <IconFileDescription />
+                            </button>
+
+                          </div>
+
                         ) : (
                           <>
-                          <a href={generarURL(element)}> <img src={PdfLogo} className="logoExel" /> </a>
-                            <button  type="button"  className="btn-color btn mx-2"  data-bs-toggle="modal"  data-bs-target="#exampleModal"  onClick={() => {    setModal(true);    editarProveedor(element.id_proveedores);  }}>
+                            <button
+                              className="btn btn-primary"
+                              type="button"
+                              onClick={() => window.open(generarURL(element), '_blank')}
+                            >
+                              <IconFileDescription />
+                            </button>
+
+                            <button type="button" className="btn-color btn mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setModal(true); editarProveedor(element.id_proveedores); }}>
                               <IconEdit />
                             </button>
-                            <button  className="btn btn-danger"  type="button"  onClick={() =>    deshabilitarProveedor(element.id_proveedores)  }>
+                            <button className="btn btn-danger" type="button" onClick={() => deshabilitarProveedor(element.id_proveedores)}>
                               <IconTrash />
                             </button>
                           </>
                         )}
                       </td>
-                    ):(
+                    ) : (
                       <td>No disponible</td>
                     )}
                   </tr>
@@ -444,7 +457,7 @@ const proveedor = () => {
         </table>
       </div>
       {/* desde aqui el modal */}
-      <div  className="modal fade"  id="exampleModal"  data-bs-backdrop="static"  data-bs-keyboard="false"  tabIndex="-1"  aria-labelledby="exampleModalLabel"  aria-hidden="true"  style={{ display: modal == true ? "block" : "none" }}>
+      <div className="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{ display: modal == true ? "block" : "none" }}>
         <div className="modal-dialog modal-dialog-centered ">
           <div className="modal-content">
             <div className="modal-header txt-color">
@@ -454,22 +467,22 @@ const proveedor = () => {
               <h1 className="modal-title fs-5 d-none" id="titleSctualizar">
                 Actualizar proveedor
               </h1>
-              <button  type="button"  className="btn-close text-white bg-white"  data-bs-dismiss="modal"  aria-label="Close"  onClick={()=>limpiar()}></button>
+              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" onClick={() => limpiar()}></button>
             </div>
             <div className="modal-body">
               <div className=" d-flex justify-content-center">
-                <form  className="text-center border border-light" encType='multipart/form-data' onSubmit={registrarProveedor}>
+                <form className="text-center border border-light" encType='multipart/form-data' onSubmit={registrarProveedor}>
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="nombre_proveedores">Nombres</label>
-                      <input value={nombre_proveedores} onChange={(e) => {setNombre_proveedores(e.target.value); }} type="text" id="nombre_proveedores" name="nombre_proveedores" className="form-control form-empty limpiar" placeholder="Nombres" required/>
+                      <input value={nombre_proveedores} onChange={(e) => { setNombre_proveedores(e.target.value); }} type="text" id="nombre_proveedores" name="nombre_proveedores" className="form-control form-empty limpiar" placeholder="Nombres" required />
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="direccion_proveedores">Direccion</label>
-                      <input value={direccion_proveedores} onChange={(e) => {setDireccion_proveedores(e.target.value);  }}  type="text"  id="direccion_proveedores"  name="direccion_proveedores"  className="form-control form-empty limpiar"  placeholder="Direccion"></input>
+                      <input value={direccion_proveedores} onChange={(e) => { setDireccion_proveedores(e.target.value); }} type="text" id="direccion_proveedores" name="direccion_proveedores" className="form-control form-empty limpiar" placeholder="Direccion"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -478,14 +491,14 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-4">
                     <div className="col">
                       <label htmlFor="contrato_proveedores">N° Contrato</label>
-                      <input value={contrato_proveedores}  onChange={(e) => {    setContrato_proveedores(e.target.value);  }}  type="text"  name="contrato_proveedores"  id="contrato_proveedores"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
+                      <input value={contrato_proveedores} onChange={(e) => { setContrato_proveedores(e.target.value); }} type="text" name="contrato_proveedores" id="contrato_proveedores" className="form-control form-empty  limpiar" placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="telefono_proveedores">Telefono</label>
-                      <input value={telefono_proveedores} onChange={(e) => {    setTelefono_proveedores(e.target.value);  }}  type="text"  name="telefono_proveedores"  id="telefono_proveedores"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <input value={telefono_proveedores} onChange={(e) => { setTelefono_proveedores(e.target.value); }} type="text" name="telefono_proveedores" id="telefono_proveedores" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
@@ -495,48 +508,48 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="inicio_contrato">Inicio de contrato</label>
-                      <input value={inicio_contrato} onChange={(e) => {    setinicio_contrato(e.target.value);  }}  type="date"  name="inicio_contrato"  id="inicio_contrato"  className="form-control form-empty  limpiar"  placeholder="N° de contrato"></input>
+                      <input value={inicio_contrato} onChange={(e) => { setinicio_contrato(e.target.value); }} type="date" name="inicio_contrato" id="inicio_contrato" className="form-control form-empty  limpiar" placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                     <div className="col ms-3">
                       <label htmlFor="fin_contrato">Fin de contrato</label>
-                      <input value={fin_contrato} onChange={(e) => {    setfin_contrato(e.target.value);  }}  type="date"  name="fin_contrato"  id="fin_contrato"  className="form-control form-empty limpiar"  placeholder="Telefono"  aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
+                      <input value={fin_contrato} onChange={(e) => { setfin_contrato(e.target.value); }} type="date" name="fin_contrato" id="fin_contrato" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                   </div>
 
-                  <div className="d-flex form-row mb-1">
+                  <div className="d-flex form-row mb-1 mt-3">
                     <div className="col">
                       <label htmlFor="archivo_contrato">Archivo de contrato</label>
-                      <input value={archivo_contrato}   onChange={(e) => {     const { value } = e.target;     setArchivo_contrato(value);   }}   type="file"   name="archivo_contrato"   id="archivo_contrato"   className="form-control form-empty limpiar" accept="application/pdf"   placeholder="file Pdf"/>
+                      <input value={archivo_contrato} onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" accept="application/pdf" placeholder="file Pdf" />
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
                   </div>
                   <div className="d-flex gap-1 justify-content-end mt-3">
-                    
-                    <button  id="btnActualizar"  type="button"  className="btn btn-color d-none"  
-                    onClick={()=>{    actualizarProveedor(selectedProveedorData.id_proveedores);}}>
+
+                    <button id="btnActualizar" type="button" className="btn btn-color d-none"
+                      onClick={() => { actualizarProveedor(selectedProveedorData.id_proveedores); limpiar(); }}>
                       Actualizar
                     </button>
-                    
-                    <button  type="button"  className="btn btn-secondary"  data-bs-dismiss="modal"  onClick={()=>limpiar()}>
+
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => limpiar()}>
                       Cerrar
                     </button>
 
-                    <button id="btnAgregar" type="submit"  className="btn btn-color">Enviar</button>
-                    
+                    <button id="btnAgregar" type="submit" className="btn btn-color">Enviar</button>
+
                   </div>
                 </form>
               </div>
             </div>
             <div className="modal-footer">
-              
+
             </div>
           </div>
         </div>
