@@ -71,21 +71,24 @@ const Movimiento = () => {
     ];
   
     // Obtener los datos de la tabla
-    const tableData = movimientos.map((element) => ({
-      nombre_tipo: element.nombre_tipo,
-      num_lote: element.num_lote,
-      fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
-      tipo_movimiento: element.tipo_movimiento,
-      cantidad_peso_movimiento: element.cantidad_peso_movimiento,
-      unidad_peso: element.unidad_peso,
-      precio_movimiento: element.precio_movimiento,
-      precio_total_mov: element.precio_total_mov,
-      estado_producto_movimiento: element.estado_producto_movimiento,
-      nota_factura: element.nota_factura,
-      fecha_caducidad: Validate.formatFecha(element.fecha_caducidad),
-      nombre_usuario: element.nombre_usuario,
-      nombre_proveedores: element.nombre_proveedores,
-    }));
+    const tableData = movimientos.map((element) => {
+      const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
+      return {
+        nombre_tipo: element.nombre_tipo,
+        num_lote: element.num_lote,
+        fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
+        tipo_movimiento: element.tipo_movimiento,
+        cantidad_peso_movimiento: element.cantidad_peso_movimiento,
+        unidad_peso: element.unidad_peso,
+        precio_movimiento: element.precio_movimiento,
+        precio_total_mov: element.precio_total_mov,
+        estado_producto_movimiento: element.estado_producto_movimiento,
+        nota_factura: element.nota_factura,
+        fecha_caducidad: fechaCaducidad,
+        nombre_usuario: element.nombre_usuario,
+        nombre_proveedores: element.nombre_proveedores,
+      };
+    });
   
     // Agregar las columnas y los datos a la tabla del PDF
     doc.autoTable({
@@ -122,6 +125,7 @@ const Movimiento = () => {
 
     // Obtener los datos de las filas
     movimientos.forEach(element => {
+      const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       const rowData = [
         element.nombre_tipo,
         element.num_lote,
@@ -133,7 +137,7 @@ const Movimiento = () => {
         element.precio_total_mov,
         element.estado_producto_movimiento,
         element.nota_factura,
-        Validate.formatFecha(element.fecha_caducidad),
+        fechaCaducidad,
         element.nombre_usuario,
         element.nombre_proveedores
       ];
@@ -157,11 +161,9 @@ const Movimiento = () => {
   };
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption); 
-    console.log(selectedOption);
   };
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption);
-    console.log(selectedOption);
   };
   const fkIdUsuarioRef = useRef(null);
 
@@ -414,8 +416,6 @@ const Movimiento = () => {
   }
   function actualizarMovimiento(id) {
     let fecha_caducidad = null;
-
-    // Verificar si se debe actualizar la fecha de caducidad
     if (aplicaFechaCaducidad2 && fechaCaducidadModificada && movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
         const fechaSeleccionada = new Date(movimientoSeleccionado.fecha_caducidad);
         fechaSeleccionada.setDate(fechaSeleccionada.getDate() + 1);
@@ -423,18 +423,10 @@ const Movimiento = () => {
     } else if (movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
         fecha_caducidad = movimientoSeleccionado.fecha_caducidad;
     }
-
-    console.log("Fecha de caducidad seleccionada:", fecha_caducidad); // Depuración: Verificar la fecha de caducidad
-
-    // Preparar el cuerpo de la solicitud
     let body = { ...movimientoSeleccionado };
     if (fecha_caducidad !== null) {
         body.fecha_caducidad = fecha_caducidad;
     }
-
-    console.log("Cuerpo de la solicitud:", body); // Depuración: Verificar el cuerpo de la solicitud
-
-    // Realizar la solicitud de actualización al servidor
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
         method: "PUT",
         headers: {
@@ -458,14 +450,15 @@ const Movimiento = () => {
         if (modalBackdrop) {
             modalBackdrop.remove();
         }
-        // Restablecer movimientoSeleccionado a un objeto vacío
         setMovimientoSeleccionado({});
     })
     .catch((error) => {
         error.json().then((body) => {
-            if (body.status === 409) {
-                Sweet.error('El número de lote ya está registrado');
-            } else if (body.errors) {
+            if (body.status === 404) {
+                Sweet.error(body.message);
+            } else if (body.status === 409) {
+                Sweet.error(body.message);
+            }   else if (body.errors) {
                 body.errors.forEach((err) => {
                     Sweet.error(err.msg);
                 });
@@ -475,6 +468,7 @@ const Movimiento = () => {
         });
     });
 }
+
 
   function registrarMovimiento() {
 
@@ -491,8 +485,13 @@ const Movimiento = () => {
     if (aplicaFechaCaducidad) {
       fecha_caducidad = document.getElementById('fecha_caducidad').value;
     }
+    Validate.validarCampos('.form-empty');
+    const validacionExitosa = Validate.validarSelect('.form-empt');
 
-    const validacionExitosa = Validate.validarCampos('.form-empty');
+    if (!validacionExitosa) {
+      Sweet.registroFallido();
+      return;
+    }
     fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
       method: 'POST',
       headers: {
@@ -643,9 +642,8 @@ const Movimiento = () => {
                       </td>
                       <td className="p-2 text-center">{element.precio_total_mov}</td>
                       <td className="p-2 text-center">
-  {element.estado_producto_movimiento === 'optimo' ? 'Óptimo' : element.estado_producto_movimiento.charAt(0).toUpperCase() + element.estado_producto_movimiento.slice(1).toLowerCase()}
-</td>
-
+                        {element.estado_producto_movimiento === 'optimo' ? 'Óptimo' : element.estado_producto_movimiento.charAt(0).toUpperCase() + element.estado_producto_movimiento.slice(1).toLowerCase()}
+                      </td>
                       <td className="p-2 text-center">
                         {element.nota_factura.charAt(0).toUpperCase() + element.nota_factura.slice(1).toLowerCase()}
                       </td>
@@ -685,7 +683,7 @@ const Movimiento = () => {
                       <div className="col">
                         <label className="form-label" htmlFor="categoria">Categoria</label>
                           <Select
-                            className="react-select-container  form-empty my-custom-class"
+                            className="react-select-container  form-empt my-custom-class"
                             classNamePrefix="react-select"
                             options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
                             placeholder="Selecciona..."
@@ -694,15 +692,15 @@ const Movimiento = () => {
                             id="categoria"
                           />
                         <div className="invalid-feedback is-invalid">
-                      Por favor, seleccione un tipo de producto.
-                    </div>
+                        Por favor, seleccione un tipo de producto.
+                        </div>
                       </div>
                       <div className="col">
                         <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Producto</label>
                         <Select
-                          className="react-select-container  form-empty my-custom-class"
+                          className="react-select-container form-empty limpiar my-custom-class"
                           classNamePrefix="react-select"
-                          options={selectedCategoria ? productosCategoria.map(element => ({ key: element.id_tipo, value: element.id_tipo, label: element.nombre_tipo })) : []}
+                          options={selectedCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_tipo, value: element.id_tipo, label: element.nombre_tipo })) : [{ value: '', label: 'No hay productos disponibles' }]}
                           placeholder="Selecciona..."
                           onChange={handleTipo}
                           value={selectedTipo}
@@ -716,7 +714,7 @@ const Movimiento = () => {
                       <div className="col">
                         <label htmlFor="fk_id_up" className="label-bold mb-2">Bodega</label>
                         <Select
-                            className="react-select-container form-empty my-custom-class"
+                            className="react-select-container form-empt my-custom-class"
                             classNamePrefix="react-select"
                             options={up.map(element => ({ value: element.id_up, label: element.nombre_up}))}
                             placeholder="Selecciona..."
@@ -776,7 +774,7 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="number" id="num_lote" name="num_lote" className="form-control form-empty limpiar" />
+                          <input type="text" id="num_lote" maxLength={6} name="num_lote" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un número válido.
                           </div>
@@ -800,7 +798,8 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                          <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
+                          <textarea id="nota_factura" name="nota_factura" className="form-control form-empty limpiar"></textarea>
+
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese una descripción válida.
                           </div>
@@ -891,12 +890,23 @@ const Movimiento = () => {
                           </div>
                         </div>
                         <div className="col">
+                        <div data-mdb-input-init className="form-outline">
+                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
+                          <input type="text" id="num_lote" value={movimientoSeleccionado.num_lote || ''} maxLength={6} name="num_lote" className="form-control form-empty limpiar" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
+                          <div className="invalid-feedback is-invalid">
+                            Por favor, ingrese un número válido.
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                      <div className="row mb-4">
+                      <div className="col">
                           <div data-mdb-input-init className="form-outline">
                             <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                            <input type="text" className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
+                            <textarea className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
                             <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese una nota mas larga.
-                          </div>
+                              Por favor, ingrese una nota mas larga.
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -942,13 +952,12 @@ const Movimiento = () => {
                   </div>
                   
                   <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState();handleCloseModal2()}}>Cerrar</button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  onClick={() => { resetFormState()}}>Cerrar</button>
                     <button
                       type="button"
                       className="btn btn-color"
                       onClick={() => {
-                        actualizarMovimiento(movimientoSeleccionado.id_factura);
-                        handleCloseModal2();
+                        actualizarMovimiento(movimientoSeleccionado.id_factura)
                       }}
                     >
                       Actualizar

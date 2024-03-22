@@ -21,6 +21,7 @@ import * as xlsx from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import portConexion from "../const/portConexion";
+import Select from 'react-select'
 
 const Movimiento = () => {
   const [userId, setUserId] = useState('');
@@ -35,6 +36,17 @@ const Movimiento = () => {
   const [showModal, setShowModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
+  const [selectedTipo, setSelectedTipo] = useState(null);
+  const [selectedCategoria, setSelectedCategoria] = useState(null);
+  const [selectedLote, setSelectedLote] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptionTit, setSelectedOptionTit] = useState(null);
+  const [selectedOptionIns, setSelectedOptionIns] = useState(null);
+  const [destinoMovimiento, setDestinoMovimiento] = useState('');
+  const [tituladoList,setTitulado] = useState(null);
+  const [selectedTitulado, setSelectedTitulado] = useState(null);
+  const [instructorList,setInstrucor] = useState(null);
+  const [selectedInstructor, setSelectedInstructor] = useState(null);
   const modalUpdateRef = useRef(null);
   const modalProductoRef = useRef(null);
   const handleOnExport = () => {
@@ -115,10 +127,37 @@ const Movimiento = () => {
 
     return wsData;
   };
-  const handleCheckboxChange = () => {
-    setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-
+  const handleCategoria = (selectedOption) => {
+    setSelectedCategoria(selectedOption); 
+    setSelectedTipo(null); 
   };
+
+  const handleTitulado = (selectedOptionTit) => {
+    setSelectedOptionTit(selectedOptionTit);
+    setSelectedTitulado(selectedOptionTit.value); 
+    //console.log(" titulado id: "+selectedOptionTit.value);// Actualiza el estado del titulado seleccionado
+};
+
+const handleInstructor = (selectedOptionIns) => {
+    setSelectedOptionIns(selectedOptionIns);
+    setSelectedInstructor(selectedOptionIns.value); 
+    //console.log("oinstructor id:"+selectedOptionIns.value);// Actualiza el estado del instructor seleccionado
+};
+  
+  const handleDestino = (event) => {
+    setDestinoMovimiento(event.target.value);
+    console.log("destino id: "+event.target.value)
+};
+
+  const handleTipo = (selectedOption) => {
+    setSelectedOption(selectedOption);
+    setSelectedTipo(selectedOption.value.id_producto);
+    //console.log(selectedOption.value.id_producto);
+    setSelectedLote(selectedOption.value.num_lote);
+    //console.log(selectedOption.value.num_lote);
+  };
+  
+  
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
@@ -128,24 +167,8 @@ const Movimiento = () => {
     setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
   const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    formFields.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-    formFields2.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
   };
   useEffect(() => {
     if (movimientos.length > 0) {
@@ -192,8 +215,15 @@ const Movimiento = () => {
     listarTipo();
     listarProveedor();
     listarUsuario();
-
-  }, []);
+    listarTitulado();
+    listarInstructor();
+    if (selectedCategoria) {
+      listarProductoCategoria(selectedCategoria.value);
+    }
+    if (selectedTipo) {
+      listarUnidadesPro(selectedTipo)
+    }
+  }, [selectedCategoria,selectedTipo]);
 
   function listarCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listar`, {
@@ -213,6 +243,56 @@ const Movimiento = () => {
       .then((data) => {
         if (data !== null) {
           setcategorias_producto(data);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function listarTitulado() {
+    fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token")
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          console.log("No hay datos disponibles");
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          setTitulado(data);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function listarInstructor() {
+    fetch(`http://${portConexion}:3000/instructor/listarActivo`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token")
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          console.log("No hay datos disponibles");
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          setInstrucor(data);
         }
       })
       .catch((e) => {
@@ -264,7 +344,7 @@ const Movimiento = () => {
   function listarProductoCategoria(id_categoria) {
 
     fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+      `http://${portConexion}:3000/facturamovimiento/buscarProPro/${id_categoria == '' ? 0 : id_categoria}`,
       {
         method: "GET",
         headers: {
@@ -287,27 +367,31 @@ const Movimiento = () => {
   }
 
   function listarUnidadesPro(id_producto) {
-
-    fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          token: localStorage.getItem("token")
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setUniPro(data);
-        //console.log("Unidades producto   : ", data);
-      })
-      .catch((e) => {
-        setUniPro([]);
-        console.log("Error:: ", e);
-      });
+    if (id_producto) {
+      fetch(
+        `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            token: localStorage.getItem("token")
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setUniPro(data);
+          //console.log("Unidades producto   : ", data);
+        })
+        .catch((e) => {
+          setUniPro([]);
+          console.log("Error:: ", e);
+        });
+    } else {
+      console.log('id_producto es undefined');
+    }
   }
+  
   function editarMovimiento(id) {
     fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
       method: 'GET',
@@ -366,63 +450,6 @@ const Movimiento = () => {
     });
   });
   }
-  function registrarMovimientoSalida() {
-
-    let fk_id_usuario =userId;
-    let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
-    let nota_factura = document.getElementById('nota_factura').value;
-    let fecha_caducidad = null;
-    let fk_id_producto = document.getElementById('fk_id_producto').value;
-    if (aplicaFechaCaducidad) {
-      fecha_caducidad = document.getElementById('fecha_caducidad').value;
-    }
-
-    const validacionExitosa = Validate.validarCampos('.form-empty');
-
-    fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        token: localStorage.getItem("token")
-      },
-      body: JSON.stringify({cantidad_peso_movimiento, nota_factura,  fk_id_producto, fk_id_usuario}),
-    })
-    .then((res) => res.json())
-    .then(data => {
-      if (data.status === 200) {
-        Sweet.exito(data.message);
-        if ($.fn.DataTable.isDataTable(tableRef.current)) {
-          $(tableRef.current).DataTable().destroy();
-        }
-        listarMovimiento();
-      }
-      if (data.status === 403) {
-        Sweet.error(data.error.errors[0].msg);
-        return;
-      }
-      if (data.status === 402) {
-        Sweet.error(data.mensaje); // El mensaje de error debe estar en data.mensaje
-        return;
-      }
-      if (data.status === 409) {
-        Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
-        return;
-      }
-      /* console.log(data); */
-      listarMovimiento();
-      setShowModal(false);
-      removeModalBackdrop(true );
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
-
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    })
-    //console.log(document.getElementById('fecha_caducidad'));
-  }
   function listarUsuario() {
     fetch(`http://${portConexion}:3000/usuario/listar`, {
       method: "get",
@@ -441,6 +468,67 @@ const Movimiento = () => {
       })
       .catch(e => { console.log(e); })
   }
+
+  function registrarMovimientoSalida() {
+    let fk_id_usuario = userId;
+    let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
+    let nota_factura = document.getElementById('nota_factura').value;
+    let destino_movimiento = document.getElementById('destino_movimiento').value;
+    let num_lote = selectedLote ? selectedLote : null;
+    let fk_id_producto = selectedTipo ? selectedTipo : null;
+    let fk_id_titulado = null;
+    let fk_id_instructor = null;
+
+    // Si el destino es "Taller" o "Evento", obtener los valores de los campos "fk_id_titulado" y "fk_id_instructor"
+    if (destino_movimiento === "taller" || destino_movimiento === "evento") {
+        fk_id_titulado = selectedOptionTit.value; // Obtener el valor del campo seleccionado para fk_id_titulado
+        fk_id_instructor = selectedOptionIns.value; // Obtener el valor del campo seleccionado para fk_id_instructor
+    }
+
+    // Validación de campos aquí...
+
+    fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, num_lote, destino_movimiento, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
+    })
+    .then((res) => res.json())
+    .then(data => {
+        if (data.status === 200) {
+            Sweet.exito(data.message);
+            setShowModal(false);
+            removeModalBackdrop(true);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+                $(tableRef.current).DataTable().destroy();
+            }
+            listarMovimiento();
+        } else if (data.status === 403) {
+            Sweet.error(data.error.errors[0].msg);
+        } else if (data.status === 402) {
+            Sweet.error(data.mensaje);
+        } else if (data.status === 409) {
+            Sweet.error(data.message);
+        } else {
+            listarMovimiento();
+            setShowModal(false);
+            removeModalBackdrop(true);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
   function listarMovimiento() {
     fetch(`http://${portConexion}:3000/facturamovimiento/listarSalida`, {
@@ -473,7 +561,7 @@ const Movimiento = () => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos de Salida</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}>
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedCategoria(null);setSelectedOptionIns(null);setSelectedOptionTit(null);setSelectedOption(null)}}>
             Registrar nuevo movimiento de Salida
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
@@ -571,36 +659,40 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="categoria">Categoria</label>
-                          <select onChange={(e)=>{listarProductoCategoria(e.target.value)}} className="form-select form-empty limpiar" id="categoria" name="categoria" aria-label="Default select example">
-                            <option value="">Selecciona una categoria</option>
-                            {categoria_list.map((element) => (
-                              
-                              <option  key={element.id_categoria} value={element.id_categoria}>{element.nombre_categoria}</option>
-                            ))}
-                          </select>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, seleccione una categoria.
-                          </div>
+                              <Select
+                                className="react-select-container form-empty limpiar my-custom-clas"
+                                classNamePrefix="react-select"
+                                options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
+                                placeholder="Selecciona..."
+                                onChange={handleCategoria}
+                                value={selectedCategoria}
+                                id="categoria"
+                              />
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, seleccione una categoria.
+                            </div>
                         </div>
                       </div>
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="fk_id_producto">Producto</label>
-                          <select onChange={(e)=>{listarUnidadesPro(e.target.value)}} defaultValue="" className="form-select form-empty limpiar" id="fk_id_producto" name="fk_id_producto" aria-label="Default select example">
-                            <option value="">Seleccione una opción</option>
-                            {productosCategoria.length > 0 ? productosCategoria.map((element) => (
-                              <option key={element.id_producto} value={element.id_producto}>
-                                {element.nombre_tipo} - {element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}</option>
-                            )): ""}
-                          </select>
+                          <Select
+                            className="react-select-container form-empty limpiar my-custom-class"
+                            classNamePrefix="react-select"
+                            options={productosCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_producto, value: { id_producto: element.id_producto, num_lote: element.num_lote }, label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` })) : [{ value: '', label: 'No hay productos disponibles' }]}
+                            placeholder="Selecciona..."
+                            onChange={handleTipo}
+                            value={selectedOption } // Aquí es donde cambiamos selectedTipo a selectedOption
+                            id="fk_id_producto"
+                            name="fk_id_producto"
+                          />
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un producto.
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="row mb-4">
-                      <div className="col">
+                    <div className="row mb-4"><div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
                           <input type="number" id="cantidad_peso_movimiento" name="cantidad_peso_movimiento"  className="form-control form-empty limpiar" />
@@ -619,23 +711,82 @@ const Movimiento = () => {
                       </div>
                     </div>
                     <div className="row mb-4">
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="nota_factura">Nota</label>
-                          <input type="text" id="nota_factura" name="nota_factura" className="form-control form-empty limpiar" />
-                        </div>
+                    <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                              <label className="form-label" htmlFor="destino_movimiento">Destino</label>
+                              <select  className="form-select form-empty limpiar" id="destino_movimiento" name="destino_movimiento" aria-label="Default select example" onChange={handleDestino} value={destinoMovimiento}>
+                                  <option value="">Seleccione una opción</option>
+                                  <option value="taller">Taller</option>
+                                  <option value="produccion">Producción</option>
+                                  <option value="evento">Evento</option>
+                              </select>
+                              <div className="invalid-feedback is-invalid">
+                                  Por favor, seleccione un destino.
+                              </div>
+                          </div>
                       </div>
-                      
-                    </div>
-                  </form>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                  <button type="button" className="btn-color btn" onClick={registrarMovimientoSalida}>Registrar</button>
+                      {/* Si el destino es "Taller" o "Evento", mostrar los selectores de instructores y titulados */}
+                      {destinoMovimiento === "taller" || destinoMovimiento === "evento" ? (
+                          <>
+                              <div className="col">
+                                  <div data-mdb-input-init className="form-outline">
+                                      <label className="form-label" htmlFor="fk_id_titulado">Titulado</label>
+                                      <Select
+                                        className="react-select-container  form-empt my-custom-class"
+                                        classNamePrefix="react-select"
+                                        options={tituladoList.map(element => ({ value: element.id_titulado, label: `${element.nombre_titulado} - ${element.id_ficha}`}))}
+                                        placeholder="Selecciona..."
+                                        onChange={handleTitulado}
+                                        value={selectedOptionTit}
+                                        id="fk_id_titulado"
+                                      />
+                                      <div className="invalid-feedback is-invalid">
+                                          Por favor, seleccione un titulado.
+                                      </div>
+                                  </div>
+                              </div>
+                                <div className="col">
+                                    <div data-mdb-input-init className="form-outline">
+                                        <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
+                                        <Select
+                                          className="react-select-container  form-empt my-custom-class"
+                                          classNamePrefix="react-select"
+                                          options={instructorList.map(element => ({ value: element.id, label: element.nombre}))}
+                                          placeholder="Selecciona..."
+                                          onChange={handleInstructor}
+                                          value={selectedOptionIns}
+                                          id="fk_id_instructor"
+                                        />
+                                        <div className="invalid-feedback is-invalid">
+                                            Por favor, seleccione un instructor.
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : null}
+                      </div>
+                      <div className="row mb-4">
+                      <div className="col">
+                          <div data-mdb-input-init className="form-outline">
+                            <label className="form-label" htmlFor="nota_factura">Descripción</label>
+                            <textarea id="nota_factura" name="nota_factura" className="form-control form-empty limpiar"></textarea>
+
+                            <div className="invalid-feedback is-invalid">
+                              Por favor, ingrese una descripción válida.
+                            </div>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </form>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" className="btn-color btn" onClick={registrarMovimientoSalida}>Registrar</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">

@@ -130,7 +130,7 @@ const proveedor = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[9, "asc"]],
+        order: [[8, "asc"]],
       });
     }
   }, [proveedor]);
@@ -329,7 +329,14 @@ const proveedor = () => {
     setTelefono_proveedores('')
     setinicio_contrato('')
     setfin_contrato('')
+    setArchivo_contrato('')
   }
+  function generarURL(element) {
+    // Realiza cualquier lógica necesaria para generar la URL
+    const url = `../../public/filePDF/${element.nombre_proveedores}${element.contrato_proveedores}.pdf`;
+    return url;
+}
+
   return (
     <div>
       <div className="boxBtnContendidoTitulo">
@@ -376,7 +383,7 @@ const proveedor = () => {
               <th className="th-sm">Estado</th>
               <th className="th-sm">Inicio de contrato</th>
               <th className="th-sm">Fin de contrato</th>
-              <th className="th-sm">Archivo Contrato</th>
+              
               <th className="th-sm text-center">Acciones</th>
             </tr>
           </thead>
@@ -393,13 +400,17 @@ const proveedor = () => {
                     <td>{element.estado === 1 ? "Activo" : "Inactivo"}</td>
                     <td>{Validate.formatFecha(element.inicio_contrato)}</td>
                     <td>{Validate.formatFecha(element.fin_contrato)}</td>
-                    <td>{element.archivo_contrato}</td>
                     {userRoll == "administrador" ? (   
                       <td className="p-0">
                         {element.estado !== 1 ? (
-                          "NO DISPONIBLES"
+                            <div>
+                                <a href={generarURL(element)}> <img src={PdfLogo} className="logoExel" alt="PDF" /> </a>
+                                <span>NO DISPONIBLES</span>
+                            </div>
+                          
                         ) : (
                           <>
+                          <a href={generarURL(element)}> <img src={PdfLogo} className="logoExel" /> </a>
                             <button  type="button"  className="btn-color btn mx-2"  data-bs-toggle="modal"  data-bs-target="#exampleModal"  onClick={() => {    setModal(true);    editarProveedor(element.id_proveedores);  }}>
                               <IconEdit />
                             </button>
@@ -501,7 +512,7 @@ const proveedor = () => {
                   <div className="d-flex form-row mb-1">
                     <div className="col">
                       <label htmlFor="archivo_contrato">Archivo de contrato</label>
-                      <input   onChange={(e) => {     const { value } = e.target;     setArchivo_contrato(value);   }}   type="file"   name="archivo_contrato"   id="archivo_contrato"   className="form-control form-empty limpiar"   placeholder="file Pdf"/>
+                      <input value={archivo_contrato}   onChange={(e) => {     const { value } = e.target;     setArchivo_contrato(value);   }}   type="file"   name="archivo_contrato"   id="archivo_contrato"   className="form-control form-empty limpiar" accept="application/pdf"   placeholder="file Pdf"/>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>

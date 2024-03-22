@@ -32,7 +32,7 @@ export const registroTitulado = async (req, res) => {
 
 			res.status(200).json({
 				"status": 200,
-				"menssage": "El titulado se  registrada con exito "
+				"menssage": "El titulado se registro con exito "
 			})
 		} else {
 			res.status(204).json({
@@ -142,4 +142,21 @@ export const activarTitulado = async (req, res) => {
 	} catch (e) {
 		res.status(500).json({ message: "Error en activarTipo titulado: " + e });
 	}
+};
+export const listarTituladoActivo = async (req, res) => {
+	try {
+		const [result] = await pool.query('select * from titulados where estado = 1');
+		if (result.length > 0) {
+			res.status(200).json(result);
+		} else {
+			res.status(204).json({ "status": 204, "message": "No se pudo listar titulados" });
+		}
+
+	} catch (err) {
+        res.status(500).json({
+            "status": 500, "message": "Error en el servidor   "+err
+        
+        })
+    }
+
 };
