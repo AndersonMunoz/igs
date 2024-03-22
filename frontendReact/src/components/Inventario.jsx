@@ -118,12 +118,6 @@ const Inventario = () => {
         $(tableRef.current).DataTable().destroy();
       }
       $(tableRef.current).DataTable({
-        columnDefs: [
-          {
-            targets: -1,
-            responsivePriority: 1
-          }
-        ],
         responsive: true,
         language: esES,
         lengthMenu: [
@@ -232,14 +226,12 @@ const Inventario = () => {
               <table id="dtBasicExample max-width-5" className="table table-striped table-bordered border display responsive nowrap " cellSpacing={0} width="100%" ref={tableRef}>
                 <thead className="text-center text-justify">
                   <tr>
-                    <th className="th-sm">N°</th>
+                    <th className="th-sm">#Lote</th>
                     <th className="th-sm">Nombre producto</th>
-                    <th className="th-sm">Nombre categoria</th>
                     <th className="th-sm">Cantidad</th>
                     <th className="th-sm">Unidad</th>
                     <th className="th-sm">Fecha ingreso</th>
                     <th className="th-sm">Fecha caducidad</th>
-                    <th className="th-sm">Descripcion</th>
                   </tr>
                 </thead>
                 <tbody id="tableProducto" className="text-center">
@@ -257,16 +249,12 @@ const Inventario = () => {
                     <>
                       {categoriaItem.map((element, index) => (
                         <tr key={index} style={{ textTransform: 'capitalize' }}>
-                          <td>{index + 1}</td>
+                          <td>{element.Lote}</td>
                           <td>{element.NombreProducto}</td>
-                          <td>{element.NombreCategoria}</td>
                           <td>{element.Cantidad}</td>
                           <td>{element.Unidad}</td>
                           <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
                           <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
-                          <td style={{ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {element.Descripcion}
-                          </td>
                         </tr>
                       ))}
                     </>

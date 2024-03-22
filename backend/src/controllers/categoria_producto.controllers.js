@@ -187,6 +187,7 @@ export const listarCategoriaItem = async (req, res) => {
         let id = req.params.id;
         const [result] = await pool.query(
             `SELECT
+                p.num_lote AS Lote,
                 c.id_categoria,
                 c.nombre_categoria AS NombreCategoria,
                 p.cantidad_peso_producto AS Cantidad,
@@ -194,12 +195,12 @@ export const listarCategoriaItem = async (req, res) => {
                 t.unidad_peso AS Unidad,
                 f.fecha_movimiento AS FechaIngreso,
                 f.fecha_caducidad AS FechaCaducidad,
-                p.descripcion_producto AS Descripcion
+                f.nota_factura AS Descripcion
             FROM categorias_producto c
             JOIN tipo_productos t ON t.fk_categoria_pro = c.id_categoria
             JOIN productos p ON p.fk_id_tipo_producto = t.id_tipo
             LEFT JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto
-             WHERE c.id_categoria = ? GROUP BY NombreProducto`,
+             WHERE c.id_categoria = ? GROUP BY Lote`,
             [id]
         );
         res.status(200).json(result);
