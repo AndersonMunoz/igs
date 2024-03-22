@@ -495,10 +495,7 @@ const handleInstructor = (selectedOptionIns) => {
         },
         body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, num_lote, destino_movimiento, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
     })
-    .then((res) => {
-        console.log(res); // Imprime la respuesta completa del servidor
-        return res.json();
-    })
+    .then((res) => res.json())
     .then(data => {
         if (data.status === 200) {
             Sweet.exito(data.message);
