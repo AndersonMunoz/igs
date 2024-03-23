@@ -131,6 +131,27 @@ const Movimiento = () => {
 
     return wsData;
   };
+  const resetFormState = () => {
+    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    formFields.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+    formFields2.forEach(field => {
+      if (field.type === 'checkbox') {
+        field.checked = false;
+      } else {
+        field.value = '';
+      }
+      field.classList.remove('is-invalid');
+    });
+  };
+
   const handleCategoria = (selectedOption) => {
     setSelectedCategoria(selectedOption); 
     setSelectedTipo(null); 
@@ -167,11 +188,15 @@ const handleDestino = (event) => {
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
- 
-  const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
+
+  const handleCheckboxChange2 = () => {
+    setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
   };
+  // const resetFormState = () => {
+  //   const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  //   const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  // };
   useEffect(() => {
     if (movimientos.length > 0) {
       if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -341,8 +366,6 @@ const handleDestino = (event) => {
       })
       ;
   }
-
-
   function listarProductoCategoria(id_categoria) {
 
     fetch(
@@ -367,7 +390,6 @@ const handleDestino = (event) => {
         console.log("Error:: ", e);
       });
   }
-
   function listarUnidadesPro(id_producto) {
     if (id_producto) {
       fetch(
@@ -393,7 +415,6 @@ const handleDestino = (event) => {
       console.log('id_producto es undefined');
     }
   }
-  
   function editarMovimiento(id) {
     fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
       method: 'GET',
@@ -508,6 +529,13 @@ const handleDestino = (event) => {
     }
 
     // Validación de campos aquí...
+    Validate.validarCampos('.form-empty');
+    const validacionExitosa = Validate.validarSelect('.form-empt');
+
+    if (!validacionExitosa) {
+      Sweet.registroFallido();
+      return;
+    }
 
     fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
         method: 'POST',
@@ -682,7 +710,7 @@ const handleDestino = (event) => {
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="categoria">Categoria</label>
                               <Select
-                                className="react-select-container form-empty limpiar my-custom-clas"
+                                className="react-select-container form-empty limpiar my-custom-clas form-empt"
                                 classNamePrefix="react-select"
                                 options={categoria_list.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
                                 placeholder="Selecciona..."

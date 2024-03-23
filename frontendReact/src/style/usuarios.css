@@ -33,6 +33,13 @@
 .logoExel {
   width: 28px;
 }
+.logoContrato {
+  width: 25px;
+  height: 35px;
+}
+a{
+  text-decoration: none;
+}
 
 .tituloHeaderpp{
   font-size: 1.3em;

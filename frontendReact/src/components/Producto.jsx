@@ -264,60 +264,6 @@ const Producto = () => {
       
     })
   }
-    // Función para deshabilitar un producto
-  function deshabilitarProducto(id) {
-    Sweet.confirmacion().then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/producto/deshabilitar/${id}`, {
-          method: 'PATCH',
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.status === 200) {
-              Sweet.deshabilitadoExitoso();
-            }
-            if (data.status === 401) {
-              Sweet.deshabilitadoFallido();
-            }
-            listarProducto();
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-      }
-    });
-  }
-    // Función para activar un producto
-  function activarProducto(id) {
-    Sweet.confirmacionActivar().then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/producto/activar/${id}`, {
-          method: 'PATCH',
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          }
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 200) {
-            Sweet.habilitadoExitoso();
-          }
-          if (data.status === 401) {
-            Sweet.habilitadoFallido();
-          }
-          listarProducto();
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-    });
-  }
 
   return (
     <div>
@@ -414,15 +360,12 @@ const Producto = () => {
                       </td>
                      {userRoll == "administrador"?(
                        <td className="p-0">
-                       {element.estado === 1 ? (
+                       {element.estado === 1 && (
                          <>
                            <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
                            <IconEdit /> 
                            </button>
-                           <button className="btn btn-danger" onClick={() => deshabilitarProducto(element.id_producto)}><IconTrash /></button>
                          </>
-                       ): (
-                           <button className="btn btn-primary" onClick={() => activarProducto(element.id_producto)}>Activar</button>
                        )}
                        </td>
                      ):(

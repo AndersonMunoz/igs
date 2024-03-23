@@ -62,6 +62,20 @@ export const listarInstructor = async (req, res) => {
     }
 }
 
+export const listarInstructoresCount = async (req, res) => {
+    try {
+        const [result] = await pool.query('SELECT COUNT(*) AS count FROM instructores');
+        if (result.length > 0) {
+            res.status(200).json({ count: result[0].count });
+
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error en servidor:' + err
+        })
+    }
+};
+
 export const listarActivoInstructor = async (req, res) => {
     try {
         const [result] = await pool.query

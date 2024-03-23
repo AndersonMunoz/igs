@@ -137,6 +137,49 @@ const reporte = () => {
     }
   }, [reporte]);
 
+  function ListartPorRango(inicio, fin) {
+    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if (res.status === 204) {
+            return null;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data !== null) {
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+              $(tableRef.current).DataTable().destroy();
+            }
+            let valEntradas = 0;
+            let valSalidas = 0;
+            let ReporteDelFiltro = [];
+            let fechaInicio = new Date(inicio);
+            let fechaFin = new Date(fin);
+            fechaFin.setDate(fechaFin.getDate() + 1);
+            fechaFin.setHours(23, 59, 59);
+            for (let index = 0; index < data.productos.length; index++) {
+                const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
+                if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
+                    console.log(data.productos[index]);
+                    valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
+                    valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
+                    ReporteDelFiltro.push(data.productos[index])
+                }
+            }
+            setValEntradas(valEntradas)
+            setValSalidas(valSalidas)
+            setReporte(ReporteDelFiltro)
+            console.log(ReporteDelFiltro);
+        }        
+        })
+  }
+
   useEffect(()=>{
     setRangoMovFin(formatDateYYYYMMDD(new Date()));
     listarProducto()
@@ -162,53 +205,11 @@ const reporte = () => {
             setValEntradas(data.entraron)
             setValSalidas(data.salieron)
             setReporte(data.productos)
-            setRangoMovInicio(formatDateYYYYMMDD(new Date(data.
-              primera_fecha_movimiento_primer_producto)))
+            setRangoMovInicio(formatDateYYYYMMDD(new Date('2023-03-19')))
           }
         })
       }
-  function ListartPorRango(inicio, fin) {
-    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status === 204) {
-            return null;
-          }
-          return res.json();
-        })
-        .then((data) => {
-          if (data !== null) {
-            let valEntradas= 0;
-            let valSalidas = 0;
-            let Reporte = [];
-            //tal ves haya una mejor logica, Pero esta es la mia
-            let fechaInicio = new Date (inicio);
-            let diaInicio = fechaInicio.getDate();
-            let mesInicio = fechaInicio.getMonth() + 1;
-            let añoInicio = fechaInicio.getFullYear();
-            let fechaFin = new Date (fin)
-            let diaFin = fechaFin.getDate();
-            let mesFin = fechaFin.getMonth() + 1;
-            let añoFin = fechaFin.getFullYear();
-            data.productos.forEach(element=>{
-              let fechaDeProduto = new Date (element.primera_fecha_movimiento)
-              let dia = fechaDeProduto.getDate();
-              let mes = fechaDeProduto.getMonth() + 1;
-              let año = fechaDeProduto.getFullYear();
-              if ((fechaDeProduto >= fechaInicio)&&(fechaDeProduto <= fechaFin)) {
-                console.log(element);
-              }
-              
-            })
-           
-          }
-        })
-  }
+
 
   return (
     <div>
@@ -216,11 +217,11 @@ const reporte = () => {
 
         <div className="btnContenido11">
           <div  style={{ width: "200px", marginRight: "10px", gap:"20px" }}  className="d-flex">
-            <input className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
+            <input onChange={(e) => setRangoMovInicio(e.target.value)} className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
             <h5 className="mt-1">Inicio</h5>
           </div>
           <div style={{ width: "180px", height:"35px", gap:"20px"}} className="d-flex">
-            <input className="inputFechaReporte" type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
+            <input onChange={(e) => setRangoMovFin(e.target.value)} className="inputFechaReporte" type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
             <h5 className="mt-1">Fin</h5>
           </div>
           <div>
