@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-03-2024 a las 21:52:44
+-- Tiempo de generación: 23-03-2024 a las 03:17:59
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -41,8 +41,10 @@ CREATE TABLE `bodega` (
 
 CREATE TABLE `categorias_producto` (
   `id_categoria` int(11) NOT NULL,
-  `nombre_categoria` varchar(45) DEFAULT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `nombre_categoria` varchar(45) NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1,
+  `tipo_categoria` enum('perecedero','no perecedero') NOT NULL,
+  `codigo_categoria` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
