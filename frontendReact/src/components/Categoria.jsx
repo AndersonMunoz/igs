@@ -43,7 +43,10 @@ const Categoria = () => {
     // Obtener las columnas
     const columns = [
       'Id',
-      'Nombre'
+      'Nombre',
+      'Tipo ',
+      'Codigo'
+      
     ];
     wsData.push(columns);
 
@@ -51,7 +54,9 @@ const Categoria = () => {
     categorias_producto.forEach(element => {
       const rowData = [
         element.id_categoria,
-        element.nombre_categoria
+        element.nombre_categoria,
+        element.tipo_categoria,
+        element.codigo_categoria,
       ];
       wsData.push(rowData);
     });
@@ -66,12 +71,16 @@ const Categoria = () => {
     const columns = [
       { title: 'Id', dataKey: 'id_categoria' },
       { title: 'Nombre de categoria', dataKey: 'nombre_categoria' },
+      { title: 'Tipo categoria  ', dataKey: 'tipo_categoria' },
+      { title: 'Codigo', dataKey: 'codigo_categoria' },
     ];
   
     // Obtener los datos de la tabla
     const tableData = categorias_producto.map((element) => ({
       id_categoria: element.id_categoria,
       nombre_categoria: element.nombre_categoria,
+      tipo_categoria: element.tipo_categoria,
+      codigo_categoria: element.codigo_categoria,
     }));
   
     // Agregar las columnas y los datos a la tabla del PDF
@@ -110,7 +119,7 @@ const Categoria = () => {
 					[10, 50, 100, -1],
 					['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
 				],
-        order: [[2, "asc"]],
+        order: [[4, "asc"]],
 			});
 		}
 	}, [categorias_producto]);
@@ -159,6 +168,8 @@ const Categoria = () => {
   
   function registrarCategoria() {
     let nombre_categoria = document.getElementById('nombreCategoria').value;
+    let tipo_categoria = document.getElementById("tipo_categoria").value;
+    let codigo_categoria = document.getElementById("codigoCategoria").value;
   
     const validacionExitosa = Validate.validarCampos('.form-empty');
 
@@ -168,7 +179,7 @@ const Categoria = () => {
         "Content-Type": "application/json",
         token: localStorage.getItem("token"),
       },
-      body: JSON.stringify({ nombre_categoria}),
+      body: JSON.stringify({ nombre_categoria,tipo_categoria,codigo_categoria}),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -278,13 +289,24 @@ const Categoria = () => {
   }
   function actualizarCategoria(id){
     const validacionExitosa = Validate.validarCampos('.form-update');
+    const codigoExistente = categorias_producto.some(cat => cat.codigo_categoria === categoriaSeleccionada.codigo_categoria && cat.id_categoria !== categoriaSeleccionada.id_categoria);
+    if (codigoExistente) {
+      Sweet.error('El código ingresado ya está en uso. Por favor, ingrese un código diferente.');
+      return;
+    }
+  
+    if (!categoriaSeleccionada.tipo_categoria || !categoriaSeleccionada.codigo_categoria) {
+      Sweet.error('Por favor, complete todos los campos.');
+      return;
+    }
+  
     fetch(`http://${portConexion}:3000/categoria/editar/${id}`,{
       method: 'PUT',
       headers:{
         'Content-type':'application/json',
         token: localStorage.getItem("token"),
       },
-       body: JSON.stringify(categoriaSeleccionada),
+      body: JSON.stringify(categoriaSeleccionada),
     })
     .then((res)=>res.json())
     .then((data)=>{
@@ -294,11 +316,11 @@ const Categoria = () => {
       }
       if (data.status === 200) {
         Sweet.exito(data.menssge);
-    
+  
       }
       else {
         Sweet.error(data.errors[0].msg);
-    
+  
       }
       listarCategoria();
       setUpdateModal(false);
@@ -309,6 +331,7 @@ const Categoria = () => {
       }
     })
   }
+
 
   const [search, setSeach] = useState('');
 
@@ -368,6 +391,8 @@ const Categoria = () => {
           <tr>
             <th className="th-sm">Id</th>
             <th className="th-sm">Nombre categoria</th>
+            <th className="th-sm">Tipo</th>
+            <th className="th-sm">Codigo</th>
             <th className="th-sm"> Botones de acciones</th>
           </tr>
         </thead>
@@ -375,7 +400,7 @@ const Categoria = () => {
 
           {categorias_producto.length === 0 ? (
         <tr>
-          <td colSpan={12}>
+          <td colSpan={5}>
 
 
           <div className="d-flex justify-content-center">
@@ -399,6 +424,8 @@ const Categoria = () => {
             <tr key={element.id_categoria}>
               <td style={{textTransform: 'capitalize'}}>{element.id_categoria}</td>
               <td style={{textTransform: 'capitalize'}}>{element.nombre_categoria}</td>
+              <td style={{textTransform: 'capitalize'}}>{element.tipo_categoria}</td>
+              <td style={{textTransform: 'capitalize'}}>{element.codigo_categoria}</td>
              {userRoll == "administrador" ? (
                <td className="p-0">
                {element.estado === 1   ? (
@@ -447,6 +474,7 @@ const Categoria = () => {
           </tbody>
         </table>
       </div>
+
       <div className="modal fade"id="staticBackdrop" tabIndex="-1"data-bs-backdrop="static"ref={modalCategoriaRef} style={{ display: showModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
@@ -484,6 +512,41 @@ const Categoria = () => {
                         Preference
                       </label>
                     </div>
+                    <div className="row mb-3">
+                  <div className="col-md-6">
+                    <label htmlFor="inlineFormInputGroupUp" className="label-bold mb-2">
+                   Tipo
+                    </label>
+
+                    <select
+                      id="tipo_categoria"
+                      name="tipo_categoria"
+                      className="form-select form-control form-empty limpiar"
+                    >
+                      <option value="">Seleccione una opción</option>
+                      <option value="perecedero">perecedero </option>
+                      <option value="no perecedero">no perecedero </option>
+                    </select>
+                    <div className="invalid-feedback is-invalid">
+                      Por favor, seleccione un tipo de categoria 
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="inlineFormInputGroupUp" className="label-bold mb-2">
+                    Código 
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control form-empty limpiar"
+                      id="codigoCategoria"
+                      name="codigoCategoria"
+                      placeholder="Escribe el Codigo "
+                    />
+                    <div className="invalid-feedback is-invalid">
+                      Por favor,  ingrese el  Codigo 
+                    </div>
+                  </div>
+                </div>
               </form>
             </div>
             <div className="modal-footer">
@@ -499,49 +562,91 @@ const Categoria = () => {
       </div>
 
       <div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
-        <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
-          <div className="modal-content">
-            <div className="modal-header bg text-white">
-              <h1 className="modal-title fs-5" id="actualizarModalLabel">Actualizar Categoria</h1>
-              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <form>
-              <div className="col-12">
-                      <label
-                        className="visually-hidden"
-                        htmlFor="inlineFormInputGroupUp"
-                      >
-                       Up
-                      </label>
-                      <div className="col-md-12">
-                    <label htmlFor="nombre_categoria" className="label-bold mb-2">Nombre Categoria</label>
-                    <input type="hidden" value={categoriaSeleccionada.nombre_categoria || ''} onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, nombre_categoria: e.target.value })} disabled/>
-                    <input type="text" className="form-control form-update" placeholder="nombre categoria" value={categoriaSeleccionada.nombre_categoria || ''} name="nombre_categoria" onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, nombre_categoria: e.target.value })}/>
+  <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
+    <div className="modal-content">
+      <div className="modal-header bg text-white">
+        <h1 className="modal-title fs-5" id="actualizarModalLabel">Actualizar Categoria</h1>
+        <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div className="modal-body">
+        <form>
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="inlineFormInputGroupUp">
+              Up
+            </label>
+            <div className="col-md-12">
+              <label htmlFor="nombre_categoria" className="label-bold mb-2">Nombre Categoria</label>
+              <input type="hidden" value={categoriaSeleccionada.nombre_categoria || ''} onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, nombre_categoria: e.target.value })} disabled/>
+              <input type="text" className="form-control form-update" placeholder="nombre categoria" value={categoriaSeleccionada.nombre_categoria || ''} name="nombre_categoria" onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, nombre_categoria: e.target.value })}/>
+              <div className="invalid-feedback is-invalid"></div>       
+            </div>    
+          </div>
+          <div className="col-12">
+            <label className="visually-hidden" htmlFor="inlineFormSelectPref">
+              Preference
+            </label>
+          </div>
+          <div className="row mb-3">
+          <div className="col-md-6">
+                    <label htmlFor="tipo_categoria " className="label-bold mb-2">
+                    tipo categoria{" "}
+                    </label>
+                    <select
+                      className="form-select form-update"
+                      value={categoriaSeleccionada.tipo_categoria || ""}
+                      name="tipo_categoria"
+                      onChange={(e) =>
+                        setcategoriaSeleccionada({
+                          ...categoriaSeleccionada,
+                          tipo_categoria: e.target.value,
+                        })
+                      }
+                    >
+                      {" "}
+                      <option value="">Seleccione una opción</option>
+                <option value="perecedero">perecedero </option>
+                <option value="no perecedero">no perecedero </option>
+                    </select>
                     <div className="invalid-feedback is-invalid">
-                    </div>       
-                     </div>    
-                     </div>    
-                    <div className="col-12">
-                      <label
-                        className="visually-hidden"
-                        htmlFor="inlineFormSelectPref"
-                      >
-                        Preference
-                      </label>
+                      Por favor,  seleccione un tipo de categoria 
                     </div>
-              </form>
+                  </div>
 
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar </button>
-              <button type="button" className="btn btn-color"   onClick={() => {actualizarCategoria(categoriaSeleccionada.id_categoria);}}>
-                Actualizar
-              </button>
+
+
+
+
+            {/* <div className="col-md-6">
+              <label htmlFor="inlineFormInputGroupUp" className="label-bold mb-2">TIPO</label>
+              <select id="tipo_categoria" name="tipo_categoria" className="form-select form-control form-empty limpiar" value={categoriaSeleccionada.tipo_categoria || ''} onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, tipo_categoria: e.target.value })}>
+                <option value="">Seleccione una opción</option>
+                <option value="perecedero">perecedero </option>
+                <option value="no perecedero">no perecedero </option>
+              </select>
+              <div className="invalid-feedback is-invalid">
+              </div>
+            </div> */}
+            <div className="col-md-6">
+              <label htmlFor="codigo_Categoria" className="label-bold mb-2">Codigo</label>
+              <input type="hidden" value={categoriaSeleccionada.codigo_categoria || ''} onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, codigo_categoria: e.target.value })} disabled/>
+              <input type="text" className="form-control form-update" placeholder="nombre categoria" value={categoriaSeleccionada.codigo_categoria || ''} name="codigo_categoria" onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, codigo_categoria: e.target.value })}/>
+              <div className="invalid-feedback is-invalid">
+                Por favor, ingrese el CODIGO
+              </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar </button>
+        <button type="button" className="btn btn-color" onClick={() => {actualizarCategoria(categoriaSeleccionada.id_categoria);}}>
+          Actualizar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     </div>
   );

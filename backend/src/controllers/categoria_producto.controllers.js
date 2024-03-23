@@ -10,10 +10,12 @@ export const registrocategoria_producto = async (req, res) => {
            return res.status(403).json({"status": 403 ,error})
         };
 
-        let { nombre_categoria
+        let { nombre_categoria,tipo_categoria,codigo_categoria
          } = req.body;
          const CategoriaQuery = `SELECT * FROM categorias_producto WHERE nombre_categoria = '${nombre_categoria}'`;
         const [existingCategoria] = await pool.query(CategoriaQuery);
+        const CosigoQuery = `SELECT * FROM categorias_producto WHERE codigo_categoria = '${codigo_categoria}'`;
+        const [existingCodigo] = await pool.query(CosigoQuery);
         
        
         if (existingCategoria.length > 0) {
@@ -22,8 +24,14 @@ export const registrocategoria_producto = async (req, res) => {
                 "message": "La categoria ya esta registrada"
             });
         }
-        let sql = `insert into categorias_producto (nombre_categoria)
-  values('${nombre_categoria}')`;
+        if (existingCodigo.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El codigo ya esta regirtado"
+            });
+        }
+        let sql = `insert into categorias_producto (nombre_categoria,tipo_categoria,codigo_categoria)
+  values('${nombre_categoria}','${tipo_categoria}','${codigo_categoria}')`;
 
         const [rows] = await pool.query(sql);
 
@@ -123,9 +131,9 @@ export const editarcategoria_producto = async (req, res) => {
             return res.status(400).json(error)
         }   
         let id = req.params.id;
-        let { nombre_categoria } = req.body;
+        let { nombre_categoria,tipo_categoria,codigo_categoria } = req.body;
 
-        let sql = `UPDATE categorias_producto SET nombre_categoria = '${nombre_categoria}'
+        let sql = `UPDATE categorias_producto SET nombre_categoria = '${nombre_categoria}',tipo_categoria='${tipo_categoria}',codigo_categoria='${codigo_categoria}'
         WHERE id_categoria = ${id}`;
         
 
