@@ -174,7 +174,7 @@ const Movimiento = () => {
   const handleCheckboxChange2 = () => {
     setAplicaFechaCaducidad2(prevState => !prevState);
   };
-
+  
   const handleCloseModal2 = () => {
     setShowModal(false);
     setAplicaFechaCaducidad2(false); // Asegura que el estado del checkbox se restablezca
@@ -188,6 +188,7 @@ const Movimiento = () => {
   const resetFormState = () => {
     const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
     const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+    setAplicaFechaCaducidad2(false);
     formFields.forEach(field => {
       if (field.type === 'checkbox') {
         field.checked = false;
