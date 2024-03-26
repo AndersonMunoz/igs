@@ -270,6 +270,9 @@ const proveedor = () => {
     document.getElementById("titleRegistro").classList.add("d-none");
     document.getElementById("btnAgregar").classList.add("d-none");
     document.getElementById("btnActualizar").classList.remove("d-none");
+    document.getElementById("divArchContrato").classList.add("d-none");
+    document.getElementById("numContrato").classList.add("d-none");
+
     fetch(`http://${portConexion}:3000/proveedor/buscar/${id}`, {
       method: "get",
       headers: {
@@ -291,20 +294,20 @@ const proveedor = () => {
       });
   }
   function actualizarProveedor(id) {
-    const formData = new FormData();
-    formData.append('nombre_proveedores', nombre_proveedores)
-    formData.append('telefono_proveedores', telefono_proveedores)
-    formData.append('direccion_proveedores', direccion_proveedores)
-    formData.append('inicio_contrato', inicio_contrato)
-    formData.append('fin_contrato', fin_contrato)
-    formData.append('contrato_proveedores', contrato_proveedores)
-    formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
     fetch(`http://${portConexion}:3000/proveedor/actualizar/${id}`, {
       method: "PUT",
-      headers: {
+      headers:{
+        'Content-type':'application/json',
         token: localStorage.getItem("token"),
       },
-      body: formData,
+      body: JSON.stringify({
+        nombre_proveedores: nombre_proveedores,
+        telefono_proveedores: telefono_proveedores,
+        direccion_proveedores: direccion_proveedores,
+        inicio_contrato: inicio_contrato,
+        fin_contrato: fin_contrato,
+        contrato_proveedores: contrato_proveedores
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -333,7 +336,8 @@ const proveedor = () => {
   }
   function generarURL(element) {
     // Realiza cualquier lógica necesaria para generar la URL
-    const url = `../../public/filePDF/${element.nombre_proveedores}${element.contrato_proveedores}.pdf`;
+    const url = `../../public/filePDF/Contrato_Proveedor:${element}.pdf`;
+    console.log(url);
     return url;
   }
 
@@ -348,6 +352,8 @@ const proveedor = () => {
                 document.getElementById("titleRegistro").classList.remove("d-none");
                 document.getElementById("btnAgregar").classList.remove("d-none");
                 document.getElementById("btnActualizar").classList.add("d-none");
+                document.getElementById("divArchContrato").classList.remove("d-none");
+                document.getElementById("numContrato").classList.remove("d-none");
               }}>
               Registrar Nuevo Proveedor
             </button>
@@ -407,7 +413,7 @@ const proveedor = () => {
                             <button
                               className="btn btn-primary"
                               type="button"
-                              onClick={() => window.open(generarURL(element), '_blank')}
+                              onClick={() => window.open(generarURL(element.contrato_proveedores), '_blank')}
                             >
                               <IconFileDescription />
                             </button>
@@ -419,7 +425,7 @@ const proveedor = () => {
                             <button
                               className="btn btn-primary"
                               type="button"
-                              onClick={() => window.open(generarURL(element), '_blank')}
+                              onClick={() => window.open(generarURL(element.contrato_proveedores), '_blank')}
                             >
                               <IconFileDescription />
                             </button>
@@ -489,14 +495,14 @@ const proveedor = () => {
                     </div>
                   </div>
                   <div className="d-flex form-row mb-4">
-                    <div className="col">
+                    <div id="numContrato" className="col me-3">
                       <label htmlFor="contrato_proveedores">N° Contrato</label>
                       <input value={contrato_proveedores} onChange={(e) => { setContrato_proveedores(e.target.value); }} type="text" name="contrato_proveedores" id="contrato_proveedores" className="form-control form-empty  limpiar" placeholder="N° de contrato"></input>
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>
                     </div>
-                    <div className="col ms-3">
+                    <div className="col">
                       <label htmlFor="telefono_proveedores">Telefono</label>
                       <input value={telefono_proveedores} onChange={(e) => { setTelefono_proveedores(e.target.value); }} type="text" name="telefono_proveedores" id="telefono_proveedores" className="form-control form-empty limpiar" placeholder="Telefono" aria-describedby="defaultRegisterFormPhoneHelpBlock"></input>
                       <div className="invalid-feedback is-invalid">
@@ -522,10 +528,10 @@ const proveedor = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex form-row mb-1 mt-3">
+                  <div id="divArchContrato" className="d-flex form-row mb-1 mt-3">
                     <div className="col">
                       <label htmlFor="archivo_contrato">Archivo de contrato</label>
-                      <input value={archivo_contrato} onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" accept="application/pdf" placeholder="file Pdf" />
+                      <input onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" accept="application/pdf" placeholder="file Pdf" />
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>

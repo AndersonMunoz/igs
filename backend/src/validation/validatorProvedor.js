@@ -1,17 +1,6 @@
 import { check, validationResult } from 'express-validator';
 
-// Función de validación personalizada para verificar el tipo de archivo
-const validarTipoArchivo = (value, { req }) => {
-    if (!req.file) {
-        // Si no se ha adjuntado ningún archivo, la validación pasa sin problemas
-        return true;
-    }
-    // Verifica si el tipo de archivo es PDF
-    if (req.file.mimetype !== 'application/pdf') {
-        throw new Error('El archivo debe ser de tipo PDF');
-    }
-    return true;
-};
+
 
 export const validarProvedor = [
     check('nombre_proveedores', '¡Error! Valor mínimo para el nombre 5 y máximo 45 caracteres.')
@@ -38,7 +27,4 @@ export const validarProvedor = [
         .isEmpty()
         .isNumeric()
         .custom(value => value >= 0),
-
-    // Validación del tipo de archivo
-    check('archivo_contrato').custom(validarTipoArchivo)
 ];
