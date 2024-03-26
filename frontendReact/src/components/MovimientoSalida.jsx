@@ -223,6 +223,9 @@ const handleDestino = (event) => {
       });
     }
   }, [movimientos]);
+  useEffect(() => {
+    console.log("Unidad seleccionada (actualizada): ", unidadSeleccionada);
+}, [unidadSeleccionada]);
 
 
   function removeModalBackdrop() {

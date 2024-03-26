@@ -42,7 +42,8 @@ const Movimiento = () => {
   const [selectedTipo, setSelectedTipo] = useState(null);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
   const [fechaCaducidadModificada, setFechaCaducidadModificada] = useState(false);
-  
+  const [unidadSeleccionada, setUnidadSeleccionada] = useState('');
+
   const tableRef = useRef(null);
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -56,7 +57,6 @@ const Movimiento = () => {
   
     const columns = [
       { title: 'Nombre producto', dataKey: 'nombre_tipo' },
-      { title: '# Lote', dataKey: 'num_lote' },
       { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
       { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
       { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
@@ -75,7 +75,6 @@ const Movimiento = () => {
       const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       return {
         nombre_tipo: element.nombre_tipo,
-        num_lote: element.num_lote,
         fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
         tipo_movimiento: element.tipo_movimiento,
         cantidad_peso_movimiento: element.cantidad_peso_movimiento,
@@ -128,7 +127,6 @@ const Movimiento = () => {
       const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       const rowData = [
         element.nombre_tipo,
-        element.num_lote,
         Validate.formatFecha(element.fecha_movimiento),
         element.tipo_movimiento,
         element.cantidad_peso_movimiento,
@@ -158,10 +156,14 @@ const Movimiento = () => {
   const handleCategoria = (selectedOption) => {
     setSelectedCategoria(selectedOption); 
     setSelectedTipo(null); 
+    setUnidadSeleccionada('No hay unidad de medida');
   };
   const handleTipo = (selectedOption) => {
-    setSelectedTipo(selectedOption); 
-  };
+    setSelectedTipo(selectedOption);
+    listarUnidadesPro("listar unidad: "+selectedOption);
+    //console.log("UNIDAD SELECCIONADA"+selectedOption.value) // Llama a la función para obtener las unidades asociadas al tipo seleccionado
+};
+
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption);
   };
@@ -257,9 +259,9 @@ const Movimiento = () => {
       listarProductoCategoria(selectedCategoria.value);
     }
     if (selectedTipo) {
-      listarUnidadesPro(selectedTipo.value)
+      listarUnidadesPro(selectedTipo.value);
     }
-}, [selectedCategoria,selectedTipo]);
+}, [selectedCategoria, selectedTipo]);
   function listarUp() {
     fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
@@ -375,27 +377,35 @@ const Movimiento = () => {
   }
 
   function listarUnidadesPro(id_producto) {
-
     fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-            token: localStorage.getItem("token")
-        },
-      }
+        `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
+        {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+                token: localStorage.getItem("token")
+            },
+        }
     )
-      .then((res) => res.json())
-      .then((data) => {
-        setUniPro(data);
-        //console.log("Unidades producto   : ", data);
-      })
-      .catch((e) => {
-        setUniPro([]);
-        console.log("Error:: ", e);
-      });
-  }
+    .then((res) => res.json())
+    .then((data) => {
+        //console.log("Unidades del producto:", data);
+        if (data && data.length > 0) {
+            // Actualizar el estado con la unidad de peso
+            setUnidadSeleccionada(data[0].unidad_peso);
+            //console.log(data[0].unidad_peso)
+        } else {
+            setUnidadSeleccionada('No hay unidad de medida');
+        }
+    })
+    .catch((e) => {
+        setUnidadSeleccionada('No hay unidad de medida');
+        //console.log("Error al obtener unidades:", e);
+    });
+}
+
+
+
   function editarMovimiento(id) {
     fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
       method: 'GET',
@@ -477,7 +487,6 @@ const Movimiento = () => {
     let precio_movimiento = document.getElementById('precio_movimiento').value;
     let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
     let nota_factura = document.getElementById('nota_factura').value;
-    let num_lote = document.getElementById('num_lote').value;
     let fecha_caducidad = null;
     let fk_id_proveedor = document.getElementById('fk_id_proveedor').value;
     let fk_id_tipo_producto = selectedTipo ? selectedTipo.value : null;
@@ -498,7 +507,7 @@ const Movimiento = () => {
         "Content-Type": "application/json",
         token: localStorage.getItem("token")
       },
-      body: JSON.stringify({ fk_id_usuario,cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura,num_lote, fecha_caducidad, fk_id_proveedor,fk_id_up,fk_id_tipo_producto}),
+      body: JSON.stringify({ fk_id_usuario,cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_proveedor,fk_id_up,fk_id_tipo_producto}),
     })
     .then((res) => res.json())
     .then(data => {
@@ -598,7 +607,6 @@ const Movimiento = () => {
               <tr>
                 <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
-                <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
@@ -630,7 +638,6 @@ const Movimiento = () => {
                     <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
                       <td className="p-2 text-center" >{index+1}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
-                      <td className="p-2 text-center">{element.num_lote}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center">{element.tipo_movimiento}</td>
                       <td className="p-2 text-center" >
@@ -755,9 +762,14 @@ const Movimiento = () => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="unidad_peso_movimiento">Unidad</label><br></br>
-                          {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text"  id="unidad_peso_movimiento" className="form-control form-empty limpiar" disabled="true "name="unidad_peso_movimiento" key={element.id_tipo} defaultValue={element.unidad_peso}/>
-                              )): "No hay unidad de medida"}
+                          <input 
+                              type="text" 
+                              id="unidad_peso_movimiento" 
+                              className="form-control form-empty limpiar" 
+                              disabled={true} 
+                              name="unidad_peso_movimiento" 
+                              value={unidadSeleccionada || 'No hay unidad de medida'}
+                          />
                         </div>
                       </div>
                     </div>
@@ -768,15 +780,6 @@ const Movimiento = () => {
                           <input type="number" id="precio_movimiento" name="precio_movimiento" className="form-control form-empty limpiar" />
                           <div className="invalid-feedback is-invalid">
                             Por favor, ingrese un precio válido.
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="text" id="num_lote" maxLength={6} name="num_lote" className="form-control form-empty limpiar" />
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese un número válido.
                           </div>
                         </div>
                       </div>
@@ -889,15 +892,6 @@ const Movimiento = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col">
-                        <div data-mdb-input-init className="form-outline">
-                          <label className="form-label" htmlFor="num_lote">Número de lote</label>
-                          <input type="text" id="num_lote" value={movimientoSeleccionado.num_lote || ''} maxLength={6} name="num_lote" className="form-control form-empty limpiar" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, num_lote: e.target.value })}/>
-                          <div className="invalid-feedback is-invalid">
-                            Por favor, ingrese un número válido.
-                          </div>
-                        </div>
-                      </div>
                       </div>
                       <div className="row mb-4">
                       <div className="col">
