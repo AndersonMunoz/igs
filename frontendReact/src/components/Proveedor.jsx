@@ -243,7 +243,6 @@ const proveedor = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.status === 200) {
             Sweet.exito(data.message);
             listarProveedor();
@@ -337,7 +336,6 @@ const proveedor = () => {
   function generarURL(element) {
     // Realiza cualquier lógica necesaria para generar la URL
     const url = `../../public/filePDF/Contrato_Proveedor:${element}.pdf`;
-    console.log(url);
     return url;
   }
 
