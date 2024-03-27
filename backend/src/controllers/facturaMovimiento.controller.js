@@ -614,21 +614,30 @@ export const actualizarMovimientoSalida = async (req, res) => {
         }
 
         let id = req.params.id;
-        let { nota_factura, cantidad_peso_movimiento, destino_movimiento, fk_id_instructor, fk_id_titulado } = req.body;
+        let { nota_factura, cantidad_peso_movimiento, fk_id_producto, destino_movimiento, fk_id_instructor, fk_id_titulado } = req.body;
 		
-		let cantidadNueva = cantidad_peso_movimiento;
+        // Validar que si el destino_movimiento es "taller" o "evento", entonces fk_id_titulado y fk_id_instructor deben estar presentes
+        if ((destino_movimiento === "taller" || destino_movimiento === "evento") && (!fk_id_titulado || !fk_id_instructor)) {
+            return res.status(400).json({
+                "status": 400,
+                "mensaje": "En taller o evento es necesario un titulado e instructor."
+            });
+        }
 
-		let sqlPrev = `SELECT cantidad_peso_movimiento,tipo_movimiento, fk_id_producto FROM factura_movimiento WHERE id_factura=${id}`;
-        let resultPrev = await pool.query(sqlPrev, id);
-        let prevMovimsiento = resultPrev[0][0].cantidad_peso_movimiento;
-        let fk_id_producto = resultPrev[0][0].fk_id_producto;
+        let cantidadNueva = cantidad_peso_movimiento;
 
-		let sql6 = `SELECT cantidad_peso_producto FROM productos WHERE id_producto = '${fk_id_producto}'`;
+        // Buscar la cantidad de producto original
+        let sql6 = `SELECT cantidad_peso_producto FROM productos WHERE id_producto = '${fk_id_producto}'`;
         let result5 = await pool.query(sql6);
-        let cantidadMovEntrada = result5[0][0].cantidad_peso_movimiento;
+        let cantidadOriginalProducto = result5[0][0].cantidad_peso_producto;
 
-        let nuevaCantidadPesoProducto = cantidadMovEntrada -  cantidadNueva;
-        if (nuevaCantidadPesoProducto < 0) {
+        // Buscar la cantidad de movimiento previa
+        let sqlPrevMovimiento = `SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE id_factura = '${id}'`;
+        let resultPrevMovimiento = await pool.query(sqlPrevMovimiento);
+        let prevMovimiento = resultPrevMovimiento[0][0].cantidad_peso_movimiento;
+
+        let nuevaCantidadTotal = cantidadOriginalProducto - cantidadNueva;
+        if (nuevaCantidadTotal < 0) {
             return res.status(402).json({
                 "status": 402,
                 "mensaje": "La nueva cantidad total es menor que 0. Ingrese una cantidad no mayor a lo que tiene disponible."
@@ -639,7 +648,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
             let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
             let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento} WHERE id_producto = ${fk_id_producto}`;
 
-			let sql7;
+            let sql7;
 
             if (destino_movimiento === "taller" || destino_movimiento === "evento") {
                 sql7 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
@@ -666,6 +675,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
         });
     }
 };
+
 
 
 export const obtenerProCategoria = async (req, res) => {
@@ -711,7 +721,7 @@ export const obtenerUnidad = async (req, res) => {
 export const obtenerProProductos = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,p.num_lote FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
+		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
 
 		const [rows] = await pool.query(sql);
 

@@ -155,7 +155,14 @@ const Movimiento = () => {
   const handleCategoria = (selectedOption) => {
     setSelectedCategoria(selectedOption); 
     setSelectedTipo(null); 
+    setUnidadSeleccionada('No hay unidad de medida');
   };
+
+  const handleTipo = (selectedOption) => {
+    setSelectedOption(selectedOption);
+    setSelectedTipo(selectedOption.value.id_tipo);
+    // Ahora puedes usar selectedOption.value.fk_id_producto también
+};
 
   const handleTitulado = (selectedOptionTit) => {
     setSelectedOptionTit(selectedOptionTit);
@@ -176,13 +183,7 @@ const handleDestino = (event) => {
 };
 
 
-  const handleTipo = (selectedOption) => {
-    setSelectedOption(selectedOption);
-    setSelectedTipo(selectedOption.value.id_producto);
-    //console.log(selectedOption.value.id_producto);
-    setSelectedLote(selectedOption.value.num_lote);
-    //console.log(selectedOption.value.num_lote);
-  };
+
   
   
   const tableRef = useRef();
@@ -223,9 +224,6 @@ const handleDestino = (event) => {
       });
     }
   }, [movimientos]);
-  useEffect(() => {
-    console.log("Unidad seleccionada (actualizada): ", unidadSeleccionada);
-}, [unidadSeleccionada]);
 
 
   function removeModalBackdrop() {
@@ -251,9 +249,9 @@ const handleDestino = (event) => {
       listarProductoCategoria(selectedCategoria.value);
     }
     if (selectedTipo) {
-      listarUnidadesPro(selectedTipo)
+      listarUnidadesPro(selectedTipo.value);
     }
-  }, [selectedCategoria,selectedTipo]);
+}, [selectedCategoria, selectedTipo]);
 
   function listarCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listar`, {
@@ -394,30 +392,32 @@ const handleDestino = (event) => {
       });
   }
   function listarUnidadesPro(id_producto) {
-    if (id_producto) {
-      fetch(
+    fetch(
         `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
         {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token")
-          },
+            method: "GET",
+            headers: {
+                "Content-type": "application/json",
+                token: localStorage.getItem("token")
+            },
         }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setUniPro(data);
-          //console.log("Unidades producto   : ", data);
-        })
-        .catch((e) => {
-          setUniPro([]);
-          console.log("Error:: ", e);
-        });
-    } else {
-      console.log('id_producto es undefined');
-    }
-  }
+    )
+    .then((res) => res.json())
+    .then((data) => {
+        //console.log("Unidades del producto:", data);
+        if (data && data.length > 0) {
+            // Actualizar el estado con la unidad de peso
+            setUnidadSeleccionada(data[0].unidad_peso);
+            //console.log(data[0].unidad_peso)
+        } else {
+            setUnidadSeleccionada('No hay unidad de medida');
+        }
+    })
+    .catch((e) => {
+        setUnidadSeleccionada('No hay unidad de medida');
+        //console.log("Error al obtener unidades:", e);
+    });
+}
   function editarMovimiento(id) {
     fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
       method: 'GET',
@@ -730,15 +730,16 @@ const handleDestino = (event) => {
                         <div data-mdb-input-init className="form-outline">
                           <label className="form-label" htmlFor="fk_id_producto">Producto</label>
                           <Select
-                            className="react-select-container form-empty limpiar my-custom-class"
-                            classNamePrefix="react-select"
-                            options={selectedCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_producto,  value: element.id_tipo, label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` })) : [{ value: '', label: 'No hay productos disponibles' }]}
-                            placeholder="Selecciona..."
-                            onChange={handleTipo}
-                            value={selectedTipo} // Aquí es donde cambiamos selectedTipo a selectedOption
-                            id="fk_id_producto"
-                            name="fk_id_producto"
+                              className="react-select-container form-empt limpiar my-custom-class"
+                              classNamePrefix="react-select"
+                              options={selectedCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_tipo, value: { id_tipo: element.id_tipo, id_producto: element.id_producto }, label: `${element.nombre_tipo} - ${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` })) : [{ value: '', label: 'No hay productos disponibles' }]}
+                              placeholder="Selecciona..."
+                              onChange={handleTipo}
+                              value={selectedTipo}
+                              id="fk_id_tipo_producto"
+                              name="fk_id_tipo_producto"
                           />
+
                           <div className="invalid-feedback is-invalid">
                             Por favor, seleccione un producto.
                           </div>
@@ -757,9 +758,14 @@ const handleDestino = (event) => {
                       <div className="col">
                         <div data-mdb-input-init className="form-outline" >
                           <label className="form-label" htmlFor="unidad_peso_movimiento" >Unidad</label><br></br>
-                          {unidadesProductos.length > 0 ? unidadesProductos.map((element) => (
-                              <input type="text" id="unidad_peso_movimiento" disabled={true} className="form-control form-empty limpiar" name="unidad_peso_movimiento"key={element.id_tipo} defaultValue={element.unidad_peso}/>
-                              )): "No hay unidad de medida"}
+                          <input 
+                              type="text" 
+                              id="unidad_peso_movimiento" 
+                              className="form-control form-empty limpiar" 
+                              disabled={true} 
+                              name="unidad_peso_movimiento" 
+                              value={unidadSeleccionada || 'No hay unidad de medida'}
+                          />
                         </div>
                       </div>
                     </div>
