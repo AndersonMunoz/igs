@@ -473,14 +473,30 @@ export const listarMovimientosSalida = async (req, res) => {
 		const [result] = await pool.query
 			(
 				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, 
-				f.nota_factura
-					FROM factura_movimiento f 
-					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
-					JOIN productos p ON f.fk_id_producto = p.id_producto
-					JOIN bodega u ON p.fk_id_up = u.id_up	
-					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "salida"
-					ORDER BY f.id_factura DESC`
+				f.nota_factura,c.codigo_categoria,c.tipo_categoria, d.destino_movimiento,
+				CASE 
+					WHEN ti.nombre_titulado IS NULL THEN 'No aplica'
+					ELSE ti.nombre_titulado
+				END AS nombre_titulado,
+				CASE 
+					WHEN ti.id_ficha IS NULL THEN 'No aplica'
+					ELSE ti.id_ficha
+				END AS id_ficha,
+				CASE 
+					WHEN i.nombre_instructor IS NULL THEN 'No aplica'
+					ELSE i.nombre_instructor
+				END AS nombre_instructor
+				FROM factura_movimiento f 
+				JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
+				JOIN productos p ON f.fk_id_producto = p.id_producto
+				JOIN bodega u ON p.fk_id_up = u.id_up    
+				JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+				JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+				JOIN detalles d ON d.fk_id_movimiento = f.id_factura
+				LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores
+				LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.tipo_movimiento = "salida"
+				ORDER BY d.id_detalle DESC
+			`
 			);
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -721,7 +737,7 @@ export const obtenerUnidad = async (req, res) => {
 export const obtenerProProductos = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
+		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,pr.id_tipo FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
 
 		const [rows] = await pool.query(sql);
 
