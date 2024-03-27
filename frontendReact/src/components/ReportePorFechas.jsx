@@ -203,7 +203,6 @@ const reporte = () => {
             setValEntradas(valEntradas)
             setValSalidas(valSalidas)
             setReporte(ReporteDelFiltro)
-            console.log(ReporteDelFiltro);
         }        
         })
   }
@@ -239,17 +238,19 @@ const reporte = () => {
             for (let index = 0; index < data.productos.length; index++) {
                 const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
                 if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
-                    console.log(data.productos[index]);
-                    valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
-                    valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
-                    ReporteDelFiltro.push(data.productos[index])
-                    console.log(data);
+                    if (data.productos[index].nombre_categoria == select) {
+                      valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
+                      valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
+                      ReporteDelFiltro.push(data.productos[index])
+                    }
+                    if (select == 'todas' ) {
+                      listarProducto()
+                    }
                 }
             }
             setValEntradas(valEntradas)
             setValSalidas(valSalidas)
             setReporte(ReporteDelFiltro)
-            console.log(ReporteDelFiltro);
         }        
         })
 
@@ -310,7 +311,7 @@ const reporte = () => {
           {/* <h2 className="tituloHeaderpp">{title}</h2> */}
           <div>
           <select className="form-select" name="categoryFilter" id="categoryFilter">
-            <option value="0">Filtrar por Categorias</option>
+            <option value="todas">Filtrar por Categorias</option>
           </select>
           <button onClick={()=>{filtrarCategorias(rangoMovInicio, rangoMovFin)}}>filtrar</button>
 
