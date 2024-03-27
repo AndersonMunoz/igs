@@ -107,7 +107,6 @@ const Movimiento = () => {
     // Obtener las columnas
     const columns = [
       'Nombre producto',
-      '# Lote',
       'Fecha del movimiento',
       'Tipo de movimiento',
       'Cantidad',

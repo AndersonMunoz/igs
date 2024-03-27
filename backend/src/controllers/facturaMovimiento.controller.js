@@ -110,12 +110,14 @@ export const guardarMovimientoSalida = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(403).json({ "status": 403, error });
         }
-        let { cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, num_lote, destino_movimiento, fk_id_titulado, fk_id_instructor } = req.body;
-        let sql4 = `SELECT cantidad_peso_producto FROM productos WHERE num_lote = ${num_lote}`;
+        let { cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_tipo_producto,fk_id_usuario,destino_movimiento, fk_id_titulado, fk_id_instructor } = req.body;
+        let sql4 = `SELECT cantidad_peso_producto FROM productos WHERE fk_id_tipo_producto = '${fk_id_tipo_producto}'`;
 
         let cantidadPeso = await pool.query(sql4);
+		console.log(cantidadPeso[0][0])
         let cantidadPeso2 = cantidadPeso[0];
         let cantidad3 = cantidadPeso2[0];
+		console.log(cantidad3)
         let cantidadPesoTotal = cantidad3.cantidad_peso_producto;
 
         if (cantidadPesoTotal < cantidad_peso_movimiento) {
@@ -126,8 +128,8 @@ export const guardarMovimientoSalida = async (req, res) => {
         } else if (cantidadPesoTotal >= 0) {
             let sql10 = `
                 INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,
-                nota_factura, num_lote, fk_id_producto, fk_id_usuario)
-                VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}','${num_lote}',
+                nota_factura,fk_id_producto, fk_id_usuario)
+                VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}',
                 '${fk_id_producto}','${fk_id_usuario}');`;
 
             let sql6 = `UPDATE productos 
@@ -135,7 +137,7 @@ export const guardarMovimientoSalida = async (req, res) => {
                     WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
                     ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
                 END
-                WHERE num_lote = ${num_lote}`;
+                WHERE fk_id_producto = ${fk_id_producto}`;
 
             let result10 = await pool.query(sql10);
             if (result10.affectedRows == 0) {

@@ -48,7 +48,7 @@ const Movimiento = () => {
   const [instructorList,setInstrucor] = useState(null);
   const [selectedInstructor, setSelectedInstructor] = useState(null);
   const [showInstructorTituladoSelects, setShowInstructorTituladoSelects] = useState(false);
-  
+  const [unidadSeleccionada, setUnidadSeleccionada] = useState('');
 
 
   const modalUpdateRef = useRef(null);
@@ -732,10 +732,10 @@ const handleDestino = (event) => {
                           <Select
                             className="react-select-container form-empty limpiar my-custom-class"
                             classNamePrefix="react-select"
-                            options={productosCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_producto, value: { id_producto: element.id_producto, num_lote: element.num_lote }, label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` })) : [{ value: '', label: 'No hay productos disponibles' }]}
+                            options={selectedCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_producto,  value: element.id_tipo, label: `Lote ${element.num_lote} - ${element.nombre_tipo} - ${element.cantidad_peso_producto > 0 ? `${element.cantidad_peso_producto} ${element.unidad_peso} disponible(s)` : "No hay unidades disponibles"}` })) : [{ value: '', label: 'No hay productos disponibles' }]}
                             placeholder="Selecciona..."
                             onChange={handleTipo}
-                            value={selectedOption } // Aquí es donde cambiamos selectedTipo a selectedOption
+                            value={selectedTipo} // Aquí es donde cambiamos selectedTipo a selectedOption
                             id="fk_id_producto"
                             name="fk_id_producto"
                           />
