@@ -330,7 +330,7 @@ const Producto = () => {
               <>
                 {productos.map((element, index) => (
                     <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
-                      <td>{element.Lote}</td>
+                      <td>{index + 1}</td>
                       <td>{element.NombreProducto}</td>
                       <td>{element.NombreCategoria}</td>
                       <td>{element.Cantidad}</td>

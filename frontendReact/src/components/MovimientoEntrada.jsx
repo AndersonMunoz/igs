@@ -699,13 +699,13 @@ const Movimiento = () => {
                             id="categoria"
                           />
                         <div className="invalid-feedback is-invalid">
-                        Por favor, seleccione un tipo de producto.
+                        Por favor, seleccione una categoria.
                         </div>
                       </div>
                       <div className="col">
                         <label htmlFor="fk_id_tipo_producto" className="label-bold mb-2">Producto</label>
                         <Select
-                          className="react-select-container form-empty limpiar my-custom-class"
+                          className="react-select-container form-empt limpiar my-custom-class"
                           classNamePrefix="react-select"
                           options={selectedCategoria && productosCategoria.length > 0 ? productosCategoria.map(element => ({ key: element.id_tipo, value: element.id_tipo, label: element.nombre_tipo })) : [{ value: '', label: 'No hay productos disponibles' }]}
                           placeholder="Selecciona..."
