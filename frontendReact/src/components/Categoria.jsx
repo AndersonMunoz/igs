@@ -485,12 +485,7 @@ const Categoria = () => {
             <div className="modal-body">
               <form>
               <div className="col-12">
-                      <label
-                        className="visually-hidden"
-                        htmlFor="inlineFormInputGroupUp"
-                      >
-                       Categoria 
-                      </label>
+              <label htmlFor="nombre_categoria" className="label-bold mb-2">Nombre Categoria</label>
                       <div className="input-group">
                         <input
                           type="text"
@@ -524,8 +519,8 @@ const Categoria = () => {
                       className="form-select form-control form-empty limpiar"
                     >
                       <option value="">Seleccione una opción</option>
-                      <option value="perecedero">perecedero </option>
-                      <option value="no perecedero">no perecedero </option>
+                      <option value="perecedero">Perecedero </option>
+                      <option value="no perecedero">No perecedero </option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione un tipo de categoria 
@@ -543,7 +538,7 @@ const Categoria = () => {
                       placeholder="Escribe el Codigo "
                     />
                     <div className="invalid-feedback is-invalid">
-                      Por favor,  ingrese el  Codigo 
+                      Por favor,  ingrese el  Código 
                     </div>
                   </div>
                 </div>
@@ -604,8 +599,8 @@ const Categoria = () => {
                     >
                       {" "}
                       <option value="">Seleccione una opción</option>
-                <option value="perecedero">perecedero </option>
-                <option value="no perecedero">no perecedero </option>
+                <option value="perecedero">Perecedero </option>
+                <option value="no perecedero">No perecedero </option>
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor,  seleccione un tipo de categoria 
@@ -631,7 +626,7 @@ const Categoria = () => {
               <input type="hidden" value={categoriaSeleccionada.codigo_categoria || ''} onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, codigo_categoria: e.target.value })} disabled/>
               <input type="text" className="form-control form-update" placeholder="nombre categoria" value={categoriaSeleccionada.codigo_categoria || ''} name="codigo_categoria" onChange={(e) => setcategoriaSeleccionada({ ...categoriaSeleccionada, codigo_categoria: e.target.value })}/>
               <div className="invalid-feedback is-invalid">
-                Por favor, ingrese el CODIGO
+                Por favor, ingrese el Código
               </div>
             </div>
           </div>
