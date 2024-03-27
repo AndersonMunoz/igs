@@ -335,7 +335,7 @@ const proveedor = () => {
   }
   function generarURL(element) {
     // Realiza cualquier lógica necesaria para generar la URL
-    const url = `../../public/filePDF/Contrato_Proveedor:${element}.pdf`;
+    const url = `../../public/filePDF/${element}`;
     return url;
   }
 
@@ -411,7 +411,7 @@ const proveedor = () => {
                             <button
                               className="btn btn-primary"
                               type="button"
-                              onClick={() => window.open(generarURL(element.contrato_proveedores), '_blank')}
+                              onClick={() => window.open(generarURL(element.archivo_contrato), '_blank')}
                             >
                               <IconFileDescription />
                             </button>
@@ -423,7 +423,7 @@ const proveedor = () => {
                             <button
                               className="btn btn-primary"
                               type="button"
-                              onClick={() => window.open(generarURL(element.contrato_proveedores), '_blank')}
+                              onClick={() => window.open(generarURL(element.archivo_contrato), '_blank')}
                             >
                               <IconFileDescription />
                             </button>
@@ -529,7 +529,7 @@ const proveedor = () => {
                   <div id="divArchContrato" className="d-flex form-row mb-1 mt-3">
                     <div className="col">
                       <label htmlFor="archivo_contrato">Archivo de contrato</label>
-                      <input onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" accept="application/pdf" placeholder="file Pdf" />
+                      <input onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" placeholder="file Pdf" />
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>

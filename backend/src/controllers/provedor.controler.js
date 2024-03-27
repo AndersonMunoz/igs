@@ -38,12 +38,17 @@ const storage = multer.diskStorage({
         cb(null, "frontendReact/public/filePDF");
     },
     filename: function (req, file, cb) {
-        const numeroContrato = req.body.contrato_proveedores;
-        const nombreArchivo = `Contrato_Proveedor:${numeroContrato}.pdf`;
+        const numeroContrato = file.originalname;
+        const fecha = new Date ();
+        let hora = fecha.getHours;
+        let minutos= fecha.getMinutes;
+        let segundos=fecha.getSeconds();
+        const extension = file.originalname.split('.').pop();
+        const nombreArchivo = `${numeroContrato}_${segundos}.${extension}`;
         cb(null, nombreArchivo);
     }
-    
 });
+
 
 const upload = multer({ storage: storage });
 
@@ -56,7 +61,13 @@ export const registrarProvedor = async (req, res) => {
             return res.status(403).json({ "status": 403, error })
         }
         let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores, inicio_contrato, fin_contrato } = req.body;
-        let archivo_contrato = req.file.originalname;
+        let name = req.file.originalname;
+        const fecha = new Date ();
+        let hora = fecha.getHours;
+        let minutos= fecha.getMinutes;
+        let segundos=fecha.getSeconds();
+        let extension = req.file.originalname.split('.').pop();
+        let archivo_contrato = `${name}_${segundos}.${extension}`;
 
         let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
         const [rows] = await pool.query(selectUser)
