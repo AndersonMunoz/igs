@@ -133,11 +133,11 @@ export const guardarMovimientoSalida = async (req, res) => {
                 '${fk_id_producto}','${fk_id_usuario}');`;
 
             let sql6 = `UPDATE productos 
-                SET cantidad_peso_producto = CASE 
-                    WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
-                    ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
-                END
-                WHERE fk_id_producto = ${fk_id_producto}`;
+			SET cantidad_peso_producto = CASE 
+				WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
+				ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
+			END
+			WHERE id_producto = ${fk_id_producto}`;
 
             let result10 = await pool.query(sql10);
             if (result10.affectedRows == 0) {
@@ -473,7 +473,7 @@ export const listarMovimientosSalida = async (req, res) => {
 		const [result] = await pool.query
 			(
 				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, 
-				f.nota_factura, f.num_lote
+				f.nota_factura
 					FROM factura_movimiento f 
 					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
 					JOIN productos p ON f.fk_id_producto = p.id_producto
@@ -618,17 +618,14 @@ export const actualizarMovimientoSalida = async (req, res) => {
 		
 		let cantidadNueva = cantidad_peso_movimiento;
 
-        let sqlPrev = `SELECT cantidad_peso_movimiento,tipo_movimiento, fk_id_producto, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
+		let sqlPrev = `SELECT cantidad_peso_movimiento,tipo_movimiento, fk_id_producto FROM factura_movimiento WHERE id_factura=${id}`;
         let resultPrev = await pool.query(sqlPrev, id);
-        let prevMovimiento = resultPrev[0][0].cantidad_peso_movimiento;
+        let prevMovimsiento = resultPrev[0][0].cantidad_peso_movimiento;
         let fk_id_producto = resultPrev[0][0].fk_id_producto;
-        let num_lote = resultPrev[0][0].num_lote;
 
-		let sql6 = `SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE num_lote = '${num_lote}' AND tipo_movimiento = 'entrada'`;
+		let sql6 = `SELECT cantidad_peso_producto FROM productos WHERE id_producto = '${fk_id_producto}'`;
         let result5 = await pool.query(sql6);
         let cantidadMovEntrada = result5[0][0].cantidad_peso_movimiento;
-
-
 
         let nuevaCantidadPesoProducto = cantidadMovEntrada -  cantidadNueva;
         if (nuevaCantidadPesoProducto < 0) {
@@ -640,7 +637,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
             // Realizar la actualización en la base de datos
             let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',cantidad_peso_movimiento='${cantidad_peso_movimiento}' where id_factura=${id}`;
             let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
-            let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento}  WHERE num_lote='${num_lote}'`;
+            let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento} WHERE id_producto = ${fk_id_producto}`;
 
 			let sql7;
 
