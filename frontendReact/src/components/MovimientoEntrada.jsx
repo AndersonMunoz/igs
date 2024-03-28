@@ -259,7 +259,7 @@ const Movimiento = () => {
       listarProductoCategoria(selectedCategoria.value);
     }
     if (selectedTipo) {
-      listarUnidadesPro(selectedTipo.value.id_tipo);
+      listarUnidadesPro(selectedTipo.value);
     }
 }, [selectedCategoria, selectedTipo]);
   function listarUp() {
