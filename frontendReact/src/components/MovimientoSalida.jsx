@@ -206,14 +206,46 @@ const handleInstructor = (selectedOptionIns) => {
     setSelectedInstructor(selectedOptionIns.value); 
     //console.log("oinstructor id:"+selectedOptionIns.value);
 };
-  
 const handleDestino = (event) => {
+  listarTitulado();
+    listarInstructor();
+  setDestinoMovimiento(event.target.value);
+  //console.log(event.target.value)
+  setShowInstructorTituladoSelects(event.target.value === "taller" || event.target.value === "evento");
+};
+
+const handleDestino2 = (event) => {
   const selectedDestino = event.target.value;
+  //console.log("selectedDestino:", selectedDestino); // Depurar
+
   setDestinoMovimiento(selectedDestino);
 
   // Actualiza el estado de showInstructorTituladoSelects solo si el destino seleccionado es "taller" o "evento"
-  setShowInstructorTituladoSelects(selectedDestino === "taller" || selectedDestino === "evento");
+  const showSelects = selectedDestino === "taller" || selectedDestino === "evento";
+  //console.log("showSelects:", showSelects); // Depurar
+  setShowInstructorTituladoSelects(showSelects);
+
+  // Restablece el estado del selector de instructor
+  if (!showSelects) {
+    setSelectedOptionIns(null);
+    setSelectedInstructor(null);
+  }
+
+  // Llama a las funciones para cargar los datos de instructor y titulado si es necesario
+  if (showSelects) {
+    //console.log("Llamando a listarInstructor y listarTitulado"); // Depurar
+    listarInstructorAct();
+    listarTituladoAct();
+  }
 };
+
+
+useEffect(() => {
+  const destino = movimientoSeleccionado.destino_movimiento;
+  const showSelects = destino === "taller" || destino === "evento";
+  setShowInstructorTituladoSelects(showSelects);
+}, [movimientoSeleccionado.destino_movimiento]);
+
 
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
@@ -274,6 +306,8 @@ const handleDestino = (event) => {
     listarUsuario();
     listarTitulado();
     listarInstructor();
+    listarTituladoAct();
+    listarInstructorAct();
     if (selectedCategoria) {
       listarProductoCategoria(selectedCategoria.value);
     }
@@ -292,7 +326,7 @@ const handleDestino = (event) => {
     })
       .then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
+          //console.log("No hay datos disponibles");
           return null;
         }
         return res.json();
@@ -300,13 +334,14 @@ const handleDestino = (event) => {
       .then((data) => {
         if (data !== null) {
           setcategorias_producto(data);
+          listarTitulado();
+    listarInstructor();
         }
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
       });
   }
-
   function listarTitulado() {
     fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
       method: "GET",
@@ -317,7 +352,7 @@ const handleDestino = (event) => {
     })
       .then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
+          //console.log("No hay datos disponibles");
           return null;
         }
         return res.json();
@@ -328,7 +363,7 @@ const handleDestino = (event) => {
         }
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
       });
   }
 
@@ -342,7 +377,7 @@ const handleDestino = (event) => {
     })
       .then((res) => {
         if (res.status === 204) {
-          console.log("No hay datos disponibles");
+          //console.log("No hay datos disponibles");
           return null;
         }
         return res.json();
@@ -353,9 +388,74 @@ const handleDestino = (event) => {
         }
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
       });
   }
+
+    function listarTituladoAct() {
+      fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          token: localStorage.getItem("token")
+        },
+      })
+        .then((res) => {
+          if (res.status === 204) {
+            //console.log("No hay datos disponibles");
+            return null;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          //console.log("Datos de titulado recibidos:", data);
+          if (data !== null) {
+            const formattedTituladoList = data.map(titulado => ({
+              value: titulado.id_titulado,
+              label: `${titulado.nombre_titulado} - ${titulado.id_ficha}` 
+            }));
+            setTitulado(formattedTituladoList);
+          }
+        })
+        
+        .catch((e) => {
+          //console.log(e);
+        });
+    }
+
+    function listarInstructorAct() {
+      //console.log("Llamando a la función listarInstructor()...");
+      fetch(`http://${portConexion}:3000/instructor/listarActivo`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          token: localStorage.getItem("token")
+        },
+      })
+        .then((res) => {
+          if (res.status === 204) {
+            //console.log("No hay datos disponibles");
+            return null;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          //console.log("Datos de instructor recibidos:", data);
+          if (data !== null) {
+            const formattedInstructorList = data.map(instructor => ({
+              value: instructor.id,
+              label: instructor.nombre
+            }));
+            setInstrucor(formattedInstructorList);
+            //console.log("instructorList:", formattedInstructorList); // Mover aquí
+          }
+        })
+        .catch((e) => {
+          //console.log("Error al obtener datos de instructor:", e);
+        });
+    }
+  
+
   function listarTipo() {
     fetch(`http://${portConexion}:3000/tipo/listar`, {
       method: "GET",
@@ -392,7 +492,7 @@ const handleDestino = (event) => {
         setProveedor(data)
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
       })
       ;
   }
@@ -417,7 +517,7 @@ const handleDestino = (event) => {
       })
       .catch((e) => {
         setProCat([]);
-        console.log("Error:: ", e);
+        //console.log("Error:: ", e);
       });
   }
   function listarUnidadesPro(id_producto) {
@@ -481,50 +581,56 @@ const handleDestino = (event) => {
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizarSalida/${id}`, {
-        method: "PUT",
-        headers: {
-            'Content-type': 'application/json',
-            token: localStorage.getItem("token")
-        },
-        body: JSON.stringify(movimientoSeleccionado),
-    })
-    .then((res) => res.json())
+    method: "PUT",
+    headers: {
+        'Content-type': 'application/json',
+        token: localStorage.getItem("token")
+    },
+    body: JSON.stringify(movimientoSeleccionado),
+})
+.then((res) => {
+    if (!res.ok) {
+        return res.json().then((json) => {
+            let errorMessage = json.errors ? json.errors[0].msg : json.mensaje;
+            throw new Error(errorMessage);
+        });
+    }
+    return res.json();
+})
     .then((data) => {
-        if (data.status === 200) {
-            Sweet.exito(data.message);
-            listarMovimiento();
-            setUpdateModal(false);
-            removeModalBackdrop(true);
-            const modalBackdrop = document.querySelector('.modal-backdrop');
-            if (modalBackdrop) {
-                modalBackdrop.remove();
-            }
-            if ($.fn.DataTable.isDataTable(tableRef.current)) {
-                $(tableRef.current).DataTable().destroy();
-            }
-        } else if (data.status === 403) {
-            Sweet.error(data.error.errors[0].msg);
-        } else if (data.status === 402) {
-            Sweet.error(data.mensaje);
-        } else if (data.status === 409) {
-            Sweet.error(data.message);
-        } else {
-            listarMovimiento();
-            setUpdateModal(false);
-            removeModalBackdrop(true);
-            const modalBackdrop = document.querySelector('.modal-backdrop');
-            if (modalBackdrop) {
-                modalBackdrop.remove();
-            }
-        }
+      if (data.status === 200) {
+          Sweet.exito(data.message);
+          listarMovimiento();
+          setUpdateModal(false);
+          removeModalBackdrop(true);
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+              modalBackdrop.remove();
+          }
+          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+              $(tableRef.current).DataTable().destroy();
+          }
+      } else if (data.status === 400 || data.status === 403) {
+          Sweet.error(data.error.errors[0].msg);
+      } else if (data.status === 402) {
+          Sweet.error(data.mensaje);
+      } else if (data.status === 409) {
+          Sweet.error(data.message);
+      } else {
+          listarMovimiento();
+          setUpdateModal(false);
+          removeModalBackdrop(true);
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+              modalBackdrop.remove();
+          }
+      }
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      //console.error('Error:', error);
+      Sweet.error(error.message);
     });
-}
-
-
-
+  }
   function listarUsuario() {
     fetch(`http://${portConexion}:3000/usuario/listar`, {
       method: "get",
@@ -554,20 +660,18 @@ const handleDestino = (event) => {
     let fk_id_titulado = null;
     let fk_id_instructor = null;
 
-    // Si el destino es "Taller" o "Evento", obtener los valores de los campos "fk_id_titulado" y "fk_id_instructor"
     if (destino_movimiento === "taller" || destino_movimiento === "evento") {
-        fk_id_titulado = selectedOptionTit.value; // Obtener el valor del campo seleccionado para fk_id_titulado
-        fk_id_instructor = selectedOptionIns.value; // Obtener el valor del campo seleccionado para fk_id_instructor
-    }
+      fk_id_titulado = selectedOptionTit ? selectedOptionTit.value : null;
+      fk_id_instructor = selectedOptionIns ? selectedOptionIns.value : null; 
+  }
 
-    // Validación de campos aquí...
-    Validate.validarCampos('.form-empty');
-    const validacionExitosa = Validate.validarSelect('.form-empt');
+  Validate.validarCampos('.form-empty');
+  const validacionExitosa = Validate.validarSelect('.form-empt');
 
-    if (!validacionExitosa) {
-      Sweet.registroFallido();
-      return;
-    }
+  if (!validacionExitosa) {
+    Sweet.registroFallido();
+    return;
+  }
 
     fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
         method: 'POST',
@@ -631,7 +735,7 @@ const handleDestino = (event) => {
         }
       })
       .catch((e) => {
-        console.log(e);
+        //console.log(e);
       });
   }
 
@@ -643,8 +747,8 @@ const handleDestino = (event) => {
         <h1 className="text-center modal-title fs-5 m-4">Movimientos de Salida</h1>
         <div className="d-flex justify-content-between mb-4">
           <div>
-          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedCategoria(null);setSelectedOptionIns(null);setDestinoMovimiento(""),setUnidadSeleccionada(null);setSelectedOptionTit(null);setSelectedOption(null)}}>
-            Registrar nuevo movimiento de Salida
+          <button type="button" className="btn-color btn  m-1 " data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();setSelectedTipo(null);setSelectedCategoria(null);setSelectedOptionIns(null);setDestinoMovimiento(""),setUnidadSeleccionada(null);setSelectedOptionTit(null);setSelectedOption(null); listarInstructor(); listarTitulado();}}>
+              Registrar nuevo movimiento de Salida
           </button>
           <Link to="/movimiento"><button type="button"  className="btn btn-primary m-1 ">Volver a Movimientos Totales</button></Link>
           
@@ -729,10 +833,9 @@ const handleDestino = (event) => {
                       <td className="p-2 text-center">{element.nombre_instructor}</td>
 
                       <td className="p-0 text-center"   >
-                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true);editarDetalleDestino(element.id_factura); editarMovimiento(element.id_factura); resetFormState();setDestinoMovimiento("")}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
-                        <IconEdit />
-                        </button>
-
+                      <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true);editarDetalleDestino(element.id_factura); editarMovimiento(element.id_factura); resetFormState();setDestinoMovimiento(""); listarInstructorAct(); listarTituladoAct();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                          <IconEdit />
+                      </button>
                       </td>
                     </tr>
 
@@ -835,12 +938,12 @@ const handleDestino = (event) => {
                                       <Select
                                         className="react-select-container  form-empt my-custom-class"
                                         classNamePrefix="react-select"
-                                        options={tituladoList.map(element => ({key: element.id_titulado, value: element.id_titulado, label: `${element.nombre_titulado} - ${element.id_ficha}`}))}
+                                        options={tituladoList.map((element, index) => ({key: index, value: element.id_titulado, label: `${element.nombre_titulado} - ${element.id_ficha}`}))}
                                         placeholder="Selecciona..."
                                         onChange={handleTitulado}
                                         value={selectedOptionTit}
                                         id="fk_id_titulado"
-                                      />
+                                    />
                                       <div className="invalid-feedback is-invalid">
                                           Por favor, seleccione un titulado.
                                       </div>
@@ -852,7 +955,7 @@ const handleDestino = (event) => {
                                         <Select
                                           className="react-select-container  form-empt my-custom-class"
                                           classNamePrefix="react-select"
-                                          options={instructorList.map(element => ({key: element.id  , value: element.id, label: element.nombre}))}
+                                          options={instructorList.map((element, index) => ({key: index, value: element.id, label: element.nombre}))}
                                           placeholder="Selecciona..."
                                           onChange={handleInstructor}
                                           value={selectedOptionIns}
@@ -912,7 +1015,7 @@ const handleDestino = (event) => {
                                     <div className="col">
                                         <div className="form-outline">
                                             <label className="form-label" htmlFor="destino_movimiento">Destino</label>
-                                            <select className="form-select" value={movimientoSeleccionado.destino_movimiento || ''} name="destino_movimiento" onChange={(e) => {setMovimientoSeleccionado({ ...movimientoSeleccionado, destino_movimiento: e.target.value }); handleDestino(e);}}>
+                                            <select className="form-select" value={movimientoSeleccionado.destino_movimiento || ''} name="destino_movimiento" onChange={(e) => {setMovimientoSeleccionado({ ...movimientoSeleccionado, destino_movimiento: e.target.value }); handleDestino2(e);}}>
 
                                                 <option value="">Seleccio una opción </option>
                                                 <option value="taller">Taller</option>
@@ -926,11 +1029,10 @@ const handleDestino = (event) => {
                                             <div className="col">
                                                 <div className="form-outline">
                                                     <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
-                                                    <select className="form-select" value={movimientoSeleccionado.fk_id_instructor || ''} key="fk_id_instructor" name="fk_id_instructor" onChange={(e) => {setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_instructor: e.target.value }); handleDestino(e);}}>
-                                                        <option>Seleccione una opción</option>
-                                                        {instructorList.map((element) => (
-                                                            <option key={element.id_instructores} value={element.id_instructores}>{element.nombre_instructor}</option>
-                                                        ))}
+                                                    <select className="form-select" value={movimientoSeleccionado.fk_id_instructor || ''} key="fk_id_instructor" name="fk_id_instructor" onChange={(e) => {setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_instructor: e.target.value }); handleInstructor(e);}}>
+                                                      <option>Seleccione una opción</option>
+                                                      {instructorList && instructorList.map((instructor, index) => (<option key={index} value={instructor.value}>{instructor.label}</option>
+                                                      ))}
                                                     </select>
                                                     <div className="invalid-feedback is-invalid">
                                                         Por favor, seleccione un instructor.
@@ -940,10 +1042,10 @@ const handleDestino = (event) => {
                                             <div className="col">
                                                 <div className="form-outline">
                                                     <label className="form-label" htmlFor="fk_id_titulado">Titulado</label>
-                                                    <select className="form-select" value={movimientoSeleccionado.fk_id_titulado || ''} key="fk_id_instructor" name="fk_id_titulado" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_titulado: e.target.value })}>
-                                                        <option >Seleccionar titulado</option>
-                                                        {tituladoList && tituladoList.map(titulado => (
-                                                            <option key={titulado.id} value={titulado.id}>{titulado.nombre}</option>
+                                                    <select className="form-select" value={movimientoSeleccionado.fk_id_titulado || ''} key="fk_id_titulado" name="fk_id_titulado" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_titulado: e.target.value })}>
+                                                        <option>Seleccionar titulado</option>
+                                                        {tituladoList && tituladoList.map((titulado, index) => (
+                                                            <option key={index} value={titulado.value}>{titulado.label}</option>
                                                         ))}
                                                     </select>
                                                 </div>
