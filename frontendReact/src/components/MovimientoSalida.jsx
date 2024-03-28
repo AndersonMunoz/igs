@@ -208,15 +208,13 @@ const handleInstructor = (selectedOptionIns) => {
 };
   
 const handleDestino = (event) => {
-  setDestinoMovimiento(event.target.value);
-  //console.log(event.target.value)
-  setShowInstructorTituladoSelects(event.target.value === "taller" || event.target.value === "evento");
+  const selectedDestino = event.target.value;
+  setDestinoMovimiento(selectedDestino);
+
+  // Actualiza el estado de showInstructorTituladoSelects solo si el destino seleccionado es "taller" o "evento"
+  setShowInstructorTituladoSelects(selectedDestino === "taller" || selectedDestino === "evento");
 };
 
-
-
-  
-  
   const tableRef = useRef();
   const fkIdUsuarioRef = useRef(null);
 
@@ -483,43 +481,50 @@ const handleDestino = (event) => {
   function actualizarMovimiento(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
     fetch(`http://${portConexion}:3000/facturamovimiento/actualizarSalida/${id}`, {
-    method: "PUT",
-    headers: {
-      'Content-type': 'application/json',
-      token: localStorage.getItem("token")
-    },
-    body: JSON.stringify(movimientoSeleccionado),
-  })
-  .then((res) => {
-    if (!res.ok) {
-      throw res;
-    }
-    return res.json();
-  })
-  .then((data) => {
-    Sweet.exito(data.message);
-    listarMovimiento();
-    setUpdateModal(false);
-    removeModalBackdrop(true );
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
-  })
-  .catch((error) => {
-    error.json().then((body) => {
-      if (body.status === 409) {
-        Sweet.error('El número de lote ya está registrado');
-      } else if (body.errors) {
-        body.errors.forEach((err) => {
-          Sweet.error(err.msg);
-        });
-      } else {
-        Sweet.error('Error en el servidor');
-      }
+        method: "PUT",
+        headers: {
+            'Content-type': 'application/json',
+            token: localStorage.getItem("token")
+        },
+        body: JSON.stringify(movimientoSeleccionado),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (data.status === 200) {
+            Sweet.exito(data.message);
+            listarMovimiento();
+            setUpdateModal(false);
+            removeModalBackdrop(true);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+                $(tableRef.current).DataTable().destroy();
+            }
+        } else if (data.status === 403) {
+            Sweet.error(data.error.errors[0].msg);
+        } else if (data.status === 402) {
+            Sweet.error(data.mensaje);
+        } else if (data.status === 409) {
+            Sweet.error(data.message);
+        } else {
+            listarMovimiento();
+            setUpdateModal(false);
+            removeModalBackdrop(true);
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
-  });
-  }
+}
+
+
+
   function listarUsuario() {
     fetch(`http://${portConexion}:3000/usuario/listar`, {
       method: "get",
@@ -724,7 +729,7 @@ const handleDestino = (event) => {
                       <td className="p-2 text-center">{element.nombre_instructor}</td>
 
                       <td className="p-0 text-center"   >
-                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true);editarDetalleDestino(element.id_factura); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
+                        <button className="btn btn-color"  style={{ textTransform: 'capitalize' }}onClick={() => { setUpdateModal(true);editarDetalleDestino(element.id_factura); editarMovimiento(element.id_factura); resetFormState();setDestinoMovimiento("")}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
 
@@ -883,87 +888,89 @@ const handleDestino = (event) => {
                 </div>
               </div>
             </div>
-            <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef}>
-    <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-            <div className="modal-header bg text-white">
-                <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento de salida</h1>
-                <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-                <form>
-                    <div className="row mb-4">
-                        <div className="col">
-                            <div data-mdb-input-init className="form-outline">
-                                <label className="form-label" htmlFor="nota_factura">Descripción</label>
-                                <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.nota_factura || ''} name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
-                                <div className="invalid-feedback is-invalid">
-                                    Por favor, ingrese una nota más larga.
-                                </div>
-                            </div>
+            <div className="modal fade" id="movimientoEditarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="actualizarModalLabel" aria-hidden="true" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header bg text-white">
+                            <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento de salida</h1>
+                            <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="col">
-                            <div data-mdb-input-init className="form-outline">
-                                <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
-                                <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.cantidad_peso_movimiento || ''} name="cantidad_peso_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, cantidad_peso_movimiento: e.target.value })} />
-                                <div className="invalid-feedback is-invalid">
-                                    Por favor, ingrese una cantidad.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row mb-4">
-                        <div className="col">
-                            <div className="form-outline">
-                                <label className="form-label" htmlFor="destino_movimiento">Destino</label>
-                                <select className="form-select" value={movimientoSeleccionado.destino_movimiento || ''} name="destino_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, destino_movimiento: e.target.value })}>
-                                    <option value="">Seleccio una opción </option>
-                                    <option value="taller">Taller</option>
-                                    <option value="evento">Evento</option>
-                                    <option value="produccion">Producción</option>
-                                </select>
-                            </div>
-                        </div>
-                        {showInstructorTituladoSelects &&
-                            <>
-                                <div className="col">
-                                    <div className="form-outline">
-                                        <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
-                                        <select value={movimientoSeleccionado.fk_id_instructor || ''} key="fk_id_instructor" className="form-select form-empty limpiar" id="fk_id_instructor" name="fk_id_instructor" aria-label="Default select example" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_instructor: e.target.value })}>
-                                            <option>Seleccione una opción</option>
-                                            {instructorList.map((element) => (
-                                                <option key={element.id_instructores} value={element.id_instructores}>{element.nombre_instructor}</option>
-                                            ))}
-                                        </select>
-                                        <div className="invalid-feedback is-invalid">
-                                            Por favor, seleccione un instructor.
+                        <div className="modal-body">
+                            <form>
+                                <div className="row mb-4">
+                                    <div className="col">
+                                        <div data-mdb-input-init className="form-outline">
+                                            <label className="form-label" htmlFor="cantidad_peso_movimiento">Cantidad</label>
+                                            <input type="text" className="form-control form-update limpiar" placeholder="Precio del Producto" value={movimientoSeleccionado.cantidad_peso_movimiento || ''} name="cantidad_peso_movimiento" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, cantidad_peso_movimiento: e.target.value })} />
+                                            <div className="invalid-feedback is-invalid">
+                                                Por favor, ingrese una cantidad.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col">
-                                    <div className="form-outline">
-                                        <label className="form-label" htmlFor="fk_id_titulado">Titulado</label>
-                                        <select className="form-select" value={movimientoSeleccionado.fk_id_titulado || ''} key="fk_id_instructor" name="fk_id_titulado" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_titulado: e.target.value })}>
-                                            <option >Seleccionar titulado</option>
-                                            {tituladoList && tituladoList.map(titulado => (
-                                                <option key={titulado.id} value={titulado.id}>{titulado.nombre}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                    </div>
-                </form>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" className="btn btn-color" onClick={() => actualizarMovimiento(movimientoSeleccionado.id)}>Actualizar</button>
-            </div>
-        </div>
-    </div>
-</div>
+                                <div className="row mb-4">
+                                    <div className="col">
+                                        <div className="form-outline">
+                                            <label className="form-label" htmlFor="destino_movimiento">Destino</label>
+                                            <select className="form-select" value={movimientoSeleccionado.destino_movimiento || ''} name="destino_movimiento" onChange={(e) => {setMovimientoSeleccionado({ ...movimientoSeleccionado, destino_movimiento: e.target.value }); handleDestino(e);}}>
 
+                                                <option value="">Seleccio una opción </option>
+                                                <option value="taller">Taller</option>
+                                                <option value="evento">Evento</option>
+                                                <option value="produccion">Producción</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {showInstructorTituladoSelects &&
+                                        <>
+                                            <div className="col">
+                                                <div className="form-outline">
+                                                    <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
+                                                    <select className="form-select" value={movimientoSeleccionado.fk_id_instructor || ''} key="fk_id_instructor" name="fk_id_instructor" onChange={(e) => {setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_instructor: e.target.value }); handleDestino(e);}}>
+                                                        <option>Seleccione una opción</option>
+                                                        {instructorList.map((element) => (
+                                                            <option key={element.id_instructores} value={element.id_instructores}>{element.nombre_instructor}</option>
+                                                        ))}
+                                                    </select>
+                                                    <div className="invalid-feedback is-invalid">
+                                                        Por favor, seleccione un instructor.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col">
+                                                <div className="form-outline">
+                                                    <label className="form-label" htmlFor="fk_id_titulado">Titulado</label>
+                                                    <select className="form-select" value={movimientoSeleccionado.fk_id_titulado || ''} key="fk_id_instructor" name="fk_id_titulado" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, fk_id_titulado: e.target.value })}>
+                                                        <option >Seleccionar titulado</option>
+                                                        {tituladoList && tituladoList.map(titulado => (
+                                                            <option key={titulado.id} value={titulado.id}>{titulado.nombre}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+                                </div>
+                                <div className="row mb-4">
+                                  <div className="col">
+                                    <div data-mdb-input-init className="form-outline">
+                                      <label className="form-label" htmlFor="nota_factura">Descripción</label>
+                                      <textarea className="form-control form-update limpiar" placeholder="Nota" value={movimientoSeleccionado.nota_factura || ''}name="nota_factura" onChange={(e) => setMovimientoSeleccionado({ ...movimientoSeleccionado, nota_factura: e.target.value })} />
+                                      <div className="invalid-feedback is-invalid">
+                                        Por favor, ingrese una nota mas larga.
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" className="btn btn-color" onClick={() => actualizarMovimiento(movimientoSeleccionado.id_factura)}>Actualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
           </div>
         </div>
 

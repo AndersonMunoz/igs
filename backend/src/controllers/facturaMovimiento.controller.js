@@ -523,7 +523,7 @@ export const buscarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		const [result] = await pool.query('SELECT * FROM factura_movimiento WHERE id_factura = ?', [id]);
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN usuarios us ON f.fk_id_usuario = us.id_usuario JOIN productos p ON f.fk_id_producto = p.id_producto JOIN bodega u ON p.fk_id_up = u.id_up JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria JOIN detalles d ON d.fk_id_movimiento = f.id_factura LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.id_factura = ?', [id]);
 
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -547,7 +547,7 @@ export const buscarMovimientoDetalle = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN detalles d ON d.fk_id_movimiento = f.id_factura JOIN instructores i ON d.fk_id_instructor = i.id_instructores JOIN titulados t ON d.fk_id_titulado = t.id_titulado WHERE f.id_factura = ?', [id]);
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN usuarios us ON f.fk_id_usuario = us.id_usuario JOIN productos p ON f.fk_id_producto = p.id_producto JOIN bodega u ON p.fk_id_up = u.id_up JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria JOIN detalles d ON d.fk_id_movimiento = f.id_factura LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.id_factura = ?', [id]);
 
 		if (result.length > 0) {
 			res.status(200).json(result);
