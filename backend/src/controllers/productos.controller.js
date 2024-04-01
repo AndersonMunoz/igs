@@ -47,7 +47,6 @@ export const listarProductos = async (req, res) => {
   try {
     const [result] = await pool.query(
       `SELECT 
-      p.num_lote AS Lote,
       p.id_producto, 
       t.nombre_tipo AS NombreProducto,
       f.fecha_caducidad AS FechaCaducidad,
@@ -64,7 +63,7 @@ export const listarProductos = async (req, res) => {
     LEFT JOIN bodega u ON p.fk_id_up = u.id_up
     LEFT JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
     LEFT JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-    GROUP BY Lote`);
+    GROUP BY p.id_producto`);
     if (result.length > 0) {
       res.status(200).json(result);
   } else {
@@ -168,3 +167,8 @@ GROUP BY Lote
 
 
 };
+
+
+
+
+
