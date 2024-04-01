@@ -36,7 +36,6 @@ const Movimiento = () => {
   
     const columns = [
       { title: 'Nombre producto', dataKey: 'nombre_tipo' },
-      { title: '# Lote', dataKey: 'num_lote' },
       { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
       { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
       { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
@@ -49,7 +48,6 @@ const Movimiento = () => {
     // Obtener los datos de la tabla
     const tableData = movimientos.map((element) => ({
       nombre_tipo: element.nombre_tipo,
-      num_lote: element.num_lote,
       fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
       tipo_movimiento: element.tipo_movimiento,
       cantidad_peso_movimiento: element.cantidad_peso_movimiento,
@@ -77,7 +75,6 @@ const Movimiento = () => {
     // Obtener las columnas
     const columns = [
       'Nombre producto',
-      '# Lote',
       'Fecha del movimiento',
       'Tipo de movimiento',
       'Cantidad',
@@ -92,7 +89,6 @@ const Movimiento = () => {
     movimientos.forEach(element => {
       const rowData = [
         element.nombre_tipo,
-        element.num_lote,
         Validate.formatFecha(element.fecha_movimiento),
         element.tipo_movimiento,
         element.cantidad_peso_movimiento,
@@ -217,7 +213,6 @@ const Movimiento = () => {
               <tr>
                 <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
-                <th className="th-sm"># Lote</th>
                 <th className="th-sm">Fecha del movimiento</th>
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
@@ -244,7 +239,6 @@ const Movimiento = () => {
                     <tr style={{ textTransform: 'capitalize' }}  key={element.id_factura}>
                       <td className="p-2 text-center" >{element.id_factura}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
-                      <td className="p-2 text-center" >{element.num_lote}</td>
                       <td className="p-2 text-center" >{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center" >{element.tipo_movimiento}</td>
                       <td className="p-2 text-center" >

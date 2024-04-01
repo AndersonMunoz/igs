@@ -136,12 +136,7 @@ LEFT JOIN
     tipo_productos t ON t.id_tipo = p.fk_id_tipo_producto 
 LEFT JOIN 
     categorias_producto c ON c.id_categoria = t.fk_categoria_pro
-GROUP BY Lote
-
-
-
-
-                    `;
+GROUP BY nombre_categoria, nombre_producto  `;
 
     const [rows] = await pool.query(sql);
 

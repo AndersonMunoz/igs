@@ -70,7 +70,6 @@ const Movimiento = () => {
       { title: 'Proveedor', dataKey: 'nombre_proveedores' }
     ];
   
-    // Obtener los datos de la tabla
     const tableData = movimientos.map((element) => {
       const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       return {
@@ -89,7 +88,6 @@ const Movimiento = () => {
       };
     });
   
-    // Agregar las columnas y los datos a la tabla del PDF
     doc.autoTable({
       columns,
       body: tableData,
@@ -98,13 +96,11 @@ const Movimiento = () => {
       headStyles: { fillColor: [0, 100, 0] },
     });
   
-    // Guardar el PDF
     doc.save('MovimientosEntrada.pdf');
   };
   const getTableData = () => {
     const wsData = [];
 
-    // Obtener las columnas
     const columns = [
       'Nombre producto',
       'Fecha del movimiento',
@@ -121,7 +117,6 @@ const Movimiento = () => {
     ];
     wsData.push(columns);
 
-    // Obtener los datos de las filas
     movimientos.forEach(element => {
       const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       const rowData = [
@@ -149,8 +144,8 @@ const Movimiento = () => {
   };
   const handleCloseModal = () => {
     setShowModal(false);
-    setAplicaFechaCaducidad(false); // Asegura que el estado del checkbox se restablezca
-    resetFormState(); // Llama a la función para restablecer el formulario
+    setAplicaFechaCaducidad(false); 
+    resetFormState(); 
   };
   const handleCategoria = (selectedOption) => {
     setSelectedCategoria(selectedOption); 
@@ -159,9 +154,10 @@ const Movimiento = () => {
   };
   const handleTipo = (selectedOption) => {
     setSelectedTipo(selectedOption);
-    listarUnidadesPro("listar unidad: "+selectedOption);
+    listarUnidadesPro(selectedOption.value);
     //console.log("UNIDAD SELECCIONADA"+selectedOption.value) // Llama a la función para obtener las unidades asociadas al tipo seleccionado
 };
+
 
   const handleUp = (selectedOption) => {
     setSelectedUp(selectedOption);
@@ -176,13 +172,13 @@ const Movimiento = () => {
   
   const handleCloseModal2 = () => {
     setShowModal(false);
-    setAplicaFechaCaducidad2(false); // Asegura que el estado del checkbox se restablezca
-    resetFormState(); // Llama a la función para restablecer el formulario
+    setAplicaFechaCaducidad2(false); 
+    resetFormState(); 
   };
 
   const handleFechaCaducidadChange = (e) => {
     setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value });
-    setFechaCaducidadModificada(true); // Marca la fecha de caducidad como modificada
+    setFechaCaducidadModificada(true);
 };
   const resetFormState = () => {
     const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
@@ -240,7 +236,6 @@ const Movimiento = () => {
     }
   }
   useEffect(() => {
-    // Restablecer movimientoSeleccionado cuando el modal se abre
     if (updateModal) {
         setMovimientoSeleccionado({});
     }
@@ -391,7 +386,6 @@ const Movimiento = () => {
     .then((data) => {
         //console.log("Unidades del producto:", data);
         if (data && data.length > 0) {
-            // Actualizar el estado con la unidad de peso
             setUnidadSeleccionada(data[0].unidad_peso);
             //console.log(data[0].unidad_peso)
         } else {
@@ -523,7 +517,7 @@ const Movimiento = () => {
         return;
       }
       if (data.status === 409) {
-        Sweet.error(data.message); // Mostrar mensaje de error para el conflicto de lote
+        Sweet.error(data.message); 
         return;
       }
       /* console.log(data); */
@@ -856,7 +850,7 @@ const Movimiento = () => {
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header bg text-white">
-                    <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento</h1>
+                    <h1 className="modal-title fs-5" id="actualizarModalLabel">Editar de movimiento de entrada</h1>
                     <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal" aria-label="Close" onClick={handleCloseModal2}></button>
                   </div>
                   <div className="modal-body">

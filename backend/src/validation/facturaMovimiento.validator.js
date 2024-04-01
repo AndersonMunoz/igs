@@ -31,6 +31,7 @@ export const validarFacturaMovimientoActu = [
 export const validarFacturaMovimientoActuSalida = [
     check('nota_factura','Ingrese un descripción válida, máximo 300 caracteres y mínimo 3').isLength({min: 3,max:300}).notEmpty(),
     check('cantidad_peso_movimiento','Ingrese una cantidad válida, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
+    check('destino_movimiento','Ingrese un estado válido en minúscula. Valores válidos: taller, produccion o evento').matches(/^(taller|produccion|evento)$/)
     /* check('fk_id_instructor','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('fk_id_titulado','Ingrese un ID válido, mayor a 0').isNumeric().custom(value => value > 0).notEmpty(),
     check('destino_movimiento','Ingrese un estado válido en minúscula. Valores válidos: taller, produccion o evento').matches(/^(taller|produccion|evento)$/).notEmpty(), */

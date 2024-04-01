@@ -38,12 +38,17 @@ const storage = multer.diskStorage({
         cb(null, "frontendReact/public/filePDF");
     },
     filename: function (req, file, cb) {
-        const nombreProveedor = req.body.nombre_proveedores;
-        const numeroContrato = req.body.contrato_proveedores;
-        const nombreArchivo = `${nombreProveedor}${numeroContrato}.pdf`;
+        const numeroContrato = file.originalname;
+        const fecha = new Date ();
+        let hora = fecha.getHours;
+        let minutos= fecha.getMinutes;
+        let segundos=fecha.getSeconds();
+        const extension = file.originalname.split('.').pop();
+        const nombreArchivo = `${numeroContrato}_${segundos}.${extension}`;
         cb(null, nombreArchivo);
     }
 });
+
 
 const upload = multer({ storage: storage });
 
@@ -56,7 +61,13 @@ export const registrarProvedor = async (req, res) => {
             return res.status(403).json({ "status": 403, error })
         }
         let { nombre_proveedores, telefono_proveedores, direccion_proveedores, contrato_proveedores, inicio_contrato, fin_contrato } = req.body;
-        let archivo_contrato = req.file.originalname;
+        let name = req.file.originalname;
+        const fecha = new Date ();
+        let hora = fecha.getHours;
+        let minutos= fecha.getMinutes;
+        let segundos=fecha.getSeconds();
+        let extension = req.file.originalname.split('.').pop();
+        let archivo_contrato = `${name}_${segundos}.${extension}`;
 
         let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores
         const [rows] = await pool.query(selectUser)
@@ -110,30 +121,24 @@ export const actualizarProvedor = async (req, res) => {
         }
         let id = req.params.id;
         let { nombre_proveedores, telefono_proveedores, contrato_proveedores, direccion_proveedores, inicio_contrato, fin_contrato } = req.body;
-        let archivo_contrato =req.file.originalname;
-        let selectUser = "SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores= " + contrato_proveedores + " AND id_proveedores != " + id;
+
+        let selectUser = `SELECT nombre_proveedores FROM proveedores WHERE contrato_proveedores = '${contrato_proveedores}' AND id_proveedores != ${id}`;
 
         const [userExist] = await pool.query(selectUser)
 
         if (!userExist.length > 0) {
-            let sql = `update proveedores set nombre_proveedores='${nombre_proveedores}',telefono_proveedores='${telefono_proveedores}',contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}', inicio_contrato='${inicio_contrato}',fin_contrato='${fin_contrato}',archivo_contrato='${archivo_contrato}' where id_proveedores= ${id}`;
+            let sql = `UPDATE proveedores SET nombre_proveedores='${nombre_proveedores}', telefono_proveedores='${telefono_proveedores}', contrato_proveedores='${contrato_proveedores}', direccion_proveedores='${direccion_proveedores}', inicio_contrato='${inicio_contrato}', fin_contrato='${fin_contrato}' WHERE id_proveedores=${id}`;
+
             const [rows] = await pool.query(sql);
             if (rows.affectedRows > 0) {
-                res.status(200).json({
-                    "status": 200, "message": "Proveedor actualizado con éxito"
-                })
+                res.status(200).json({ "status": 200, "message": "Proveedor actualizado con éxito" });
             } else {
-                res.status(401).json({
-                    "status": 401, "message": "No se actualizó el proveedor"
-                })
+                res.status(401).json({ "status": 401, "message": "No se actualizó el proveedor" });
             }
-        }
-        else {
-            res.status(409).json({
-                "status": 409, "message": "Duplicidad en contratos"
-            });
+        } else {
+            res.status(409).json({ "status": 409, "message": "Duplicidad en contratos" });
         }
     } catch (e) {
-        res.status(500).json({ message: 'Error interno en el servidor: ' + e })
+        res.status(500).json({ message: 'Error interno en el servidor: ' + e });
     }
 }

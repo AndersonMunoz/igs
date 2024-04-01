@@ -133,11 +133,11 @@ export const guardarMovimientoSalida = async (req, res) => {
                 '${fk_id_producto}','${fk_id_usuario}');`;
 
             let sql6 = `UPDATE productos 
-                SET cantidad_peso_producto = CASE 
-                    WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
-                    ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
-                END
-                WHERE fk_id_producto = ${fk_id_producto}`;
+			SET cantidad_peso_producto = CASE 
+				WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
+				ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
+			END
+			WHERE id_producto = ${fk_id_producto}`;
 
             let result10 = await pool.query(sql10);
             if (result10.affectedRows == 0) {
@@ -473,14 +473,30 @@ export const listarMovimientosSalida = async (req, res) => {
 		const [result] = await pool.query
 			(
 				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, 
-				f.nota_factura, f.num_lote
-					FROM factura_movimiento f 
-					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
-					JOIN productos p ON f.fk_id_producto = p.id_producto
-					JOIN bodega u ON p.fk_id_up = u.id_up	
-					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "salida"
-					ORDER BY f.id_factura DESC`
+				f.nota_factura,c.codigo_categoria,c.tipo_categoria, d.destino_movimiento,
+				CASE 
+					WHEN ti.nombre_titulado IS NULL THEN 'No aplica'
+					ELSE ti.nombre_titulado
+				END AS nombre_titulado,
+				CASE 
+					WHEN ti.id_ficha IS NULL THEN 'No aplica'
+					ELSE ti.id_ficha
+				END AS id_ficha,
+				CASE 
+					WHEN i.nombre_instructor IS NULL THEN 'No aplica'
+					ELSE i.nombre_instructor
+				END AS nombre_instructor
+				FROM factura_movimiento f 
+				JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
+				JOIN productos p ON f.fk_id_producto = p.id_producto
+				JOIN bodega u ON p.fk_id_up = u.id_up    
+				JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+				JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+				JOIN detalles d ON d.fk_id_movimiento = f.id_factura
+				LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores
+				LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.tipo_movimiento = "salida"
+				ORDER BY d.id_detalle DESC
+			`
 			);
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -507,7 +523,7 @@ export const buscarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		const [result] = await pool.query('SELECT * FROM factura_movimiento WHERE id_factura = ?', [id]);
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN usuarios us ON f.fk_id_usuario = us.id_usuario JOIN productos p ON f.fk_id_producto = p.id_producto JOIN bodega u ON p.fk_id_up = u.id_up JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria JOIN detalles d ON d.fk_id_movimiento = f.id_factura LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.id_factura = ?', [id]);
 
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -531,7 +547,7 @@ export const buscarMovimientoDetalle = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN detalles d ON d.fk_id_movimiento = f.id_factura JOIN instructores i ON d.fk_id_instructor = i.id_instructores JOIN titulados t ON d.fk_id_titulado = t.id_titulado WHERE f.id_factura = ?', [id]);
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN usuarios us ON f.fk_id_usuario = us.id_usuario JOIN productos p ON f.fk_id_producto = p.id_producto JOIN bodega u ON p.fk_id_up = u.id_up JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria JOIN detalles d ON d.fk_id_movimiento = f.id_factura LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.id_factura = ?', [id]);
 
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -614,24 +630,30 @@ export const actualizarMovimientoSalida = async (req, res) => {
         }
 
         let id = req.params.id;
-        let { nota_factura, cantidad_peso_movimiento, destino_movimiento, fk_id_instructor, fk_id_titulado } = req.body;
+        let { nota_factura, cantidad_peso_movimiento, fk_id_producto, destino_movimiento, fk_id_instructor, fk_id_titulado } = req.body;
 		
-		let cantidadNueva = cantidad_peso_movimiento;
+        // Validar que si el destino_movimiento es "taller" o "evento", entonces fk_id_titulado y fk_id_instructor deben estar presentes
+        if ((destino_movimiento === "taller" || destino_movimiento === "evento") && (!fk_id_titulado || !fk_id_instructor)) {
+            return res.status(400).json({
+                "status": 400,
+                "mensaje": "En taller o evento es necesario un titulado e instructor."
+            });
+        }
 
-        let sqlPrev = `SELECT cantidad_peso_movimiento,tipo_movimiento, fk_id_producto, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
-        let resultPrev = await pool.query(sqlPrev, id);
-        let prevMovimiento = resultPrev[0][0].cantidad_peso_movimiento;
-        let fk_id_producto = resultPrev[0][0].fk_id_producto;
-        let num_lote = resultPrev[0][0].num_lote;
+        let cantidadNueva = cantidad_peso_movimiento;
 
-		let sql6 = `SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE num_lote = '${num_lote}' AND tipo_movimiento = 'entrada'`;
+        // Buscar la cantidad de producto original
+        let sql6 = `SELECT cantidad_peso_producto FROM productos WHERE id_producto = '${fk_id_producto}'`;
         let result5 = await pool.query(sql6);
-        let cantidadMovEntrada = result5[0][0].cantidad_peso_movimiento;
+        let cantidadOriginalProducto = result5[0][0].cantidad_peso_producto;
 
+        // Buscar la cantidad de movimiento previa
+        let sqlPrevMovimiento = `SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE id_factura = '${id}'`;
+        let resultPrevMovimiento = await pool.query(sqlPrevMovimiento);
+        let prevMovimiento = resultPrevMovimiento[0][0].cantidad_peso_movimiento;
 
-
-        let nuevaCantidadPesoProducto = cantidadMovEntrada -  cantidadNueva;
-        if (nuevaCantidadPesoProducto < 0) {
+        let nuevaCantidadTotal = cantidadOriginalProducto - cantidadNueva;
+        if (nuevaCantidadTotal < 0) {
             return res.status(402).json({
                 "status": 402,
                 "mensaje": "La nueva cantidad total es menor que 0. Ingrese una cantidad no mayor a lo que tiene disponible."
@@ -640,9 +662,9 @@ export const actualizarMovimientoSalida = async (req, res) => {
             // Realizar la actualización en la base de datos
             let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',cantidad_peso_movimiento='${cantidad_peso_movimiento}' where id_factura=${id}`;
             let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
-            let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento}  WHERE num_lote='${num_lote}'`;
+            let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento} WHERE id_producto = ${fk_id_producto}`;
 
-			let sql7;
+            let sql7;
 
             if (destino_movimiento === "taller" || destino_movimiento === "evento") {
                 sql7 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
@@ -669,6 +691,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
         });
     }
 };
+
 
 
 export const obtenerProCategoria = async (req, res) => {
@@ -714,7 +737,7 @@ export const obtenerUnidad = async (req, res) => {
 export const obtenerProProductos = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,p.num_lote FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
+		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,pr.id_tipo FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
 
 		const [rows] = await pool.query(sql);
 
