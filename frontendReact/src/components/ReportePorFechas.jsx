@@ -292,12 +292,14 @@ const reporte = () => {
 
         <div className="btnContenido11">
           <div style={{ width: "200px", marginRight: "10px", gap: "20px" }} className="d-flex">
+            <h6 className="mt-1">Inicio</h6>
             <input onChange={(e) => setRangoMovInicio(e.target.value)} className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio} />
-            <h5 className="mt-1">Inicio</h5>
+            
           </div>
           <div style={{ width: "180px", height: "35px", gap: "20px" }} className="d-flex">
+            <h6 className="mt-1">Fin</h6>
             <input onChange={(e) => setRangoMovFin(e.target.value)} className="inputFechaReporte" type="date" name="fin" id="fin" defaultValue={rangoMovFin} />
-            <h5 className="mt-1">Fin</h5>
+            
           </div>
           <div>
             <button className="btn btn-color" onClick={() => { ListartPorRango(rangoMovInicio, rangoMovFin) }}>buscar</button>

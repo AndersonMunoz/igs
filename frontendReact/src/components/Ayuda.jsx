@@ -11,9 +11,13 @@ const Ayuda = () => {
     return (
 
         <>
-            <h3 className="text-center mt-3">Ayuda</h3>
+            <h2 className="text-center mt-3">Ayuda</h2>
+            <h4 className="sssssss">Guias de ayuda</h4>
             <h5 className="mb-2">Manual de usuario administrador</h5>
-            <a href={PdfManual1} target="_blank">Manual de usuario</a>
+            <button className="btn btn-color">
+                <a className="dsdsd" href={PdfManual1} target="_blank">Manual de usuario</a>
+            </button>
+            
             <h5 className="mt-2 mb-4">Manual de usuario coadministrador</h5>
             <h5 className="mb-4">Manual Tecnico</h5>
 

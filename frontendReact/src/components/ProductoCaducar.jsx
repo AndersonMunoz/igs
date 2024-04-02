@@ -22,6 +22,7 @@ const ProductoCaducar = () => {
   const [productos, setProductos] = useState([]);
   const tableRef = useRef();
 
+
   const handleOnExport = () => {
     const wsData = getTableData();
     const wb = xlsx.utils.book_new();
@@ -145,6 +146,7 @@ const ProductoCaducar = () => {
       console.error('Error:', e);
     });
   }
+
   
 
 	return (
