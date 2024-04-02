@@ -94,7 +94,7 @@ export const guardarMovimientoEntrada = async (req, res) => {
             }
         }
     } catch (e) {
-        console.error(e); // Imprime el error en la consola del servidor
+        //console.error(e); // Imprime el error en la consola del servidor
         res.status(500).json({
           "status": 500,
           "message": "Error en el servidor" + e
@@ -114,10 +114,10 @@ export const guardarMovimientoSalida = async (req, res) => {
         let sql4 = `SELECT cantidad_peso_producto FROM productos WHERE fk_id_tipo_producto = '${fk_id_tipo_producto}'`;
 
         let cantidadPeso = await pool.query(sql4);
-		console.log(cantidadPeso[0][0])
+		//console.log(cantidadPeso[0][0])
         let cantidadPeso2 = cantidadPeso[0];
         let cantidad3 = cantidadPeso2[0];
-		console.log(cantidad3)
+		//console.log(cantidad3)
         let cantidadPesoTotal = cantidad3.cantidad_peso_producto;
 
         if (cantidadPesoTotal < cantidad_peso_movimiento) {
@@ -199,7 +199,7 @@ export const obtenerValorTotalProductos = async (req, res) => {
 
 			res.status(200).json(valorTotalProductos);
 	} catch (error) {
-			console.error("Error al obtener el valor total de los productos:", error);
+			//console.error("Error al obtener el valor total de los productos:", error);
 			res.status(500).json({
 					"status": 500,
 					"message": "Error en el servidor"
@@ -354,7 +354,7 @@ export const listarMovimientos = async (req, res) => {
 			c.nombre_categoria,
 			f.fecha_movimiento,
 			f.cantidad_peso_movimiento,
-			t.unidad_peso,
+			t.unidad_peso, c.codigo_categoria,c.tipo_categoria,c.nombre_categoria,
 			CASE 
 				WHEN f.tipo_movimiento = 'salida' AND (f.precio_movimiento IS NULL OR f.precio_movimiento = 0) THEN 'No aplica'
 				ELSE CAST(f.precio_movimiento AS CHAR)
@@ -426,7 +426,7 @@ export const listarMovimientosEntrada = async (req, res) => {
         }
 		const [result] = await pool.query
 			(
-				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, f.precio_movimiento, f.estado_producto_movimiento,
+				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, f.precio_movimiento, f.estado_producto_movimiento, c.codigo_categoria,c.tipo_categoria,
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
 				f.nota_factura,CASE 
 				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
@@ -512,7 +512,6 @@ export const listarMovimientosSalida = async (req, res) => {
 		});
 	}
 }
-
 
 export const buscarMovimiento = async (req, res) => {
 	try {
@@ -611,7 +610,7 @@ export const actualizarMovimiento = async (req, res) => {
 			}
 		}
     } catch (e) {
-        console.error("Error en el servidor:", e);
+        //console.error("Error en el servidor:", e);
         res.status(500).json({
             "status": 500,
             "message": "Error en el servidor"
