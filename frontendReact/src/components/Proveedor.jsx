@@ -335,7 +335,7 @@ const proveedor = () => {
   }
   function generarURL(element) {
     // Realiza cualquier lógica necesaria para generar la URL
-    const url = `../../public/filePDF/${element}`;
+    const url = `/filePDF/${element}`;
     return url;
   }
 
@@ -353,7 +353,7 @@ const proveedor = () => {
                 document.getElementById("divArchContrato").classList.remove("d-none");
                 document.getElementById("numContrato").classList.remove("d-none");
               }}>
-              Registrar Nuevo Proveedor
+              Registrar Proveedor
             </button>
           )}
         </div>

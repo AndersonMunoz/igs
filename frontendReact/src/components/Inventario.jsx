@@ -179,7 +179,7 @@ const Inventario = () => {
       <div className="container">
         <div className="row">
           {categories.map((categorie, index) => (
-            <div key={categorie.id_categoria} className="col-md-6" >
+            <div key={categorie.id_categoria} className="col-md-3" >
               <div className={`rounded ${index % 2 === 0 ? 'bg-colorrr' : 'bg-colorrr'}`} >
                 <button
                   type="button"
