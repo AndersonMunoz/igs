@@ -62,7 +62,7 @@ a{
   flex-direction: row;
   justify-content: space-between;
   grid-template: "btnContenido1 btnContenido22 btnContenido3"100%/
-                    1fr auto 1fr;
+                    1fr 1fr 1fr;
 }
 
 .btnContenido1{

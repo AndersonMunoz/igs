@@ -51,24 +51,22 @@ const reporte = () => {
     const doc = new jsPDF();
 
     const columns = [
-        { title: "Productos",   dataKey: "nombre_producto" },
-        { title: "Categoría",   dataKey: "nombre_categoria" },
-        { title: "Entradas",    dataKey: "total_entradas" },
-        { title: "Salidas",     dataKey: "total_salidas" },
-        { title: "valor",       dataKey: "precio_total" },
-        { title: "Fecha último movimiento", dataKey: "ultima_fecha_movimiento" },
-        { title: "Usuario",     dataKey: "nombre_usuario" },
+      { title: "Productos", dataKey: "nombre_producto" },
+      { title: "Categoría", dataKey: "nombre_categoria" },
+      { title: "Entradas", dataKey: "total_entradas" },
+      { title: "Salidas", dataKey: "total_salidas" },
+      { title: "valor", dataKey: "precio_total" },
+      { title: "Fecha último movimiento", dataKey: "ultima_fecha_movimiento" },
     ];
 
     // Obtener los datos de la tabla
     const tableData = reporte.map((element) => ({
-      nombre_producto:element.nombre_producto,
-      nombre_categoria:element.nombre_categoria,
-      total_entradas:element.total_entradas,
-      total_salidas:element.total_salidas,
-      precio_total:element.precio_total,
-      ultima_fecha_movimiento:element.ultima_fecha_movimiento,
-      nombre_usuario:element.nombre_usuario,
+      nombre_producto: element.nombre_producto,
+      nombre_categoria: element.nombre_categoria,
+      total_entradas: element.total_entradas,
+      total_salidas: element.total_salidas,
+      precio_total: element.precio_total,
+      ultima_fecha_movimiento: Validate.formatFecha(element.ultima_fecha_movimiento),
     }));
 
     // Agregar las columnas y los datos a la tabla del PDF
@@ -90,11 +88,10 @@ const reporte = () => {
     const columns = [
       "Productos",
       "Categoría",
-      "Entradas", 
-      "Salidas",  
-      "valor",    
+      "Entradas",
+      "Salidas",
+      "valor",
       "Fecha último movimiento",
-      "Usuario",  
     ];
     wsData.push(columns);
 
@@ -106,8 +103,7 @@ const reporte = () => {
         element.total_entradas,
         element.total_salidas,
         element.precio_total,
-        element.ultima_fecha_movimiento,
-        element.nombre_usuario,
+        Validate.formatFecha(element.ultima_fecha_movimiento)
       ];
       wsData.push(rowData);
     });
@@ -138,11 +134,11 @@ const reporte = () => {
     }
   }, [reporte]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setRangoMovFin(formatDateYYYYMMDD(new Date()));
     listarProducto()
     listaCat()
-  },[])
+  }, [])
 
   function listaCat() {
     var select = document.getElementById("categoryFilter");
@@ -156,10 +152,10 @@ const reporte = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data !== null) {
-          data.forEach(element =>{
+          data.forEach(element => {
             var option = document.createElement("option");
-            option.text= element.nombre_categoria;  
-            option.value= element.nombre_categoria;  
+            option.text = element.nombre_categoria;
+            option.value = element.nombre_categoria;
             select.appendChild(option)
           })
         }
@@ -168,125 +164,126 @@ const reporte = () => {
 
   function ListartPorRango(inicio, fin) {
     fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status === 204) {
-            return null;
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable().destroy();
           }
-          return res.json();
-        })
-        .then((data) => {
-          if (data !== null) {
-            if ($.fn.DataTable.isDataTable(tableRef.current)) {
-              $(tableRef.current).DataTable().destroy();
+          let valEntradas = 0;
+          let valSalidas = 0;
+          let ReporteDelFiltro = [];
+          let fechaInicio = new Date(inicio);
+          let fechaFin = new Date(fin);
+          fechaFin.setDate(fechaFin.getDate() + 1);
+          fechaFin.setHours(23, 59, 59);
+          for (let index = 0; index < data.productos.length; index++) {
+            const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
+            if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
+              valEntradas = valEntradas + parseInt(data.productos[index].total_entradas);
+              valSalidas = valSalidas + parseInt(data.productos[index].total_salidas);
+              ReporteDelFiltro.push(data.productos[index])
             }
-            let valEntradas = 0;
-            let valSalidas = 0;
-            let ReporteDelFiltro = [];
-            let fechaInicio = new Date(inicio);
-            let fechaFin = new Date(fin);
-            fechaFin.setDate(fechaFin.getDate() + 1);
-            fechaFin.setHours(23, 59, 59);
-            for (let index = 0; index < data.productos.length; index++) {
-                const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
-                if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
-                    valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
-                    valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
-                    ReporteDelFiltro.push(data.productos[index])
-                }
-            }
-            setValEntradas(valEntradas)
-            setValSalidas(valSalidas)
-            setReporte(ReporteDelFiltro)
-        }        
-        })
+          }
+          setValEntradas(valEntradas)
+          setValSalidas(valSalidas)
+          setReporte(ReporteDelFiltro)
+        }
+      })
   }
 
-  function filtrarCategorias(inicio , fin) {
+  function filtrarCategorias(inicio, fin) {
     var select = document.getElementById("categoryFilter").value;
 
     fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status === 204) {
-            return null;
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          if ($.fn.DataTable.isDataTable(tableRef.current)) {
+            $(tableRef.current).DataTable().destroy();
           }
-          return res.json();
-        })
-        .then((data) => {
-          if (data !== null) {
-            if ($.fn.DataTable.isDataTable(tableRef.current)) {
-              $(tableRef.current).DataTable().destroy();
+          let valEntradas = 0;
+          let valSalidas = 0;
+          let ReporteDelFiltro = [];
+          let fechaInicio = new Date(inicio);
+          let fechaFin = new Date(fin);
+          fechaFin.setDate(fechaFin.getDate() + 1);
+          fechaFin.setHours(23, 59, 59);
+          for (let index = 0; index < data.productos.length; index++) {
+            const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
+            if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
+              if (data.productos[index].nombre_categoria == select) {
+                valEntradas = valEntradas + parseInt(data.productos[index].total_entradas);
+                valSalidas = valSalidas + parseInt(data.productos[index].total_salidas);
+                ReporteDelFiltro.push(data.productos[index])
+              }
+              if (select == 'todas') {
+                listarProducto()
+              }
             }
-            let valEntradas = 0;
-            let valSalidas = 0;
-            let ReporteDelFiltro = [];
-            let fechaInicio = new Date(inicio);
-            let fechaFin = new Date(fin);
-            fechaFin.setDate(fechaFin.getDate() + 1);
-            fechaFin.setHours(23, 59, 59);
-            for (let index = 0; index < data.productos.length; index++) {
-                const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
-                if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
-                    if (data.productos[index].nombre_categoria == select) {
-                      valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
-                      valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
-                      ReporteDelFiltro.push(data.productos[index])
-                    }
-                    if (select == 'todas' ) {
-                      listarProducto()
-                    }
-                }
-            }
-            setValEntradas(valEntradas)
-            setValSalidas(valSalidas)
-            setReporte(ReporteDelFiltro)
-        }        
-        })
+          }
+          setValEntradas(valEntradas)
+          setValSalidas(valSalidas)
+          setReporte(ReporteDelFiltro)
+        }
+      })
 
   }
 
 
 
-      // Función para listar los productos
-      function listarProducto() {
-        fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if (res.status === 204) {
-            return null;
-          }
-          return res.json();
-        })
-        .then((data) => {
-          if (data !== null) {
-            setValEntradas(data.entraron)
-            setValSalidas(data.salieron)
-            setReporte(data.productos)
-            let valor = 0;
-            data.productos.forEach(element =>{
-              valor = valor + element.precio_total; 
-            })
-            setValorTotal(valor)
-            setRangoMovInicio(formatDateYYYYMMDD(new Date('2023-03-19')))
-          }
-        })
-      }
+  // Función para listar los productos
+  function listarProducto() {
+    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        if (data !== null) {
+          setValEntradas(data.entraron)
+          setValSalidas(data.salieron)
+          setReporte(data.productos)
+          let valor = 0;
+          data.productos.forEach(element => {
+            valor = valor + element.precio_total;
+          })
+          setValorTotal(valor)
+          setRangoMovInicio(formatDateYYYYMMDD(new Date('2023-03-19')))
+        }
+      })
+  }
 
 
   return (
@@ -294,38 +291,41 @@ const reporte = () => {
       <div className="boxBtnContendidoTitulo">
 
         <div className="btnContenido11">
-          <div  style={{ width: "200px", marginRight: "10px", gap:"20px" }}  className="d-flex">
-            <input onChange={(e) => setRangoMovInicio(e.target.value)} className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio}/>
+          <div style={{ width: "200px", marginRight: "10px", gap: "20px" }} className="d-flex">
+            <input onChange={(e) => setRangoMovInicio(e.target.value)} className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio} />
             <h5 className="mt-1">Inicio</h5>
           </div>
-          <div style={{ width: "180px", height:"35px", gap:"20px"}} className="d-flex">
-            <input onChange={(e) => setRangoMovFin(e.target.value)} className="inputFechaReporte" type="date"  name="fin"  id="fin"  defaultValue={rangoMovFin}/>
+          <div style={{ width: "180px", height: "35px", gap: "20px" }} className="d-flex">
+            <input onChange={(e) => setRangoMovFin(e.target.value)} className="inputFechaReporte" type="date" name="fin" id="fin" defaultValue={rangoMovFin} />
             <h5 className="mt-1">Fin</h5>
           </div>
           <div>
-            <button className="btn btn-color" onClick={() => {ListartPorRango(rangoMovInicio, rangoMovFin)}}>buscar</button>
+            <button className="btn btn-color" onClick={() => { ListartPorRango(rangoMovInicio, rangoMovFin) }}>buscar</button>
           </div>
         </div>
-        
+
         <div className="btnContenido22">
-          {/* <h2 className="tituloHeaderpp">{title}</h2> */}
-          <div>
-          <select className="form-select" name="categoryFilter" id="categoryFilter">
-            <option value="todas">Filtrar por Categorias</option>
-          </select>
-          <button onClick={()=>{filtrarCategorias(rangoMovInicio, rangoMovFin)}}>filtrar</button>
+          <div className="conteFiltrar">
+            <select className="form-select" name="categoryFilter" id="categoryFilter">
+              <option value="todas">Filtrar por Categorias</option>
+            </select>
+            <button className="btn btn-color" onClick={() => { filtrarCategorias(rangoMovInicio, rangoMovFin) }}>Filtrar</button>
 
           </div>
+          {/* <h2 className="tituloHeaderpp">{title}</h2> */}
+
+
+
         </div>
         <div className="btnContenido3">
-          <div  className="btn-group"  role="group"  aria-label="Basic mixed styles example">
+          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
-              <button  onClick={handleOnExport}  type="button"  className="btn btn-light">
+              <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
               </button>
             </div>
             <div className="" title="Descargar Pdf">
-              <button  type="button"  className="btn btn-light"  onClick={exportPdfHandler}>
+              <button type="button" className="btn btn-light" onClick={exportPdfHandler}>
                 <img src={PdfLogo} className="logoExel" />
               </button>
             </div>
@@ -334,7 +334,7 @@ const reporte = () => {
       </div>
 
       <div className="container-fluid w-full">
-        <table  id="dtBasicExample"  className="table table-striped table-bordered border display responsive nowrap b-4"  ref={tableRef}  cellSpacing={0}  width="100%">
+        <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap b-4" ref={tableRef} cellSpacing={0} width="100%">
           <thead className="text-center">
             <tr>
               <th className="th-sm">Productos</th>
@@ -348,7 +348,7 @@ const reporte = () => {
           <tbody id="tableReportes" className="text-center">
             {reporte.length > 0 ? (
               <>
-                {reporte.map((element, index)=>(
+                {reporte.map((element, index) => (
                   <tr key={index}>
                     <td>{element.nombre_producto}</td>
                     <td>{element.nombre_categoria}</td>

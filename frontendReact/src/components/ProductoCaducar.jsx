@@ -35,28 +35,25 @@ const ProductoCaducar = () => {
     const doc = new jsPDF();
   
     const columns = [
-      { title: 'N°', dataKey: 'id_producto' },
-      { title: 'NombreProducto', dataKey: 'NombreProducto' },
-      { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
-      { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
+   
+      { title: 'Nombre del producto', dataKey: 'NombreProducto' },
+      { title: 'Nombrede la categoria', dataKey: 'NombreCategoria' },
+      { title: 'Cantidad', dataKey: 'Cantidad' },
       { title: 'Unidad', dataKey: 'Unidad' },
-      { title: 'PrecioIndividual', dataKey: 'PrecioIndividual' },
-      { title: 'UnidadProductiva', dataKey: 'UnidadProductiva' },
-      { title: 'Descripcion', dataKey: 'Descripcion' },
-      { title: 'PrecioTotal', dataKey: 'PrecioTotal' }
+      { title: 'Bodega', dataKey: 'UnidadProductiva' },
+      { title: 'PrecioTotal', dataKey: 'PrecioTotal' },
+      { title: 'Fecha de Caducidad', dataKey: 'FechaCaducidad' }
     ];
   
     // Obtener los datos de la tabla
     const tableData = productos.map((element) => ({
-      id_producto: element.id_producto,
       NombreProducto: element.NombreProducto,
       NombreCategoria: element.NombreCategoria,
       Cantidad: element.cantidad_peso_movimiento,
       Unidad: element.Unidad,
-      PrecioIndividual: element.PrecioIndividual,
       UnidadProductiva: element.UnidadProductiva,
-      Descripcion: element.Descripcion,
-      PrecioTotal: element.PrecioTotal
+      PrecioTotal: element.PrecioTotal,
+      FechaCaducidad: Validate.formatFecha(element.FechaCaducidad)
     }));
   
     // Agregar las columnas y los datos a la tabla del PDF
@@ -76,30 +73,26 @@ const ProductoCaducar = () => {
   
     // Obtener las columnas
     const columns = [
-      'N°',
       'NombreProducto',
       'NombreCategoria',
       'Cantidad',
       'Unidad',
-      'PrecioIndividual',
       'UnidadProductiva',
-      'Descripcion',
-      'PrecioTotal'
+      'PrecioTotal',
+      'FechaCaducidad'
     ];
     wsData.push(columns);
   
     // Obtener los datos de las filas
     productos.forEach(element => {
       const rowData = [
-        element.id_producto,
         element.NombreProducto,
         element.NombreCategoria,
         element.cantidad_peso_movimiento,
         element.Unidad,
-        element.PrecioIndividual,
         element.UnidadProductiva,
-        element.Descripcion,
-        element.PrecioTotal  
+        element.PrecioTotal,
+        Validate.formatFecha(element.FechaCaducidad)
       ];
       wsData.push(rowData);
     });
@@ -179,7 +172,7 @@ const ProductoCaducar = () => {
       <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
         <thead className="text-center text-justify">
           <tr>
-            <th className="th-sm">Número Lote</th>
+          
             <th className="th-sm">Nombre Producto</th>
             <th className="th-sm">Nombre Categoria</th>
             <th className="th-sm">Cantidad</th>
@@ -211,10 +204,10 @@ const ProductoCaducar = () => {
                   const diasFaltantes = Math.ceil(diferenciaFechas / (1000 * 60 * 60 * 24));
 
                   let mensaje = '';
-                  if (diasFaltantes > 2) {
+                  if (diasFaltantes >= 7) {
                     mensaje = <span style={{ color: 'green' }}>{`Faltan ${diasFaltantes} días para la fecha de caducidad`}</span>;
-                  } else if (diasFaltantes === 2) {
-                    mensaje = <span style={{ color: 'orange' }}>Faltan 2 días para la fecha de caducidad</span>;
+                  } else if (diasFaltantes > 2 && diasFaltantes < 7) {
+                    mensaje = <span style={{ color: 'orange' }}>{`Faltan ${diasFaltantes} días para la fecha de caducidad`}</span>;
                   } else if (diasFaltantes === 1) {
                     mensaje = <span style={{ color: 'orange' }}>Falta 1 día para la fecha de caducidad</span>;
                   } else if (diasFaltantes === 0) {
@@ -225,7 +218,6 @@ const ProductoCaducar = () => {
 
                   return (
                     <tr key={index + 1} style={{ textTransform: 'capitalize' }}>
-                      <td className="pt-3">{element.num_lote}</td>
                       <td className="pt-3">{element.NombreProducto}</td>
                       <td className="pt-3">{element.NombreCategoria}</td>
                       <td className="pt-3">{element.cantidad_peso_movimiento}</td>
