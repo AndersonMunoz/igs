@@ -92,7 +92,6 @@ const reporte = () => {
       "Salidas",
       "valor",
       "Fecha último movimiento",
-      "Usuario",
     ];
     wsData.push(columns);
 
@@ -104,8 +103,7 @@ const reporte = () => {
         element.total_entradas,
         element.total_salidas,
         element.precio_total,
-        element.ultima_fecha_movimiento,
-        element.nombre_usuario,
+        Validate.formatFecha(element.ultima_fecha_movimiento)
       ];
       wsData.push(rowData);
     });

@@ -52,22 +52,24 @@ const proveedor = () => {
     const doc = new jsPDF();
 
     const columns = [
-      { title: "N°", dataKey: "id_proveedores" },
       { title: "Nombre", dataKey: "nombre_proveedores" },
       { title: "Telefono", dataKey: "telefono_proveedores" },
       { title: "Dirección", dataKey: "direccion_proveedores" },
       { title: "Contrato", dataKey: "contrato_proveedores" },
       { title: "Estado", dataKey: "estado" },
+      {title: "Inicio contrato", dataKey: "Inicio"},
+      {title: "Fin contrato", dataKey: "fin"},
     ];
 
     // Obtener los datos de la tabla
     const tableData = proveedor.map((element) => ({
-      id_proveedores: element.id_proveedores,
       nombre_proveedores: element.nombre_proveedores,
       telefono_proveedores: element.telefono_proveedores,
       direccion_proveedores: element.direccion_proveedores,
       contrato_proveedores: element.contrato_proveedores,
-      estado: element.estado,
+      estado: element.estado == 1 ? "activo": "inactivo",
+      Inicio: Validate.formatFecha(element.inicio_contrato),
+      fin : Validate.formatFecha(element.fin_contrato)
     }));
 
     // Agregar las columnas y los datos a la tabla del PDF
@@ -87,24 +89,26 @@ const proveedor = () => {
 
     // Obtener las columnas
     const columns = [
-      "N°",
       "Nombre",
       "Telefono",
       "Dirección",
       "Contrato",
       "Estado",
+      "Inicio contrato",
+      "Fin contrato"
     ];
     wsData.push(columns);
 
     // Obtener los datos de las filas
     proveedor.forEach((element) => {
       const rowData = [
-        element.id_proveedores,
         element.nombre_proveedores,
         element.telefono_proveedores,
         element.direccion_proveedores,
         element.contrato_proveedores,
-        element.estado,
+        element.estado== 1 ? "Activo":"Inactivo",
+        Validate.formatFecha(element.inicio_contrato),
+        Validate.formatFecha(element.fin_contrato)
       ];
       wsData.push(rowData);
     });
@@ -379,7 +383,7 @@ const proveedor = () => {
         <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap b-4" ref={tableRef} cellSpacing={0} width="100%">
           <thead className="text-center">
             <tr>
-              <th className="th-sm">Estado</th>
+              <th className="th-sm">Numero</th>
               <th className="th-sm">Nombre</th>
               <th className="th-sm">Teléfono</th>
               <th className="th-sm">Dirección</th>
