@@ -140,6 +140,7 @@ export const Menu = () => {
     })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       const fechaActual = new Date()
       let caducar = []
       data.forEach(element => {

@@ -118,7 +118,6 @@ export const obtenerValorTotalProductosFecha = async (req, res) => {
     let sql = `
     SELECT 
     p.id_producto,
-    p.num_lote AS Lote,
     t.nombre_tipo AS nombre_producto, 
     c.nombre_categoria AS nombre_categoria, 
     SUM(f.precio_total_mov) AS precio_total, 
@@ -156,7 +155,7 @@ GROUP BY nombre_categoria, nombre_producto  `;
     }
 } catch (error) {
     console.error("Error al obtener el valor total de los productos:", error);
-    res.status(500).json({ "status": 500, "message": "Error en el servidor" });
+    res.status(500).json({ "status": 500, "message": "Error en el servidor", error });
 }
 
 

@@ -212,7 +212,6 @@ export const listarProductosCaducar = async (req, res) => {
       `SELECT 
       p.id_producto, 
       t.nombre_tipo AS NombreProducto,
-			f.num_lote,
       f.fecha_caducidad AS FechaCaducidad, 
       c.nombre_categoria AS NombreCategoria,
       f.cantidad_peso_movimiento,
@@ -226,8 +225,7 @@ export const listarProductosCaducar = async (req, res) => {
     JOIN bodega u ON p.fk_id_up = u.id_up
     JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
     JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-    WHERE f.fecha_caducidad <> '1899-11-30'
-GROUP BY f.num_lote 
+    WHERE f.fecha_caducidad <> '1899-11-30' 
 ORDER BY FechaCaducidad ASC `
     );
     res.status(200).json(result);
