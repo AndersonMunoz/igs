@@ -250,6 +250,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
     display: grid;
     grid-template:
       "empty-1 conteEstadistica1 conteEstadistica2 empty-2" 100%/

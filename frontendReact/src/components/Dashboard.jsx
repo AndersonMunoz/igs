@@ -6,6 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 import { IconArrowBigRightFilled, IconUsersGroup } from "@tabler/icons-react";
 import { dataDecript } from "./encryp/decryp";
 import portConexion from "../const/portConexion";
+import ProductoCaducar from "./ProductoCaducar";
 
 const Dashboard = () => {
 	const [usuariosCount, setUsuariosCount] = useState(0);
@@ -17,8 +18,10 @@ const Dashboard = () => {
 	});
 	const [categoriasCount, setCategoriasCount] = useState([]);
 	const [userRoll, setUserRoll] = useState("");
+	const [alertReportes, setAlertReportes] = useState('')
 	// useEffect para obtener datos del backend al cargar el componente
 	useEffect(() => {
+		listarProducto()
 		setUserRoll(dataDecript(localStorage.getItem("roll")));
 		obtenerValorTotalProductos();
 		listarUsuario();
@@ -156,6 +159,41 @@ const Dashboard = () => {
 		"rgba(0, 0, 255, 0.5)",
 	];
 
+	// Funciones para obtener lla cantidad de usuarios
+	function listarProducto() {
+		fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
+		  method: "GET",
+		  headers: {
+			"Content-type": "application/json",
+			token: localStorage.getItem('token')
+		  },
+		})
+		.then((res) => res.json())
+		.then((data) => {
+	
+		  const fechaActual = new Date()
+		  let caducar = []
+		  data.forEach(element => {
+			const fechaProducto = new Date(element.FechaCaducidad);
+			const diferenciaFechas = fechaProducto - fechaActual;
+			const diasFaltantes = Math.ceil(diferenciaFechas / (1000 * 60 * 60 * 24));
+			if (diasFaltantes < 7 ) {
+			  caducar.push(element)
+			}
+		  });
+		  if (caducar.length > 0) {
+			setAlertReportes(caducar.length);
+			cont = cont + caducar.length
+			setAlert(cont)
+		  }else{
+			setAlertReportes('')
+		  }
+		})
+		.catch((e) => {
+		  console.error('Error:', e);
+		});
+	  }
+
 	return (
 		<div className="dashboard-container">
 			<div className="container-wrapper">
@@ -191,7 +229,10 @@ const Dashboard = () => {
 					)}
 				</div>
 				<div className="small-container2">
-					<div className="contInterno contcolor1"></div>
+					<div className="contInterno contcolor1">
+						<span className="usuarioTitiii">Ultimo Movimiento:</span>
+						<span className="usuarioTitiii">Tipo: </span>
+					</div>
 					<div className="contInterno2 contcolor1">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +256,11 @@ const Dashboard = () => {
 					</Link>
 				</div>
 				<div className="small-container3">
-					<div className="contInterno contcolor2"></div>
+					<div className="contInterno contcolor2">
+					<span className="usuarioTitiii">
+							Productos a caducar: {alertReportes}
+							</span>
+					</div>
 					<div className="contInterno2 contcolor2">
 						<svg
 							fill="none"
@@ -305,7 +350,7 @@ const Dashboard = () => {
 
 			<div className="container-wrapper2">
 				<div className="conteEstadistica1">
-					<Doughnut 
+					<Doughnut
 						data={{
 							labels: categoriasCount.map((count) => count.Categoria),
 							datasets: [

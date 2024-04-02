@@ -155,8 +155,6 @@ export const Menu = () => {
         setAlertReportes(`Revisa los productos a caducar.(${caducar.length})`);
         cont = cont + caducar.length
         setAlert(cont)
-      }else{
-        setAlertReportes('')
       }
     })
     .catch((e) => {
@@ -340,7 +338,7 @@ export const Menu = () => {
             </li>
             <li>
               <div className="content-nav">
-                <Link to="#">
+                <Link to="/reporte-fechas">
                   <div className="tamañoLateral">
                     <IconClipboardText className="iconosLaterales" />
                   </div>
@@ -535,7 +533,7 @@ export const Menu = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {alert > 0 ? (
+                  {elementoAlmacenado.length > 0 ? (
                     <>
                       {elementoAlmacenado.map((element, index) => (
                         <tr key={index} className="textContenidoNoti">
@@ -547,7 +545,7 @@ export const Menu = () => {
                     </>
                   ) : (
                     <tr>
-                      <td className="text-center" colSpan={3}>Nada por mostrar</td>
+                      <td className="text-center" colSpan={3}>Nada para mostrar</td>
                     </tr>
                   )}
                 </tbody>
