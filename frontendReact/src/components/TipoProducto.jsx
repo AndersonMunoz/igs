@@ -62,7 +62,7 @@ const Tipo = () => {
   const [tiposeleccionado, setTiposeleccionado] = useState({});
   const tableRef = useRef();
   const categoriaRecived = "";
- 
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -155,7 +155,7 @@ const Tipo = () => {
           [10, 50, 100, -1],
           ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
         ],
-        order: [[2, "asc"]],
+        order: [[4, "asc"]],
       });
     }
   }, [tipos]);
@@ -288,7 +288,7 @@ const Tipo = () => {
         } else if (data.status === 403) {
           Sweet.error(data.error.errors[0].msg);
         }else if(data.status === 409){
-            Sweet.error(data.menssage);
+            Sweet.error(data.message);
             return;
         } else {
           console.error('Error en la petición:', data);
