@@ -19,6 +19,8 @@ const Dashboard = () => {
 	const [categoriasCount, setCategoriasCount] = useState([]);
 	const [userRoll, setUserRoll] = useState("");
 	const [alertReportes, setAlertReportes] = useState('')
+	const [movimiento, setMovimento] = useState('')
+	const [nombre, setNombre]= useState('')
 	// useEffect para obtener datos del backend al cargar el componente
 	useEffect(() => {
 		listarProducto()
@@ -28,7 +30,33 @@ const Dashboard = () => {
 		listarTitulado();
 		listarInstructor();
 		listarCountCategoria();
+		listarMovimiento()
 	}, []);
+	function listarMovimiento() {
+		fetch(`http://${portConexion}:3000/facturamovimiento/listar`, {
+		  method: "GET",
+		  headers: {
+			"content-type": "application/json",
+			token: localStorage.getItem("token")
+		  },
+		}).then((res) => {
+		  if (res.status === 204) {
+			return null;
+		  }
+		  return res.json();
+		})
+		  .then((data) => {
+			if (Array.isArray(data)) {
+			  console.log(data);
+			  data.forEach((element)=>{
+				console.log(element);
+			  })
+			}
+		  })
+		  .catch((e) => {
+			console.log(e);
+		  });
+	  }
 	// Funciones para obtener la cantidad de categorias
 	function listarCountCategoria() {
 		fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
@@ -230,8 +258,8 @@ const Dashboard = () => {
 				</div>
 				<div className="small-container2">
 					<div className="contInterno contcolor1">
-						<span className="usuarioTitiii">Ultimo Movimiento:</span>
-						<span className="usuarioTitiii">Tipo: </span>
+						<span className="usuarioTitiii">Ultimo Movimiento: {movimiento}</span>
+						<span className="usuarioTitiii">Producto: {nombre}</span>
 					</div>
 					<div className="contInterno2 contcolor1">
 						<svg
