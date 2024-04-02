@@ -41,3 +41,20 @@
 .bg-colorrr:hover{
     background-color: rgb(90, 90, 90) !important;
 }
+.conteFiltrar{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding-left: 3%;
+
+
+}
+.form-select{
+    height: 38px;
+    width: auto !important;
+}
