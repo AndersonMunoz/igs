@@ -9,67 +9,99 @@ export const guardarMovimientoEntrada = async (req, res) => {
         }
 
         let { cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento,
-            nota_factura, fecha_caducidad, fk_id_usuario, fk_id_proveedor, num_lote, fk_id_up, fk_id_tipo_producto} = req.body;
+            nota_factura, fecha_caducidad, fk_id_usuario, fk_id_proveedor, fk_id_up, fk_id_tipo_producto} = req.body;
 
-        // Si fecha_caducidad no está definida o es una cadena vacía, establece su valor como null
         if (!fecha_caducidad) {
             fecha_caducidad = null;
         }
 
-        const loteQuery = `SELECT * FROM factura_movimiento WHERE num_lote = '${num_lote}'`;
-        const [existingLote] = await pool.query(loteQuery);
-        if (existingLote.length > 0) {
-            return res.status(409).json({
-                "status": 409,
-                "message": "El lote ya está registrado"
-            });
-        }
+        const tipoQuery = `SELECT * FROM productos WHERE fk_id_tipo_producto = '${fk_id_tipo_producto}'`;
+        const [existingTipo] = await pool.query(tipoQuery);
 
-        const sql2 = `INSERT INTO productos (num_lote, fk_id_up, fk_id_tipo_producto) VALUES ('${num_lote}', '${fk_id_up}', '${fk_id_tipo_producto}')`;
-        const resultInsertProductos = await pool.query(sql2).catch(err => console.log(err));
+        if (existingTipo.length > 0) {
+            const newIdProducto = existingTipo[0].id_producto;
 
-        const newIdProducto = resultInsertProductos[0].insertId;
+            const precio_total_mov = precio_movimiento * cantidad_peso_movimiento;
+            const sql = `
+                INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, precio_total_mov,fk_id_producto, fk_id_usuario, fk_id_proveedor) 
+                VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, ?, '${newIdProducto}', '${fk_id_usuario}', '${fk_id_proveedor}');
+            `;
 
-        const precio_total_mov = precio_movimiento * cantidad_peso_movimiento;
-        const sql = `
-            INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, precio_total_mov,fk_id_producto, fk_id_usuario, fk_id_proveedor, num_lote ) 
-            VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, ?, '${newIdProducto}', '${fk_id_usuario}', '${fk_id_proveedor}','${num_lote}');
-        `;
+            const resultInsertFacturaMovimiento = await pool.query(sql, [fecha_caducidad, precio_total_mov]);
 
-        const resultInsertFacturaMovimiento = await pool.query(sql, [fecha_caducidad, precio_total_mov]);
+            const sql3 = `
+                UPDATE productos
+                SET cantidad_peso_producto = cantidad_peso_producto + '${cantidad_peso_movimiento}'
+                WHERE id_producto = '${newIdProducto}'
+            `;
+            const resultUpdateProductos = await pool.query(sql3, [cantidad_peso_movimiento,newIdProducto]);
 
-        const sql3 = `
-            UPDATE productos
-            SET cantidad_peso_producto = cantidad_peso_producto + '${cantidad_peso_movimiento}'
-            WHERE num_lote = '${num_lote}'
-        `;
-        const resultUpdateProductos = await pool.query(sql3, [cantidad_peso_movimiento, num_lote]);
-
-		let resultPrev = await pool.query('SELECT LAST_INSERT_ID() as id from factura_movimiento');
-		let newIdFactura = resultPrev[0][0].id;
-		let sql7 = `INSERT INTO detalles (fk_id_movimiento) VALUES (?)`;
-		const resultInsertarDetalles = await pool.query(sql7, [newIdFactura]);
+            let resultPrev = await pool.query('SELECT LAST_INSERT_ID() as id from factura_movimiento');
+            let newIdFactura = resultPrev[0][0].id;
+            let sql7 = `INSERT INTO detalles (fk_id_movimiento) VALUES (?)`;
+            const resultInsertarDetalles = await pool.query(sql7, [newIdFactura]);
 
 
-        if (resultInsertProductos[0].affectedRows > 0 && resultInsertFacturaMovimiento[0].affectedRows > 0 && resultUpdateProductos[0].affectedRows > 0 && resultInsertarDetalles[0].affectedRows > 0 ) {
-            res.status(200).json({
-                "status": 200,
-                "message": "¡Se registró el movimiento de entrada!"
-            });
+            if (resultInsertFacturaMovimiento[0].affectedRows > 0 && resultUpdateProductos[0].affectedRows > 0 && resultInsertarDetalles[0].affectedRows > 0 ) {
+                res.status(200).json({
+                    "status": 200,
+                    "message": "¡Se registró el movimiento de entrada!"
+                });
+            } else {
+                res.status(401).json({
+                    "status": 401,
+                    "message": "¡No se registró movimiento de entrada!"
+                });
+            }
         } else {
-            res.status(401).json({
-                "status": 401,
-                "message": "¡No se registró movimiento de entrada!"
-            });
+            // Si no existe un producto con el fk_id_tipo_producto dado
+            const sql2 = `INSERT INTO productos (fk_id_up, fk_id_tipo_producto) VALUES ( '${fk_id_up}', '${fk_id_tipo_producto}')`;
+            const resultInsertProductos = await pool.query(sql2).catch(err => console.log(err));
+
+            const newIdProducto = resultInsertProductos[0].insertId;
+
+            const precio_total_mov = precio_movimiento * cantidad_peso_movimiento;
+            const sql = `
+                INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, precio_total_mov,fk_id_producto, fk_id_usuario, fk_id_proveedor) 
+                VALUES ('entrada', '${cantidad_peso_movimiento}', '${precio_movimiento}', '${estado_producto_movimiento}', '${nota_factura}', ?, ?, '${newIdProducto}', '${fk_id_usuario}', '${fk_id_proveedor}');
+            `;
+
+            const resultInsertFacturaMovimiento = await pool.query(sql, [fecha_caducidad, precio_total_mov]);
+
+            const sql3 = `
+                UPDATE productos
+                SET cantidad_peso_producto = cantidad_peso_producto + '${cantidad_peso_movimiento}'
+                WHERE id_producto = '${newIdProducto}'
+            `;
+            const resultUpdateProductos = await pool.query(sql3, [cantidad_peso_movimiento,newIdProducto]);
+
+            let resultPrev = await pool.query('SELECT LAST_INSERT_ID() as id from factura_movimiento');
+            let newIdFactura = resultPrev[0][0].id;
+            let sql7 = `INSERT INTO detalles (fk_id_movimiento) VALUES (?)`;
+            const resultInsertarDetalles = await pool.query(sql7, [newIdFactura]);
+
+
+            if (resultInsertProductos[0].affectedRows > 0 && resultInsertFacturaMovimiento[0].affectedRows > 0 && resultUpdateProductos[0].affectedRows > 0 && resultInsertarDetalles[0].affectedRows > 0 ) {
+                res.status(200).json({
+                    "status": 200,
+                    "message": "¡Se registró el movimiento de entrada!"
+                });
+            } else {
+                res.status(401).json({
+                    "status": 401,
+                    "message": "¡No se registró movimiento de entrada!"
+                });
+            }
         }
     } catch (e) {
-		console.error(e); // Imprime el error en la consola del servidor
-		res.status(500).json({
-		  "status": 500,
-		  "message": "Error en el servidor" + e
-		});
-	  }
+        console.error(e); // Imprime el error en la consola del servidor
+        res.status(500).json({
+          "status": 500,
+          "message": "Error en el servidor" + e
+        });
+      }
 }
+
 
 
 export const guardarMovimientoSalida = async (req, res) => {
@@ -78,12 +110,14 @@ export const guardarMovimientoSalida = async (req, res) => {
         if (!error.isEmpty()) {
             return res.status(403).json({ "status": 403, error });
         }
-        let { cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_usuario, num_lote, destino_movimiento, fk_id_titulado, fk_id_instructor } = req.body;
-        let sql4 = `SELECT cantidad_peso_producto FROM productos WHERE num_lote = ${num_lote}`;
+        let { cantidad_peso_movimiento, nota_factura, fk_id_producto, fk_id_tipo_producto,fk_id_usuario,destino_movimiento, fk_id_titulado, fk_id_instructor } = req.body;
+        let sql4 = `SELECT cantidad_peso_producto FROM productos WHERE fk_id_tipo_producto = '${fk_id_tipo_producto}'`;
 
         let cantidadPeso = await pool.query(sql4);
+		console.log(cantidadPeso[0][0])
         let cantidadPeso2 = cantidadPeso[0];
         let cantidad3 = cantidadPeso2[0];
+		console.log(cantidad3)
         let cantidadPesoTotal = cantidad3.cantidad_peso_producto;
 
         if (cantidadPesoTotal < cantidad_peso_movimiento) {
@@ -94,16 +128,16 @@ export const guardarMovimientoSalida = async (req, res) => {
         } else if (cantidadPesoTotal >= 0) {
             let sql10 = `
                 INSERT INTO factura_movimiento (tipo_movimiento, cantidad_peso_movimiento,
-                nota_factura, num_lote, fk_id_producto, fk_id_usuario)
-                VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}','${num_lote}',
+                nota_factura,fk_id_producto, fk_id_usuario)
+                VALUES ('salida','${cantidad_peso_movimiento}','${nota_factura}',
                 '${fk_id_producto}','${fk_id_usuario}');`;
 
             let sql6 = `UPDATE productos 
-                SET cantidad_peso_producto = CASE 
-                    WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
-                    ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
-                END
-                WHERE num_lote = ${num_lote}`;
+			SET cantidad_peso_producto = CASE 
+				WHEN cantidad_peso_producto - ${cantidad_peso_movimiento} <= 0 THEN 0
+				ELSE cantidad_peso_producto - ${cantidad_peso_movimiento}
+			END
+			WHERE id_producto = ${fk_id_producto}`;
 
             let result10 = await pool.query(sql10);
             if (result10.affectedRows == 0) {
@@ -343,7 +377,6 @@ export const listarMovimientos = async (req, res) => {
 				WHEN pr.id_proveedores IS NULL OR pr.id_proveedores = 0 THEN 'No aplica'
 				ELSE pr.nombre_proveedores
 			END AS nombre_proveedores,
-			f.num_lote,
 			CASE 
 				WHEN f.precio_total_mov IS NULL THEN 'No aplica'
 				ELSE f.precio_total_mov
@@ -400,7 +433,7 @@ export const listarMovimientosEntrada = async (req, res) => {
 				f.nota_factura,CASE 
 				WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
 				ELSE f.fecha_caducidad
-			END as fecha_caducidad, pr.nombre_proveedores,f.num_lote,
+			END as fecha_caducidad, pr.nombre_proveedores,
 			CASE 
 			WHEN f.precio_total_mov IS NULL THEN 'No aplica'
 			ELSE f.precio_total_mov
@@ -440,14 +473,30 @@ export const listarMovimientosSalida = async (req, res) => {
 		const [result] = await pool.query
 			(
 				`SELECT f.id_factura,us.nombre_usuario, f.tipo_movimiento, t.nombre_tipo, c.nombre_categoria, f.fecha_movimiento, f.cantidad_peso_movimiento, t.unidad_peso, 
-				f.nota_factura, f.num_lote
-					FROM factura_movimiento f 
-					JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
-					JOIN productos p ON f.fk_id_producto = p.id_producto
-					JOIN bodega u ON p.fk_id_up = u.id_up	
-					JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
-					JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria WHERE f.tipo_movimiento = "salida"
-					ORDER BY f.id_factura DESC`
+				f.nota_factura,c.codigo_categoria,c.tipo_categoria, d.destino_movimiento,
+				CASE 
+					WHEN ti.nombre_titulado IS NULL THEN 'No aplica'
+					ELSE ti.nombre_titulado
+				END AS nombre_titulado,
+				CASE 
+					WHEN ti.id_ficha IS NULL THEN 'No aplica'
+					ELSE ti.id_ficha
+				END AS id_ficha,
+				CASE 
+					WHEN i.nombre_instructor IS NULL THEN 'No aplica'
+					ELSE i.nombre_instructor
+				END AS nombre_instructor
+				FROM factura_movimiento f 
+				JOIN usuarios us ON f.fk_id_usuario = us.id_usuario
+				JOIN productos p ON f.fk_id_producto = p.id_producto
+				JOIN bodega u ON p.fk_id_up = u.id_up    
+				JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
+				JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
+				JOIN detalles d ON d.fk_id_movimiento = f.id_factura
+				LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores
+				LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.tipo_movimiento = "salida"
+				ORDER BY d.id_detalle DESC
+			`
 			);
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -474,7 +523,31 @@ export const buscarMovimiento = async (req, res) => {
 			return res.status(400).json(error);
 		}
 		let id = req.params.id;
-		const [result] = await pool.query('SELECT * FROM factura_movimiento WHERE id_factura = ?', [id]);
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN usuarios us ON f.fk_id_usuario = us.id_usuario JOIN productos p ON f.fk_id_producto = p.id_producto JOIN bodega u ON p.fk_id_up = u.id_up JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria JOIN detalles d ON d.fk_id_movimiento = f.id_factura LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.id_factura = ?', [id]);
+
+		if (result.length > 0) {
+			res.status(200).json(result);
+		} else {
+			res.status(404).json({
+				status: 404,
+				message: "No existe un movimiento con el ID proporcionado."
+			});
+		}
+	} catch (err) {
+		res.status(500).json({
+			message: 'Error en buscar movimiento :(' + err
+		});
+	}
+};
+
+export const buscarMovimientoDetalle = async (req, res) => {
+	try {
+		let error = validationResult(req);
+		if (!error.isEmpty()) {
+			return res.status(400).json(error);
+		}
+		let id = req.params.id;
+		const [result] = await pool.query('SELECT * FROM factura_movimiento f JOIN usuarios us ON f.fk_id_usuario = us.id_usuario JOIN productos p ON f.fk_id_producto = p.id_producto JOIN bodega u ON p.fk_id_up = u.id_up JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria JOIN detalles d ON d.fk_id_movimiento = f.id_factura LEFT JOIN instructores i ON d.fk_id_instructor = i.id_instructores LEFT JOIN titulados ti ON d.fk_id_titulado = ti.id_titulado WHERE f.id_factura = ?', [id]);
 
 		if (result.length > 0) {
 			res.status(200).json(result);
@@ -499,115 +572,46 @@ export const actualizarMovimiento = async (req, res) => {
         }
         
         const id = req.params.id;
-        const { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad, cantidad_peso_movimiento, num_lote } = req.body;
-        const nuevoNumLote = `${num_lote}`;
-
-        // Obtener el número de lote inicial del movimiento seleccionado
-        const [movimientoInicial] = await pool.query(`SELECT cantidad_peso_movimiento, num_lote FROM factura_movimiento WHERE id_factura = ${id}`);
+        const { estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad, cantidad_peso_movimiento} = req.body;
+        
+        // Obtener la cantidad inicial del movimiento seleccionado
+        const [movimientoInicial] = await pool.query(`SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE id_factura = ${id}`);
         const cantidadMovimientoInicial = movimientoInicial[0].cantidad_peso_movimiento;
 
-        console.log("Cantidad de movimiento inicial:", cantidadMovimientoInicial);
-        console.log("Movimiento inicial:", movimientoInicial);
-
-        // Verificar si el número de lote ha sido modificado
-        const numLoteModificado = num_lote !== movimientoInicial[0].num_lote;
-
-        if (numLoteModificado) {
-            // Verificar si el nuevo número de lote ya existe en la base de datos
-            const [existingLote] = await pool.query(`SELECT num_lote FROM productos WHERE num_lote = ${num_lote}`);
-            if (existingLote.length > 0) {
-                return res.status(409).json({
-                    "status": 409,
-                    "message": "El lote ya está registrado"
-                });
-            }
-        }
-
         // Calcular la diferencia entre la nueva cantidad de movimiento y la cantidad inicial de movimiento
-        const diferenciaMovimiento = cantidadMovimientoInicial - cantidad_peso_movimiento;
+        const diferenciaMovimiento = cantidad_peso_movimiento - cantidadMovimientoInicial;
+
+        // Obtener el ID del producto asociado al movimiento
+        const [id_producto] = await pool.query(`SELECT fk_id_producto FROM factura_movimiento WHERE id_factura = ${id}`);
+        const idProducto = id_producto[0].fk_id_producto;
 
         // Obtener la cantidad actual del producto
-        const [productoActual] = await pool.query(`SELECT cantidad_peso_producto FROM productos WHERE num_lote = ${movimientoInicial[0].num_lote}`);
+        const [productoActual] = await pool.query(`SELECT cantidad_peso_producto FROM productos WHERE id_producto = ${idProducto}`);
         const cantidadProductoActual = productoActual[0].cantidad_peso_producto;
 
-        console.log("Cantidad actual del producto:", cantidadProductoActual);
+        if (cantidadProductoActual + diferenciaMovimiento >= 0) {
+            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=?`;
+            const sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ? WHERE id_producto=?`;
+					// Calcular el nuevo precio total del movimiento
+			const precioTotalMov = precio_movimiento * cantidad_peso_movimiento;
 
-        if (diferenciaMovimiento > 0 && cantidadProductoActual - diferenciaMovimiento >= 0) {
-            // Si la diferencia es positiva y la resta no resulta en un valor negativo, realizar la actualización del movimiento y de la tabla de productos
-            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
-            const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
-            const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ?, num_lote=? WHERE num_lote=?`;
-            const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`;
+			// Añadir una nueva consulta SQL para actualizar precio_total_mov
+			const sql3 = `UPDATE factura_movimiento SET precio_total_mov = ? WHERE id_factura=?`;
 
-            const [result1, result2, result3] = await Promise.all([
-                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id, movimientoInicial[0].num_lote]),
-                pool.query(sql2, [id]),
-                pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
-            ]);
+			// Añadir la nueva consulta a Promise.all
+			const [result1, result2, result3] = await Promise.all([
+				pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, fecha_caducidad, cantidad_peso_movimiento, id]),
+				pool.query(sql2, [diferenciaMovimiento, idProducto]),
+				pool.query(sql3, [precioTotalMov, id]),  // nueva consulta
+			]);
 
-            // Verificar si hay un movimiento de tipo 'salida' con el número de lote antiguo
-            const [existingSalida] = await pool.query(`SELECT num_lote FROM factura_movimiento WHERE num_lote = ${movimientoInicial[0].num_lote} AND tipo_movimiento='salida'`);
-            if (existingSalida.length > 0) {
-                const result4 = await pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]);
-            }
-
-            if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0) {
-                res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
-            } else {
-                res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
-            }
-        } else if (diferenciaMovimiento < 0 && cantidadProductoActual + diferenciaMovimiento >= 0) {
-            // Si la diferencia es negativa y la suma no resulta en un valor negativo, realizar la actualización del movimiento y sumar la diferencia a la tabla de productos
-            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
-            const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
-            const sql3 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto + ?, num_lote=? WHERE num_lote=?`;
-            const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`;
-
-            const [result1, result2,result3] = await Promise.all([
-                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id, movimientoInicial[0].num_lote]),
-                pool.query(sql2, [id]),
-                pool.query(sql3, [Math.abs(diferenciaMovimiento), nuevoNumLote, movimientoInicial[0].num_lote]),
-            ]);
-
-            // Verificar si hay un movimiento de tipo 'salida' con el número de lote antiguo
-            const [existingSalida] = await pool.query(`SELECT num_lote FROM factura_movimiento WHERE num_lote = ${movimientoInicial[0].num_lote} AND tipo_movimiento='salida'`);
-            if (existingSalida.length > 0) {
-                const result4 = await pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]);
-            }
-
-            if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0) {
-                res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
-            } else {
-                res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
-            }
-        } else if (diferenciaMovimiento === 0) {
-            // Si la diferencia es cero, realizar la actualización del movimiento
-            const sql = `UPDATE factura_movimiento SET estado_producto_movimiento=?, precio_movimiento=?, nota_factura=?, num_lote=?, fecha_caducidad=?, cantidad_peso_movimiento=? WHERE id_factura=? AND num_lote=?`;
-            const sql2 = `UPDATE factura_movimiento SET precio_total_mov = cantidad_peso_movimiento * precio_movimiento, precio_movimiento = precio_movimiento WHERE id_factura=?`;
-            const sql3 = `UPDATE productos SET num_lote=? WHERE num_lote=?`;
-            const sql4 = `UPDATE factura_movimiento SET num_lote = ? WHERE num_lote=? AND tipo_movimiento='salida'`;
-
-            const [result1, result2, result3] = await Promise.all([
-                pool.query(sql, [estado_producto_movimiento, precio_movimiento, nota_factura, num_lote, fecha_caducidad, cantidad_peso_movimiento, id, movimientoInicial[0].num_lote]),
-                pool.query(sql2, [id]),
-                pool.query(sql3, [nuevoNumLote, movimientoInicial[0].num_lote]),
-            ]);
-
-            // Verificar si hay un movimiento de tipo 'salida' con el número de lote antiguo
-            const [existingSalida] = await pool.query(`SELECT num_lote FROM factura_movimiento WHERE num_lote = ${movimientoInicial[0].num_lote} AND tipo_movimiento='salida'`);
-            if (existingSalida.length > 0) {
-                const result4 = await pool.query(sql4, [nuevoNumLote, movimientoInicial[0].num_lote]);
-            }
-
-            if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows >= 0) {
-                res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
-            } else {
-                res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
-            }
-        } else {
-            // Si la suma o resta resulta en un valor negativo, no realizar ninguna actualización en la tabla de productos ni en el movimiento
-            res.status(409).json({ "status": 409, "message": "No se realizó ninguna actualización ya que la cantidad de movimiento resultaría en un valor negativo." });
-        }
+			// Comprobar si todas las consultas se ejecutaron correctamente
+			if (result1[0].affectedRows > 0 && result2[0].affectedRows >= 0 && result3[0].affectedRows > 0) {
+				res.status(200).json({ "status": 200, "message": "¡Se actualizó el movimiento con éxito!" });
+			} else {
+				res.status(401).json({ "status": 401, "message": "¡No se actualizó el movimiento!" });
+			}
+		}
     } catch (e) {
         console.error("Error en el servidor:", e);
         res.status(500).json({
@@ -618,9 +622,6 @@ export const actualizarMovimiento = async (req, res) => {
 };
 
 
-
-
-
 export const actualizarMovimientoSalida = async (req, res) => {
     try {
         let error = validationResult(req);
@@ -629,23 +630,30 @@ export const actualizarMovimientoSalida = async (req, res) => {
         }
 
         let id = req.params.id;
-        let { nota_factura, cantidad_peso_movimiento, destino_movimiento, fk_id_instructor, fk_id_titulado } = req.body;
+        let { nota_factura, cantidad_peso_movimiento, fk_id_producto, destino_movimiento, fk_id_instructor, fk_id_titulado } = req.body;
 		
-		let cantidadNueva = cantidad_peso_movimiento;
+        // Validar que si el destino_movimiento es "taller" o "evento", entonces fk_id_titulado y fk_id_instructor deben estar presentes
+        if ((destino_movimiento === "taller" || destino_movimiento === "evento") && (!fk_id_titulado || !fk_id_instructor)) {
+            return res.status(400).json({
+                "status": 400,
+                "mensaje": "En taller o evento es necesario un titulado e instructor."
+            });
+        }
 
-        let sqlPrev = `SELECT cantidad_peso_movimiento,tipo_movimiento, fk_id_producto, num_lote FROM factura_movimiento WHERE id_factura=${id}`;
-        let resultPrev = await pool.query(sqlPrev, id);
-        let prevMovimiento = resultPrev[0][0].cantidad_peso_movimiento;
-        let fk_id_producto = resultPrev[0][0].fk_id_producto;
-        let num_lote = resultPrev[0][0].num_lote;
+        let cantidadNueva = cantidad_peso_movimiento;
 
-		let sql6 = `SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE num_lote = '${num_lote}' AND tipo_movimiento = 'entrada'`;
+        // Buscar la cantidad de producto original
+        let sql6 = `SELECT cantidad_peso_producto FROM productos WHERE id_producto = '${fk_id_producto}'`;
         let result5 = await pool.query(sql6);
-        let cantidadMovEntrada = result5[0][0].cantidad_peso_movimiento;
+        let cantidadOriginalProducto = result5[0][0].cantidad_peso_producto;
 
+        // Buscar la cantidad de movimiento previa
+        let sqlPrevMovimiento = `SELECT cantidad_peso_movimiento FROM factura_movimiento WHERE id_factura = '${id}'`;
+        let resultPrevMovimiento = await pool.query(sqlPrevMovimiento);
+        let prevMovimiento = resultPrevMovimiento[0][0].cantidad_peso_movimiento;
 
-        let nuevaCantidadPesoProducto = cantidadMovEntrada -  cantidadNueva;
-        if (nuevaCantidadPesoProducto < 0) {
+        let nuevaCantidadTotal = cantidadOriginalProducto - cantidadNueva;
+        if (nuevaCantidadTotal < 0) {
             return res.status(402).json({
                 "status": 402,
                 "mensaje": "La nueva cantidad total es menor que 0. Ingrese una cantidad no mayor a lo que tiene disponible."
@@ -654,12 +662,19 @@ export const actualizarMovimientoSalida = async (req, res) => {
             // Realizar la actualización en la base de datos
             let sql = `UPDATE factura_movimiento SET nota_factura='${nota_factura}',cantidad_peso_movimiento='${cantidad_peso_movimiento}' where id_factura=${id}`;
             let diffMovimiento = cantidad_peso_movimiento - prevMovimiento;
-            let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento}  WHERE num_lote='${num_lote}'`;
-            let sql3 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
+            let sql2 = `UPDATE productos SET cantidad_peso_producto = cantidad_peso_producto - ${diffMovimiento} WHERE id_producto = ${fk_id_producto}`;
+
+            let sql7;
+
+            if (destino_movimiento === "taller" || destino_movimiento === "evento") {
+                sql7 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = '${fk_id_instructor}', fk_id_titulado = '${fk_id_titulado}'  WHERE fk_id_movimiento=${id}`;
+            } else if (destino_movimiento === "produccion") {
+                sql7 = `UPDATE detalles SET destino_movimiento = '${destino_movimiento}', fk_id_instructor = NULL, fk_id_titulado = NULL WHERE fk_id_movimiento=${id}`;
+            }
             const [result1, result2, result3] = await Promise.all([
                 pool.query(sql, [nota_factura, cantidad_peso_movimiento, id]),
                 pool.query(sql2, [fk_id_producto]),
-                pool.query(sql3),
+                pool.query(sql7),
             ]);
 
             if (result1[0].affectedRows > 0 && result2[0].affectedRows > 0 && result3[0].affectedRows > 0) {
@@ -667,6 +682,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
             } else {
                 res.status(401).json({ "status": 401, "message": "¡NO se actualizó el movimiento!" });
             }
+
         }
     } catch (e) {
         res.status(500).json({
@@ -675,6 +691,7 @@ export const actualizarMovimientoSalida = async (req, res) => {
         });
     }
 };
+
 
 
 export const obtenerProCategoria = async (req, res) => {
@@ -700,7 +717,7 @@ export const obtenerProCategoria = async (req, res) => {
 export const obtenerUnidad = async (req, res) => {
 	try {
 		let id = req.params.id_producto;
-		let sql = `SELECT pr.id_tipo, pr.unidad_peso, pr.nombre_tipo FROM productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo where p.id_producto= ${id};`;
+		let sql = `SELECT pr.id_tipo, pr.unidad_peso, pr.nombre_tipo FROM tipo_productos pr where pr.id_tipo=${id};`;
 
 		const [rows] = await pool.query(sql);
 
@@ -720,7 +737,7 @@ export const obtenerUnidad = async (req, res) => {
 export const obtenerProProductos = async (req, res) => {
 	try {
 		let id = req.params.id_categoria;
-		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,p.num_lote FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
+		let sql = `SELECT p.id_producto, pr.nombre_tipo,p.cantidad_peso_producto,pr.unidad_peso,pr.id_tipo FROM  productos p JOIN tipo_productos pr ON p.fk_id_tipo_producto = pr.id_tipo JOIN categorias_producto cat ON pr.fk_categoria_pro = cat.id_categoria WHERE cat.id_categoria= ${id} and pr.estado=1 and p.cantidad_peso_producto > 0;`;
 
 		const [rows] = await pool.query(sql);
 

@@ -47,7 +47,6 @@ export const listarProductos = async (req, res) => {
   try {
     const [result] = await pool.query(
       `SELECT 
-      p.num_lote AS Lote,
       p.id_producto, 
       t.nombre_tipo AS NombreProducto,
       f.fecha_caducidad AS FechaCaducidad,
@@ -64,7 +63,7 @@ export const listarProductos = async (req, res) => {
     LEFT JOIN bodega u ON p.fk_id_up = u.id_up
     LEFT JOIN tipo_productos t ON p.fk_id_tipo_producto = t.id_tipo
     LEFT JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria
-    GROUP BY Lote`);
+    GROUP BY p.id_producto`);
     if (result.length > 0) {
       res.status(200).json(result);
   } else {
@@ -111,38 +110,6 @@ export const actualizarProducto = async (req,res) =>{
 		res.status(500).json({message: 'Error en actualizarProducto: '+e})
 	}
 }
-export const deshabilitarProducto = async (req, res) => {
-  try {
-    let id = req.params.id;
-    let sql = `UPDATE productos SET estado = 0 WHERE id_producto = ${id}`;
-    const [rows] = await pool.query(sql);
-    if (rows.affectedRows > 0) {
-      res
-        .status(200)
-        .json({ status: 200, message: "Se deshabilitó con éxito el producto" });
-    } else {
-      res
-        .status(401)
-        .json({ status: 401, message: "No se deshabilitó el producto" });
-    }
-  } catch (e) {
-    res.status(500).json({ message: "Error en deshabilitarProducto: " + e });
-  }
-};
-export const activarProducto = async (req, res) => {
-  try {
-    let id = req.params.id; 
-    let sql = `UPDATE productos SET estado = 1 WHERE id_producto = ${id}`;
-    const [rows] = await pool.query(sql);
-    if (rows.affectedRows > 0) {
-      res.status(200).json({ status: 200, message: "Se habilitó con éxito el producto" });
-    } else {
-      res.status(404).json({ status: 404, message: "No se encontró el producto para habilitar" });
-    }
-  } catch (e) {
-    res.status(500).json({ message: "Error en activar: " + e });
-  }
-};
 export const obtenerValorTotalProductosFecha = async (req, res) => {
   try {
     const [resultEntradas] = await pool.query(`SELECT COUNT(tipo_movimiento) AS total_entradas FROM factura_movimiento WHERE tipo_movimiento = 'entrada'`);
@@ -169,12 +136,7 @@ LEFT JOIN
     tipo_productos t ON t.id_tipo = p.fk_id_tipo_producto 
 LEFT JOIN 
     categorias_producto c ON c.id_categoria = t.fk_categoria_pro
-GROUP BY Lote
-
-
-
-
-                    `;
+GROUP BY nombre_categoria, nombre_producto  `;
 
     const [rows] = await pool.query(sql);
 
@@ -200,3 +162,8 @@ GROUP BY Lote
 
 
 };
+
+
+
+
+

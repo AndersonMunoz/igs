@@ -1,6 +1,6 @@
 .dashboard-container {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
 .container-wrapper {
   gap: 10px;
   width: 100%;
-  height: 150px;
+  height: 160px;
   font-weight: 700;
   display: grid;
   justify-content: center;
@@ -21,28 +21,42 @@
 .small-container1 {
   grid-area: small-container1;
   grid-template:
-    "contInterno contInterno2" 110px
-    "linkContenido linkContenido" 40px
+    "contInterno contInterno2" 115px
+    "linkContenido linkContenido" 45px
     / 70% 30%;
 }
 .small-container2 {
   grid-area: small-container2;
   grid-template:
-    "contInterno contInterno2" 110px
-    "linkContenido linkContenido" 40px
+    "contInterno contInterno2" 115px
+    "linkContenido linkContenido" 45px
     / 70% 30%;
 }
 .small-container3 {
   grid-area: small-container3;
   grid-template:
-    "contInterno contInterno2" 110px
-    "linkContenido linkContenido" 40px
+    "contInterno contInterno2" 115px
+    "linkContenido linkContenido" 45px
     / 70% 30%;
 }
 .small-container4 {
   grid-area: small-container4;
   grid-template:
-    "contInterno contInterno2" 110px
+    "contInterno contInterno2" 115px
+    "linkContenido linkContenido" 45px
+    / 70% 30%;
+}
+.small-container6 {
+  grid-area: small-container6;
+  grid-template:
+    "contInterno contInterno2" 120px
+    "linkContenido linkContenido" 40px
+    / 70% 30%;
+}
+.small-container7 {
+  grid-area: small-container7;
+  grid-template:
+    "contInterno contInterno2" 120px
     "linkContenido linkContenido" 40px
     / 70% 30%;
 }
@@ -50,7 +64,9 @@
 .small-container1,
 .small-container2,
 .small-container3,
-.small-container4 {
+.small-container4,
+.small-container6,
+.small-container7 {
   border-radius: 10px;
   display: grid;
   width: 100%;
@@ -73,7 +89,7 @@
   justify-content: center;
 }
 
-.contcolor{
+.contcolor {
   background-color: #ff8800;
 }
 .contcolor1 {
@@ -85,11 +101,22 @@
 .contcolor3 {
   background-color: #b641da;
 }
+.contcolor6 {
+  background-color: #41daa7;
+}
+.contcolor7 {
+  background-color: #ef3f80;
+}
 
 .ssssIcono {
   opacity: 0.7;
   width: 115px;
   height: 115px;
+}
+.ssssIconoss {
+  opacity: 0.7;
+  width: 105px;
+  height: 105px;
 }
 .ssssIcono333 {
   opacity: 0.7;
@@ -131,6 +158,18 @@
 .linkColor4:hover {
   background-color: #c657e8;
 }
+.linkColor6 {
+  background-color: #3aad87;
+}
+.linkColor6:hover {
+  background-color: #59b395;
+}
+.linkColor7 {
+  background-color: #cd2b67;
+}
+.linkColor7:hover {
+  background-color: #d6457a;
+}
 
 .iconosDashboard {
   color: rgba(255, 255, 255, 0.704);
@@ -145,10 +184,10 @@
   justify-content: center;
 }
 .container-wrapper2 {
-  margin-top: 15px;
   width: 100%;
-  height: 430px;
+  height: 500px;
   gap: 15px;
+  position: relative;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -157,27 +196,92 @@
     "empty-1 conteEstadistica1 conteEstadistica2 empty-2" 100%/
     1% 49% 49% 1%;
 }
+.conteEstadistica1 {
+  grid-area: conteEstadistica1;
+  background-color: #f0f0f0;
+  display: flex;
+  width: 100%;
+  height: 470px;
+  padding: 10px;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
 
-@media screen and  (min-width: 690px) and (max-width: 1300px) {
+.conteEstadistica2 {
+  grid-area: conteEstadistica2;
+  background-color: #f0f0f0;
+  display: flex;
+  width: 100%;
+  height: 470px;
+  padding: 10px;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
+.estadisticaAuto{
+  height: auto !important;
+}
 
+@media screen and (min-width: 690px) and (max-width: 1300px) {
   .container-wrapper {
     gap: 10px;
     width: 98%;
-    height: 310px;
+    height: auto;
     font-weight: 700;
     display: grid;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
+    padding-bottom: 10px;
     grid-template:
-       "small-container1 small-container2"150px
+      "small-container1 small-container2" 150px
+      "empty empty" 5px
       "small-container3 small-container4" 150px/
       50% 50%;
   }
+  .container-wrapper2 {
+    margin-top: 15px;
+    width: 100%;
+    height: 500px;
+    gap: 15px;
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    display: grid;
+    grid-template:
+      "empty-1 conteEstadistica1 conteEstadistica2 empty-2" 100%/
+      1% 49% 49% 1%;
+  }
+  .conteEstadistica1 {
+    grid-area: conteEstadistica1;
+    background-color: #f0f0f0;
+    display: flex;
+    width: 100%;
+    height: 400px;
+    padding: 10px;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+  }
   
-
+  .conteEstadistica2 {
+    grid-area: conteEstadistica2;
+    background-color: #f0f0f0;
+    display: flex;
+    width: 100%;
+    height: 400px;
+    padding: 10px;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+  }
 }
-@media screen and  (min-width: 1300px) and (max-width: 1530px) {
-
+@media screen and (min-width: 1300px) and (max-width: 1530px) {
   .contInterno {
     border-radius: 10px 0px 0px 0px;
     grid-area: contInterno;
@@ -185,11 +289,8 @@
     display: flex;
     font-size: 1em;
   }
-  
-
 }
-@media screen and  (min-width: 690px) and (max-width: 800px) {
-
+@media screen and (min-width: 690px) and (max-width: 800px) {
   .contInterno {
     border-radius: 10px 0px 0px 0px;
     grid-area: contInterno;
@@ -197,24 +298,38 @@
     display: flex;
     font-size: 0.9em;
   }
-  
-
 }
-@media screen and  (min-width: 150px) and (max-width: 689px) {
-
+@media screen and (min-width: 150px) and (max-width: 689px) {
   .container-wrapper {
     gap: 10px;
     width: 98%;
-    height: 630px;
+    height: auto;
     font-weight: 700;
     display: grid;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     grid-template:
-       "small-container1"150px
-        "small-container2"150px
-      "small-container3 "150px
+      "small-container1" 150px
+      "empty-1" 3px
+      "small-container2" 150px
+      "empty-2" 3px
+      "small-container3 " 150px
+      "empty-3" 3px
       "small-container4" 150px/
+      100%;
+  }
+  .container-wrapper2 {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 300px;
+    gap: 15px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: grid;
+    grid-template:
+      "conteEstadistica1" 400px
+      "conteEstadistica2" 400px/
       100%;
   }
 
@@ -237,55 +352,100 @@
     font-size: 0.8em;
   }
   
-
 }
-@media screen and  (min-width: 150px) and (max-width: 870px) {
-
+@media screen and (min-width: 150px) and (max-width: 870px) {
   .container-wrapper2 {
-    margin-top: 15px;
+    margin-top: 10px;
     width: 100%;
-    height: 430px;
+    height: 620px;
     gap: 15px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     display: grid;
     grid-template:
-      "conteEstadistica1" 400px 
-      "conteEstadistica2" 400px/
+      "conteEstadistica1" 300px
+      "conteEstadistica2" 300px/
       100%;
+  }
+  .conteEstadistica1 {
+    grid-area: conteEstadistica1;
+    background-color: #f0f0f0;
+    display: flex;
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .conteEstadistica2 {
+    grid-area: conteEstadistica2;
+    background-color: #f0f0f0;
+    display: flex;
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+
+  .containerWrapper3 {
+    margin-top: 8px !important;
+    gap: 3px !important;
+    width: 98%;
+    height: 170px;
+    font-weight: 700;
+    display: grid;
+    flex-direction: row;
+    justify-content: center;
+    grid-template: 
+      "small-container6 " 170px
+      " small-container7" 170px/
+      100% !important;
+  }
+  .tamañoLateral2{
+    font-size: 1.2em !important;
+  }
+  .usuarioTitiii2{
+    font-size: 1.4em !important;
+    color: #f0f0f0;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  
   }
   
 }
 
-.conteEstadistica1 {
-  position: relative;
-  grid-area: conteEstadistica1;
-  background-color: #f0f0f0;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  justify-content: center;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  text-align: center;
-}
 .iconoUsuarioPng {
   opacity: 0.7;
   width: 100%;
   height: 100%;
 }
-
-.conteEstadistica2 {
-  grid-area: conteEstadistica2;
-  background-color: #f0f0f0;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
+.containerWrapper3 {
+  gap: 15px;
+  width: 98%;
+  height: 170px;
+  font-weight: 700;
+  display: grid;
+  flex-direction: row;
   justify-content: center;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  text-align: center;
+  grid-template:
+    "small-container6 small-container7" 170px/
+    50% 50%;
 }
+.usuarioTitiii2{
+  font-size: 1.2em !important;
+  color: #f0f0f0;
+align-items: center;
+display: flex;
+justify-content: center;
+
+}
+

@@ -105,6 +105,19 @@ export const editarTitulado = async (req, res) => {
 		});
 	}
 }
+export const listarTituladoCount = async (req, res) => {
+    try {
+        const [result] = await pool.query('SELECT COUNT(*) AS count FROM titulados');
+        if (result.length > 0) {
+            res.status(200).json({ count: result[0].count });
+
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: 'Error en servidor:' + err
+        })
+    }
+};
 
 export const deshabilitarTitulado = async (req, res) => {
 	try {

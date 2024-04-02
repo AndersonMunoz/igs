@@ -29,9 +29,11 @@ export const Menu = () => {
   const [userName, setUserName] = useState("");
   const [userRoll, setUserRoll] = useState("");
   const [id, setId] = useState(dataDecript(localStorage.getItem("id")));
-  const [alert, setAlert] = useState(0); // Inicializar alert con 0
+  const [alert, setAlert] = useState(0);
   const [elementoAlmacenado, setElemento] = useState([]); // Inicializar elementoAlmacenado con un array vacío
   const [stockMin, setStockMin] = useState('');
+  const [alertReportes, setAlertReportes] = useState('')
+  let cont = 0;
 
 
   useEffect(() => {
@@ -95,10 +97,72 @@ export const Menu = () => {
 
 
     listartMen(id);
+    listarProducto()
 
   }, []);
+  function calcularMIn(stockMin) {
+    fetch(`http://${portConexion}:3000/producto/listar`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+       
+        let menores = [];
+        if (data !== null) {
+          for (let index = 0; index < data.length; index++) {
+            if (stockMin > data[index].Cantidad) {
+              cont = cont + 1;
+              menores.push(data[index]);
+            }
+          }
+          setAlert(cont);
+          setElemento(menores);
+        }
+      });
+  }
 
-
+  function listarProducto() {
+    fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem('token')
+      },
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      const fechaActual = new Date()
+      let caducar = []
+      data.forEach(element => {
+        const fechaProducto = new Date(element.FechaCaducidad);
+        const diferenciaFechas = fechaProducto - fechaActual;
+        const diasFaltantes = Math.ceil(diferenciaFechas / (1000 * 60 * 60 * 24));
+        if (diasFaltantes < 7 ) {
+          caducar.push(element)
+        }
+      });
+      if (caducar.length > 0) {
+        setAlertReportes(`Revisa los productos a caducar.(${caducar.length})`);
+        cont = cont + caducar.length
+        setAlert(cont)
+      }else{
+        setAlertReportes('')
+      }
+    })
+    .catch((e) => {
+      console.error('Error:', e);
+    });
+  }
+  
 
 
 
@@ -118,35 +182,7 @@ export const Menu = () => {
       })
   }
 
-  function calcularMIn(stockMin) {
-    fetch(`http://${portConexion}:3000/producto/listar`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-    })
-    .then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      let cont = 0;
-      let menores = [];
-      if (data !== null) {
-        for (let index = 0; index < data.length; index++) {
-          if (stockMin > data[index].Cantidad) {
-            cont = cont + 1;
-            menores.push(data[index]);
-          }
-        }
-        setAlert(cont);
-        setElemento(menores);
-      }
-    });
-  }
+
 
   return (
     <>
@@ -241,21 +277,6 @@ export const Menu = () => {
               </ul>
             </li>
             <li>
-              <Link to="/categoria">
-                <div className="tamañoLateral">
-                  <IconBoxMultiple className="iconosLaterales" />
-                </div>
-                <span className="link_name">Categoria</span>
-              </Link>
-              <ul className="sub-menu blank">
-                <li>
-                  <Link className="link_name" to="/categoria">
-                    Categoria
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li>
               <Link to="/tipoproducto">
                 <div className="tamañoLateral">
                   <IconApple className="iconosLaterales" />
@@ -270,6 +291,22 @@ export const Menu = () => {
                 </li>
               </ul>
             </li>
+            <li>
+              <Link to="/categoria">
+                <div className="tamañoLateral">
+                  <IconBoxMultiple className="iconosLaterales" />
+                </div>
+                <span className="link_name">Categoria</span>
+              </Link>
+              <ul className="sub-menu blank">
+                <li>
+                  <Link className="link_name" to="/categoria">
+                    Categoria
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
             <li>
               <Link to="/up">
                 <div className="tamañoLateral">
@@ -483,22 +520,26 @@ export const Menu = () => {
                 <IconX className="closeNotii" id="closeNoti" />
               </div>
             </div>
+            <div className="textModalNoti">
+            <span className="text-danger" role="alert"><a href="/producto/caducar">{alertReportes}</a></span><br/>
+              <span>Quedan Pocas Unidades de:</span>
+            </div>
             <div className="TableNoti">
               <table className="table table22">
                 <thead>
-                  <tr>
+                  <tr className="textTituloNoti">
                     <th scope="col">Producto</th>
                     <th scope="col">Categoria</th>
                     <th scope="col">Cantidad</th>
                   </tr>
                 </thead>
                 <tbody>
-                    {alert > 0 ? (
+                  {alert > 0 ? (
                     <>
                       {elementoAlmacenado.map((element, index) => (
-                        <tr key={index}>
-                          <td>{element.NombreProducto} </td>
-                          <td>{element.NombreCategoria}</td>
+                        <tr key={index} className="textContenidoNoti">
+                          <td style={{ textTransform: 'capitalize' }}>{element.NombreProducto} </td>
+                          <td style={{ textTransform: 'capitalize' }}>{element.NombreCategoria}</td>
                           <td className="text-center">{element.Cantidad}</td>
                         </tr>
                       ))}

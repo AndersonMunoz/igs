@@ -1,12 +1,16 @@
 import { check } from "express-validator";
 
 export const validatorTipo_producto = [
-    check('nombre_tipo', 'El nombre solo debe contener letras, espacios y apóstrofes')
+    check('nombre_tipo', 'El nombre solo debe contener letras, espacios, apóstrofes, la letra ñ, el guion "-" y los paréntesis "()"')
         .exists()
         .not()
         .isEmpty()
-        .isLength({min: 2, max: 45})
-        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÜü\s']+$/),
+        .isLength({ min: 2, max: 45 })
+        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÜü\sñ'()-]+$/)
+        .custom((value) => {
+            // Permitir el uso del carácter de apóstrofe
+            return true;
+        }),
     check('unidad_peso').custom((value, { req }) => {
         const unidadesValidas = ['kg', 'lb', 'gr', 'lt', 'ml', 'oz'];
         const unidadSeleccionada = req.body.unidad_peso;

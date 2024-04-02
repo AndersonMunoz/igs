@@ -226,7 +226,7 @@ const Inventario = () => {
               <table id="dtBasicExample max-width-5" className="table table-striped table-bordered border display responsive nowrap " cellSpacing={0} width="100%" ref={tableRef}>
                 <thead className="text-center text-justify">
                   <tr>
-                    <th className="th-sm">#Lote</th>
+                    <th className="th-sm">#</th>
                     <th className="th-sm">Nombre producto</th>
                     <th className="th-sm">Cantidad</th>
                     <th className="th-sm">Unidad</th>
@@ -249,7 +249,7 @@ const Inventario = () => {
                     <>
                       {categoriaItem.map((element, index) => (
                         <tr key={index} style={{ textTransform: 'capitalize' }}>
-                          <td>{element.Lote}</td>
+                          <td>{index + 1}</td>
                           <td>{element.NombreProducto}</td>
                           <td>{element.Cantidad}</td>
                           <td>{element.Unidad}</td>
@@ -263,6 +263,9 @@ const Inventario = () => {
               </table>
             </div>
             <div className="modal-footer">
+            <button type="button" className="btn btn-color" data-bs-dismiss="modal">
+                Ver en reportes
+              </button>
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cerrar
               </button>

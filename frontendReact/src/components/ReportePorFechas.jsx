@@ -33,8 +33,9 @@ const reporte = () => {
   const [rangoMovFin, setRangoMovFin] = useState();
   const [expMov, setExpMov] = useState("aqui para exportar");
   const [reporte, setReporte] = useState([]);
-  const [valEntradas, setValEntradas] = useState('')
-  const [valSalidas, setValSalidas] = useState('')
+  const [valEntradas, setValEntradas] = useState('0')
+  const [valSalidas, setValSalidas] = useState('0')
+  const [valorTotal, setValorTotal] = useState('0')
   const tableRef = useRef(null);
 
   // falta ver
@@ -137,6 +138,34 @@ const reporte = () => {
     }
   }, [reporte]);
 
+  useEffect(()=>{
+    setRangoMovFin(formatDateYYYYMMDD(new Date()));
+    listarProducto()
+    listaCat()
+  },[])
+
+  function listaCat() {
+    var select = document.getElementById("categoryFilter");
+    fetch("http://localhost:3000/categoria/listar", {
+      method: "get",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem('token'),
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data !== null) {
+          data.forEach(element =>{
+            var option = document.createElement("option");
+            option.text= element.nombre_categoria;  
+            option.value= element.nombre_categoria;  
+            select.appendChild(option)
+          })
+        }
+      });
+  }
+
   function ListartPorRango(inicio, fin) {
     fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
           method: "GET",
@@ -166,7 +195,6 @@ const reporte = () => {
             for (let index = 0; index < data.productos.length; index++) {
                 const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
                 if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
-                    console.log(data.productos[index]);
                     valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
                     valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
                     ReporteDelFiltro.push(data.productos[index])
@@ -175,15 +203,60 @@ const reporte = () => {
             setValEntradas(valEntradas)
             setValSalidas(valSalidas)
             setReporte(ReporteDelFiltro)
-            console.log(ReporteDelFiltro);
         }        
         })
   }
 
-  useEffect(()=>{
-    setRangoMovFin(formatDateYYYYMMDD(new Date()));
-    listarProducto()
-  },[])
+  function filtrarCategorias(inicio , fin) {
+    var select = document.getElementById("categoryFilter").value;
+
+    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+          method: "GET",
+          headers: {
+            "Content-type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if (res.status === 204) {
+            return null;
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data !== null) {
+            if ($.fn.DataTable.isDataTable(tableRef.current)) {
+              $(tableRef.current).DataTable().destroy();
+            }
+            let valEntradas = 0;
+            let valSalidas = 0;
+            let ReporteDelFiltro = [];
+            let fechaInicio = new Date(inicio);
+            let fechaFin = new Date(fin);
+            fechaFin.setDate(fechaFin.getDate() + 1);
+            fechaFin.setHours(23, 59, 59);
+            for (let index = 0; index < data.productos.length; index++) {
+                const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
+                if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
+                    if (data.productos[index].nombre_categoria == select) {
+                      valEntradas= valEntradas+parseInt( data.productos[index].total_entradas);
+                      valSalidas= valSalidas+parseInt( data.productos[index].total_salidas);
+                      ReporteDelFiltro.push(data.productos[index])
+                    }
+                    if (select == 'todas' ) {
+                      listarProducto()
+                    }
+                }
+            }
+            setValEntradas(valEntradas)
+            setValSalidas(valSalidas)
+            setReporte(ReporteDelFiltro)
+        }        
+        })
+
+  }
+
+
 
       // Función para listar los productos
       function listarProducto() {
@@ -205,6 +278,11 @@ const reporte = () => {
             setValEntradas(data.entraron)
             setValSalidas(data.salieron)
             setReporte(data.productos)
+            let valor = 0;
+            data.productos.forEach(element =>{
+              valor = valor + element.precio_total; 
+            })
+            setValorTotal(valor)
             setRangoMovInicio(formatDateYYYYMMDD(new Date('2023-03-19')))
           }
         })
@@ -230,7 +308,14 @@ const reporte = () => {
         </div>
         
         <div className="btnContenido22">
-          <h2 className="tituloHeaderpp">{title}</h2>
+          {/* <h2 className="tituloHeaderpp">{title}</h2> */}
+          <div>
+          <select className="form-select" name="categoryFilter" id="categoryFilter">
+            <option value="todas">Filtrar por Categorias</option>
+          </select>
+          <button onClick={()=>{filtrarCategorias(rangoMovInicio, rangoMovFin)}}>filtrar</button>
+
+          </div>
         </div>
         <div className="btnContenido3">
           <div  className="btn-group"  role="group"  aria-label="Basic mixed styles example">
@@ -256,7 +341,7 @@ const reporte = () => {
               <th className="th-sm">Categoría</th>
               <th className="th-sm">Entradas ({valEntradas})</th>
               <th className="th-sm">Salidas ({valSalidas})</th>
-              <th className="th-sm">Valor</th>
+              <th className="th-sm">Valor ({valorTotal})</th>
               <th className="th-sm">Fecha último movimiento</th>
             </tr>
           </thead>

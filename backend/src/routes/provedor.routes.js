@@ -11,7 +11,7 @@ provedorRouter.get('/listarActivo', validarToken, listarProvedorActivo);
 provedorRouter.get('/buscar/:id', validarToken,buscarProvedor);
 provedorRouter.post('/registrar' ,cargarImagen,validarProvedor,validarToken,registrarProvedor);
 provedorRouter.put('/eliminar/:id' ,validarToken , eliminarProvedor);
-provedorRouter.put('/actualizar/:id',cargarImagen ,validarProvedor,validarToken,actualizarProvedor);
+provedorRouter.put('/actualizar/:id',validarProvedor,validarToken,actualizarProvedor);
 
 
 export default provedorRouter;
