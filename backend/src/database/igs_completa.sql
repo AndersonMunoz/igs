@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-04-2024 a las 03:03:33
--- Versión del servidor: 10.4.18-MariaDB
--- Versión de PHP: 7.4.16
+-- Tiempo de generación: 02-04-2024 a las 17:14:39
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +31,7 @@ CREATE TABLE `bodega` (
   `id_up` int(11) NOT NULL,
   `nombre_up` varchar(45) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -45,16 +45,16 @@ CREATE TABLE `categorias_producto` (
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `tipo_categoria` enum('perecedero','no perecedero') NOT NULL,
   `codigo_categoria` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `categorias_producto`
 --
 
 INSERT INTO `categorias_producto` (`id_categoria`, `nombre_categoria`, `estado`, `tipo_categoria`, `codigo_categoria`) VALUES
-(1, 'carnes y salsamentaria ', 1, 'perecedero', 'CS'),
-(2, 'pescados y mariscos  ', 1, 'perecedero', 'PM'),
-(3, 'Aves y caza ', 1, 'perecedero', 'AC'),
+(1, 'Carnes y Salsamentaria ', 1, 'perecedero', 'CS'),
+(2, 'Pescados y mariscos  ', 1, 'perecedero', 'PM'),
+(3, 'Aves y Caza ', 1, 'perecedero', 'AC'),
 (4, 'Lácteos(1)', 1, 'perecedero', 'L1'),
 (5, 'Frutas y verduras ', 1, 'perecedero', 'FV'),
 (6, 'Lácteos(2)', 1, 'no perecedero', 'L2'),
@@ -62,7 +62,7 @@ INSERT INTO `categorias_producto` (`id_categoria`, `nombre_categoria`, `estado`,
 (8, 'Granos', 1, 'no perecedero', 'G'),
 (9, 'Licores(Bebidas Alcohólicas)', 1, 'no perecedero', 'LC'),
 (10, 'Vinos', 1, 'no perecedero', 'V'),
-(11, 'gaseosas ', 1, 'no perecedero', 'Gs');
+(11, 'Gaseosas ', 1, 'no perecedero', 'Gs');
 
 -- --------------------------------------------------------
 
@@ -76,7 +76,7 @@ CREATE TABLE `detalles` (
   `fk_id_movimiento` int(11) NOT NULL,
   `fk_id_titulado` int(11) DEFAULT NULL,
   `fk_id_instructor` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -97,7 +97,7 @@ CREATE TABLE `factura_movimiento` (
   `fk_id_producto` int(11) NOT NULL,
   `fk_id_usuario` int(11) NOT NULL,
   `fk_id_proveedor` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -110,7 +110,7 @@ CREATE TABLE `instructores` (
   `documento_instructor` int(10) UNSIGNED NOT NULL,
   `nombre_instructor` varchar(45) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -124,7 +124,7 @@ CREATE TABLE `productos` (
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `fk_id_up` int(11) NOT NULL,
   `fk_id_tipo_producto` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -142,7 +142,7 @@ CREATE TABLE `proveedores` (
   `inicio_contrato` date NOT NULL,
   `fin_contrato` date NOT NULL,
   `archivo_contrato` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -156,7 +156,7 @@ CREATE TABLE `tipo_productos` (
   `fk_categoria_pro` int(11) NOT NULL,
   `unidad_peso` enum('kg','lb','gr','lt','ml','oz','unidad(es)') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `tipo_productos`
@@ -164,7 +164,7 @@ CREATE TABLE `tipo_productos` (
 
 INSERT INTO `tipo_productos` (`id_tipo`, `nombre_tipo`, `fk_categoria_pro`, `unidad_peso`, `estado`) VALUES
 (1, 'Costilla Baby', 1, 'lb', 1),
-(2, 'beef Chatas', 1, 'lb', 1),
+(2, 'Beef Chatas', 1, 'lb', 1),
 (3, 'Lomo Pierna', 1, 'lb', 1),
 (4, 'Rib o Beef', 1, 'lb', 1),
 (5, 'Sobrebarriga', 1, 'lb', 1),
@@ -220,7 +220,7 @@ INSERT INTO `tipo_productos` (`id_tipo`, `nombre_tipo`, `fk_categoria_pro`, `uni
 (55, 'Calabacín', 5, 'lb', 1),
 (56, 'Lechuga blanca Mazorca con armero', 5, 'lb', 1),
 (57, 'Aguacate', 5, 'lb', 1),
-(58, 'melón ', 5, 'lb', 1),
+(58, 'Melón ', 5, 'lb', 1),
 (59, 'Banano', 5, 'lb', 1),
 (60, 'Mora de castilla', 5, 'lb', 1),
 (61, 'Calabaza', 5, 'lb', 1),
@@ -318,9 +318,9 @@ INSERT INTO `tipo_productos` (`id_tipo`, `nombre_tipo`, `fk_categoria_pro`, `uni
 (153, 'Amaretto', 9, 'unidad(es)', 1),
 (154, 'Aperitivos', 9, 'unidad(es)', 1),
 (155, 'Bacardí', 9, 'unidad(es)', 1),
-(156, 'Bailey', 9, 'unidad(es)', 1),
+(156, 'Bailey\'s', 9, 'unidad(es)', 1),
 (157, 'Black and White', 9, 'unidad(es)', 1),
-(158, 'Buchanan s', 9, 'unidad(es)', 1),
+(158, 'Buchanan\'s', 9, 'unidad(es)', 1),
 (159, 'Campari', 9, 'unidad(es)', 1),
 (160, 'Cointreau', 9, 'unidad(es)', 1),
 (161, 'Ron', 9, 'unidad(es)', 1),
@@ -362,7 +362,7 @@ CREATE TABLE `titulados` (
   `nombre_titulado` varchar(45) NOT NULL,
   `id_ficha` varchar(45) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -379,7 +379,7 @@ CREATE TABLE `usuarios` (
   `tipo_usuario` enum('administrador','coadministrador') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `stock_minimo` int(11) DEFAULT 10
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -470,7 +470,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `bodega`
 --
 ALTER TABLE `bodega`
-  MODIFY `id_up` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_up` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias_producto`
@@ -512,7 +512,7 @@ ALTER TABLE `proveedores`
 -- AUTO_INCREMENT de la tabla `tipo_productos`
 --
 ALTER TABLE `tipo_productos`
-  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
+  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT de la tabla `titulados`

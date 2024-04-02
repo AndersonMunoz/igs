@@ -5,7 +5,7 @@ import { validatorTipo_producto } from "../validation/tipo_producto.validator.js
 
 const tipo_productoRouter = Router();
 
-tipo_productoRouter.post("/registrar",validarToken ,validatorTipo_producto , registroTipo_producto );
+tipo_productoRouter.post("/registrar" ,validatorTipo_producto , registroTipo_producto );
 tipo_productoRouter.get("/listar",validarToken, listarTipoProducto );
 tipo_productoRouter.get("/listarActivo",validarToken, listarActivoTipo );
 tipo_productoRouter.get("/buscar/:id",validarToken, buscarTipoProducto);

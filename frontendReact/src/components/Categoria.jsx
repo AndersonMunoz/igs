@@ -287,50 +287,49 @@ const Categoria = () => {
         console.error('Error:', error);
       });
   }
-  function actualizarCategoria(id){
+  function actualizarCategoria(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
-    const codigoExistente = categorias_producto.some(cat => cat.codigo_categoria === categoriaSeleccionada.codigo_categoria && cat.id_categoria !== categoriaSeleccionada.id_categoria);
+    const codigoExistente = categorias_producto.some(cat => cat.codigo_categoria.toLowerCase() === categoriaSeleccionada.codigo_categoria.toLowerCase() && cat.id_categoria !== categoriaSeleccionada.id_categoria);
     if (codigoExistente) {
-      Sweet.error('El código ingresado ya está en uso. Por favor, ingrese un código diferente.');
-      return;
-    }
-  
-    if (!categoriaSeleccionada.tipo_categoria || !categoriaSeleccionada.codigo_categoria) {
-      Sweet.error('Por favor, complete todos los campos.');
-      return;
-    }
-  
-    fetch(`http://${portConexion}:3000/categoria/editar/${id}`,{
-      method: 'PUT',
-      headers:{
-        'Content-type':'application/json',
-        token: localStorage.getItem("token"),
-      },
-      body: JSON.stringify(categoriaSeleccionada),
-    })
-    .then((res)=>res.json())
-    .then((data)=>{
-      if(!validacionExitosa){
-        Sweet.actualizacionFallido();
+        Sweet.error('El código ingresado ya está en uso. Por favor, ingrese un código diferente.');
         return;
-      }
-      if (data.status === 200) {
-        Sweet.exito(data.menssge);
-  
-      }
-      else {
-        Sweet.error(data.errors[0].msg);
-  
-      }
-      listarCategoria();
-      setUpdateModal(false);
-      removeModalBackdrop();
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
-    })
-  }
+    }
+
+    if (!categoriaSeleccionada.tipo_categoria || !categoriaSeleccionada.codigo_categoria) {
+        Sweet.error('Por favor, complete todos los campos.');
+        return;
+    }
+
+    fetch(`http://${portConexion}:3000/categoria/editar/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-type': 'application/json',
+                token: localStorage.getItem("token"),
+            },
+            body: JSON.stringify(categoriaSeleccionada),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (!validacionExitosa) {
+                Sweet.actualizacionFallido();
+                return;
+            }
+            if (data.status === 200) {
+                Sweet.exito(data.menssge);
+
+            } else {
+                Sweet.error(data.errors[0].msg);
+
+            }
+            listarCategoria();
+            setUpdateModal(false);
+            removeModalBackdrop();
+            const modalBackdrop = document.querySelector('.modal-backdrop');
+            if (modalBackdrop) {
+                modalBackdrop.remove();
+            }
+        })
+}
 
 
   const [search, setSeach] = useState('');
@@ -389,7 +388,7 @@ const Categoria = () => {
       >
         <thead className="text-center text-justify">
           <tr>
-            <th className="th-sm">Id</th>
+            <th className="th-sm">#</th>
             <th className="th-sm">Nombre categoria</th>
             <th className="th-sm">Tipo</th>
             <th className="th-sm">Codigo</th>
@@ -413,15 +412,8 @@ const Categoria = () => {
       ) : (
         <>
 
-        {categorias_producto
-          .filter((item) => {
-            return (
-              search.toLowerCase() === '' ||
-              item.nombre_categoria.toLowerCase().includes(search)
-            );
-          })
-          .map((element) => (
-            <tr key={element.id_categoria}>
+        {categorias_producto.map((element,index) => (
+            <tr key={index}>
               <td style={{textTransform: 'capitalize'}}>{element.id_categoria}</td>
               <td style={{textTransform: 'capitalize'}}>{element.nombre_categoria}</td>
               <td style={{textTransform: 'capitalize'}}>{element.tipo_categoria}</td>

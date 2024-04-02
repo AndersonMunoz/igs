@@ -353,7 +353,7 @@ const Up = () => {
         >
           <thead className="text-center text-justify">
             <tr>
-              <th className="th-sm">Id</th>
+              <th className="th-sm">#</th>
               <th className="th-sm">Nombre bodega</th>
               <th className="th-sm"> Botones acciones</th>
             </tr>
