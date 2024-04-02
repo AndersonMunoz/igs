@@ -57,6 +57,9 @@ const Movimiento = () => {
   
     const columns = [
       { title: 'Nombre producto', dataKey: 'nombre_tipo' },
+      { title: 'Categoría', dataKey: 'nombre_categoria' },
+      { title: 'Tipo categoría', dataKey: 'tipo_categoria' },
+      { title: 'Código categoría', dataKey: 'codigo_categoria' },
       { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
       { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
       { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
@@ -74,6 +77,9 @@ const Movimiento = () => {
       const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       return {
         nombre_tipo: element.nombre_tipo,
+        nombre_categoria: element.nombre_categoria,
+        tipo_categoria: element.tipo_categoria,
+        codigo_categoria: element.codigo_categoria,
         fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
         tipo_movimiento: element.tipo_movimiento,
         cantidad_peso_movimiento: element.cantidad_peso_movimiento,
@@ -103,6 +109,9 @@ const Movimiento = () => {
 
     const columns = [
       'Nombre producto',
+      'Categoría',
+      'Tipo categoría',
+      'Código categoría',
       'Fecha del movimiento',
       'Tipo de movimiento',
       'Cantidad',
@@ -121,6 +130,9 @@ const Movimiento = () => {
       const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
       const rowData = [
         element.nombre_tipo,
+        element.nombre_categoria,
+        element.tipo_categoria,
+        element.codigo_categoria,
         Validate.formatFecha(element.fecha_movimiento),
         element.tipo_movimiento,
         element.cantidad_peso_movimiento,
@@ -601,6 +613,9 @@ const Movimiento = () => {
               <tr>
                 <th className="th-sm">N°</th>
                 <th className="th-sm">Nombre producto</th>
+                <th className="th-sm">Categoria</th>                
+                <th className="th-sm">Código categoría</th>
+                <th className="th-sm">Tipo categoría</th>                
                 <th className="th-sm">Fecha del movimiento</th>
                 <th className="th-sm">Tipo de movimiento</th>
                 <th className="th-sm">Cantidad</th>
@@ -632,6 +647,9 @@ const Movimiento = () => {
                     <tr style={{ textTransform: 'capitalize' }} key={element.id_factura}>
                       <td className="p-2 text-center" >{index+1}</td>
                       <td className="p-2 text-center" >{element.nombre_tipo}</td>
+                      <td className="p-2 text-center">{element.nombre_categoria}</td>
+                      <td className="p-2 text-center">{element.codigo_categoria}</td>
+                      <td className="p-2 text-center">{element.tipo_categoria}</td>
                       <td className="p-2 text-center">{Validate.formatFecha(element.fecha_movimiento)}</td>
                       <td className="p-2 text-center">{element.tipo_movimiento}</td>
                       <td className="p-2 text-center" >
