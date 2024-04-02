@@ -469,7 +469,7 @@ const Tipo = () => {
         >
           <thead className="text-center text-justify">
             <tr>
-              <th className="th-sm">Id</th>
+              <th className="th-sm">#</th>
               <th className="th-sm">Nombre tipo de producto</th>
               <th className="th-sm">Nombre categoria</th>
               <th className="th-sm">Unidad peso</th>
@@ -493,17 +493,9 @@ const Tipo = () => {
               </tr>
             ) : (
               <>
-                {tipos
-                  .filter((item) => {
-                    return typeof search === "string" &&
-                      search.toLowerCase() === ""
-                      ? item
-                      : item.Categoría.toLowerCase().includes(search);
-                  })
-
-                  .map((element) => (
-                    <tr key={element.id}>
-                      <td>{element.id}</td>
+                {tipos.map((element,index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
                       <td style={{ textTransform: "capitalize" }}>
                         {element.NombreProducto}
                       </td>

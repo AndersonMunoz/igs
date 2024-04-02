@@ -6,11 +6,7 @@ export const validatorTipo_producto = [
         .not()
         .isEmpty()
         .isLength({ min: 2, max: 45 })
-        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÜü\sñ'()-]+$/)
-        .custom((value) => {
-            // Permitir el uso del carácter de apóstrofe
-            return true;
-        }),
+        .matches(/^[A-Za-zÁÉÍÓÚáéíóúÜü\sñ'()-]+$/),
     check('unidad_peso').custom((value, { req }) => {
         const unidadesValidas = ['kg', 'lb', 'gr', 'lt', 'ml', 'oz'];
         const unidadSeleccionada = req.body.unidad_peso;

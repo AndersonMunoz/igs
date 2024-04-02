@@ -6,9 +6,10 @@ export const registroTipo_producto = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error)
+           return res.status(403).json({"status": 403 ,error})
         }
         let { nombre_tipo, fk_categoria_pro ,unidad_peso} = req.body;
+        nombre_tipo = nombre_tipo.replace("'", "''");
         const TipoQuery = `SELECT * FROM tipo_productos WHERE nombre_tipo = '${nombre_tipo}'`;
         const [existingTipo] = await pool.query(TipoQuery);
         
@@ -28,12 +29,8 @@ export const registroTipo_producto = async (req, res) => {
                 "menssage": " El tipo de producto fue  registrado  con exito "
             })
         } else {
-            res.status(403).json({
-                "status": 403,
-                "menssage": "El tipo de producto no se puedo registrar"
-            })
-
-        }
+            res.status(401).json({ status: 401, message: "No se pudo registrar." });
+          }
     } catch (error) {
         res.status(500).json({
             "status": 500,
@@ -44,7 +41,7 @@ export const registroTipo_producto = async (req, res) => {
 export const listarTipoProducto = async (req, res) => {
     try {
         const [result] = await pool.query
-            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto,t.unidad_peso AS UnidadPeso, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria ORDER BY t.estado DESC');
+            ('SELECT t.estado, t.id_tipo AS id, t.nombre_tipo AS NombreProducto,t.unidad_peso AS UnidadPeso, c.nombre_categoria AS Categoría FROM tipo_productos t JOIN categorias_producto c ON t.fk_categoria_pro = c.id_categoria ');
         if (result.length > 0) {
             res.status(200).json(result);
         } else {
@@ -103,7 +100,7 @@ export const editarTipo_producto = async (req, res) => {
         }
         let id = req.params.id;
         let { nombre_tipo, fk_categoria_pro , unidad_peso} = req.body;
-
+        nombre_tipo = nombre_tipo.replace("'", "''");
         let sql = `update tipo_productos SET nombre_tipo = '${nombre_tipo}', fk_categoria_pro= '${fk_categoria_pro}' , unidad_peso= '${unidad_peso}'
         where id_tipo = ${id} `;
         console.log(sql)
