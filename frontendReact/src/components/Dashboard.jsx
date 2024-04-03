@@ -47,10 +47,15 @@ const Dashboard = () => {
 		})
 		  .then((data) => {
 			if (Array.isArray(data)) {
-			  console.log(data);
-			  data.forEach((element)=>{
-				console.log(element);
-			  })
+				let fechaMayor = new Date("2023-03-02");
+				data.forEach((element) => {
+				  const fechaActual = new Date(element.fecha_movimiento);
+				  if (fechaActual > fechaMayor) {
+					fechaMayor = fechaActual
+				    setMovimento(element.tipo_movimiento)
+					setNombre(element.nombre_tipo)
+				  }
+				});
 			}
 		  })
 		  .catch((e) => {
@@ -209,10 +214,10 @@ const Dashboard = () => {
 			  caducar.push(element)
 			}
 		  });
+		  let cont = 0;
 		  if (caducar.length > 0) {
 			setAlertReportes(caducar.length);
 			cont = cont + caducar.length
-			setAlert(cont)
 		  }else{
 			setAlertReportes('')
 		  }
