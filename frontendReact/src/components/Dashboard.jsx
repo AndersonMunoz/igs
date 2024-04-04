@@ -21,6 +21,7 @@ const Dashboard = () => {
 	const [alertReportes, setAlertReportes] = useState('')
 	const [movimiento, setMovimento] = useState('')
 	const [nombre, setNombre]= useState('')
+	const [contCate, setContCate] = useState('')
 	// useEffect para obtener datos del backend al cargar el componente
 	useEffect(() => {
 		listarProducto()
@@ -73,6 +74,7 @@ const Dashboard = () => {
 		})
 			.then((res) => res.json())
 			.then((data) => {
+				setContCate(data.length)
 				setCategoriasCount(data);
 			})
 			.catch((e) => {
@@ -346,8 +348,13 @@ const Dashboard = () => {
 					</Link>
 				</div>
 				<div className="small-container4">
-					<div className="contInterno contcolor3"></div>
+					<div className="contInterno contcolor3">
+					<span className="usuarioTitiii">
+						Categorias registradas: {contCate}
+					</span>
+					</div>
 					<div className="contInterno2 contcolor3">
+						
 						<svg
 							fill="none"
 							height="48"
@@ -371,6 +378,7 @@ const Dashboard = () => {
 							</g>
 						</svg>
 					</div>
+					
 					<Link className="linkContenido linkColor4" to="/inventario">
 						<div className="tamañoLateral">
 							<span className="">Ver Inventario</span>
