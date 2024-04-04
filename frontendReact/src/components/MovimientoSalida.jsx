@@ -935,14 +935,14 @@ useEffect(() => {
                                   <div data-mdb-input-init className="form-outline">
                                       <label className="form-label" htmlFor="fk_id_titulado">Titulado</label>
                                       <Select
-  className="react-select-container  form-empt my-custom-class"
-  classNamePrefix="react-select"
-  options={tituladoList && tituladoList.length > 0 ? tituladoList.map((element, index) => ({key: index, value: element.id_titulado, label: `${element.nombre_titulado} - ${element.id_ficha}`})) : [{value: "", label: "No hay titulados registrados"}]}
-  placeholder="Selecciona..."
-  onChange={handleTitulado}
-  value={selectedOptionTit}
-  id="fk_id_titulado"
-/>
+                                        className="react-select-container  form-empt my-custom-class"
+                                        classNamePrefix="react-select"
+                                        options={tituladoList && tituladoList.length > 0 ? tituladoList.map((element, index) => ({key: index, value: element.id_titulado, label: `${element.nombre_titulado} - ${element.id_ficha}`})) : [{value: "", label: "No hay titulados registrados"}]}
+                                        placeholder="Selecciona..."
+                                        onChange={handleTitulado}
+                                        value={selectedOptionTit}
+                                        id="fk_id_titulado"
+                                      />
                                       <div className="invalid-feedback is-invalid">
                                           Por favor, seleccione un titulado.
                                       </div>
@@ -952,14 +952,14 @@ useEffect(() => {
                                     <div data-mdb-input-init className="form-outline">
                                         <label className="form-label" htmlFor="fk_id_instructor">Instructor</label>
                                         <Select
-  className="react-select-container  form-empt my-custom-class"
-  classNamePrefix="react-select"
-  options={instructorList && instructorList.length > 0 ? instructorList.map((element, index) => ({key: index, value: element.id, label: element.nombre})) : [{value: "", label: "No hay instructores registrados"}]}
-  placeholder="Selecciona..."
-  onChange={handleInstructor}
-  value={selectedOptionIns}
-  id="fk_id_instructor"
-/>
+                                          className="react-select-container  form-empt my-custom-class"
+                                          classNamePrefix="react-select"
+                                          options={instructorList && instructorList.length > 0 ? instructorList.map((element, index) => ({key: index, value: element.id, label: element.nombre})) : [{value: "", label: "No hay instructores registrados"}]}
+                                          placeholder="Selecciona..."
+                                          onChange={handleInstructor}
+                                          value={selectedOptionIns}
+                                          id="fk_id_instructor"
+                                        />
                                         <div className="invalid-feedback is-invalid">
                                             Por favor, seleccione un instructor.
                                         </div>
