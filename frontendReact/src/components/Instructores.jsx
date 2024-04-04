@@ -17,6 +17,7 @@ import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import portConexion from "../const/portConexion";
+import { dataDecript } from "./encryp/decryp";
 
 
 const Instructores = () => {
@@ -27,6 +28,7 @@ const Instructores = () => {
 	const modalUpdateRef = useRef(null);
 	const tableRef = useRef();
 	const [instructorSeleccionado, setInstructoreSeleccionado] = useState({});
+	const [userRoll, setUserRoll]= useState('');
 
 	useEffect(() => {
 		if (instructores.length > 0) {
@@ -75,8 +77,11 @@ const Instructores = () => {
 		};
 
 		listarInstructores();
-
+		let roll= (localStorage.getItem("roll"));
+		setUserRoll(dataDecript(roll));
 	}, []);
+
+	
 
 	function removeModalBackdrop() {
 		const modalBackdrop = document.querySelector(".modal-backdrop");
@@ -283,7 +288,8 @@ const Instructores = () => {
 		<>
 			<div className="boxBtnContendidoTitulo">
 				<div className="btnContenido1">
-					<button
+					{userRoll == "administrador" && (
+						<button
 						type="button"
 						id="modalInstructor"
 						className="btn-color btn"
@@ -297,6 +303,7 @@ const Instructores = () => {
 					>
 						Registrar Instructor
 					</button>
+					)}
 				</div>
 				<div className="btnContenido22">
 					<h2 className="tituloHeaderpp">Lista de Instructores </h2>
@@ -372,7 +379,9 @@ const Instructores = () => {
 										<td className="text-center">{index + 1}</td>
 										<td style={{ textTransform: 'capitalize' }}>{element.nombre_instructor}</td>
 										<td>{element.documento_instructor}</td>
-										{<td className="p-0 text-center">
+										{userRoll == "administrador" ? (
+											<>
+											<td className="p-0 text-center">
 											{element.estado === 1 ? (
 												<>
 													<button
@@ -403,7 +412,13 @@ const Instructores = () => {
 													Activar
 												</button>
 											)}
-										</td>}
+										</td>
+											</>
+										):(
+											<>
+											<td className="p-0 text-center">No disponible</td>
+											</>
+										)}
 									</tr>
 								))}
 							</>
