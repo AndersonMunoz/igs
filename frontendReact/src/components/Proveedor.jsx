@@ -39,7 +39,7 @@ const proveedor = () => {
   const [inicio_contrato, setinicio_contrato] = useState('');
   const [fin_contrato, setfin_contrato] = useState("");
   const [userRoll, setUserRoll] = useState("");
-  const [archivo_contrato, setArchivo_contrato] = useState(null);
+  const [archivo_contrato, setArchivo_contrato] = useState('');
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -355,8 +355,7 @@ const proveedor = () => {
                 document.getElementById("btnAgregar").classList.remove("d-none");
                 document.getElementById("btnActualizar").classList.add("d-none");
                 document.getElementById("divArchContrato").classList.remove("d-none");
-                document.getElementById("numContrato").classList.remove("d-none");
-              }}>
+                document.getElementById("numContrato").classList.remove("d-none");}}>
               Registrar Proveedor
             </button>
           )}
@@ -533,7 +532,7 @@ const proveedor = () => {
                   <div id="divArchContrato" className="d-flex form-row mb-1 mt-3">
                     <div className="col">
                       <label htmlFor="archivo_contrato">Archivo de contrato</label>
-                      <input onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" placeholder="file Pdf" />
+                      <input value={archivo_contrato} onChange={(e) => { const { value } = e.target; setArchivo_contrato(value); }} type="file" name="archivo_contrato" id="archivo_contrato" className="form-control form-empty limpiar" placeholder="file Pdf" />
                       <div className="invalid-feedback is-invalid">
                         Este campo es obligatorio.
                       </div>

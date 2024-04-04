@@ -11,7 +11,9 @@ tituladosRouter.get("/listar",validarToken, listarTitulado);
 tituladosRouter.get("/listarCount",validarToken, listarTituladoCount);
 tituladosRouter.get("/listaractivo",validarToken, listarTituladoActivo);
 tituladosRouter.get('/buscar/:id',validarToken, buscarTitulado);
-tituladosRouter.patch('/activar/:id',validarToken, activarTitulado);
+tituladosRouter.patch('/activar/:id',validarToken, activarTitulado);    
+
+
 tituladosRouter.patch('/deshabilitar/:id',validarToken, deshabilitarTitulado);
 tituladosRouter.put("/editar/:id",validarToken,validatorTitulados, editarTitulado);
 

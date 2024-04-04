@@ -17,6 +17,7 @@ import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
 import portConexion from "../const/portConexion";
+import { dataDecript } from "./encryp/decryp";
 
 
 const Titulados = () => {
@@ -27,6 +28,8 @@ const Titulados = () => {
 	const modalUpdateRef = useRef(null);
 	const tableRef = useRef();
 	const [tituladoSeleccionado, setTituladoSeleccionado] = useState({});
+	const [userRoll, setUserRoll] = useState('');
+
 
 	useEffect(() => {
 		if (titulados.length > 0) {
@@ -35,8 +38,8 @@ const Titulados = () => {
 			}
 			$(tableRef.current).DataTable({
 				columnDefs: [
-					{
-						targets: -1,
+						{
+							targets: -1,
 						responsivePriority: 1,
 					},
 				],
@@ -75,7 +78,8 @@ const Titulados = () => {
 		};
 
 		listarTitulados();
-
+		let roll = (localStorage.getItem("roll"));
+		setUserRoll(dataDecript(roll));
 	}, []);
 
 	function removeModalBackdrop() {
@@ -283,20 +287,22 @@ const Titulados = () => {
 		<>
 			<div className="boxBtnContendidoTitulo">
 				<div className="btnContenido1">
-					<button
-						type="button"
-						id="modalTitulado"
-						className="btn-color btn"
-						data-bs-toggle="modal"
-						data-bs-target="#staticBackdrop"
-						onClick={() => {
-							setShowModal(true);
-							Validate.limpiar(".limpiar");
-							resetFormState();
-						}}
-					>
-						Registrar Titulado
-					</button>
+					{userRoll == "administrador" && (
+						<button
+							type="button"
+							id="modalTitulado"
+							className="btn-color btn"
+							data-bs-toggle="modal"
+							data-bs-target="#staticBackdrop"
+							onClick={() => {
+								setShowModal(true);
+								Validate.limpiar(".limpiar");
+								resetFormState();
+							}}
+						>
+							Registrar Titulado
+						</button>
+					)}
 				</div>
 				<div className="btnContenido22">
 					<h2 className="tituloHeaderpp">Lista de Titulados </h2>
@@ -372,38 +378,46 @@ const Titulados = () => {
 										<td className="text-center">{index + 1}</td>
 										<td style={{ textTransform: 'capitalize' }}>{element.nombre_titulado}</td>
 										<td>{element.id_ficha}</td>
-										{<td className="p-0 text-center">
-											{element.estado === 1 ? (
-												<>
-													<button
-														className="btn btn-color mx-2"
-														onClick={() => {
-															setUpdateModal(true);
-															editarTitulado(element.id_titulado);
-															resetFormState();
-														}}
-														data-bs-toggle="modal"
-														data-bs-target="#staticBackdrop2"
-													>
-														<IconEdit />
-													</button>
-													<button
-														className="btn btn-danger"
-														onClick={() => eliminarTitulado(element.id_titulado)}
-													>
-														{" "}
-														<IconTrash />
-													</button>
-												</>
-											) : (
-												<button
-													className="btn btn-primary"
-													onClick={() => activarTitulado(element.id_titulado)}
-												>
-													Activar
-												</button>
-											)}
-										</td>}
+										{userRoll == "administrador" ? (
+											<>
+												<td className="p-0 text-center">
+													{element.estado === 1 ? (
+														<>
+															<button
+																className="btn btn-color mx-2"
+																onClick={() => {
+																	setUpdateModal(true);
+																	editarTitulado(element.id_titulado);
+																	resetFormState();
+																}}
+																data-bs-toggle="modal"
+																data-bs-target="#staticBackdrop2"
+															>
+																<IconEdit />
+															</button>
+															<button
+																className="btn btn-danger"
+																onClick={() => eliminarTitulado(element.id_titulado)}
+															>
+																{" "}
+																<IconTrash />
+															</button>
+														</>
+													) : (
+														<button
+															className="btn btn-primary"
+															onClick={() => activarTitulado(element.id_titulado)}
+														>
+															Activar
+														</button>
+													)}
+												</td>
+											</>
+										):(
+											<><td className="p-0 text-center">
+												No dosponibles
+											</td></>
+										)}
 									</tr>
 								))}
 							</>
