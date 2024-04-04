@@ -24,42 +24,42 @@
   grid-template:
     "contInterno contInterno2" 115px
     "linkContenido linkContenido" 45px
-    / 70% 30%;
+    / 75% 25%;
 }
 .small-container2 {
   grid-area: small-container2;
   grid-template:
     "contInterno contInterno2" 115px
     "linkContenido linkContenido" 45px
-    / 70% 30%;
+    / 75% 25%;
 }
 .small-container3 {
   grid-area: small-container3;
   grid-template:
     "contInterno contInterno2" 115px
     "linkContenido linkContenido" 45px
-    / 70% 30%;
+    / 75% 25%;
 }
 .small-container4 {
   grid-area: small-container4;
   grid-template:
     "contInterno contInterno2" 115px
     "linkContenido linkContenido" 45px
-    / 70% 30%;
+    / 75% 25%;
 }
 .small-container6 {
   grid-area: small-container6;
   grid-template:
     "contInterno contInterno2" 110px
     "linkContenido linkContenido" 40px
-    / 70% 30%;
+    / 75% 25%;
 }
 .small-container7 {
   grid-area: small-container7;
   grid-template:
     "contInterno contInterno2" 110px
     "linkContenido linkContenido" 40px
-    / 70% 30%;
+    / 75% 25%;
 }
 
 .small-container1,
@@ -79,7 +79,18 @@
   grid-area: contInterno;
   justify-content: center;
   display: flex;
-  font-size: 1.2em;
+  font-size: 1em;
+}
+.contInterno4 {
+  border-radius: 10px 0px 0px 0px;
+  grid-area: contInterno;
+  text-align: justify !important;
+  justify-content: center;
+  align-items:flex-start;
+  display: flex;
+  flex-direction: column !important;
+  font-size: 14px;
+  padding-left: 10px;
 }
 
 .contInterno2 {
@@ -94,7 +105,7 @@
   background-color: #ff8800;
 }
 .contcolor1 {
-  background-color: #44d4d7;
+  background-color: #00b8fb;
 }
 .contcolor2 {
   background-color: #f73d3d;
@@ -142,10 +153,10 @@
   background-color: #dc8017;
 }
 .linkColor2 {
-  background-color: #45bdbf;
+  background-color: #0095cc;
 }
 .linkColor2:hover {
-  background-color: #74c5c6;
+  background-color: #2487ab;
 }
 .linkColor3 {
   background-color: #ba2d2d;
@@ -181,6 +192,13 @@
 .usuarioTitiii {
   color: #f0f0f0;
   align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.usuarioTitiii2 {
+  color: #f0f0f0;
+  align-items: center;
+  text-transform: capitalize;
   display: flex;
   justify-content: center;
 }
@@ -226,6 +244,17 @@
 .estadisticaAuto{
   height: auto !important;
 }
+@media screen and (min-width: 690px) and (max-width: 1495px) {
+  .contInterno4 {
+    border-radius: 10px 0px 0px 0px;
+    grid-area: contInterno;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+  }
+
+}
 
 @media screen and (min-width: 690px) and (max-width: 1300px) {
   .container-wrapper {
@@ -264,6 +293,14 @@
     justify-content: center;
     display: flex;
     font-size: 1em;
+  }
+  .contInterno4 {
+    border-radius: 10px 0px 0px 0px;
+    grid-area: contInterno;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
   }
 
   .conteEstadistica1 {
@@ -342,6 +379,17 @@
       "conteEstadistica1" 400px
       "conteEstadistica2" 400px/
       100%;
+  }
+  .contInterno4 {
+    border-radius: 10px 0px 0px 0px;
+    grid-area: contInterno;
+    text-align: justify !important;
+    justify-content: center;
+    align-items:flex-start;
+    display: flex;
+    flex-direction: column !important;
+    font-size: 13px;
+    padding-left: 10px;
   }
 
   .contInterno {

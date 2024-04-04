@@ -264,9 +264,9 @@ const Dashboard = () => {
 					)}
 				</div>
 				<div className="small-container2">
-					<div className="contInterno contcolor1">
-						<span className="usuarioTitiii">Ultimo Movimiento: {movimiento}</span>
-						<span className="usuarioTitiii">Producto: {nombre}</span>
+					<div className="contInterno4 contcolor1">
+						<span className="usuarioTitiii2">Ultimo Movimiento: {movimiento}</span>
+						<span className="usuarioTitiii2">Producto: {nombre}</span>
 					</div>
 					<div className="contInterno2 contcolor1">
 						<svg

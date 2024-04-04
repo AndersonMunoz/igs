@@ -392,13 +392,13 @@ export const Menu = () => {
               </>
             ) : (
               <>
-                <li className="d-none">
+                <li className="">
                   <div className="content-nav">
-                    <Link to="/usuario">
+                    <Link to="/usuario/instructores">
                       <div className="tamañoLateral">
                         <IconUser className="iconosLaterales" />
                       </div>
-                      <span className="link_name">Usuarios</span>
+                      <span className="link_name">Instructores</span>
                     </Link>
                     <div className="container-icon">
                       <IconChevronDown className="iconoA" />
@@ -407,12 +407,9 @@ export const Menu = () => {
 
                   <ul className="sub-menu">
                     <li>
-                      <Link className="link_name" to="/usuario">
-                        Usuarios
+                      <Link className="link_name" to="/usuario/instructores">
+                        Intructores
                       </Link>
-                    </li>
-                    <li>
-                      <Link to="/usuario/instructores">Instructores</Link>
                     </li>
                     <li>
                       <Link to="/usuario/titulados">Titulados</Link>
