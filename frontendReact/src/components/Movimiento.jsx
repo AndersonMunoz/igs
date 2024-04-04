@@ -549,7 +549,7 @@ const Movimiento = () => {
             <tbody id="tableMovimiento">
               {movimientos.length === 0 ? (
                 <tr>
-                  <td colSpan={13}>
+                  <td colSpan={16}>
                     <div className="d-flex justify-content-center">
                       <div className="alert alert-danger text-center mt-4 w-50">
                         <h2> En este momento no contamos con ningún movimiento disponible.😟</h2>

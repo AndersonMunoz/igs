@@ -81,6 +81,19 @@ const Up = () => {
 
     return wsData;
   };
+  const resetFormState = () => {
+    const formFields = modalCategoriaRef.current.querySelectorAll(
+      '.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]'
+    );
+    formFields.forEach((field) => {
+      if (field.type === "checkbox") {
+        field.checked = false;
+      } else {
+        field.value = "";
+      }
+      field.classList.remove("is-invalid");
+    });
+  };
 
   
 
@@ -304,14 +317,11 @@ const Up = () => {
         <div className="btnContenido1">
           <button
             type="button"
-            id="modalUsuario"
+            id="modalCategoria"
             className="btn-color btn"
             data-bs-toggle="modal"
             data-bs-target="#staticBackdrop"
-            onClick={() => {
-              setShowModal(true);
-              Validate.limpiar(".limpiar");
-            }}
+            onClick={() => { setShowModal(true); Validate.limpiar('.limpiar'); resetFormState();}}
           >
             Registrar Bodega
           </button>

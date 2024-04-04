@@ -26,6 +26,7 @@ const Movimiento = () => {
   const [userId, setUserId] = useState('');
   const [movimientos, setMovimientos] = useState([]);
   const [productosCategoria,setProCat] = useState([]);
+  const [userRoll, setUserRoll] = useState("");
   const [unidadesProductos,setUniPro] = useState([]);
   const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
   const [categoria_list, setcategorias_producto] = useState([]);
@@ -238,6 +239,7 @@ const Movimiento = () => {
         ],
       });
     }
+    setUserRoll(dataDecript(localStorage.getItem("roll")));
   }, [movimientos]);
 
 
@@ -633,7 +635,7 @@ const Movimiento = () => {
             <tbody id="tableMovimiento">
               {movimientos.length === 0 ? (
                 <tr>
-                  <td colSpan={13}>
+                  <td colSpan={16}>
                     <div className="d-flex justify-content-center">
                       <div className="alert alert-danger text-center mt-4 w-50">
                         <h2> En este momento no contamos con ningún movimiento disponible.😟</h2>
@@ -675,15 +677,20 @@ const Movimiento = () => {
                       </td>
                       <td className="p-2 text-center">{element.nombre_usuario}</td>
                       <td className="p-2 text-center">{element.nombre_proveedores}</td>
-
-                      <td className="p-0 text-center"   >
+                    <td className="p-0 text-center"  > 
+                      { (userRoll === "administrador") ? (
+                        
                         <button className="btn btn-color"onClick={() => { setUpdateModal(true); editarMovimiento(element.id_factura); resetFormState();}} data-bs-toggle="modal" data-bs-target="#movimientoEditarModal">
                         <IconEdit />
                         </button>
+                      ) :(
 
-                      </td>
+                        <span>No disponible</span>
+                      )}
+                  </td>
+                      
                     </tr>
-
+  
                   ))}</>)}
             </tbody>
           </table>

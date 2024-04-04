@@ -5,7 +5,7 @@ import { validatorInstructores } from "../validation/instructores.validator.js";
 
 const instructoresRouter = Router();
 
-instructoresRouter.post("/registrar",validatorInstructores, registroInstructor);
+instructoresRouter.post("/registrar",validarToken,validatorInstructores, registroInstructor);
 instructoresRouter.get("/listar",validarToken, listarInstructor);
 instructoresRouter.get("/listarCount",validarToken, listarInstructoresCount);
 instructoresRouter.get("/listarActivo",validarToken, listarActivoInstructor );
