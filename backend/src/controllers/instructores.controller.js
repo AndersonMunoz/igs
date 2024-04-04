@@ -6,7 +6,7 @@ export const registroInstructor = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error)
+            return res.status(403).json(error)
         }
         let {documento_instructor, nombre_instructor} = req.body;
         const documento_instructorQuery = `SELECT * FROM  instructores  WHERE documento_instructor = '${documento_instructor}'`;
@@ -33,7 +33,6 @@ export const registroInstructor = async (req, res) => {
                 "status": 403,
                 "menssage": "El Instructor no se puedo registrar"
             })
-
         }
     } catch (error) {
         res.status(500).json({

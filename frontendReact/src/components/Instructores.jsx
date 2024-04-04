@@ -137,7 +137,7 @@ const Instructores = () => {
 					return;
 				}
 				if (data.status !== 200) {
-					Sweet.error(data.error.errors[0].msg);
+					Sweet.error(data.errors[0].msg);
 					return;
 				}
 				listarInstructores();

@@ -299,7 +299,6 @@ const Tipo = () => {
         console.error("Error:", error);
       });
   }
-
   function deshabilitarTipo(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -578,8 +577,8 @@ const Tipo = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row mb-3">
-                  <div className="col-md-6">
+                <div className="row">
+                  <div className="col">
                     <label
                       htmlFor="fk_categoria_pro"
                       className="label-bold mb-2"
@@ -587,7 +586,7 @@ const Tipo = () => {
                       Categoria
                     </label>
                     <Select
-                        className="react-select-container  form-empt my-custom-class"
+                        className="react-select-container form-empt my-custom-class"
                         classNamePrefix="react-select"
                         options={categoria.map(element => ({ value: element.id_categoria, label: element.nombre_categoria}))}
                         placeholder="Selecciona..."
@@ -600,7 +599,7 @@ const Tipo = () => {
                     </div>
                   </div>
 
-                  <div className="col-md-6">
+                  <div className="col">
                     <label htmlFor="unidad_peso" className="label-bold mb-2">
                       Unidad de Peso
                     </label>
