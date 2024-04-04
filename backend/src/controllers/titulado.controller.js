@@ -85,6 +85,18 @@ export const editarTitulado = async (req, res) => {
 		let id = req.params.id;
 		let { nombre_titulado,id_ficha} = req.body;
 
+		
+        const id_fichaQuery = `SELECT * FROM titulados WHERE id_ficha = '${id_ficha}'`;
+		const [existingid_ficha] = await pool.query(id_fichaQuery);
+		
+
+        if (existingid_ficha.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El id de ficha  ya está registrado"
+            });
+        }
+
 		let sql = `update titulados SET nombre_titulado = '${nombre_titulado}',id_ficha ='${id_ficha}'
         where id_titulado = ${id} `;
 		
