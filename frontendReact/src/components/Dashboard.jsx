@@ -19,6 +19,9 @@ const Dashboard = () => {
 	const [categoriasCount, setCategoriasCount] = useState([]);
 	const [userRoll, setUserRoll] = useState("");
 	const [alertReportes, setAlertReportes] = useState('')
+	const [movimiento, setMovimento] = useState('')
+	const [nombre, setNombre]= useState('')
+	const [contCate, setContCate] = useState('')
 	// useEffect para obtener datos del backend al cargar el componente
 	useEffect(() => {
 		listarProducto()
@@ -28,7 +31,38 @@ const Dashboard = () => {
 		listarTitulado();
 		listarInstructor();
 		listarCountCategoria();
+		listarMovimiento()
 	}, []);
+	function listarMovimiento() {
+		fetch(`http://${portConexion}:3000/facturamovimiento/listar`, {
+		  method: "GET",
+		  headers: {
+			"content-type": "application/json",
+			token: localStorage.getItem("token")
+		  },
+		}).then((res) => {
+		  if (res.status === 204) {
+			return null;
+		  }
+		  return res.json();
+		})
+		  .then((data) => {
+			if (Array.isArray(data)) {
+				let fechaMayor = new Date("2023-03-02");
+				data.forEach((element) => {
+				  const fechaActual = new Date(element.fecha_movimiento);
+				  if (fechaActual > fechaMayor) {
+					fechaMayor = fechaActual
+				    setMovimento(element.tipo_movimiento)
+					setNombre(element.nombre_tipo)
+				  }
+				});
+			}
+		  })
+		  .catch((e) => {
+			console.log(e);
+		  });
+	  }
 	// Funciones para obtener la cantidad de categorias
 	function listarCountCategoria() {
 		fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
@@ -40,6 +74,7 @@ const Dashboard = () => {
 		})
 			.then((res) => res.json())
 			.then((data) => {
+				setContCate(data.length)
 				setCategoriasCount(data);
 			})
 			.catch((e) => {
@@ -181,10 +216,10 @@ const Dashboard = () => {
 			  caducar.push(element)
 			}
 		  });
+		  let cont = 0;
 		  if (caducar.length > 0) {
 			setAlertReportes(caducar.length);
 			cont = cont + caducar.length
-			setAlert(cont)
 		  }else{
 			setAlertReportes('')
 		  }
@@ -230,8 +265,8 @@ const Dashboard = () => {
 				</div>
 				<div className="small-container2">
 					<div className="contInterno contcolor1">
-						<span className="usuarioTitiii">Ultimo Movimiento:</span>
-						<span className="usuarioTitiii">Tipo: </span>
+						<span className="usuarioTitiii">Ultimo Movimiento: {movimiento}</span>
+						<span className="usuarioTitiii">Producto: {nombre}</span>
 					</div>
 					<div className="contInterno2 contcolor1">
 						<svg
@@ -313,8 +348,13 @@ const Dashboard = () => {
 					</Link>
 				</div>
 				<div className="small-container4">
-					<div className="contInterno contcolor3"></div>
+					<div className="contInterno contcolor3">
+					<span className="usuarioTitiii">
+						Categorias registradas: {contCate}
+					</span>
+					</div>
 					<div className="contInterno2 contcolor3">
+						
 						<svg
 							fill="none"
 							height="48"
@@ -338,6 +378,7 @@ const Dashboard = () => {
 							</g>
 						</svg>
 					</div>
+					
 					<Link className="linkContenido linkColor4" to="/inventario">
 						<div className="tamañoLateral">
 							<span className="">Ver Inventario</span>
