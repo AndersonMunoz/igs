@@ -35,8 +35,8 @@ const Titulados = () => {
 			}
 			$(tableRef.current).DataTable({
 				columnDefs: [
-					{
-						targets: -1,
+						{
+							targets: -1,
 						responsivePriority: 1,
 					},
 				],

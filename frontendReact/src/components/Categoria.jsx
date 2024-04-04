@@ -443,17 +443,7 @@ const Categoria = () => {
                       <td className="p-0">
                         {element.estado === 1 ? (
                           <>
-                            <button
-                              className="btn btn-color mx-2"
-                              onClick={() => {
-                                setUpdateModal(true);
-                                editarCategoria(element.id_categoria);
-                              }}
-                              data-bs-toggle="modal"
-                              data-bs-target="#staticBackdrop2"
-                            >
-                              <IconEdit />
-                            </button>
+                          
                             <button
                               className="btn btn-danger "
                               onClick={() =>
@@ -475,7 +465,17 @@ const Categoria = () => {
                         )}
                       </td>
                     ) : (
-                      <td>No disponible</td>
+                      <td>  <button
+                      className="btn btn-color mx-2"
+                      onClick={() => {
+                        setUpdateModal(true);
+                        editarCategoria(element.id_categoria);
+                      }}
+                      data-bs-toggle="modal"
+                      data-bs-target="#staticBackdrop2"
+                    >
+                      <IconEdit />
+                    </button></td>
                     )}
                   </tr>
                 ))}
