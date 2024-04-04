@@ -1,6 +1,6 @@
 .dashboard-container {
   width: 100%;
-  margin-top: 15px;
+  margin-top: 10px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -13,6 +13,7 @@
   height: 160px;
   font-weight: 700;
   display: grid;
+  margin-bottom: 6px;
   justify-content: center;
   grid-template:
     "empty-1 small-container1 small-container2 small-container3 small-container4 empty-2 " 100%/
@@ -49,14 +50,14 @@
 .small-container6 {
   grid-area: small-container6;
   grid-template:
-    "contInterno contInterno2" 120px
+    "contInterno contInterno2" 110px
     "linkContenido linkContenido" 40px
     / 70% 30%;
 }
 .small-container7 {
   grid-area: small-container7;
   grid-template:
-    "contInterno contInterno2" 120px
+    "contInterno contInterno2" 110px
     "linkContenido linkContenido" 40px
     / 70% 30%;
 }
@@ -186,6 +187,7 @@
 .container-wrapper2 {
   width: 100%;
   height: 500px;
+  margin-bottom: 5px;
   gap: 15px;
   position: relative;
   flex-direction: row;
@@ -215,7 +217,7 @@
   display: flex;
   width: 100%;
   height: 470px;
-  padding: 10px;
+  padding: 8px;
   justify-content: center;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -234,10 +236,10 @@
     display: grid;
     flex-direction: row;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     grid-template:
       "small-container1 small-container2" 150px
-      "empty empty" 5px
+      "empty empty" 4px
       "small-container3 small-container4" 150px/
       50% 50%;
   }
@@ -256,6 +258,14 @@
       "empty-1 conteEstadistica1 conteEstadistica2 empty-2" 100%/
       1% 49% 49% 1%;
   }
+  .contInterno {
+    border-radius: 10px 0px 0px 0px;
+    grid-area: contInterno;
+    justify-content: center;
+    display: flex;
+    font-size: 1em;
+  }
+
   .conteEstadistica1 {
     grid-area: conteEstadistica1;
     background-color: #f0f0f0;
@@ -432,17 +442,17 @@
 .containerWrapper3 {
   gap: 15px;
   width: 98%;
-  height: 170px;
+  height: 150px;
   font-weight: 700;
   display: grid;
   flex-direction: row;
   justify-content: center;
   grid-template:
-    "small-container6 small-container7" 170px/
+    "small-container6 small-container7" 150px/
     50% 50%;
 }
 .usuarioTitiii2{
-  font-size: 1.2em !important;
+  font-size: 1.1em !important;
   color: #f0f0f0;
 align-items: center;
 display: flex;
