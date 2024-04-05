@@ -29,6 +29,8 @@ const Usuario = () => {
   const modalUpdateRef = useRef(null);
   const tableRef = useRef();
 
+  const [userRoll, setUserRoll] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState('');
@@ -192,10 +194,25 @@ const Usuario = () => {
   useEffect(() => {
     window.onpopstate = function(event) {
       window.location.reload();
+
+      
   };
+  /* setUserRoll(dataDecript(localStorage.getItem("roll"))); */
+
+      const role = localStorage.getItem("roll")
+
+      console.log(role)
+
+
   
     listarUsuario();
+
+
   }, []);
+  
+  
+
+      
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector(".modal-backdrop");
@@ -404,6 +421,10 @@ const Usuario = () => {
 
   return (
     <div>
+      {/* {role === "'administrador'" ? (
+        <> */}
+        
+        
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <button
@@ -956,7 +977,13 @@ const Usuario = () => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
+      {/* </>
+      ):(
+        <>
+        <h1>no disponible</h1>
+        </>
+      ) } */}
     </div>
   );
 };
