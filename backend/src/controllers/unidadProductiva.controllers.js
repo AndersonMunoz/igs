@@ -1,6 +1,7 @@
-import { pool } from "../database/conexion.js"
+import { pool } from "../database/conexion.js";
 import { validationResult } from "express-validator";
 
+// Registra una nueva  bodega en la base de datos
 export const registroUnidadProductiva = async (req, res) => {
 
 	try {
@@ -48,34 +49,38 @@ export const registroUnidadProductiva = async (req, res) => {
 	}
 }
 
+
+// Lista todas las  bodegas disponibles en la base de datos
 export const listarUnidadProductiva = async (req, res) => {
-	try {
-		const [result] = await pool.query('select * from bodega');
-		if (result.length > 0) {
-			res.status(200).json(result);
-		} else {
-			res.status(204).json({ "status": 204, "message": "No se pudo listar bodegas" });
-		}
-
-	} catch (err) {
+    try {
+        const [result] = await pool.query('SELECT * FROM bodega');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({"status": 204, "message": "No se encontraron bodegas"});
+        }
+    } catch (err) {
         res.status(500).json({
-            "status": 500, "message": "Error en el servidor   "+err
-        
-        })
+            "status": 500,
+            "message": "Error en el servidor " + err
+        });
     }
-
 };
+
+// Busca una bodega  por su ID
 export const buscarup = async (req, res) => {
     try {
-      let id = req.params.id;
-      const [result] = await pool.query(
-        "SELECT * FROM bodega WHERE id_up=" + id
-      );
-      res.status(200).json(result);
-      }catch(e){
-          res.status(500).json({message: 'Error en  buscar  : '+e})
-      }
-  }
+        let id = req.params.id;
+        const [result] = await pool.query(
+            "SELECT * FROM bodega WHERE id_up=" + id
+        );
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(500).json({message: 'Error en buscar: ' + e});
+    }
+};
+
+// Edita una bodega  existente en la base de datos
 export const editarUnidadProductiva = async (req, res) => {
 	try {
 		let error = validationResult(req);
@@ -106,40 +111,36 @@ export const editarUnidadProductiva = async (req, res) => {
 	}
 }
 
+// Deshabilita una bodega  en la base de datos
 export const deshabilitarUp = async (req, res) => {
-	try {
-		let id = req.params.id;
-		let sql = `UPDATE bodega SET estado = 0 WHERE id_up  = ${id}`;
-		const [rows] = await pool.query(sql);
-		if (rows.affectedRows > 0) {
-			res
-				.status(200)
-				.json({ status: 200, message: "Se deshabilitó con éxito la bodega " });
-		} else {
-			res
-				.status(401)
-				.json({ status: 401, message: "No se deshabilitó la bodega" });
-		}
-	} catch (e) {
-		res.status(500).json({ message: "Error en deshabilitartipo la bodega: " + e });
-	}
+    try {
+        let id = req.params.id;
+        let sql = `UPDATE bodega SET estado = 0 WHERE id_up = ${id}`;
+        const [rows] = await pool.query(sql);
+
+        if (rows.affectedRows > 0) {
+            res.status(200).json({"status": 200, "message": "Se deshabilitó con éxito la bodega"});
+        } else {
+            res.status(401).json({"status": 401, "message": "No se deshabilitó la bodega"});
+        }
+    } catch (e) {
+        res.status(500).json({"message": "Error en deshabilitar la bodega: " + e});
+    }
 };
 
+// Activa una bodega  que fue previamente deshabilitada
 export const activarUp = async (req, res) => {
-	try {
-		let id = req.params.id;
-		let sql = `UPDATE bodega SET estado = 1 WHERE id_up  = ${id}`;
-		const [rows] = await pool.query(sql);
-		if (rows.affectedRows > 0) {
-			res
-				.status(200)
-				.json({ status: 200, message: "Se activo  con éxito la bodega" });
-		} else {
-			res
-				.status(401)
-				.json({ status: 401, message: "No se activo  bodega " });
-		}
-	} catch (e) {
-		res.status(500).json({ message: "Error en activarTipo bodega: " + e });
-	}
+    try {
+        let id = req.params.id;
+        let sql = `UPDATE bodega SET estado = 1 WHERE id_up = ${id}`;
+        const [rows] = await pool.query(sql);
+
+        if (rows.affectedRows > 0) {
+            res.status(200).json({"status": 200, "message": "Se activó con éxito la bodega"});
+        } else {
+            res.status(401).json({"status": 401, "message": "No se activó la bodega"});
+        }
+    } catch (e) {
+        res.status(500).json({"message": "Error en activar la bodega: " + e});
+    }
 };

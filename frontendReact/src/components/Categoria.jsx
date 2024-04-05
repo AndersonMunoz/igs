@@ -146,7 +146,7 @@ const Categoria = () => {
       modalBackdrop.remove();
     }
   }
-
+// Función para listar las categorias  
   function listarCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listar`, {
       method: "GET",
@@ -169,7 +169,7 @@ const Categoria = () => {
       })
       .catch((e) => {});
   }
-
+// Función para registrar  una nueva categoria 
   function registrarCategoria() {
     let nombre_categoria = document.getElementById("nombreCategoria").value;
     let tipo_categoria = document.getElementById("tipo_categoria").value;
@@ -223,7 +223,7 @@ const Categoria = () => {
         console.error("Error:", error);
       });
   }
-
+ // esta funcion es para deshabilitar una categoria  
   function deshabilitarCategoria(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -249,6 +249,7 @@ const Categoria = () => {
       }
     });
   }
+   // esta funcion es para activar una categoria deshabilitada
   function activarCategoria(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
@@ -275,6 +276,8 @@ const Categoria = () => {
       }
     });
   }
+  
+  // funcion para  llamar  los datos que aparezcan el el modal para actualizar 
   function editarCategoria(id) {
     fetch(`http://${portConexion}:3000/categoria/buscar/${id}`, {
       method: "GET",
@@ -292,6 +295,7 @@ const Categoria = () => {
         console.error("Error:", error);
       });
   }
+    // funcion para actualizar la categoria 
   function actualizarCategoria(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
     const codigoExistente = categorias_producto.some(
@@ -348,6 +352,7 @@ const Categoria = () => {
 
   return (
     <div>
+    
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <button
@@ -504,6 +509,7 @@ const Categoria = () => {
         ref={modalCategoriaRef}
         style={{ display: showModal ? "block" : "none" }}
       >
+          {/* Modal de Nuevo categoria  */}
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -614,6 +620,7 @@ const Categoria = () => {
         ref={modalUpdateRef}
         style={{ display: updateModal ? "block" : "none" }}
       >
+        {/* Modal de actualizar de categoria */}
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">

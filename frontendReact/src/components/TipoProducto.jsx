@@ -198,7 +198,7 @@ const Tipo = () => {
       modalBackdrop.remove();
     }
   }
-
+// Función para listar los tipos   
   function listarTipo() {
     fetch(`http://${portConexion}:3000/tipo/listar`, {
       method: "GET",
@@ -223,6 +223,7 @@ const Tipo = () => {
         console.log(e);
       });
   }
+    // Función para listar las categorias  
   function listarCategoria() {
     fetch(`http://${portConexion}:3000/categoria/listar`, {
       method: "GET",
@@ -249,6 +250,7 @@ const Tipo = () => {
   const handleCategoria = (selectedOption) => {
     setSelectedCategoria(selectedOption); 
   };
+  // Función para registrar  un nuevo tipo de producto 
   function registrarTipo() {
     let nombre_tipo = document.getElementById("nombre_tipo").value;
     let unidad_peso = document.getElementById("unidad_peso").value;
@@ -299,6 +301,7 @@ const Tipo = () => {
         console.error("Error:", error);
       });
   }
+  // esta funcion es para deshabilitar un tipo de producto  
   function deshabilitarTipo(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -324,7 +327,9 @@ const Tipo = () => {
           });
       }
     });
-  }
+  } 
+  // esta funcion es para activar un tipo de producto 
+  
   function activarTipo(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
@@ -351,7 +356,7 @@ const Tipo = () => {
       }
     });
   }
-
+  // funcion para  llamar  los datos que aparezcan el el modal para actualizar 
   function editarTipo(id) {
     fetch(`http://${portConexion}:3000/tipo/buscar/${id}`, {
       method: "GET",
@@ -369,6 +374,7 @@ const Tipo = () => {
         console.error("Error:", error);
       });
   }
+  // funcion para actualizar tipo de  producto 
   function actualizarTipo(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
     fetch(`http://${portConexion}:3000/tipo/editar/${id}`, {
@@ -412,7 +418,7 @@ const Tipo = () => {
   };
 
   const search = setSeach({ category }); // Pasando el valor de category como argumento
-
+// Renderizado del componente
   return (
     <div>
        <div className="boxBtnContendidoTitulo">
@@ -556,6 +562,7 @@ const Tipo = () => {
           </tbody>
         </table>
       </div>
+      {/* Modal de Nuevo Tipo  de producto  */}
       <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref={modalProductoRef} style={{ display: showModal ? 'block' : 'none' }} >
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
@@ -654,7 +661,7 @@ const Tipo = () => {
           </div>
         </div>
       </div>
-
+{/* Modal de actualizar tipo de producto  */}
       <div
         className="modal fade"
         id="staticBackdrop2"

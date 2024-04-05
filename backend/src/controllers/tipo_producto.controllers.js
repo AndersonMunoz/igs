@@ -1,6 +1,7 @@
 import { pool } from "../database/conexion.js"
 import { validationResult } from "express-validator";
 
+// Esta función registra un nuevo tipo de producto en la base de datos.
 export const registroTipo_producto = async (req, res) => {
 
     try {
@@ -38,6 +39,8 @@ export const registroTipo_producto = async (req, res) => {
         })
     }
 }
+
+ // Esta función obtiene todos los tipos de productos disponibles en la base de datos y los devuelve como resultado. Si no hay tipos de productos disponibles, devuelve un mensaje indicando que no se encontraron tipos de productos..
 export const listarTipoProducto = async (req, res) => {
     try {
         const [result] = await pool.query
@@ -57,7 +60,7 @@ export const listarTipoProducto = async (req, res) => {
         });
     }
 }
-
+ // Esta función lista solo los tipos de productos activos en la base de datos.
 export const listarActivoTipo = async (req, res) => {
     try {
         const [result] = await pool.query
@@ -78,7 +81,7 @@ export const listarActivoTipo = async (req, res) => {
         });
     }
 }
-
+  // Esta función busca un tipo de producto específico por su ID en la base de datos.
 export const buscarTipoProducto = async (req, res) => {
     try {
       let id = req.params.id;
@@ -91,7 +94,7 @@ export const buscarTipoProducto = async (req, res) => {
       }
   }
 
-
+// Esta función edita un tipo de producto existente en la base de datos.
 export const editarTipo_producto = async (req, res) => {
     try {
         let error = validationResult(req);
@@ -121,7 +124,7 @@ export const editarTipo_producto = async (req, res) => {
         });
     }
 }
-
+  // Esta función deshabilita un tipo de producto existente en la base de datos.
 
 export const deshabilitarTipo = async (req, res) => {
     try {
@@ -141,6 +144,7 @@ export const deshabilitarTipo = async (req, res) => {
       res.status(500).json({ message: "Error en deshabilitartipo de producto: " + e });
     }
   };
+ // Esta función activa un tipo de producto que previamente fue deshabilitado en la base de datos.
 
   export const activarTipo = async (req, res) => {
     try {

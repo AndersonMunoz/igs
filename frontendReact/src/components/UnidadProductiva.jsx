@@ -139,7 +139,7 @@ const Up = () => {
       modalBackdrop.remove();
     }
   }
-
+// Función para listar las  bodegas 
   function listarUp() {
     fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
@@ -163,6 +163,7 @@ const Up = () => {
         console.log(e);
       });
   }
+// Función para registrar  una nueva bodega 
 
   function registrarUp() {
     let nombre_up = document.getElementById("nombreUp").value;
@@ -207,7 +208,7 @@ const Up = () => {
         console.error("Error:", error);
       });
   }
-
+ // esta funcion es para deshabilitar una bodega 
   function deshabilitarUp(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
@@ -233,6 +234,7 @@ const Up = () => {
       }
     });
   }
+   // esta funcion es para activar una bodega deshabilitada
   function activarUp(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
@@ -259,7 +261,7 @@ const Up = () => {
       }
     });
   }
-
+// funcion para  llamar  los datos que aparezcan el modal para actualizar
   function editarUp(id) {
     fetch(`http://${portConexion}:3000/up/buscar/${id}`, {
       method: "GET",
@@ -277,6 +279,7 @@ const Up = () => {
         console.error("Error:", error);
       });
   }
+   // funcion para actualizar la  bodega 
   function actualizarUp(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
     fetch(`http://${portConexion}:3000/up/editar/${id}`, {
@@ -461,6 +464,7 @@ const Up = () => {
         ref={modalCategoriaRef}
         style={{ display: showModal ? "block" : "none" }}
       >
+          {/* Modal de Nuevo bodega   */}
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg txt-color">
@@ -520,7 +524,7 @@ const Up = () => {
           </div>
         </div>
       </div>
-
+   {/* Modal de actualizar de bodega  */}
       <div
         className="modal fade"
         id="staticBackdrop2"
