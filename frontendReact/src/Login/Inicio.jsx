@@ -29,7 +29,7 @@ const LoginForm = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         if (data.status === 200) {
           Sweet.recuperacionExitosa();
         } else {
@@ -65,7 +65,7 @@ const LoginForm = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.status == 200) {
-          console.log(data);
+          //console.log(data);
           setLoginSuccesFull(true);
           localStorage.setItem("token", data.token);
           localStorage.setItem("name", dataEncript(data.nombre));
@@ -77,8 +77,8 @@ const LoginForm = () => {
           setLoginSuccesFull(false);
         }
       });
-    console.log("documento:", documento);
-    console.log("Contraseña:", contrasena);
+    //console.log("documento:", documento);
+    //console.log("Contraseña:", contrasena);
   };
 
   const handleCloseRecuperarModal = () => {
