@@ -227,6 +227,7 @@ const reporte = () => {
           let valEntradas = 0;
           let valSalidas = 0;
           let ReporteDelFiltro = [];
+          let valTotal = 0;
           let fechaInicio = new Date(inicio);
           let fechaFin = new Date(fin);
           fechaFin.setDate(fechaFin.getDate() + 1);
@@ -235,8 +236,10 @@ const reporte = () => {
             const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
             if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
               if (data.productos[index].nombre_categoria == select) {
+                
                 valEntradas = valEntradas + parseInt(data.productos[index].total_entradas);
                 valSalidas = valSalidas + parseInt(data.productos[index].total_salidas);
+                valTotal = valTotal + (data.productos[index].precio_total);
                 ReporteDelFiltro.push(data.productos[index])
               }
               if (select == 'todas') {
@@ -244,6 +247,7 @@ const reporte = () => {
               }
             }
           }
+          setValorTotal(valTotal)
           setValEntradas(valEntradas)
           setValSalidas(valSalidas)
           setReporte(ReporteDelFiltro)
@@ -270,7 +274,7 @@ const reporte = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+      //  console.log(data);
         if (data !== null) {
           setValEntradas(data.entraron)
           setValSalidas(data.salieron)
@@ -341,9 +345,9 @@ const reporte = () => {
             <tr>
               <th className="th-sm">Productos</th>
               <th className="th-sm">Categoría</th>
-              <th className="th-sm">Entradas ({valEntradas})</th>
-              <th className="th-sm">Salidas ({valSalidas})</th>
-              <th className="th-sm">Valor ({valorTotal})</th>
+              <th className="th-sm">Entradas (<span style={{color: 'rgb(13,110,253)'}}>${valEntradas}</span>)</th>
+              <th className="th-sm">Salidas (<span style={{color: 'rgb(13,110,253)'}}>${valSalidas}</span>)</th>
+              <th className="th-sm">Valor total(<span style={{color: 'rgb(13,110,253)'}}>${valorTotal}</span>)</th>
               <th className="th-sm">Fecha último movimiento</th>
             </tr>
           </thead>
