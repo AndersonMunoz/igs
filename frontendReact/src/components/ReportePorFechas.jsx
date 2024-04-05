@@ -28,7 +28,6 @@ const formatDateYYYYMMDD = (date) => {
 };
 
 const reporte = () => {
-  const [title, setTitle] = useState("Reportes por fechas");
   const [rangoMovInicio, setRangoMovInicio] = useState();
   const [rangoMovFin, setRangoMovFin] = useState();
   const [expMov, setExpMov] = useState("aqui para exportar");
@@ -292,7 +291,7 @@ const reporte = () => {
 
   return (
     <div>
-      <h3 className="text-center mt-2">Reporte por fecha</h3>
+      <h5 className="text-center mt-2">Reporte por fecha</h5>
       <div className="boxBtnContendidoTituloF">
 
         <div className="btnContenidoF11">

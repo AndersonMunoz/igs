@@ -146,15 +146,104 @@
         gap: 5px;
         padding: 5px;
         width: 100%;
-        justify-content:space-evenly !important;
         flex-direction: column;
         display: flex;
       }
       .grupoBOtoness{
-        background-color: aquamarine;
         width: 100%;
       }
 
+      .CategoriasInput {
+        height: 38px;
+        padding: 0px 0px 0px 5px !important;
+        font-size: .8em !important;
+      }
+}
+
+@media screen and (min-width: 100px) and (max-width: 639px) {
+  .boxBtnContendidoTituloF {
+    display: grid;
+    margin-top: 10px;
+    width: 100%;
+    height:auto;
+    gap: 10px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    grid-template:
+      "btnContenidoF11" 50%
+      "btnContenidoF22" 50%/
+      1fr;
+    margin-bottom: 10px;
+  }
+  .btnContenidoF11 {
+    grid-area: btnContenidoF11;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: grid;
+    grid-template:
+      "ContFechaR1 botonBuscarFecha" 40px
+      "ContFechaR2 botonBuscarFecha" 40px/
+      2fr 1fr;
+  }
+  .inputFechaReporte {
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid rgb(184, 184, 184);
+    padding: 5px 10px 5px 15px;
+  }
+  .ContFechaR1 {
+    grid-area: ContFechaR1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 15px;
+    gap: 10px;
+  }
+  .ContFechaR2 {
+    grid-area: ContFechaR2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0px;
+    gap: 10px;
+  }
+  .inputFechaReporte {
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid rgb(184, 184, 184);
+    padding: 5px 10px 5px 15px;
+  }
+
+  .botonBuscarFecha {
+    grid-area: botonBuscarFecha;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btnContenidoF22 {
+    grid-area: btnContenidoF22;
+    height: auto;
+    gap: 5px;
+    padding: 5px;
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+  }
+  .grupoBOtoness{
+    width: 100%;
+  }
+
+  .CategoriasInput {
+    height: 38px;
+    padding: 0px 0px 0px 5px !important;
+    font-size: .8em !important;
+  }
 
 }
 
