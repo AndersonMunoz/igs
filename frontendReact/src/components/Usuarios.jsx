@@ -16,8 +16,8 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
-import { secretKey } from "../const/keys";
 import portConexion from "../const/portConexion";
+import { secretKey } from "../const/keys";
 import CryptoJs from "crypto-js";
 
 
@@ -160,7 +160,7 @@ const Usuario = () => {
       field.classList.remove("is-invalid");
     });
   };
-  
+
 
 
 
@@ -192,27 +192,15 @@ const Usuario = () => {
   }, [usuarios]);
 
   useEffect(() => {
-    window.onpopstate = function(event) {
+    window.onpopstate = function (event) {
       window.location.reload();
-
-      
-  };
-  /* setUserRoll(dataDecript(localStorage.getItem("roll"))); */
-
-      const role = localStorage.getItem("roll")
-
-      console.log(role)
-
-
-  
+    };
     listarUsuario();
-
-
   }, []);
-  
-  
 
-      
+
+
+
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector(".modal-backdrop");
@@ -421,10 +409,6 @@ const Usuario = () => {
 
   return (
     <div>
-      {/* {role === "'administrador'" ? (
-        <> */}
-        
-        
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <button
@@ -978,12 +962,6 @@ const Usuario = () => {
           </div>
         </div>
       </div>
-      {/* </>
-      ):(
-        <>
-        <h1>no disponible</h1>
-        </>
-      ) } */}
     </div>
   );
 };
