@@ -345,8 +345,8 @@ const reporte = () => {
             <tr>
               <th className="th-sm">Productos</th>
               <th className="th-sm">Categoría</th>
-              <th className="th-sm">Entradas (<span style={{color: 'rgb(13,110,253)'}}>${valEntradas}</span>)</th>
-              <th className="th-sm">Salidas (<span style={{color: 'rgb(13,110,253)'}}>${valSalidas}</span>)</th>
+              <th className="th-sm">Entradas (<span style={{color: 'rgb(13,110,253)'}}>{valEntradas}</span>)</th>
+              <th className="th-sm">Salidas (<span style={{color: 'rgb(13,110,253)'}}>{valSalidas}</span>)</th>
               <th className="th-sm">Valor total(<span style={{color: 'rgb(13,110,253)'}}>${valorTotal}</span>)</th>
               <th className="th-sm">Fecha último movimiento</th>
             </tr>
