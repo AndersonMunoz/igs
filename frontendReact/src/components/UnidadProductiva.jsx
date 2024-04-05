@@ -403,7 +403,17 @@ const Up = () => {
                         <td className="p-0">
                         {element.estado === 1 ? (
                           <>
-                           
+                           <button
+                        className="btn btn-color mx-2"
+                        onClick={() => {
+                          setUpdateModal(true);
+                          editarUp(element.id_up);
+                        }}
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop2"
+                      >
+                        <IconEdit />
+                      </button>
                             <button
                               className="btn btn-danger"
                               onClick={() => deshabilitarUp(element.id_up)}
@@ -421,7 +431,7 @@ const Up = () => {
                         )}
                       </td>
                       ):(
-                        <td> <button
+                        <td className="p-0"> <button
                         className="btn btn-color mx-2"
                         onClick={() => {
                           setUpdateModal(true);

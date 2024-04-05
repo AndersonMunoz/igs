@@ -508,7 +508,17 @@ const Tipo = () => {
                         <td className="p-0">
                         {element.estado === 1 ? (
                           <>
-                         
+                         <button
+                      className="btn btn-color mx-2"
+                      onClick={() => {
+                        setUpdateModal(true);
+                        editarTipo(element.id);
+                      }}
+                      data-bs-toggle="modal"
+                      data-bs-target="#staticBackdrop2"
+                    >
+                      <IconEdit />
+                    </button>
 
                             <button
                               className="btn btn-danger"
@@ -527,7 +537,7 @@ const Tipo = () => {
                         )}
                       </td>
                     ):(
-                      <td>   <button
+                      <td className="p-0">   <button
                       className="btn btn-color mx-2"
                       onClick={() => {
                         setUpdateModal(true);
