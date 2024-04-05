@@ -16,8 +16,8 @@ import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import generatePDF from "react-to-pdf";
-import { secretKey } from "../const/keys";
 import portConexion from "../const/portConexion";
+import { secretKey } from "../const/keys";
 import CryptoJs from "crypto-js";
 
 
@@ -28,6 +28,8 @@ const Usuario = () => {
   const [updateModal, setUpdateModal] = useState(false);
   const modalUpdateRef = useRef(null);
   const tableRef = useRef();
+
+  const [userRoll, setUserRoll] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -159,7 +161,7 @@ const Usuario = () => {
       field.classList.remove("is-invalid");
     });
   };
-  
+
 
 
 
@@ -191,14 +193,17 @@ const Usuario = () => {
   }, [usuarios]);
 
   useEffect(() => {
-    window.onpopstate = function(event) {
+    window.onpopstate = function (event) {
       window.location.reload();
-  };
-  
+    };
     listarUsuario();
     let roll = localStorage.getItem('roll')
     setUserRoll(dataDecript(roll));
   }, []);
+
+
+
+
 
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector(".modal-backdrop");
@@ -962,13 +967,8 @@ const Usuario = () => {
             </div>
           </div>
         </div>
-      </div >
-    </div></>
-    ):(
-      <>
-      <h2>no disponibles</h2></>
-    )}
-    </>
+      </div>
+    </div>
   );
 };
 
