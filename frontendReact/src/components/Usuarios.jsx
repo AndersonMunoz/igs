@@ -29,8 +29,6 @@ const Usuario = () => {
   const modalUpdateRef = useRef(null);
   const tableRef = useRef();
 
-  const [userRoll, setUserRoll] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState('');
@@ -38,7 +36,6 @@ const Usuario = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
-  const [userRoll, setUserRoll] = useState("");
 
 
   function dataDecript(encryptedPassword) {
@@ -197,8 +194,6 @@ const Usuario = () => {
       window.location.reload();
     };
     listarUsuario();
-    let roll = localStorage.getItem('roll')
-    setUserRoll(dataDecript(roll));
   }, []);
 
 
@@ -411,9 +406,7 @@ const Usuario = () => {
   }
 
   return (
-    <>
-    { userRoll == "administrador" ? (
-      <>
+
       <div>
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
