@@ -105,9 +105,6 @@ a{
     width: auto;
     display: flex;
   }
-  .btn-color22{
-    background-color: red;
-  }
   .btnContenido22{
     grid-area: btnContenido22;
     width: 100%;

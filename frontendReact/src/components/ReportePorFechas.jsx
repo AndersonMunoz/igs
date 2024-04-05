@@ -292,39 +292,33 @@ const reporte = () => {
 
   return (
     <div>
-      <div className="boxBtnContendidoTitulo">
+      <h3 className="text-center mt-2">Reporte por fecha</h3>
+      <div className="boxBtnContendidoTituloF">
 
-        <div className="btnContenido11">
-          <div style={{ width: "200px", marginRight: "10px", gap: "20px" }} className="d-flex">
-            <h6 className="mt-1">Inicio</h6>
+        <div className="btnContenidoF11">
+          <div className="ContFechaR1">
+            <h6 className="textoReporte">Inicio</h6>
             <input onChange={(e) => setRangoMovInicio(e.target.value)} className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio} />
             
           </div>
-          <div style={{ width: "180px", height: "35px", gap: "20px" }} className="d-flex">
-            <h6 className="mt-1">Fin</h6>
+          <div className="ContFechaR2">
+            <h6 className="textoReporte">Fin</h6>
             <input onChange={(e) => setRangoMovFin(e.target.value)} className="inputFechaReporte" type="date" name="fin" id="fin" defaultValue={rangoMovFin} />
             
           </div>
-          <div>
-            <button className="btn btn-color" onClick={() => { ListartPorRango(rangoMovInicio, rangoMovFin) }}>buscar</button>
+          <div className="botonBuscarFecha">
+            <button className="btn btn-color " onClick={() => { ListartPorRango(rangoMovInicio, rangoMovFin) }}>buscar</button>
           </div>
         </div>
 
-        <div className="btnContenido22">
+        <div className="btnContenidoF22">
           <div className="conteFiltrar">
-            <select className="form-select" name="categoryFilter" id="categoryFilter">
+            <select className="form-select CategoriasInput" name="categoryFilter" id="categoryFilter">
               <option value="todas">Filtrar por Categorias</option>
             </select>
             <button className="btn btn-color" onClick={() => { filtrarCategorias(rangoMovInicio, rangoMovFin) }}>Filtrar</button>
-
           </div>
-          {/* <h2 className="tituloHeaderpp">{title}</h2> */}
-
-
-
-        </div>
-        <div className="btnContenido3">
-          <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+          <div className="btn-group grupoBOtoness" role="group" aria-label="Basic mixed styles example">
             <div className="" title="Descargar Excel">
               <button onClick={handleOnExport} type="button" className="btn btn-light">
                 <img src={ExelLogo} className="logoExel" />
@@ -360,7 +354,7 @@ const reporte = () => {
                     <td>{element.nombre_categoria}</td>
                     <td>{element.total_entradas}</td>
                     <td>{element.total_salidas}</td>
-                    <td>{element.precio_total}</td>
+                    <td>${element.precio_total}</td>
                     <td>{formatDateYYYYMMDD(new Date(element.ultima_fecha_movimiento))}</td>
                   </tr>
                 ))}

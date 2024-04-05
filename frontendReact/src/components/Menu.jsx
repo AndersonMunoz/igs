@@ -421,7 +421,7 @@ export const Menu = () => {
             )}
             <li>
               <div className="content-nav">
-                <Link>
+                <Link to="/ajustes">
                   <div className="tamañoLateral">
                     <IconSettings className="iconosLaterales" />
                   </div>
