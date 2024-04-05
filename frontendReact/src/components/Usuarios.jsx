@@ -36,6 +36,7 @@ const Usuario = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
+  const [userRoll, setUserRoll] = useState("");
 
 
   function dataDecript(encryptedPassword) {
@@ -195,6 +196,8 @@ const Usuario = () => {
   };
   
     listarUsuario();
+    let roll = localStorage.getItem('roll')
+    setUserRoll(dataDecript(roll));
   }, []);
 
   function removeModalBackdrop() {
@@ -403,7 +406,10 @@ const Usuario = () => {
   }
 
   return (
-    <div>
+    <>
+    { userRoll == "administrador" ? (
+      <>
+      <div>
       <div className="boxBtnContendidoTitulo">
         <div className="btnContenido1">
           <button
@@ -957,7 +963,12 @@ const Usuario = () => {
           </div>
         </div>
       </div >
-    </div>
+    </div></>
+    ):(
+      <>
+      <h2>no disponibles</h2></>
+    )}
+    </>
   );
 };
 

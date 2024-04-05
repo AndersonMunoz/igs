@@ -263,9 +263,6 @@ const Inventario = () => {
               </table>
             </div>
             <div className="modal-footer">
-            <button type="button" className="btn btn-color" data-bs-dismiss="modal">
-                Ver en reportes
-              </button>
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                 Cerrar
               </button>
