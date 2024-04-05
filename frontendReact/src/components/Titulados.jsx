@@ -414,7 +414,7 @@ const Titulados = () => {
 												</td>
 											</>
 										):(
-											<><td className="p-0 text-center">
+											<><td className=" text-center">
 												No dosponibles
 											</td></>
 										)}

@@ -10,7 +10,7 @@
   height: 100%;
   width: 240px;
   background: rgb(0, 173, 0);
-  transition: all 0.5s ease;
+  transition: all .4s ease;
 }
 
 .sidebar.close {
@@ -495,11 +495,19 @@
   height: 25px;
   cursor: pointer;
 }
+.closeUser:hover{
+  border-radius: 3px;
+  background-color: #d6d6d6;
+}
 .closeNotii {
   color: rgb(126, 121, 121);
   width: 25px;
   height: 25px;
   cursor: pointer;
+}
+.closeNotii:hover{
+  border-radius: 3px;
+  background-color: #d6d6d6;
 }
 
 .letraCerrarSesion:hover {

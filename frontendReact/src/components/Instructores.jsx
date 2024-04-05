@@ -416,7 +416,7 @@ const Instructores = () => {
 											</>
 										):(
 											<>
-											<td className="p-0 text-center">No disponible</td>
+											<td className="text-center">No disponible</td>
 											</>
 										)}
 									</tr>
