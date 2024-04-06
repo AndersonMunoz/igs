@@ -99,7 +99,7 @@ export const editarTitulado = async (req, res) => {
 
         // Actualizar la información del titulado
         let sql = `UPDATE titulados SET nombre_titulado = '${nombre_titulado}', id_ficha ='${id_ficha}'
-                   WHERE id_titulado = ${id}`;
+                WHERE id_titulado = ${id}`;
         const [rows] = await pool.query(sql);
 
         if (rows.affectedRows > 0) {

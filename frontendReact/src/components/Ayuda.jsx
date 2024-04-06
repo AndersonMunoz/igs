@@ -27,10 +27,6 @@ const Ayuda = () => {
                     <button className="btn btn-color mb-4">
                         <a className="dsdsd" href={PdfManualUsuarioAdmin} target="_blank">Ver manual de usuario</a>
                     </button>
-                    <h5 className="mb-2">Manual de usuario Co-Administrador</h5>
-                    <button className="btn btn-color mb-4">
-                        <a className="dsdsd" href={PdfManualUsuarioCoadmin} target="_blank">Ver manual de usuario</a>
-                    </button>
                     <h5 className="mb-2">Manual Tecnico Instalacion</h5>
                     <button className="btn btn-color">
                         <a className="dsdsd" href={PdfManualTecnico} target="_blank">Ver manual tecnico</a>
@@ -43,10 +39,10 @@ const Ayuda = () => {
                     <button className="btn btn-color mb-4">
                         <a className="dsdsd" href={PdfManualUsuarioCoadmin} target="_blank">Ver manual de usuario</a>
                     </button>
-                    <h5 className="mb-2">Manual Tecnico Instalacion</h5>
+{/*                     <h5 className="mb-2">Manual Tecnico Instalacion</h5>
                     <button className="btn btn-color">
                         <a className="dsdsd" href={PdfManualTecnico} target="_blank">Ver manual tecnico</a>
-                    </button>
+                    </button> */}
                 </>
 
             )}

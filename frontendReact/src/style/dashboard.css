@@ -406,6 +406,7 @@
   top: 65px;
   border-radius: 12px;
   border: 0.5px solid rgba(188, 188, 188, 0.845);
+  
 }
 .modalCloseNoti {
   display: none;
@@ -417,6 +418,7 @@
   width: 100%;
   height: 100%;
   caret-color: transparent;
+  
 }
 .tituloNotify {
   grid-area: tituloNotify;
