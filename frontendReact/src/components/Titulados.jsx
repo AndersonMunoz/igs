@@ -130,7 +130,7 @@ const Titulados = () => {
 					return;
 				}
 				if (data.status === 200) {
-					Sweet.exito(data.menssage);
+					Sweet.exito(data.message);
 					if ($.fn.DataTable.isDataTable(tableRef.current)) {
 						$(tableRef.current).DataTable().destroy();
 					}
@@ -141,7 +141,7 @@ const Titulados = () => {
 					return;
 				}
 				if (data.status !== 200) {
-					Sweet.error(data.error.errors[0].msg);
+					Sweet.error(data.error.errors[0].message);
 					return;
 				}
 				listarTitulados();

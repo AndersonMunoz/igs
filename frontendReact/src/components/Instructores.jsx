@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import "../style/usuarios.css";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
@@ -131,7 +132,7 @@ const Instructores = () => {
 					return;
 				}
 				if (data.status === 200) {
-					Sweet.exito(data.menssage);
+					Sweet.exito(data.message);
 					if ($.fn.DataTable.isDataTable(tableRef.current)) {
 						$(tableRef.current).DataTable().destroy();
 					}
