@@ -141,7 +141,7 @@ const Titulados = () => {
 					return;
 				}
 				if (data.status !== 200) {
-					Sweet.error(data.error.errors[0].message);
+					Sweet.error(data.error.errors[0].msg);
 					return;
 				}
 				listarTitulados();
@@ -263,7 +263,7 @@ const Titulados = () => {
 					return;
 				}
 				if (data.status !== 200) {
-					Sweet.error(data.error.errors[0].msg);
+					Sweet.error(data.errors[0].msg);
 					return;
 				}
 				listarTitulados();

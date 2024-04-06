@@ -86,8 +86,8 @@ export const editarTitulado = async (req, res) => {
         let id = req.params.id;
         let { nombre_titulado, id_ficha } = req.body;
 
-        // Comprobar si ya existe un titulado con la misma ficha
-        const id_fichaQuery = `SELECT * FROM titulados WHERE id_ficha = '${id_ficha}'`;
+        // Comprobar si ya existe un titulado con la misma ficha, excepto si es el mismo registro
+        const id_fichaQuery = `SELECT * FROM titulados WHERE id_ficha = '${id_ficha}' AND id_titulado != ${id}`;
         const [existingid_ficha] = await pool.query(id_fichaQuery);
 
         if (existingid_ficha.length > 0) {
@@ -117,6 +117,7 @@ export const editarTitulado = async (req, res) => {
         });
     }
 };
+
 
 // Contar la cantidad de titulados registrados
 export const listarTituladoCount = async (req, res) => {
