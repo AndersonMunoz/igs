@@ -20,6 +20,8 @@ import portConexion from "../const/portConexion";
 import { dataDecript } from "./encryp/decryp";
 import Movimiento from "./Movimiento";
 
+//formatear una fecha a formato año, mes, dia
+
 const formatDateYYYYMMDD = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -36,8 +38,7 @@ const reporte = () => {
   const [valSalidas, setValSalidas] = useState('0')
   const [valorTotal, setValorTotal] = useState('0')
   const tableRef = useRef(null);
-
-  // falta ver
+// Función para exportar datos a un archivo Excel
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -46,6 +47,8 @@ const reporte = () => {
     xlsx.utils.book_append_sheet(wb, ws, "ExcelTotal");
     xlsx.writeFile(wb, "reportes-fechas.xlsx");
   };
+  // Función para exportar datos a un archivo PDF
+
   const exportPdfHandler = () => {
     const doc = new jsPDF();
 
@@ -80,6 +83,8 @@ const reporte = () => {
     // Guardar el PDF
     doc.save("Reportes-fechas.pdf");
   };
+  // Función para obtener los datos de la tabla
+
   const getTableData = () => {
     const wsData = [];
 
@@ -109,6 +114,7 @@ const reporte = () => {
 
     return wsData;
   };
+// Efecto secundario para inicializar la tabla de datos cuando el reporte cambia
 
   useEffect(() => {
     if (reporte.length > 0) {
@@ -132,12 +138,14 @@ const reporte = () => {
       });
     }
   }, [reporte]);
+// Efecto secundario para inicializar datos cuando el componente se monta
 
   useEffect(() => {
     setRangoMovFin(formatDateYYYYMMDD(new Date()));
     listarProducto()
     listaCat()
   }, [])
+// Función para listar las categorías en un select
 
   function listaCat() {
     var select = document.getElementById("categoryFilter");
@@ -160,6 +168,7 @@ const reporte = () => {
         }
       });
   }
+// Función para listar productos por rango de fechas
 
   function ListartPorRango(inicio, fin) {
     fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
@@ -201,6 +210,7 @@ const reporte = () => {
         }
       })
   }
+// Función para filtrar productos por categoría y rango de fechas
 
   function filtrarCategorias(inicio, fin) {
     var select = document.getElementById("categoryFilter").value;
@@ -254,9 +264,6 @@ const reporte = () => {
       })
 
   }
-
-
-
   // Función para listar los productos
   function listarProducto() {
     fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {

@@ -19,6 +19,7 @@ import jsPDF from "jspdf";
 import portConexion from "../const/portConexion";
 import { dataDecript } from "./encryp/decryp";
 
+//formatear una fecha a formato año, mes, dia
 
 const formatDateYYYYMMDD = (date) => {
   const year = date.getFullYear();
@@ -41,6 +42,8 @@ const proveedor = () => {
   const [userRoll, setUserRoll] = useState("");
   const [archivo_contrato, setArchivo_contrato] = useState('');
 
+    // Maneja la exportación de datos a un archivo Excel
+
   const handleOnExport = () => {
     const wsData = getTableData();
     const wb = xlsx.utils.book_new();
@@ -48,6 +51,9 @@ const proveedor = () => {
     xlsx.utils.book_append_sheet(wb, ws, "ExcelTotal");
     xlsx.writeFile(wb, "Proveedores.xlsx");
   };
+
+    // Maneja la exportación de datos a un archivo PDF
+
   const exportPdfHandler = () => {
     const doc = new jsPDF();
 
@@ -84,6 +90,7 @@ const proveedor = () => {
     // Guardar el PDF
     doc.save("Proveedores.pdf");
   };
+   // Obtiene los datos de la tabla para la exportación
   const getTableData = () => {
     const wsData = [];
 
@@ -115,6 +122,7 @@ const proveedor = () => {
 
     return wsData;
   };
+    // Función ejecutada cuando el componente se monta o actualiza
 
   useEffect(() => {
     if (proveedor.length > 0) {
@@ -139,6 +147,7 @@ const proveedor = () => {
     }
   }, [proveedor]);
 
+
   useEffect(() => {
     window.onpopstate = function () {
       window.location.reload();
@@ -146,6 +155,8 @@ const proveedor = () => {
     setUserRoll(dataDecript(localStorage.getItem("roll")));
     listarProveedor();
   }, []);
+
+    // Función para listar proveedores desde el servidor
 
   function listarProveedor() {
     fetch(`http://${portConexion}:3000/proveedor/listar`, {
@@ -183,6 +194,8 @@ const proveedor = () => {
       });
   }
 
+  // Función para deshabilitar un proveedor cuando vence el contrato
+
   function vencioProveedor(id) {
     fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
       method: "put",
@@ -201,6 +214,8 @@ const proveedor = () => {
         }
       });
   }
+
+  // Función para confirmar y deshabilitar un proveedor
 
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
@@ -224,6 +239,8 @@ const proveedor = () => {
       }
     });
   }
+
+  // Función para registrar un nuevo proveedor
 
   function registrarProveedor(e) {
     e.preventDefault();
@@ -268,6 +285,8 @@ const proveedor = () => {
     }
   }
 
+    // Función para cargar datos de un proveedor seleccionado para editar
+
   function editarProveedor(id) {
     document.getElementById("titleSctualizar").classList.remove("d-none");
     document.getElementById("titleRegistro").classList.add("d-none");
@@ -296,6 +315,9 @@ const proveedor = () => {
         }
       });
   }
+
+    // Función para actualizar los datos de un proveedor
+
   function actualizarProveedor(id) {
     fetch(`http://${portConexion}:3000/proveedor/actualizar/${id}`, {
       method: "PUT",
@@ -327,6 +349,9 @@ const proveedor = () => {
         }
       });
   }
+
+    // Función para limpiar los campos del formulario
+
   function limpiar() {
     setSelectedProveedorData('');
     setNombre_proveedores('')
@@ -337,8 +362,9 @@ const proveedor = () => {
     setfin_contrato('')
     setArchivo_contrato('')
   }
+  // funcion para ir al PDF del contrato del proveeedor
+
   function generarURL(element) {
-    // Realiza cualquier lógica necesaria para generar la URL
     const url = `/filePDF/${element}`;
     return url;
   }
