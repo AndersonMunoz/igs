@@ -25,7 +25,7 @@ const Ayuda = () => {
                 <>
                     <h5 className="mb-2">Manual de usuario administrador</h5>
                     <button className="btn btn-color mb-4">
-                        <a className="dsdsd" href={PdfManualUsuarioAdmin} target="_blank">Ver manual de usuario</a>
+                        <a className="dsdsd" href={PdfManualUsuarioAdmin} target="_blank">Ver manual de usuario administrador</a>
                     </button>
                     <h5 className="mb-2">Manual Tecnico Instalacion</h5>
                     <button className="btn btn-color">
@@ -37,7 +37,7 @@ const Ayuda = () => {
                 <>
                     <h5 className="mb-2">Manual de usuario Co-Administrador</h5>
                     <button className="btn btn-color mb-4">
-                        <a className="dsdsd" href={PdfManualUsuarioCoadmin} target="_blank">Ver manual de usuario</a>
+                        <a className="dsdsd" href={PdfManualUsuarioCoadmin} target="_blank">Ver manual de usuario co-administrador</a>
                     </button>
 {/*                     <h5 className="mb-2">Manual Tecnico Instalacion</h5>
                     <button className="btn btn-color">
