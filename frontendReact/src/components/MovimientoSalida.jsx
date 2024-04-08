@@ -1,72 +1,74 @@
-import React, { useState, useEffect, useRef } from "react";
-import {Link } from "react-router-dom";
-import Sweet from '../helpers/Sweet';
-import { dataDecript } from "./encryp/decryp";
-import Validate from '../helpers/Validate';
-import '../style/movimiento.css';
-import { IconEdit } from "@tabler/icons-react";
-import ExelLogo from "../../img/excel.224x256.png";
-import PdfLogo from "../../img/pdf.224x256.png";
-import esES from '../languages/es-ES.json';
-import $ from 'jquery';
-import 'bootstrap';
-import 'datatables.net';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import 'datatables.net-responsive';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import generatePDF from 'react-to-pdf';
-import * as xlsx from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import portConexion from "../const/portConexion";
-import Select from 'react-select'
+import React, { useState, useEffect, useRef } from "react"; // Importar React y hooks
+import { Link } from "react-router-dom"; // Importar Link de react-router-dom para enlaces
+import Sweet from '../helpers/Sweet'; // Importar Sweet para notificaciones
+import { dataDecript } from "./encryp/decryp"; // Importar función de desencriptación
+import Validate from '../helpers/Validate'; // Importar Validate para validaciones
+import '../style/movimiento.css'; // Importar estilos para el componente Movimiento
+import { IconEdit } from "@tabler/icons-react"; // Importar IconEdit de Tabler Icons
+import ExelLogo from "../../img/excel.224x256.png"; // Importar imagen de logo de Excel
+import PdfLogo from "../../img/pdf.224x256.png"; // Importar imagen de logo de PDF
+import esES from '../languages/es-ES.json'; // Importar archivo de traducción para español
+import $ from 'jquery'; // Importar jQuery
+import 'bootstrap'; // Importar Bootstrap
+import 'datatables.net'; // Importar DataTables
+import 'datatables.net-bs5'; // Importar DataTables con Bootstrap 5
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'; // Estilos de DataTables con Bootstrap 5
+import 'datatables.net-responsive'; // Importar DataTables Responsive
+import 'datatables.net-responsive-bs5'; // Importar DataTables Responsive con Bootstrap 5
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; // Estilos de DataTables Responsive con Bootstrap 5
+import generatePDF from 'react-to-pdf'; // Importar generador de PDF a partir de componente React
+import * as xlsx from 'xlsx'; // Importar librería para manipulación de archivos Excel
+import jsPDF from 'jspdf'; // Importar librería para generar documentos PDF
+import autoTable from 'jspdf-autotable'; // Importar librería para generar tablas en documentos PDF automáticamente
+import portConexion from "../const/portConexion"; // Importar configuración de puerto de conexión
+import Select from 'react-select'; // Importar componente de selección personalizada
 
-const Movimiento = () => {
-  const [userId, setUserId] = useState('');
-  const [movimientos, setMovimientos] = useState([]);
-  const [productosCategoria,setProCat] = useState([]);
-  const [userRoll, setUserRoll] = useState("");
-  const [unidadesProductos,setUniPro] = useState([]);
-  const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
-  const [categoria_list, setcategorias_producto] = useState([]);
-  const [proveedor_list, setProveedor] = useState([]);
-  const [tipos, setTipo] = useState([]);
-  const [usuario_list, setUsuario] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [updateModal, setUpdateModal] = useState(false);
-  const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
-  const [selectedTipo, setSelectedTipo] = useState(null);
-  const [selectedCategoria, setSelectedCategoria] = useState(null);
-  const [selectedLote, setSelectedLote] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedOptionTit, setSelectedOptionTit] = useState(null);
-  const [selectedOptionIns, setSelectedOptionIns] = useState(null);
-  const [destinoMovimiento, setDestinoMovimiento] = useState('');
-  const [tituladoList,setTitulado] = useState(null);
-  const [selectedTitulado, setSelectedTitulado] = useState(null);
-  const [instructorList,setInstrucor] = useState(null);
-  const [selectedInstructor, setSelectedInstructor] = useState(null);
-  const [showInstructorTituladoSelects, setShowInstructorTituladoSelects] = useState(false);
-  const [unidadSeleccionada, setUnidadSeleccionada] = useState('');
-  const [fkIdProducto, setFkIdProducto] = useState(null);
-  const [fkIdTipoProducto, setFkIdTipoProducto] = useState(null);
+const Movimiento = () => { // Definir componente Movimiento
+  // Definir estados del componente
+  const [userId, setUserId] = useState(''); // Estado para el ID de usuario
+  const [movimientos, setMovimientos] = useState([]); // Estado para la lista de movimientos
+  const [productosCategoria, setProCat] = useState([]); // Estado para la lista de productos por categoría
+  const [userRoll, setUserRoll] = useState(""); // Estado para el rol del usuario
+  const [unidadesProductos, setUniPro] = useState([]); // Estado para la lista de unidades de productos
+  const [categoria_list, setcategorias_producto] = useState([]); // Estado para la lista de categorías de productos
+  const [proveedor_list, setProveedor] = useState([]); // Estado para la lista de proveedores
+  const [tipos, setTipo] = useState([]); // Estado para la lista de tipos
+  const [usuario_list, setUsuario] = useState([]); // Estado para la lista de usuarios
+  const [showModal, setShowModal] = useState(false); // Estado para mostrar o ocultar el modal
+  const [updateModal, setUpdateModal] = useState(false); // Estado para actualizar el modal
+  const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({}); // Estado para el movimiento seleccionado
+  const [selectedTipo, setSelectedTipo] = useState(null); // Estado para el tipo seleccionado
+  const [selectedCategoria, setSelectedCategoria] = useState(null); // Estado para la categoría seleccionada
+  const [selectedOption, setSelectedOption] = useState(null); // Estado para la opción seleccionada
+  const [selectedOptionTit, setSelectedOptionTit] = useState(null); // Estado para la opción de titulado seleccionada
+  const [selectedOptionIns, setSelectedOptionIns] = useState(null); // Estado para la opción de instructor seleccionada
+  const [destinoMovimiento, setDestinoMovimiento] = useState(''); // Estado para el destino del movimiento
+  const [tituladoList, setTitulado] = useState(null); // Estado para la lista de titulados
+  const [selectedTitulado, setSelectedTitulado] = useState(null); // Estado para el titulado seleccionado
+  const [instructorList, setInstrucor] = useState(null); // Estado para la lista de instructores
+  const [selectedInstructor, setSelectedInstructor] = useState(null); // Estado para el instructor seleccionado
+  const [showInstructorTituladoSelects, setShowInstructorTituladoSelects] = useState(false); // Estado para mostrar u ocultar selects de instructor y titulado
+  const [unidadSeleccionada, setUnidadSeleccionada] = useState(''); // Estado para la unidad seleccionada
+  const [fkIdProducto, setFkIdProducto] = useState(null); // Estado para el ID de producto
 
+  // Referencias a modales
+  const modalUpdateRef = useRef(null); // Referencia al modal de actualización
+  const modalProductoRef = useRef(null); // Referencia al modal de producto
 
-  const modalUpdateRef = useRef(null);
-  const modalProductoRef = useRef(null);
+  // Función para exportar a Excel
   const handleOnExport = () => {
-    const wsData = getTableData();
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.aoa_to_sheet(wsData);
-    xlsx.utils.book_append_sheet(wb, ws, 'ExcelT  Salida');
-    xlsx.writeFile(wb, 'MovimientoSalida.xlsx');
+    const wsData = getTableData(); // Obtener datos de la tabla
+    const wb = xlsx.utils.book_new(); // Crear libro de trabajo
+    const ws = xlsx.utils.aoa_to_sheet(wsData); // Crear hoja de trabajo
+    xlsx.utils.book_append_sheet(wb, ws, 'ExcelT  Salida'); // Agregar hoja al libro con nombre
+    xlsx.writeFile(wb, 'MovimientoSalida.xlsx'); // Escribir archivo Excel
   };
+
+  // Función para exportar a PDF
   const exportPdfHandler = () => {
-    const doc = new jsPDF('landscape');
+    const doc = new jsPDF('landscape'); // Crear documento PDF en orientación horizontal
   
-    const columns = [
+    const columns = [ // Definir columnas para la tabla en el PDF
       { title: 'Nombre producto', dataKey: 'nombre_tipo' },
       { title: 'Categoría', dataKey: 'nombre_categoria' },
       { title: 'Tipo categoría', dataKey: 'tipo_categoria' },
@@ -107,16 +109,18 @@ const Movimiento = () => {
       body: tableData,
       margin: { top: 20 },
       styles: { overflow: 'linebreak' },
-      headStyles: { fillColor: [0,100,0] },
+      headStyles: { fillColor: [0,100,0] }, // Estilo del encabezado de la tabla
     });
   
     // Guardar el PDF
     doc.save('MovimientosSalida.pdf');
   };
-  const getTableData = () => {
-    const wsData = [];
 
-    // Obtener las columnas
+  // Función para obtener los datos de la tabla
+  const getTableData = () => {
+    const wsData = []; // Array para almacenar los datos de la tabla
+
+    // Definir las columnas de la tabla
     const columns = [
       'Nombre producto',
       'Categoría',
@@ -133,9 +137,9 @@ const Movimiento = () => {
       'ID ficha',
       'Instructor'
     ];
-    wsData.push(columns);
+    wsData.push(columns); // Añadir las columnas al array de datos
 
-    // Obtener los datos de las filas
+    // Obtener los datos de las filas y añadirlos al array de datos
     movimientos.forEach(element => {
       const rowData = [
         element.nombre_tipo,
@@ -153,66 +157,70 @@ const Movimiento = () => {
         element.id_ficha,
         element.nombre_instructor
       ];
-      wsData.push(rowData);
+      wsData.push(rowData); // Añadir la fila al array de datos
     });
 
-    return wsData;
+    return wsData; // Devolver los datos de la tabla
   };
-  const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    formFields.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-    formFields2.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
-  };
-
-  const handleCategoria = (selectedOption) => {
-    setSelectedCategoria(selectedOption); 
-    setSelectedOption(null);
-    setSelectedTipo(null); 
-    setUnidadSeleccionada('No hay unidad de medida');
-  };
-
-  const handleTipo = (selectedOption) => {
-    setSelectedOption(selectedOption);
-    setSelectedTipo(selectedOption.value.id_tipo);
-    listarUnidadesPro(selectedOption.value.id_tipo); 
-    setFkIdProducto(selectedOption.value.id_producto);
-    //console.log(selectedOption.value.id_tipo)
-    //console.log(selectedOption.value.id_producto)
+  // Función para restablecer el estado del formulario
+const resetFormState = () => {
+  // Seleccionar todos los campos del formulario en el modal de producto
+  const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  // Seleccionar todos los campos del formulario en el modal de actualización
+  const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  // Iterar sobre los campos del formulario en el modal de producto y del modal de actualización
+  formFields.forEach(field => {
+    if (field.type === 'checkbox') { // Si el campo es de tipo checkbox
+      field.checked = false; // Desmarcar la casilla
+    } else { // Si el campo no es de tipo checkbox
+      field.value = ''; // Limpiar el valor del campo
+    }
+    field.classList.remove('is-invalid'); // Eliminar la clase 'is-invalid' para el campo
+  });
+  formFields2.forEach(field => {
+    if (field.type === 'checkbox') { // Si el campo es de tipo checkbox
+      field.checked = false; // Desmarcar la casilla
+    } else { // Si el campo no es de tipo checkbox
+      field.value = ''; // Limpiar el valor del campo
+    }
+    field.classList.remove('is-invalid'); // Eliminar la clase 'is-invalid' para el campo
+  });
 };
 
-
-  const handleTitulado = (selectedOptionTit) => {
-    setSelectedOptionTit(selectedOptionTit);
-    setSelectedTitulado(selectedOptionTit.value); 
-    //console.log(" titulado id: "+selectedOptionTit.value);
+// Función para manejar el cambio de la categoría seleccionada
+const handleCategoria = (selectedOption) => {
+  setSelectedCategoria(selectedOption); // Actualizar estado de categoría seleccionada
+  setSelectedOption(null); // Reiniciar estado de opción seleccionada
+  setSelectedTipo(null); // Reiniciar estado de tipo seleccionado
+  setUnidadSeleccionada('No hay unidad de medida'); // Establecer unidad de medida predeterminada
 };
 
+// Función para manejar el cambio del tipo seleccionado
+const handleTipo = (selectedOption) => {
+  setSelectedOption(selectedOption); // Actualizar estado de opción seleccionada
+  setSelectedTipo(selectedOption.value.id_tipo); // Actualizar estado de tipo seleccionado
+  listarUnidadesPro(selectedOption.value.id_tipo); // Listar unidades de producto asociadas al tipo seleccionado
+  setFkIdProducto(selectedOption.value.id_producto); // Establecer ID de producto seleccionado
+};
+
+// Función para manejar el cambio del titulado seleccionado
+const handleTitulado = (selectedOptionTit) => {
+  setSelectedOptionTit(selectedOptionTit); // Actualizar estado de opción de titulado seleccionada
+  setSelectedTitulado(selectedOptionTit.value); // Actualizar estado de titulado seleccionado
+};
+
+// Función para manejar el cambio del instructor seleccionado
 const handleInstructor = (selectedOptionIns) => {
-    setSelectedOptionIns(selectedOptionIns);
-    setSelectedInstructor(selectedOptionIns.value); 
-    //console.log("oinstructor id:"+selectedOptionIns.value);
+  setSelectedOptionIns(selectedOptionIns); // Actualizar estado de opción de instructor seleccionada
+  setSelectedInstructor(selectedOptionIns.value); // Actualizar estado de instructor seleccionado
 };
+
+// Función para manejar el cambio del destino de movimiento
 const handleDestino = (event) => {
-  listarTitulado();
-    listarInstructor();
-  setDestinoMovimiento(event.target.value);
-  //console.log(event.target.value)
-  setShowInstructorTituladoSelects(event.target.value === "taller" || event.target.value === "evento");
+  listarTitulado(); // Listar titulados disponibles
+  listarInstructor(); // Listar instructores disponibles
+  setDestinoMovimiento(event.target.value); // Actualizar estado de destino de movimiento
+  setShowInstructorTituladoSelects(event.target.value === "taller" || event.target.value === "evento"); // Mostrar u ocultar selects de instructor y titulado según el destino seleccionado
 };
 
 const handleDestino2 = (event) => {
@@ -240,431 +248,520 @@ const handleDestino2 = (event) => {
   }
 };
 
+// Estado para rastrear si los datos se están cargando
+const [isLoading, setIsLoading] = useState(true);
 
+// Llama a las funciones para cargar los datos de instructor y titulado si es necesario
+useEffect(() => {
+  // Llama a las funciones para cargar los datos de instructor y titulado si es necesario
+  if (showInstructorTituladoSelects) {
+    setIsLoading(true);
+    Promise.all([listarInstructorAct(), listarTituladoAct()])
+      .then(() => {
+        setIsLoading(false);
+      });
+  }
+}, [showInstructorTituladoSelects]);
+
+// Efecto para controlar la visualización de los selects de instructor y titulado según el destino de movimiento seleccionado
 useEffect(() => {
   const destino = movimientoSeleccionado.destino_movimiento;
   const showSelects = destino === "taller" || destino === "evento";
   setShowInstructorTituladoSelects(showSelects);
 }, [movimientoSeleccionado.destino_movimiento]);
 
+// Referencia al elemento de la tabla
+const tableRef = useRef();
+// Referencia al ID de usuario
+const fkIdUsuarioRef = useRef(null);
 
-  const tableRef = useRef();
-  const fkIdUsuarioRef = useRef(null);
+// Estado para controlar si aplica la fecha de caducidad
+const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
 
-  const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
+// Función para manejar el cambio del checkbox de fecha de caducidad
+const handleCheckboxChange2 = () => {
+  setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
+};
 
-  const handleCheckboxChange2 = () => {
-    setAplicaFechaCaducidad2(!aplicaFechaCaducidad2);
-  };
-  // const resetFormState = () => {
-  //   const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
-  //   const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
-  // };
-  useEffect(() => {
-    if (movimientos.length > 0) {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-      $(tableRef.current).DataTable({
-        columnDefs: [
-          {
-            targets: -1,
-            responsivePriority: 1
-          }
-        ],
-        responsive: true,
-        language: esES,
-        paging: true,
-        select: {
-          'style': 'multi',
-          'selector': 'td:first-child',
-        },
-        lengthMenu: [
-          [10, 50, 100, -1],
-          ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
-        ],
-      });
+// Efecto para inicializar o destruir la tabla DataTable al cambiar los movimientos
+useEffect(() => {
+  if (movimientos.length > 0) {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
     }
-    setUserRoll(dataDecript(localStorage.getItem("roll")));
-  }, [movimientos]);
-
-
-  function removeModalBackdrop() {
-    const modalBackdrop = document.querySelector('.modal-backdrop');
-    if (modalBackdrop) {
-      modalBackdrop.remove();
-    }
-  }
-
-  useEffect(() => {
-    setUserId(dataDecript(localStorage.getItem('id')));
-    window.onpopstate = function(event) {
-      window.location.reload();
-    };
-    listarMovimiento();
-    listarCategoria();
-    listarTipo();
-    listarProveedor();
-    listarUsuario();
-    listarTitulado();
-    listarInstructor();
-    listarTituladoAct();
-    listarInstructorAct();
-    if (selectedCategoria) {
-      listarProductoCategoria(selectedCategoria.value);
-    }
-    if (selectedTipo) {
-      listarUnidadesPro(selectedOption.value.id_tipo);
-    }
-}, [selectedCategoria, selectedTipo]);
-
-  function listarCategoria() {
-    fetch(`http://${portConexion}:3000/categoria/listar`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token")
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          //console.log("No hay datos disponibles");
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setcategorias_producto(data);
-          listarTitulado();
-    listarInstructor();
-        }
-      })
-      .catch((e) => {
-        //console.log(e);
-      });
-  }
-  function listarTitulado() {
-    fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token")
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          //console.log("No hay datos disponibles");
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setTitulado(data);
-        }
-      })
-      .catch((e) => {
-        //console.log(e);
-      });
-  }
-
-  function listarInstructor() {
-    fetch(`http://${portConexion}:3000/instructor/listarActivo`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token")
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          //console.log("No hay datos disponibles");
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setInstrucor(data);
-        }
-      })
-      .catch((e) => {
-        //console.log(e);
-      });
-  }
-
-    function listarTituladoAct() {
-      fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          token: localStorage.getItem("token")
-        },
-      })
-        .then((res) => {
-          if (res.status === 204) {
-            //console.log("No hay datos disponibles");
-            return null;
-          }
-          return res.json();
-        })
-        .then((data) => {
-          //console.log("Datos de titulado recibidos:", data);
-          if (data !== null) {
-            const formattedTituladoList = data.map(titulado => ({
-              value: titulado.id_titulado,
-              label: `${titulado.nombre_titulado} - ${titulado.id_ficha}` 
-            }));
-            setTitulado(formattedTituladoList);
-          }
-        })
-        
-        .catch((e) => {
-          //console.log(e);
-        });
-    }
-
-    function listarInstructorAct() {
-      //console.log("Llamando a la función listarInstructor()...");
-      fetch(`http://${portConexion}:3000/instructor/listarActivo`, {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          token: localStorage.getItem("token")
-        },
-      })
-        .then((res) => {
-          if (res.status === 204) {
-            //console.log("No hay datos disponibles");
-            return null;
-          }
-          return res.json();
-        })
-        .then((data) => {
-          //console.log("Datos de instructor recibidos:", data);
-          if (data !== null) {
-            const formattedInstructorList = data.map(instructor => ({
-              value: instructor.id,
-              label: instructor.nombre
-            }));
-            setInstrucor(formattedInstructorList);
-            //console.log("instructorList:", formattedInstructorList); // Mover aquí
-          }
-        })
-        .catch((e) => {
-          //console.log("Error al obtener datos de instructor:", e);
-        });
-    }
-  
-
-  function listarTipo() {
-    fetch(`http://${portConexion}:3000/tipo/listar`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token")
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setTipo(data);
-        }
-      })
-      .catch((e) => {
-        console.error("Error al procesar la respuesta:", e);
-      });
-  }
-  function listarProveedor() {
-    fetch(`http://${portConexion}:3000/proveedor/listar`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        token: localStorage.getItem("token")
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setProveedor(data)
-      })
-      .catch((e) => {
-        //console.log(e);
-      })
-      ;
-  }
-  function listarProductoCategoria(id_categoria) {
-
-    fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarProPro/${id_categoria == '' ? 0 : id_categoria}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          token: localStorage.getItem("token")
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setUniPro([]);
-        setProCat(data);
-        
-        //console.log("PRODUCTO - CATEGORIA : ", data);
-      })
-      .catch((e) => {
-        setProCat([]);
-        //console.log("Error:: ", e);
-      });
-  }
-  function listarUnidadesPro(id_producto) {
-    fetch(
-        `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
+    $(tableRef.current).DataTable({
+      columnDefs: [
         {
-            method: "GET",
-            headers: {
-                "Content-type": "application/json",
-                token: localStorage.getItem("token")
-            },
+          targets: -1,
+          responsivePriority: 1
         }
-    )
-    .then((res) => res.json())
+      ],
+      responsive: true,
+      language: esES,
+      paging: true,
+      select: {
+        'style': 'multi',
+        'selector': 'td:first-child',
+      },
+      lengthMenu: [
+        [10, 50, 100, -1],
+        ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+      ],
+    });
+  }
+  setUserRoll(dataDecript(localStorage.getItem("roll")));
+}, [movimientos]);
+
+// Función para eliminar el backdrop del modal
+function removeModalBackdrop() {
+  const modalBackdrop = document.querySelector('.modal-backdrop');
+  if (modalBackdrop) {
+    modalBackdrop.remove();
+  }
+}
+
+// Efecto para cargar los datos iniciales al cargar la página o al cambiar la categoría o tipo seleccionado
+// Efecto para inicializar o destruir la tabla DataTable al cambiar los movimientos
+useEffect(() => {
+  if (movimientos.length > 0) {
+    // Verificar si la tabla DataTable ya existe y destruirla si es necesario
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+    // Crear la tabla DataTable con las opciones especificadas
+    $(tableRef.current).DataTable({
+      columnDefs: [
+        {
+          targets: -1,
+          responsivePriority: 1
+        }
+      ],
+      responsive: true,
+      language: esES,
+      paging: true,
+      select: {
+        'style': 'multi',
+        'selector': 'td:first-child',
+      },
+      lengthMenu: [
+        [10, 50, 100, -1],
+        ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+      ],
+    });
+  }
+  // Decodificar y establecer el rol de usuario
+  setUserRoll(dataDecript(localStorage.getItem("roll")));
+}, [movimientos]); // Dependencia: movimientos, se ejecuta cuando cambia la lista de movimientos
+
+// Función para eliminar el backdrop del modal
+function removeModalBackdrop() {
+  const modalBackdrop = document.querySelector('.modal-backdrop');
+  if (modalBackdrop) {
+    modalBackdrop.remove();
+  }
+}
+
+// Efecto para cargar los datos iniciales al cargar la página o al cambiar la categoría o tipo seleccionado
+useEffect(() => {
+  // Decodificar y establecer el ID de usuario
+  setUserId(dataDecript(localStorage.getItem('id')));
+  // Recargar la página al retroceder en el historial del navegador
+  window.onpopstate = function(event) {
+    window.location.reload();
+  };
+  // Listar movimientos, categorías, tipos, proveedores, usuarios, titulados, instructores, titulados activos e instructores activos
+  listarMovimiento();
+  listarCategoria();
+  listarTipo();
+  listarProveedor();
+  listarUsuario();
+  listarTitulado();
+  listarInstructor();
+  listarTituladoAct();
+  listarInstructorAct();
+  // Listar productos de la categoría seleccionada si existe
+  if (selectedCategoria) {
+    listarProductoCategoria(selectedCategoria.value);
+  }
+  // Listar unidades de producto del tipo seleccionado si existe
+  if (selectedTipo) {
+    listarUnidadesPro(selectedOption.value.id_tipo);
+  }
+}, [selectedCategoria, selectedTipo]); // Dependencias: selectedCategoria, selectedTipo, se ejecuta cuando cambia alguna de estas dos variables
+
+
+  // Función para listar las categorías
+function listarCategoria() {
+  fetch(`http://${portConexion}:3000/categoria/listar`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
+      if (res.status === 204) {
+        //console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
     .then((data) => {
-        setUnidadSeleccionada(data[0].unidad_peso)
-      })
+      if (data !== null) {
+        // Establecer las categorías obtenidas del servidor
+        setcategorias_producto(data);
+        // Listar titulados e instructores después de obtener las categorías
+        listarTitulado();
+        listarInstructor();
+      }
+    })
     .catch((e) => {
-        setUnidadSeleccionada('No hay unidad de medida');
-        //console.log("Error al obtener unidades:", e);
+      //console.log(e);
     });
 }
-  function editarMovimiento(id) {
-    fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
-      method: 'GET',
+
+// Función para listar los titulados
+function listarTitulado() {
+  fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
+      if (res.status === 204) {
+        //console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
+        // Establecer los titulados activos obtenidos del servidor
+        setTitulado(data);
+      }
+    })
+    .catch((e) => {
+      //console.log(e);
+    });
+}
+
+// Función para listar los instructores
+function listarInstructor() {
+  fetch(`http://${portConexion}:3000/instructor/listarActivo`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
+      if (res.status === 204) {
+        //console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
+        // Establecer los instructores activos obtenidos del servidor
+        setInstrucor(data);
+      }
+    })
+    .catch((e) => {
+      //console.log(e);
+    });
+}
+
+  // Función para listar los titulados en actualizar
+function listarTituladoAct() {
+  fetch(`http://${portConexion}:3000/titulado/listaractivo`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
+      if (res.status === 204) {
+        //console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      //console.log("Datos de titulado recibidos:", data);
+      if (data !== null) {
+        // Formatear la lista de titulados para el componente React-Select
+        const formattedTituladoList = data.map(titulado => ({
+          value: titulado.id_titulado,
+          label: `${titulado.nombre_titulado} - ${titulado.id_ficha}` 
+        }));
+        // Establecer la lista de titulados formateada en el estado
+        setTitulado(formattedTituladoList);
+      }
+    })
+    .catch((e) => {
+      //console.log(e);
+    });
+}
+
+// Función para listar los instructores en actualizar
+function listarInstructorAct() {
+  fetch(`http://${portConexion}:3000/instructor/listarActivo`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
+      if (res.status === 204) {
+        //console.log("No hay datos disponibles");
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      //console.log("Datos de instructor recibidos:", data);
+      if (data !== null) {
+        // Formatear la lista de instructores para el componente React-Select
+        const formattedInstructorList = data.map(instructor => ({
+          value: instructor.id,
+          label: instructor.nombre
+        }));
+        // Establecer la lista de instructores formateada en el estado
+        setInstrucor(formattedInstructorList);
+      }
+    })
+    .catch((e) => {
+      //console.log("Error al obtener datos de instructor:", e);
+    });
+}
+
+// Función para listar los tipos de productos
+function listarTipo() {
+  fetch(`http://${portConexion}:3000/tipo/listar`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
+      if (res.status === 204) {
+        return null;
+      }
+      return res.json();
+    })
+    .then((data) => {
+      if (data !== null) {
+        // Establecer la lista de tipos de productos en el estado
+        setTipo(data);
+      }
+    })
+    .catch((e) => {
+      console.error("Error al procesar la respuesta:", e);
+    });
+}
+
+// Función para listar los proveedores
+function listarProveedor() {
+  fetch(`http://${portConexion}:3000/proveedor/listar`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      // Establecer la lista de proveedores en el estado
+      setProveedor(data);
+    })
+    .catch((e) => {
+      //console.log(e);
+    });
+}
+
+ // Función para listar los productos de una categoría específica
+function listarProductoCategoria(id_categoria) {
+  fetch(
+    `http://${portConexion}:3000/facturamovimiento/buscarProPro/${id_categoria == '' ? 0 : id_categoria}`,
+    {
+      method: "GET",
       headers: {
-        'Content-type': 'application/json',
+        "Content-type": "application/json",
         token: localStorage.getItem("token")
       },
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setUniPro([]);
+      setProCat(data);
+      //console.log("PRODUCTO - CATEGORIA : ", data);
     })
-      .then((res) => res.json())
-      .then((data) => {
-        //console.log(data);
-        setMovimientoSeleccionado(data[0]);
-        setUpdateModal(true);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
+    .catch((e) => {
+      setProCat([]);
+      //console.log("Error:: ", e);
+    });
+}
 
-  function editarDetalleDestino(id) {
-    fetch(`http://${portConexion}:3000/facturamovimiento/buscarDetalleMovimiento/${id}`, {
-      method: 'GET',
+// Función para listar las unidades de un producto específico
+function listarUnidadesPro(id_producto) {
+  fetch(
+    `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
+    {
+      method: "GET",
       headers: {
-        'Content-type': 'application/json',
+        "Content-type": "application/json",
         token: localStorage.getItem("token")
       },
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setUnidadSeleccionada(data[0].unidad_peso)
     })
-      .then((res) => res.json())
-      .then((data) => {
-        //console.log(data);
-        setMovimientoSeleccionado(data[0]);
-        setUpdateModal(true);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
+    .catch((e) => {
+      setUnidadSeleccionada('No hay unidad de medida');
+      //console.log("Error al obtener unidades:", e);
+    });
+}
 
-  function actualizarMovimiento(id) {
-    const validacionExitosa = Validate.validarCampos('.form-update');
-    fetch(`http://${portConexion}:3000/facturamovimiento/actualizarSalida/${id}`, {
+// Función para editar un movimiento
+function editarMovimiento(id) {
+  fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      //console.log(data);
+      setMovimientoSeleccionado(data[0]);
+      setUpdateModal(true);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+// Función para editar el detalle del destino de un movimiento
+function editarDetalleDestino(id) {
+  fetch(`http://${portConexion}:3000/facturamovimiento/buscarDetalleMovimiento/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      //console.log(data);
+      setMovimientoSeleccionado(data[0]);
+      setUpdateModal(true);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+// Función para actualizar un movimiento
+function actualizarMovimiento(id) {
+  const validacionExitosa = Validate.validarCampos('.form-update');
+  fetch(`http://${portConexion}:3000/facturamovimiento/actualizarSalida/${id}`, {
     method: "PUT",
     headers: {
-        'Content-type': 'application/json',
-        token: localStorage.getItem("token")
+      'Content-type': 'application/json',
+      token: localStorage.getItem("token")
     },
     body: JSON.stringify(movimientoSeleccionado),
-})
-.then((res) => {
-    if (!res.ok) {
+  })
+    .then((res) => {
+      if (!res.ok) {
         return res.json().then((json) => {
-            let errorMessage = json.errors ? json.errors[0].msg : json.mensaje;
-            throw new Error(errorMessage);
+          let errorMessage = json.errors ? json.errors[0].msg : json.mensaje;
+          throw new Error(errorMessage);
         });
-    }
-    return res.json();
-})
+      }
+      return res.json();
+    })
     .then((data) => {
       if (data.status === 200) {
-          Sweet.exito(data.message);
-          listarMovimiento();
-          setUpdateModal(false);
-          removeModalBackdrop(true);
-          const modalBackdrop = document.querySelector('.modal-backdrop');
-          if (modalBackdrop) {
-              modalBackdrop.remove();
-          }
-          if ($.fn.DataTable.isDataTable(tableRef.current)) {
-              $(tableRef.current).DataTable().destroy();
-          }
+        Sweet.exito(data.message);
+        listarMovimiento();
+        setUpdateModal(false);
+        removeModalBackdrop(true);
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+        if ($.fn.DataTable.isDataTable(tableRef.current)) {
+          $(tableRef.current).DataTable().destroy();
+        }
       } else if (data.status === 400 || data.status === 403) {
-          Sweet.error(data.error.errors[0].msg);
+        Sweet.error(data.error.errors[0].msg);
       } else if (data.status === 402) {
-          Sweet.error(data.mensaje);
+        Sweet.error(data.mensaje);
       } else if (data.status === 409) {
-          Sweet.error(data.message);
+        Sweet.error(data.message);
       } else {
-          listarMovimiento();
-          setUpdateModal(false);
-          removeModalBackdrop(true);
-          const modalBackdrop = document.querySelector('.modal-backdrop');
-          if (modalBackdrop) {
-              modalBackdrop.remove();
-          }
+        listarMovimiento();
+        setUpdateModal(false);
+        removeModalBackdrop(true);
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
       }
     })
     .catch((error) => {
       //console.error('Error:', error);
       Sweet.error(error.message);
     });
-  }
-  function listarUsuario() {
-    fetch(`http://${portConexion}:3000/usuario/listar`, {
-      method: "get",
-      headers: {
-        "content-type": "application/json",
-        token: localStorage.getItem("token")
-      }
-    }).then((res) => {
+}
+  // Función para listar los usuarios
+function listarUsuario() {
+  fetch(`http://${portConexion}:3000/usuario/listar`, {
+    method: "get",
+    headers: {
+      "content-type": "application/json",
+      token: localStorage.getItem("token")
+    }
+  })
+    .then((res) => {
       if (res.status === 204) {
         return null;
       }
       return res.json();
     })
-      .then(data => {
-        setUsuario(data);
-      })
-      .catch(e => { console.log(e); })
-  }
+    .then((data) => {
+      setUsuario(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
 
-  function registrarMovimientoSalida() {
-    let fk_id_usuario = userId;
-    let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
-    let nota_factura = document.getElementById('nota_factura').value;
-    let destino_movimiento = document.getElementById('destino_movimiento').value;
-    let fk_id_producto = fkIdProducto ? fkIdProducto : null;
-    let fk_id_tipo_producto = selectedTipo ? selectedTipo : null;
-    let fk_id_titulado = null;
-    let fk_id_instructor = null;
+// Función para registrar un movimiento de salida
+function registrarMovimientoSalida() {
+  let fk_id_usuario = userId;
+  let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
+  let nota_factura = document.getElementById('nota_factura').value;
+  let destino_movimiento = document.getElementById('destino_movimiento').value;
+  let fk_id_producto = fkIdProducto ? fkIdProducto : null;
+  let fk_id_tipo_producto = selectedTipo ? selectedTipo : null;
+  let fk_id_titulado = null;
+  let fk_id_instructor = null;
 
-    if (destino_movimiento === "taller" || destino_movimiento === "evento") {
-      fk_id_titulado = selectedOptionTit ? selectedOptionTit.value : null;
-      fk_id_instructor = selectedOptionIns ? selectedOptionIns.value : null; 
+  if (destino_movimiento === "taller" || destino_movimiento === "evento") {
+    fk_id_titulado = selectedOptionTit ? selectedOptionTit.value : null;
+    fk_id_instructor = selectedOptionIns ? selectedOptionIns.value : null;
   }
 
   Validate.validarCampos('.form-empty');
@@ -675,73 +772,73 @@ useEffect(() => {
     return;
   }
 
-    fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token")
-        },
-        body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, destino_movimiento,fk_id_tipo_producto, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
-    })
+  fetch(`http://${portConexion}:3000/facturamovimiento/registrarSalida`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token")
+    },
+    body: JSON.stringify({ cantidad_peso_movimiento, nota_factura, destino_movimiento, fk_id_tipo_producto, fk_id_producto, fk_id_usuario, fk_id_titulado, fk_id_instructor }),
+  })
     .then((res) => res.json())
     .then(data => {
-        if (data.status === 200) {
-            Sweet.exito(data.message);
-            setShowModal(false);
-            removeModalBackdrop(true);
-            const modalBackdrop = document.querySelector('.modal-backdrop');
-            if (modalBackdrop) {
-                modalBackdrop.remove();
-            }
-            if ($.fn.DataTable.isDataTable(tableRef.current)) {
-                $(tableRef.current).DataTable().destroy();
-            }
-            listarMovimiento();
-        } else if (data.status === 403) {
-            Sweet.error(data.error.errors[0].msg);
-        } else if (data.status === 402) {
-            Sweet.error(data.mensaje);
-        } else if (data.status === 409) {
-            Sweet.error(data.message);
-        } else {
-            listarMovimiento();
-            setShowModal(false);
-            removeModalBackdrop(true);
-            const modalBackdrop = document.querySelector('.modal-backdrop');
-            if (modalBackdrop) {
-                modalBackdrop.remove();
-            }
+      if (data.status === 200) {
+        Sweet.exito(data.message);
+        setShowModal(false);
+        removeModalBackdrop(true);
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
         }
+        if ($.fn.DataTable.isDataTable(tableRef.current)) {
+          $(tableRef.current).DataTable().destroy();
+        }
+        listarMovimiento();
+      } else if (data.status === 403) {
+        Sweet.error(data.error.errors[0].msg);
+      } else if (data.status === 402) {
+        Sweet.error(data.mensaje);
+      } else if (data.status === 409) {
+        Sweet.error(data.message);
+      } else {
+        listarMovimiento();
+        setShowModal(false);
+        removeModalBackdrop(true);
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+          modalBackdrop.remove();
+        }
+      }
     })
     .catch(error => {
-        console.error('Error:', error);
+      console.error('Error:', error);
     });
 }
 
-  function listarMovimiento() {
-    fetch(`http://${portConexion}:3000/facturamovimiento/listarSalida`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        token: localStorage.getItem("token")
-      },
-    }).then((res) => {
+// Función para listar los movimientos de salida
+function listarMovimiento() {
+  fetch(`http://${portConexion}:3000/facturamovimiento/listarSalida`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => {
       if (res.status === 204) {
         return null;
       }
       return res.json();
     })
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setMovimientos(data);
-        }
-      })
-      .catch((e) => {
-        //console.log(e);
-      });
-  }
-
-
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setMovimientos(data);
+      }
+    })
+    .catch((e) => {
+      //console.log(e);
+    });
+}
 
   return (
     <>
@@ -1031,7 +1128,7 @@ useEffect(() => {
                                             </select>
                                         </div>
                                     </div>
-                                    {showInstructorTituladoSelects &&
+                                    {!isLoading && showInstructorTituladoSelects && (
                                         <>
                                             <div className="col">
                                                 <div className="form-outline">
@@ -1058,7 +1155,7 @@ useEffect(() => {
                                                 </div>
                                             </div>
                                         </>
-                                    }
+                                    )}
                                 </div>
                                 <div className="row mb-4">
                                   <div className="col">

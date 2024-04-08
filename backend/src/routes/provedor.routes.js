@@ -6,7 +6,7 @@ import { validarProvedor } from "../validation/validatorProvedor.js";
 
 const provedorRouter = Router();
 
-provedorRouter.get('/listar',  listarProvedor);
+provedorRouter.get('/listar', validarToken, listarProvedor);
 provedorRouter.get('/listarActivo', validarToken, listarProvedorActivo);
 provedorRouter.get('/buscar/:id', validarToken,buscarProvedor);
 provedorRouter.post('/registrar' ,cargarImagen,validarProvedor,validarToken,registrarProvedor);

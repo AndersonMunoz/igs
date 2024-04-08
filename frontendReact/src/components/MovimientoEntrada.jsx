@@ -1,581 +1,601 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Outlet, Link } from "react-router-dom";
-import Sweet from '../helpers/Sweet';
-import { dataDecript } from "./encryp/decryp";
-import Validate from '../helpers/Validate';
-import '../style/movimiento.css';
-import { IconEdit } from "@tabler/icons-react";
-import ExelLogo from "../../img/excel.224x256.png";
-import PdfLogo from "../../img/pdf.224x256.png";
-import esES from '../languages/es-ES.json';
-import $ from 'jquery';
-import 'bootstrap';
-import 'datatables.net';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import 'datatables.net-responsive';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import * as xlsx from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import portConexion from "../const/portConexion";
-import Select from 'react-select'
+import Sweet from '../helpers/Sweet'; // Importación de utilidad Sweet
+import { dataDecript } from "./encryp/decryp"; // Importación de función dataDecript
+import Validate from '../helpers/Validate'; // Importación de utilidad Validate
+import '../style/movimiento.css'; // Importación de estilos CSS
+import { IconEdit } from "@tabler/icons-react"; // Importación de icono IconEdit
+import ExelLogo from "../../img/excel.224x256.png"; // Importación de logo de Excel
+import PdfLogo from "../../img/pdf.224x256.png"; // Importación de logo de PDF
+import esES from '../languages/es-ES.json'; // Importación de archivo de idioma es-ES.json
+import $ from 'jquery'; // Importación de jQuery
+import 'bootstrap'; // Importación de Bootstrap
+import 'datatables.net'; // Importación de DataTables
+import 'datatables.net-bs5'; // Importación de DataTables para Bootstrap 5
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css'; // Importación de estilos de DataTables para Bootstrap 5
+import 'datatables.net-responsive'; // Importación de funcionalidad DataTables responsive
+import 'datatables.net-responsive-bs5'; // Importación de DataTables responsive para Bootstrap 5
+import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css'; // Importación de estilos de DataTables responsive para Bootstrap 5
+import * as xlsx from 'xlsx'; // Importación de la librería xlsx
+import jsPDF from 'jspdf'; // Importación de la librería jsPDF
+import autoTable from 'jspdf-autotable'; // Importación de funcionalidad autoTable de jsPDF
+import portConexion from "../const/portConexion"; // Importación de constante portConexion
+import Select from 'react-select'; // Importación de componente Select de react-select
 
 const Movimiento = () => {
-  const [userId, setUserId] = useState('');
-  const [movimientos, setMovimientos] = useState([]);
-  const [productosCategoria,setProCat] = useState([]);
-  const [userRoll, setUserRoll] = useState("");
-  const [unidadesProductos,setUniPro] = useState([]);
-  const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
-  const [categoria_list, setcategorias_producto] = useState([]);
-  const [proveedor_list, setProveedor] = useState([]);
-  const [tipos, setTipo] = useState([]);
-  const [usuario_list, setUsuario] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [updateModal, setUpdateModal] = useState(false);
-  const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
-  const modalUpdateRef = useRef(null);
-  const modalProductoRef = useRef(null);
-  const [up, setUp] = useState([]);
-  const [selectedUp, setSelectedUp] = useState(null);
-  const [selectedTipo, setSelectedTipo] = useState(null);
-  const [selectedCategoria, setSelectedCategoria] = useState(null);
-  const [fechaCaducidadModificada, setFechaCaducidadModificada] = useState(false);
-  const [unidadSeleccionada, setUnidadSeleccionada] = useState('');
+  // Definición de estados del componente
+    const [userId, setUserId] = useState('');
+    const [movimientos, setMovimientos] = useState([]);
+    const [productosCategoria,setProCat] = useState([]);
+    const [userRoll, setUserRoll] = useState("");
+    const [unidadesProductos,setUniPro] = useState([]);
+    const [aplicaFechaCaducidad, setAplicaFechaCaducidad] = useState(false);
+    const [categoria_list, setcategorias_producto] = useState([]);
+    const [proveedor_list, setProveedor] = useState([]);
+    const [tipos, setTipo] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false);
+    const [movimientoSeleccionado, setMovimientoSeleccionado] = useState({});
+    const modalUpdateRef = useRef(null);
+    const modalProductoRef = useRef(null);
+    const [up, setUp] = useState([]);
+    const [selectedUp, setSelectedUp] = useState(null);
+    const [selectedTipo, setSelectedTipo] = useState(null);
+    const [selectedCategoria, setSelectedCategoria] = useState(null);
+    const [fechaCaducidadModificada, setFechaCaducidadModificada] = useState(false);
+    const [unidadSeleccionada, setUnidadSeleccionada] = useState('');
 
-  const tableRef = useRef(null);
-  const handleOnExport = () => {
-    const wsData = getTableData();
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.aoa_to_sheet(wsData);
-    xlsx.utils.book_append_sheet(wb, ws, 'ExcelEntrada');
-    xlsx.writeFile(wb, 'MovimientoEntrada.xlsx');
-  };
-  const exportPdfHandler = () => {
-    const doc = new jsPDF('landscape');
-  
-    const columns = [
-      { title: 'Nombre producto', dataKey: 'nombre_tipo' },
-      { title: 'Categoría', dataKey: 'nombre_categoria' },
-      { title: 'Tipo categoría', dataKey: 'tipo_categoria' },
-      { title: 'Código categoría', dataKey: 'codigo_categoria' },
-      { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
-      { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
-      { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
-      { title: 'Unidad Peso', dataKey: 'unidad_peso' },
-      { title: 'Precio movimiento', dataKey: 'precio_movimiento' },
-      { title: 'Precio total', dataKey: 'precio_total_mov' },
-      { title: 'Estado producto', dataKey: 'estado_producto_movimiento' },
-      { title: 'Nota', dataKey: 'nota_factura' },
-      { title: 'Fecha de caducidad', dataKey: 'fecha_caducidad' },
-      { title: 'Usuario que hizo movimiento', dataKey: 'nombre_usuario' },
-      { title: 'Proveedor', dataKey: 'nombre_proveedores' }
-    ];
-  
-    const tableData = movimientos.map((element) => {
-      const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
-      return {
-        nombre_tipo: element.nombre_tipo,
-        nombre_categoria: element.nombre_categoria,
-        tipo_categoria: element.tipo_categoria,
-        codigo_categoria: element.codigo_categoria,
-        fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
-        tipo_movimiento: element.tipo_movimiento,
-        cantidad_peso_movimiento: element.cantidad_peso_movimiento,
-        unidad_peso: element.unidad_peso,
-        precio_movimiento: element.precio_movimiento,
-        precio_total_mov: element.precio_total_mov,
-        estado_producto_movimiento: element.estado_producto_movimiento,
-        nota_factura: element.nota_factura,
-        fecha_caducidad: fechaCaducidad,
-        nombre_usuario: element.nombre_usuario,
-        nombre_proveedores: element.nombre_proveedores,
-      };
-    });
-  
-    doc.autoTable({
-      columns,
-      body: tableData,
-      margin: { top: 20 },
-      styles: { overflow: 'linebreak' },
-      headStyles: { fillColor: [0, 100, 0] },
-    });
-  
-    doc.save('MovimientosEntrada.pdf');
-  };
-  const getTableData = () => {
-    const wsData = [];
+ // Definición de referencia para la tabla
+const tableRef = useRef(null);
 
-    const columns = [
-      'Nombre producto',
-      'Categoría',
-      'Tipo categoría',
-      'Código categoría',
-      'Fecha del movimiento',
-      'Tipo de movimiento',
-      'Cantidad',
-      'Unidad Peso',
-      'Precio movimiento',
-      'Precio total',
-      'Estado producto',
-      'Nota',
-      'Fecha de caducidad',
-      'Usuario que hizo movimiento',
-      'Proveedor'
-    ];
-    wsData.push(columns);
-
-    movimientos.forEach(element => {
-      const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
-      const rowData = [
-        element.nombre_tipo,
-        element.nombre_categoria,
-        element.tipo_categoria,
-        element.codigo_categoria,
-        Validate.formatFecha(element.fecha_movimiento),
-        element.tipo_movimiento,
-        element.cantidad_peso_movimiento,
-        element.unidad_peso,
-        element.precio_movimiento,
-        element.precio_total_mov,
-        element.estado_producto_movimiento,
-        element.nota_factura,
-        fechaCaducidad,
-        element.nombre_usuario,
-        element.nombre_proveedores
-      ];
-      wsData.push(rowData);
-    });
-
-    return wsData;
-  };
-  const handleCheckboxChange = () => {
-    setAplicaFechaCaducidad(!aplicaFechaCaducidad);
-
-  };
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setAplicaFechaCaducidad(false); 
-    resetFormState(); 
-  };
-  const handleCategoria = (selectedOption) => {
-    setSelectedCategoria(selectedOption); 
-    setSelectedTipo(null); 
-    setUnidadSeleccionada('No hay unidad de medida');
-  };
-  const handleTipo = (selectedOption) => {
-    setSelectedTipo(selectedOption);
-    listarUnidadesPro(selectedOption.value);
-    //console.log("UNIDAD SELECCIONADA"+selectedOption.value) // Llama a la función para obtener las unidades asociadas al tipo seleccionado
+// Función para exportar a Excel
+const handleOnExport = () => {
+  const wsData = getTableData();
+  const wb = xlsx.utils.book_new();
+  const ws = xlsx.utils.aoa_to_sheet(wsData);
+  xlsx.utils.book_append_sheet(wb, ws, 'ExcelEntrada');
+  xlsx.writeFile(wb, 'MovimientoEntrada.xlsx');
 };
 
+// Función para exportar a PDF
+const exportPdfHandler = () => {
+  const doc = new jsPDF('landscape');
 
-  const handleUp = (selectedOption) => {
-    setSelectedUp(selectedOption);
-  };
-  const fkIdUsuarioRef = useRef(null);
+  const columns = [
+    { title: 'Nombre producto', dataKey: 'nombre_tipo' },
+    { title: 'Categoría', dataKey: 'nombre_categoria' },
+    { title: 'Tipo categoría', dataKey: 'tipo_categoria' },
+    { title: 'Código categoría', dataKey: 'codigo_categoria' },
+    { title: 'Fecha del movimiento', dataKey: 'fecha_movimiento' },
+    { title: 'Tipo de movimiento', dataKey: 'tipo_movimiento' },
+    { title: 'Cantidad', dataKey: 'cantidad_peso_movimiento' },
+    { title: 'Unidad Peso', dataKey: 'unidad_peso' },
+    { title: 'Precio movimiento', dataKey: 'precio_movimiento' },
+    { title: 'Precio total', dataKey: 'precio_total_mov' },
+    { title: 'Estado producto', dataKey: 'estado_producto_movimiento' },
+    { title: 'Nota', dataKey: 'nota_factura' },
+    { title: 'Fecha de caducidad', dataKey: 'fecha_caducidad' },
+    { title: 'Usuario que hizo movimiento', dataKey: 'nombre_usuario' },
+    { title: 'Proveedor', dataKey: 'nombre_proveedores' }
+  ];
 
-  const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
+  const tableData = movimientos.map((element) => {
+    const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
+    return {
+      nombre_tipo: element.nombre_tipo,
+      nombre_categoria: element.nombre_categoria,
+      tipo_categoria: element.tipo_categoria,
+      codigo_categoria: element.codigo_categoria,
+      fecha_movimiento: Validate.formatFecha(element.fecha_movimiento),
+      tipo_movimiento: element.tipo_movimiento,
+      cantidad_peso_movimiento: element.cantidad_peso_movimiento,
+      unidad_peso: element.unidad_peso,
+      precio_movimiento: element.precio_movimiento,
+      precio_total_mov: element.precio_total_mov,
+      estado_producto_movimiento: element.estado_producto_movimiento,
+      nota_factura: element.nota_factura,
+      fecha_caducidad: fechaCaducidad,
+      nombre_usuario: element.nombre_usuario,
+      nombre_proveedores: element.nombre_proveedores,
+    };
+  });
 
-  const handleCheckboxChange2 = () => {
-    setAplicaFechaCaducidad2(prevState => !prevState);
-  };
-  
-  const handleCloseModal2 = () => {
-    setShowModal(false);
-    setAplicaFechaCaducidad2(false); 
-    resetFormState(); 
-  };
+  doc.autoTable({
+    columns,
+    body: tableData,
+    margin: { top: 20 },
+    styles: { overflow: 'linebreak' },
+    headStyles: { fillColor: [0, 100, 0] },
+  });
 
-  const handleFechaCaducidadChange = (e) => {
-    setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value });
-    setFechaCaducidadModificada(true);
+  doc.save('MovimientosEntrada.pdf');
 };
-  const resetFormState = () => {
-    const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
-    setAplicaFechaCaducidad2(false);
-    formFields.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
+
+// Función para obtener los datos de la tabla que irán en el documento excel
+const getTableData = () => {
+  const wsData = [];
+
+  const columns = [
+    'Nombre producto',
+    'Categoría',
+    'Tipo categoría',
+    'Código categoría',
+    'Fecha del movimiento',
+    'Tipo de movimiento',
+    'Cantidad',
+    'Unidad Peso',
+    'Precio movimiento',
+    'Precio total',
+    'Estado producto',
+    'Nota',
+    'Fecha de caducidad',
+    'Usuario que hizo movimiento',
+    'Proveedor'
+  ];
+  wsData.push(columns);
+
+  movimientos.forEach(element => {
+    const fechaCaducidad = element.fecha_caducidad ? Validate.formatFecha(element.fecha_caducidad) : "No aplica";
+    const rowData = [
+      element.nombre_tipo,
+      element.nombre_categoria,
+      element.tipo_categoria,
+      element.codigo_categoria,
+      Validate.formatFecha(element.fecha_movimiento),
+      element.tipo_movimiento,
+      element.cantidad_peso_movimiento,
+      element.unidad_peso,
+      element.precio_movimiento,
+      element.precio_total_mov,
+      element.estado_producto_movimiento,
+      element.nota_factura,
+      fechaCaducidad,
+      element.nombre_usuario,
+      element.nombre_proveedores
+    ];
+    wsData.push(rowData);
+  });
+
+  return wsData;
+};
+
+ // Función para cambiar el estado de aplicaFechaCaducidad
+const handleCheckboxChange = () => {
+  setAplicaFechaCaducidad(!aplicaFechaCaducidad);
+};
+
+// Función para cerrar el modal y reiniciar el estado
+const handleCloseModal = () => {
+  setShowModal(false);
+  setAplicaFechaCaducidad(false); 
+  resetFormState(); 
+};
+
+// Función para manejar la selección de categoría
+const handleCategoria = (selectedOption) => {
+  setSelectedCategoria(selectedOption); 
+  setSelectedTipo(null); 
+  setUnidadSeleccionada('No hay unidad de medida');
+};
+
+// Función para manejar la selección de tipo
+const handleTipo = (selectedOption) => {
+  setSelectedTipo(selectedOption);
+  listarUnidadesPro(selectedOption.value);
+};
+
+// Función para manejar la selección de UP
+const handleUp = (selectedOption) => {
+  setSelectedUp(selectedOption);
+};
+
+// Referencia para el usuario
+const fkIdUsuarioRef = useRef(null);
+
+// Estado para aplicaFechaCaducidad2 y función para cambiar su estado
+const [aplicaFechaCaducidad2, setAplicaFechaCaducidad2] = useState(false);
+const handleCheckboxChange2 = () => {
+  setAplicaFechaCaducidad2(prevState => !prevState);
+};
+
+// Función para cerrar el modal 2 y reiniciar el estado
+const handleCloseModal2 = () => {
+  setShowModal(false);
+  setAplicaFechaCaducidad2(false); 
+  resetFormState(); 
+};
+
+// Función para manejar el cambio en la fecha de caducidad
+const handleFechaCaducidadChange = (e) => {
+  setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value });
+  setFechaCaducidadModificada(true);
+};
+
+// Función para reiniciar el estado del formulario
+const resetFormState = () => {
+  const formFields = modalProductoRef.current.querySelectorAll('.form-control,.form-update,.my-custom-class,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  const formFields2 = modalUpdateRef.current.querySelectorAll('.form-control,.form-update,.form-empty, select, input[type="number"], input[type="checkbox"]');
+  setAplicaFechaCaducidad2(false);
+  formFields.forEach(field => {
+    if (field.type === 'checkbox') {
+      field.checked = false;
+    } else {
+      field.value = '';
+    }
+    field.classList.remove('is-invalid');
+  });
+  formFields2.forEach(field => {
+    if (field.type === 'checkbox') {
+      field.checked = false;
+    } else {
+      field.value = '';
+    }
+    field.classList.remove('is-invalid');
+  });
+};
+
+// Efecto para inicializar el DataTable cuando hay cambios en movimientos
+useEffect(() => {
+  if (movimientos.length > 0) {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      $(tableRef.current).DataTable().destroy();
+    }
+    $(tableRef.current).DataTable({
+      columnDefs: [
+        {
+          targets: -1,
+          responsivePriority: 1
+        }
+      ],
+      responsive: true,
+      language: esES,
+      paging: true,
+      select: {
+        'style': 'multi',
+        'selector': 'td:first-child',
+      },
+      lengthMenu: [
+        [10, 50, 100, -1],
+        ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
+      ],
     });
-    formFields2.forEach(field => {
-      if (field.type === 'checkbox') {
-        field.checked = false;
-      } else {
-        field.value = '';
-      }
-      field.classList.remove('is-invalid');
-    });
+  }
+  setUserRoll(dataDecript(localStorage.getItem("roll")));
+}, [movimientos]);
+
+ // Función para remover el backdrop del modal
+function removeModalBackdrop() {
+  const modalBackdrop = document.querySelector('.modal-backdrop');
+  if (modalBackdrop) {
+    modalBackdrop.remove();
+  }
+}
+
+// Efecto para limpiar el estado del movimiento seleccionado cuando el modal de actualización se abre
+useEffect(() => {
+  if (updateModal) {
+    setMovimientoSeleccionado({});
+  }
+}, [updateModal]);
+
+// Efecto para recargar la página cuando se detecta un cambio en el historial del navegador
+useEffect(() => {
+  window.onpopstate = function(event) {
+    window.location.reload();
   };
-  useEffect(() => {
-    if (movimientos.length > 0) {
+  setUserId(dataDecript(localStorage.getItem('id')));
+  listarMovimiento();
+  listarCategoria();
+  listarTipo();
+  listarProveedor();
+  listarUp();
+  if (selectedCategoria) {
+    listarProductoCategoria(selectedCategoria.value);
+  }
+  if (selectedTipo) {
+    listarUnidadesPro(selectedTipo.value);
+  }
+}, [selectedCategoria, selectedTipo]);
+
+// Función para listar los UP
+function listarUp() {
+  fetch(`http://${portConexion}:3000/up/listar`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token"),
+    },
+  })
+  .then((res) => {
+    if (res.status === 204) {
+      return null;
+    }
+    return res.json();
+  })
+  .then((data) => {
+    if (data !== null) {
+      setUp(data);
+    }
+  })
+  .catch((e) => {
+    console.error("Error al procesar la respuesta:", e);
+  });
+}
+
+// Función para listar las categorías
+function listarCategoria() {
+  fetch(`http://${portConexion}:3000/categoria/listarActivo`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token")        
+    },
+  })
+  .then((res) => {
+    if (res.status === 204) {
+      console.log("No hay datos disponibles");
+      return null;
+    }
+    return res.json();
+  })
+  .then((data) => {
+    if (data !== null) {
+      setcategorias_producto(data);
+    }
+  })
+  .catch((e) => {
+    console.log(e);
+  });
+}
+
+// Función para listar los tipos
+function listarTipo(){
+  fetch(`http://${portConexion}:3000/tipo/listarActivo`, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      token: localStorage.getItem("token"),
+    },
+  })
+  .then((res) => {
+    if (res.status === 204) {
+      return null;
+    }
+    return res.json();
+  })
+  .then((data) => {
+    if (data !== null) {
+      setTipo(data);
+    }
+  })
+  .catch((e) => {
+    console.error("Error al procesar la respuesta:", e);
+  });
+}
+
+  // Función para listar los proveedores
+function listarProveedor() {
+  fetch(`http://${portConexion}:3000/proveedor/listarActivo`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      token: localStorage.getItem("token"),
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setProveedor(data);
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+// Función para listar los productos de una categoría
+function listarProductoCategoria(id_categoria) {
+  fetch(
+    `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        token: localStorage.getItem("token")
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setUniPro([]);
+      setProCat(data);
+    })
+    .catch((e) => {
+      setProCat([]);
+      console.log("Error:: ", e);
+    });
+}
+
+// Función para listar las unidades de un producto
+function listarUnidadesPro(id_producto) {
+  fetch(
+      `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
+      {
+          method: "GET",
+          headers: {
+              "Content-type": "application/json",
+              token: localStorage.getItem("token")
+          },
+      }
+  )
+  .then((res) => res.json())
+  .then((data) => {
+      if (data && data.length > 0) {
+          setUnidadSeleccionada(data[0].unidad_peso);
+      } else {
+          setUnidadSeleccionada('No hay unidad de medida');
+      }
+  })
+  .catch((e) => {
+      setUnidadSeleccionada('No hay unidad de medida');
+  });
+}
+
+// Función para editar un movimiento
+function editarMovimiento(id) {
+  fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-type': 'application/json',
+      token: localStorage.getItem("token")
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setMovimientoSeleccionado(data[0]);
+      setUpdateModal(true);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+// Función para actualizar un movimiento
+function actualizarMovimiento(id) {
+  let fecha_caducidad = null;
+  if (aplicaFechaCaducidad2 && fechaCaducidadModificada && movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
+      const fechaSeleccionada = new Date(movimientoSeleccionado.fecha_caducidad);
+      fechaSeleccionada.setDate(fechaSeleccionada.getDate() + 1);
+      fecha_caducidad = fechaSeleccionada.toISOString().split('T')[0];
+  } else if (movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
+      fecha_caducidad = movimientoSeleccionado.fecha_caducidad;
+  }
+  let body = { ...movimientoSeleccionado };
+  if (fecha_caducidad !== null) {
+      body.fecha_caducidad = fecha_caducidad;
+  }
+  fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
+      method: "PUT",
+      headers: {
+          'Content-type': 'application/json',
+          token: localStorage.getItem("token"),
+      },
+      body: JSON.stringify(body),
+  })
+  .then((res) => {
+      if (!res.ok) {
+          throw res;
+      }
+      return res.json();
+  })
+  .then((data) => {
+      Sweet.exito(data.message);
+      listarMovimiento();
+      setUpdateModal(false);
+      removeModalBackdrop();
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+          modalBackdrop.remove();
+      }
+      setMovimientoSeleccionado({});
+  })
+  .catch((error) => {
+      error.json().then((body) => {
+          if (body.status === 404) {
+              Sweet.error(body.message);
+          } else if (body.status === 409) {
+              Sweet.error(body.message);
+          }   else if (body.errors) {
+              body.errors.forEach((err) => {
+                  Sweet.error(err.msg);
+              });
+          } else {
+              Sweet.error('Error en el servidor');
+          }
+      });
+  });
+}
+
+ // Función para registrar un movimiento
+function registrarMovimiento() {
+  let fk_id_usuario = userId;
+  let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
+  let precio_movimiento = document.getElementById('precio_movimiento').value;
+  let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
+  let nota_factura = document.getElementById('nota_factura').value;
+  let fecha_caducidad = null;
+  let fk_id_proveedor = document.getElementById('fk_id_proveedor').value;
+  let fk_id_tipo_producto = selectedTipo ? selectedTipo.value : null;
+  let fk_id_up = selectedUp ? selectedUp.value : null;
+  if (aplicaFechaCaducidad) {
+    fecha_caducidad = document.getElementById('fecha_caducidad').value;
+  }
+  Validate.validarCampos('.form-empty');
+  const validacionExitosa = Validate.validarSelect('.form-empt');
+
+  if (!validacionExitosa) {
+    Sweet.registroFallido();
+    return;
+  }
+  fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      token: localStorage.getItem("token")
+    },
+    body: JSON.stringify({ fk_id_usuario,cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_proveedor,fk_id_up,fk_id_tipo_producto}),
+  })
+  .then((res) => res.json())
+  .then(data => {
+    if (data.status === 200) {
+      Sweet.exito(data.message);
       if ($.fn.DataTable.isDataTable(tableRef.current)) {
         $(tableRef.current).DataTable().destroy();
       }
-      $(tableRef.current).DataTable({
-        columnDefs: [
-          {
-            targets: -1,
-            responsivePriority: 1
-          }
-        ],
-        responsive: true,
-        language: esES,
-        paging: true,
-        select: {
-          'style': 'multi',
-          'selector': 'td:first-child',
-        },
-        lengthMenu: [
-          [10, 50, 100, -1],
-          ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
-        ],
-      });
+      listarMovimiento();
     }
-    setUserRoll(dataDecript(localStorage.getItem("roll")));
-  }, [movimientos]);
-
-
-  function removeModalBackdrop() {
+    if (data.status === 403) {
+      Sweet.error(data.error.errors[0].msg);
+      return;
+    }
+    if (data.status === 409) {
+      Sweet.error(data.message); 
+      return;
+    }
+    listarMovimiento();
+    setShowModal(false);
+    removeModalBackdrop();
     const modalBackdrop = document.querySelector('.modal-backdrop');
     if (modalBackdrop) {
       modalBackdrop.remove();
     }
-  }
-  useEffect(() => {
-    if (updateModal) {
-        setMovimientoSeleccionado({});
-    }
-}, [updateModal]);
-  useEffect(() => {
-    window.onpopstate = function(event) {
-      window.location.reload();
-    };
-    setUserId(dataDecript(localStorage.getItem('id')));
-    listarMovimiento();
-    listarCategoria();
-    listarTipo();
-    listarProveedor();
-    listarUp();
-    if (selectedCategoria) {
-      listarProductoCategoria(selectedCategoria.value);
-    }
-    if (selectedTipo) {
-      listarUnidadesPro(selectedTipo.value);
-    }
-}, [selectedCategoria, selectedTipo]);
-  function listarUp() {
-    fetch(`http://${portConexion}:3000/up/listar`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setUp(data);
-        }
-      })
-      .catch((e) => {
-        console.error("Error al procesar la respuesta:", e);
-      });
-  }
-  function listarCategoria() {
-    fetch(`http://${portConexion}:3000/categoria/listarActivo`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem("token")        
-      },
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          console.log("No hay datos disponibles");
-          return null;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        if (data !== null) {
-          setcategorias_producto(data);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-  function listarTipo(){
-    fetch(`http://${portConexion}:3000/tipo/listarActivo`,{
-      method: "GET",
-      headers:{
-        "Content-type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-    })
-    .then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      if (data !== null) {
-        setTipo(data);
-      }
-    })
-    .catch((e) => {
-      console.error("Error al procesar la respuesta:", e);
-    });
-  }
-  function listarProveedor() {
-    fetch(`http://${portConexion}:3000/proveedor/listarActivo`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setProveedor(data)
-      })
-      .catch((e) => {
-        console.log(e);
-      })
-      ;
-  }
-
-
-  function listarProductoCategoria(id_categoria) {
-
-    fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          token: localStorage.getItem("token")
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setUniPro([]);
-        setProCat(data);
-        
-        //console.log("PRODUCTO - CATEGORIA : ", data);
-      })
-      .catch((e) => {
-        setProCat([]);
-        console.log("Error:: ", e);
-      });
-  }
-
-  function listarUnidadesPro(id_producto) {
-    fetch(
-        `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
-        {
-            method: "GET",
-            headers: {
-                "Content-type": "application/json",
-                token: localStorage.getItem("token")
-            },
-        }
-    )
-    .then((res) => res.json())
-    .then((data) => {
-        //console.log("Unidades del producto:", data);
-        if (data && data.length > 0) {
-            setUnidadSeleccionada(data[0].unidad_peso);
-            //console.log(data[0].unidad_peso)
-        } else {
-            setUnidadSeleccionada('No hay unidad de medida');
-        }
-    })
-    .catch((e) => {
-        setUnidadSeleccionada('No hay unidad de medida');
-        //console.log("Error al obtener unidades:", e);
-    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 }
 
-
-
-  function editarMovimiento(id) {
-    fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json',
-        token: localStorage.getItem("token")
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        //console.log(data);
-        setMovimientoSeleccionado(data[0]);
-        setUpdateModal(true);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }
-  function actualizarMovimiento(id) {
-    let fecha_caducidad = null;
-    if (aplicaFechaCaducidad2 && fechaCaducidadModificada && movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
-        const fechaSeleccionada = new Date(movimientoSeleccionado.fecha_caducidad);
-        fechaSeleccionada.setDate(fechaSeleccionada.getDate() + 1);
-        fecha_caducidad = fechaSeleccionada.toISOString().split('T')[0];
-    } else if (movimientoSeleccionado.fecha_caducidad && movimientoSeleccionado.fecha_caducidad !== '') {
-        fecha_caducidad = movimientoSeleccionado.fecha_caducidad;
+// Función para listar los movimientos
+function listarMovimiento() {
+  fetch(`http://${portConexion}:3000/facturamovimiento/listarEntrada`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      token: localStorage.getItem("token"),
+    },
+  }).then((res) => {
+    if (res.status === 204) {
+      return null;
     }
-    let body = { ...movimientoSeleccionado };
-    if (fecha_caducidad !== null) {
-        body.fecha_caducidad = fecha_caducidad;
+    return res.json();
+  })
+  .then((data) => {
+    if (Array.isArray(data)) {
+      setMovimientos(data);
     }
-    fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
-        method: "PUT",
-        headers: {
-            'Content-type': 'application/json',
-            token: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(body),
-    })
-    .then((res) => {
-        if (!res.ok) {
-            throw res;
-        }
-        return res.json();
-    })
-    .then((data) => {
-        Sweet.exito(data.message);
-        listarMovimiento();
-        setUpdateModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-        if (modalBackdrop) {
-            modalBackdrop.remove();
-        }
-        setMovimientoSeleccionado({});
-    })
-    .catch((error) => {
-        error.json().then((body) => {
-            if (body.status === 404) {
-                Sweet.error(body.message);
-            } else if (body.status === 409) {
-                Sweet.error(body.message);
-            }   else if (body.errors) {
-                body.errors.forEach((err) => {
-                    Sweet.error(err.msg);
-                });
-            } else {
-                Sweet.error('Error en el servidor');
-            }
-        });
-    });
+  })
+  .catch((e) => {
+    console.log(e);
+  });
 }
-
-
-  function registrarMovimiento() {
-
-    let fk_id_usuario = userId;
-    let cantidad_peso_movimiento = document.getElementById('cantidad_peso_movimiento').value;
-    let precio_movimiento = document.getElementById('precio_movimiento').value;
-    let estado_producto_movimiento = document.getElementById('estado_producto_movimiento').value;
-    let nota_factura = document.getElementById('nota_factura').value;
-    let fecha_caducidad = null;
-    let fk_id_proveedor = document.getElementById('fk_id_proveedor').value;
-    let fk_id_tipo_producto = selectedTipo ? selectedTipo.value : null;
-    let fk_id_up = selectedUp ? selectedUp.value : null;
-    if (aplicaFechaCaducidad) {
-      fecha_caducidad = document.getElementById('fecha_caducidad').value;
-    }
-    Validate.validarCampos('.form-empty');
-    const validacionExitosa = Validate.validarSelect('.form-empt');
-
-    if (!validacionExitosa) {
-      Sweet.registroFallido();
-      return;
-    }
-    fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        token: localStorage.getItem("token")
-      },
-      body: JSON.stringify({ fk_id_usuario,cantidad_peso_movimiento, precio_movimiento, estado_producto_movimiento, nota_factura, fecha_caducidad, fk_id_proveedor,fk_id_up,fk_id_tipo_producto}),
-    })
-    .then((res) => res.json())
-    .then(data => {
-      if (data.status === 200) {
-        Sweet.exito(data.message);
-        if ($.fn.DataTable.isDataTable(tableRef.current)) {
-          $(tableRef.current).DataTable().destroy();
-        }
-        listarMovimiento();
-      }
-      if (data.status === 403) {
-        Sweet.error(data.error.errors[0].msg);
-        return;
-      }
-      if (data.status === 409) {
-        Sweet.error(data.message); 
-        return;
-      }
-      /* console.log(data); */
-      listarMovimiento();
-      setShowModal(false);
-      removeModalBackdrop();
-      const modalBackdrop = document.querySelector('.modal-backdrop');
-      if (modalBackdrop) {
-        modalBackdrop.remove();
-      }
-
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    })
-    //console.log(document.getElementById('fecha_caducidad'));
-  }
-
-  function listarMovimiento() {
-    fetch(`http://${portConexion}:3000/facturamovimiento/listarEntrada`, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        token: localStorage.getItem("token"),
-        
-      },
-    }).then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setMovimientos(data);
-          //console.log(data);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-
 
   return (
     <>
