@@ -217,11 +217,28 @@ const handleInstructor = (selectedOptionIns) => {
 
 // Función para manejar el cambio del destino de movimiento
 const handleDestino = (event) => {
+  const selectedDestino = event.target.value;
+
+  // Actualizar estado de destino de movimiento
+  setDestinoMovimiento(selectedDestino, () => {
+    // Mostrar u ocultar selectores de instructor y titulado según el destino seleccionado
+    setShowInstructorTituladoSelects(selectedDestino === "taller" || selectedDestino === "evento");
+
+    // Llamar a las funciones para listar titulados e instructores si el destino seleccionado es "taller" o "evento"
+    if (selectedDestino === "taller" || selectedDestino === "evento") {
+      listarTitulado(); // Listar titulados disponibles
+      listarInstructor(); // Listar instructores disponibles
+    }
+  });
+};
+
+
+
+// Llamar a las funciones para listar titulados e instructores después de que el estado destinoMovimiento se haya actualizado
+useEffect(() => {
   listarTitulado(); // Listar titulados disponibles
   listarInstructor(); // Listar instructores disponibles
-  setDestinoMovimiento(event.target.value); // Actualizar estado de destino de movimiento
-  setShowInstructorTituladoSelects(event.target.value === "taller" || event.target.value === "evento"); // Mostrar u ocultar selects de instructor y titulado según el destino seleccionado
-};
+}, [destinoMovimiento]);
 
 const handleDestino2 = (event) => {
   const selectedDestino = event.target.value;
