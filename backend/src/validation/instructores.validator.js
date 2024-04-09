@@ -9,6 +9,6 @@ export const validatorInstructores = [
         .exists()
         .not()
         .isEmpty()
-        .matches(/^[A-Za-z\s'ñ]+$/)
+        .matches(/^[A-Za-z\s'ñáéíóúÁÉÍÓÚ]+$/u)
         .isLength({ min: 3, max: 50})
 ];

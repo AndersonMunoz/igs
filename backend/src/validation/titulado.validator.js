@@ -5,7 +5,9 @@ export const validatorTitulados = [
         .exists()
         .not()
         .isEmpty()
-        .matches(/^[A-Za-z\s'ñ]+$/),
+        .matches(/^[A-Za-z\s'ñáéíóúÁÉÍÓÚ]+$/u)
+
+
             
 
     // check('id_ficha', 'El ID de ficha ya está en uso')
