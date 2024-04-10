@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-03-2024 a las 15:46:25
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.1.17
+-- Tiempo de generación: 02-04-2024 a las 17:14:39
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,6 +46,23 @@ CREATE TABLE `categorias_producto` (
   `tipo_categoria` enum('perecedero','no perecedero') NOT NULL,
   `codigo_categoria` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `categorias_producto`
+--
+
+INSERT INTO `categorias_producto` (`id_categoria`, `nombre_categoria`, `estado`, `tipo_categoria`, `codigo_categoria`) VALUES
+(1, 'Carnes y Salsamentaria ', 1, 'perecedero', 'CS'),
+(2, 'Pescados y mariscos  ', 1, 'perecedero', 'PM'),
+(3, 'Aves y Caza ', 1, 'perecedero', 'AC'),
+(4, 'Lácteos(1)', 1, 'perecedero', 'L1'),
+(5, 'Frutas y verduras ', 1, 'perecedero', 'FV'),
+(6, 'Lácteos(2)', 1, 'no perecedero', 'L2'),
+(7, 'Enlatados y envasados ', 1, 'no perecedero', 'EE'),
+(8, 'Granos', 1, 'no perecedero', 'G'),
+(9, 'Licores(Bebidas Alcohólicas)', 1, 'no perecedero', 'LC'),
+(10, 'Vinos', 1, 'no perecedero', 'V'),
+(11, 'Gaseosas ', 1, 'no perecedero', 'Gs');
 
 -- --------------------------------------------------------
 
@@ -140,6 +157,199 @@ CREATE TABLE `tipo_productos` (
   `unidad_peso` enum('kg','lb','gr','lt','ml','oz','unidad(es)') NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_productos`
+--
+
+INSERT INTO `tipo_productos` (`id_tipo`, `nombre_tipo`, `fk_categoria_pro`, `unidad_peso`, `estado`) VALUES
+(1, 'Costilla Baby', 1, 'lb', 1),
+(2, 'Beef Chatas', 1, 'lb', 1),
+(3, 'Lomo Pierna', 1, 'lb', 1),
+(4, 'Rib o Beef', 1, 'lb', 1),
+(5, 'Sobrebarriga', 1, 'lb', 1),
+(6, 'T bone Hígado', 1, 'lb', 1),
+(7, 'Lengua Sesos', 1, 'lb', 1),
+(8, 'Riñones', 1, 'lb', 1),
+(9, 'Chuleta Lomo', 1, 'lb', 1),
+(10, 'Pierna Pecho', 1, 'lb', 1),
+(11, 'Riñones Sesos', 1, 'lb', 1),
+(12, 'Hígado', 1, 'lb', 1),
+(13, 'Chuleta Lomo', 1, 'lb', 1),
+(14, 'Costilla Pierna', 1, 'lb', 1),
+(15, 'Tocino', 1, 'lb', 1),
+(16, 'Chuleta Entero', 1, 'lb', 1),
+(17, 'Paleta Pernil', 1, 'lb', 1),
+(18, 'Chorizo Morcilla', 1, 'lb', 1),
+(19, 'Mortadela Salami', 1, 'gr', 1),
+(20, 'Paté Longaniza', 1, 'gr', 1),
+(21, 'Tocineta', 1, 'gr', 1),
+(22, 'Salchicha Cocktail', 1, 'gr', 1),
+(23, 'Salchicha Ternera', 1, 'gr', 1),
+(24, 'Salchicha Vienesa', 1, 'gr', 1),
+(25, 'Salchicha', 1, 'gr', 1),
+(26, ' Costilla Ahumada', 1, 'lb', 1),
+(27, 'Jamón Cocido', 1, 'lb', 1),
+(28, 'Jamón Ahumado', 1, 'lb', 1),
+(29, 'Bagre', 2, 'kg', 1),
+(30, 'Almejas', 2, 'kg', 1),
+(31, 'Corvina', 2, 'kg', 1),
+(32, 'Chipi-Chipi', 2, 'kg', 1),
+(33, 'Lenguado', 2, 'kg', 1),
+(34, 'Calamar', 2, 'kg', 1),
+(35, 'Pargo Rojo', 2, 'kg', 1),
+(36, 'Langosta', 2, 'kg', 1),
+(37, 'Entero', 2, 'kg', 1),
+(38, 'Langostinos', 2, 'kg', 1),
+(39, 'Pargo Rojo Filete', 2, 'kg', 1),
+(40, 'Camarones', 2, 'kg', 1),
+(41, 'Trucha fresca', 2, 'kg', 1),
+(42, 'Ostiones', 2, 'kg', 1),
+(43, 'Trucha ahumada', 2, 'kg', 1),
+(44, 'Mejillones', 2, 'kg', 1),
+(45, 'Róbalo', 2, 'kg', 1),
+(46, 'Cangrejos', 2, 'kg', 1),
+(47, 'Codorniz', 3, 'lb', 1),
+(48, 'Pato', 3, 'lb', 1),
+(49, 'Pavo', 3, 'lb', 1),
+(50, 'Conejo', 3, 'lb', 1),
+(51, 'Pollo', 3, 'lb', 1),
+(52, 'Gallina', 3, 'lb', 1),
+(53, 'Higado de Pollo', 3, 'lb', 1),
+(54, 'Calabacín', 5, 'gr', 1),
+(55, 'Calabacín', 5, 'lb', 1),
+(56, 'Lechuga blanca Mazorca con armero', 5, 'lb', 1),
+(57, 'Aguacate', 5, 'lb', 1),
+(58, 'Melón ', 5, 'lb', 1),
+(59, 'Banano', 5, 'lb', 1),
+(60, 'Mora de castilla', 5, 'lb', 1),
+(61, 'Calabaza', 5, 'lb', 1),
+(62, 'Ciruela importada', 5, 'lb', 1),
+(63, 'Naranja valencia', 5, 'lb', 1),
+(64, 'Cebolla Cabezona blanca', 5, 'lb', 1),
+(65, 'Papa criolla', 5, 'lb', 1),
+(66, 'Carambolo', 5, 'lb', 1),
+(67, 'Papaya Melona', 5, 'lb', 1),
+(68, 'Cebolla larga', 5, 'lb', 1),
+(69, 'Papa pastusa', 5, 'lb', 1),
+(70, 'Papayuela', 5, 'lb', 1),
+(71, 'Cebolla puerro', 5, 'lb', 1),
+(72, 'Papa sabanera', 5, 'lb', 1),
+(73, 'Durazno', 5, 'lb', 1),
+(74, 'Patilla Pera importada', 5, 'lb', 1),
+(75, 'Cebollín', 5, 'lb', 1),
+(76, 'Pepino cohombro', 5, 'lb', 1),
+(77, 'Feijoa', 5, 'lb', 1),
+(78, 'Piña Cayena', 5, 'lb', 1),
+(79, 'Cilantro', 5, 'lb', 1),
+(80, 'Perejil crespo', 5, 'lb', 1),
+(81, 'Fresa extra', 5, 'lb', 1),
+(82, 'Granadilla', 5, 'lb', 1),
+(83, 'Pitaya', 5, 'lb', 1),
+(84, 'Colicero', 5, 'lb', 1),
+(85, 'Pimentón', 5, 'lb', 1),
+(86, 'Tomate de árbol', 5, 'lb', 1),
+(87, 'Coliflor', 5, 'lb', 1),
+(88, 'Plátano maduro', 5, 'lb', 1),
+(89, 'Kiwi', 5, 'lb', 1),
+(90, 'Espinacas', 5, 'lb', 1),
+(91, 'Plátano verde', 5, 'lb', 1),
+(92, 'Limón Tahiti', 5, 'lb', 1),
+(93, 'Mandarina', 5, 'lb', 1),
+(94, 'Uchuvas', 5, 'lb', 1),
+(95, 'Uva champaña blanca', 5, 'lb', 1),
+(96, 'Frijol Verde', 5, 'lb', 1),
+(97, 'Rábano blanco', 5, 'lb', 1),
+(98, 'Uva champaña roja', 5, 'lb', 1),
+(99, 'Guascas', 5, 'lb', 1),
+(100, 'Rábano rojo', 5, 'lb', 1),
+(101, 'Mango azúcar', 5, 'lb', 1),
+(102, 'Haba Verde', 5, 'lb', 1),
+(103, 'Remolacha', 5, 'lb', 1),
+(104, 'Manzana roja', 5, 'lb', 1),
+(105, 'Habichuela', 5, 'lb', 1),
+(106, 'Repollo blanco', 5, 'lb', 1),
+(107, 'Manzana verde', 5, 'lb', 1),
+(108, 'Hierbas aromáticas', 5, 'lb', 1),
+(109, 'Repollo morado', 5, 'lb', 1),
+(110, 'Laurel', 5, 'lb', 1),
+(111, 'Tomate chonto', 5, 'lb', 1),
+(112, 'Lechuga Batavia', 5, 'lb', 1),
+(113, 'Tomate milano', 5, 'lb', 1),
+(114, 'Lechuga morada', 5, 'lb', 1),
+(115, 'Tomillo', 5, 'lb', 1),
+(116, 'Zanahoria', 5, 'lb', 1),
+(117, 'Leche', 4, 'lt', 1),
+(118, 'Crema de Leche (No empacada)', 4, 'ml', 1),
+(119, 'Queso Campesino (No industrial)', 4, 'lb', 1),
+(120, 'Requesón Cuajada', 4, 'lb', 1),
+(121, 'Helados', 4, 'unidad(es)', 1),
+(122, 'Natas', 4, 'gr', 1),
+(123, 'Cuajada', 4, 'lb', 1),
+(124, 'Pan Francés', 4, 'unidad(es)', 1),
+(125, 'Pan Bloque', 4, 'unidad(es)', 1),
+(126, 'Bizcochos', 4, 'unidad(es)', 1),
+(127, 'Tortas', 4, 'unidad(es)', 1),
+(128, 'Pan Tajado', 4, 'unidad(es)', 1),
+(129, 'Huevo (Codorniz)', 4, 'unidad(es)', 1),
+(130, 'Frescos A', 4, 'unidad(es)', 1),
+(131, 'Frescos B', 4, 'unidad(es)', 1),
+(132, 'Queso Camembert', 6, 'unidad(es)', 1),
+(133, 'Queso Roquefort', 6, 'unidad(es)', 1),
+(134, 'Queso Gladis', 6, 'unidad(es)', 1),
+(135, 'Queso Campesino', 6, 'unidad(es)', 1),
+(136, 'Queso Gruyere', 6, 'unidad(es)', 1),
+(137, 'Margarina', 6, 'unidad(es)', 1),
+(138, 'Yogurt', 6, 'unidad(es)', 1),
+(139, 'Queso Holandés', 6, 'unidad(es)', 1),
+(140, 'Crema de Leche', 6, 'unidad(es)', 1),
+(141, 'Queso Parmesano', 6, 'unidad(es)', 1),
+(142, 'Mantequilla', 6, 'unidad(es)', 1),
+(143, 'Queso Americano', 6, 'unidad(es)', 1),
+(144, 'Casillero del Diablo Tinto', 10, 'unidad(es)', 1),
+(145, 'Chardonay', 10, 'unidad(es)', 1),
+(146, 'Grajales Blanco', 10, 'unidad(es)', 1),
+(147, 'Grajales Tinto', 10, 'unidad(es)', 1),
+(148, 'Grajales Moscatel', 10, 'unidad(es)', 1),
+(149, 'Undurraga Blanco', 10, 'unidad(es)', 1),
+(150, 'Undurruaga Tinto', 10, 'unidad(es)', 1),
+(151, 'Absolut', 9, 'unidad(es)', 1),
+(152, 'Aguardientes', 9, 'unidad(es)', 1),
+(153, 'Amaretto', 9, 'unidad(es)', 1),
+(154, 'Aperitivos', 9, 'unidad(es)', 1),
+(155, 'Bacardí', 9, 'unidad(es)', 1),
+(156, 'Bailey\'s', 9, 'unidad(es)', 1),
+(157, 'Black and White', 9, 'unidad(es)', 1),
+(158, 'Buchanan\'s', 9, 'unidad(es)', 1),
+(159, 'Campari', 9, 'unidad(es)', 1),
+(160, 'Cointreau', 9, 'unidad(es)', 1),
+(161, 'Ron', 9, 'unidad(es)', 1),
+(162, 'Cremas', 9, 'unidad(es)', 1),
+(163, 'Agua botella', 11, 'unidad(es)', 1),
+(164, 'Coca-cola', 11, 'unidad(es)', 1),
+(165, 'Postobon', 11, 'unidad(es)', 1),
+(166, 'Jugo Hit', 11, 'unidad(es)', 1),
+(167, 'Aceite', 7, 'unidad(es)', 1),
+(168, 'Polvo para Hornear', 7, 'unidad(es)', 1),
+(169, 'Arveja', 7, 'unidad(es)', 1),
+(170, 'Champiñones', 7, 'unidad(es)', 1),
+(171, 'Gelatina', 7, 'unidad(es)', 1),
+(172, 'Pastas', 7, 'unidad(es)', 1),
+(173, 'Maicena', 7, 'unidad(es)', 1),
+(174, 'Pasta de Tomate', 7, 'unidad(es)', 1),
+(175, 'Mayonesa', 7, 'unidad(es)', 1),
+(176, 'Sal Refinada', 7, 'unidad(es)', 1),
+(177, 'Mostaza', 7, 'unidad(es)', 1),
+(178, 'Salsa China', 7, 'unidad(es)', 1),
+(179, 'Arroz', 8, 'lb', 1),
+(180, 'Azúcar', 8, 'kg', 1),
+(181, 'Arveja Seca', 8, 'unidad(es)', 1),
+(182, 'Fríjol Blanco', 8, 'lb', 1),
+(183, 'Fríjol Rojo', 8, 'lb', 1),
+(184, 'Garbanzo', 8, 'lb', 1),
+(185, 'Lenteja', 8, 'lb', 1),
+(186, 'Harina de Maíz', 8, 'lb', 1),
+(187, 'Harina de Trigo', 8, 'lb', 1);
 
 -- --------------------------------------------------------
 
@@ -260,13 +470,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `bodega`
 --
 ALTER TABLE `bodega`
-  MODIFY `id_up` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_up` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias_producto`
 --
 ALTER TABLE `categorias_producto`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles`
@@ -302,7 +512,7 @@ ALTER TABLE `proveedores`
 -- AUTO_INCREMENT de la tabla `tipo_productos`
 --
 ALTER TABLE `tipo_productos`
-  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT de la tabla `titulados`
