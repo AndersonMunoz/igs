@@ -38,7 +38,7 @@ const reporte = () => {
   const [valSalidas, setValSalidas] = useState('0')
   const [valorTotal, setValorTotal] = useState('0')
   const tableRef = useRef(null);
-// Función para exportar datos a un archivo Excel
+  // Función para exportar datos a un archivo Excel
 
   const handleOnExport = () => {
     const wsData = getTableData();
@@ -114,42 +114,44 @@ const reporte = () => {
 
     return wsData;
   };
-// Efecto secundario para inicializar la tabla de datos cuando el reporte cambia
+  // Efecto secundario para inicializar la tabla de datos cuando el reporte cambia
 
   useEffect(() => {
-    if (reporte.length > 0) {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
+    if (reporte) {
+      if (reporte.length > 0) {
+        if ($.fn.DataTable.isDataTable(tableRef.current)) {
+          $(tableRef.current).DataTable().destroy();
+        }
+        $(tableRef.current).DataTable({
+          columnDefs: [
+            {
+              targets: -1,
+              responsivePriority: 1,
+            },
+          ],
+          responsive: true,
+          language: esES,
+          lengthMenu: [
+            [10, 50, 100, -1],
+            ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
+          ],
+          order: [[5, "asc"]],
+        });
       }
-      $(tableRef.current).DataTable({
-        columnDefs: [
-          {
-            targets: -1,
-            responsivePriority: 1,
-          },
-        ],
-        responsive: true,
-        language: esES,
-        lengthMenu: [
-          [10, 50, 100, -1],
-          ["10 Filas", "50 Filas", "100 Filas", "Ver Todo"],
-        ],
-        order: [[5, "asc"]],
-      });
     }
   }, [reporte]);
-// Efecto secundario para inicializar datos cuando el componente se monta
+  // Efecto secundario para inicializar datos cuando el componente se monta
 
   useEffect(() => {
     setRangoMovFin(formatDateYYYYMMDD(new Date()));
     listarProducto()
     listaCat()
   }, [])
-// Función para listar las categorías en un select
+  // Función para listar las categorías en un select
 
   function listaCat() {
     var select = document.getElementById("categoryFilter");
-    fetch("http://localhost:3000/categoria/listar", {
+    fetch(`http://${portConexion}:3000/categoria/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -168,7 +170,7 @@ const reporte = () => {
         }
       });
   }
-// Función para listar productos por rango de fechas
+  // Función para listar productos por rango de fechas
 
   function ListartPorRango(inicio, fin) {
     fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
@@ -210,7 +212,7 @@ const reporte = () => {
         }
       })
   }
-// Función para filtrar productos por categoría y rango de fechas
+  // Función para filtrar productos por categoría y rango de fechas
 
   function filtrarCategorias(inicio, fin) {
     var select = document.getElementById("categoryFilter").value;
@@ -245,7 +247,7 @@ const reporte = () => {
             const fechaDeProducto = new Date(data.productos[index].ultima_fecha_movimiento);
             if (fechaDeProducto >= fechaInicio && fechaDeProducto <= fechaFin) {
               if (data.productos[index].nombre_categoria == select) {
-                
+
                 valEntradas = valEntradas + parseInt(data.productos[index].total_entradas);
                 valSalidas = valSalidas + parseInt(data.productos[index].total_salidas);
                 valTotal = valTotal + (data.productos[index].precio_total);
@@ -280,7 +282,7 @@ const reporte = () => {
         return res.json();
       })
       .then((data) => {
-      //  console.log(data);
+        //  console.log(data);
         if (data !== null) {
           setValEntradas(data.entraron)
           setValSalidas(data.salieron)
@@ -305,12 +307,12 @@ const reporte = () => {
           <div className="ContFechaR1">
             <h6 className="textoReporte">Inicio</h6>
             <input onChange={(e) => setRangoMovInicio(e.target.value)} className="inputFechaReporte" type="date" name="inicio" id="inicio" defaultValue={rangoMovInicio} />
-            
+
           </div>
           <div className="ContFechaR2">
             <h6 className="textoReporte">Fin</h6>
             <input onChange={(e) => setRangoMovFin(e.target.value)} className="inputFechaReporte" type="date" name="fin" id="fin" defaultValue={rangoMovFin} />
-            
+
           </div>
           <div className="botonBuscarFecha">
             <button className="btn btn-color " onClick={() => { ListartPorRango(rangoMovInicio, rangoMovFin) }}>buscar</button>
@@ -345,14 +347,14 @@ const reporte = () => {
             <tr>
               <th className="th-sm">Productos</th>
               <th className="th-sm">Categoría</th>
-              <th className="th-sm">Entradas (<span style={{color: 'rgb(13,110,253)'}}>{valEntradas}</span>)</th>
-              <th className="th-sm">Salidas (<span style={{color: 'rgb(13,110,253)'}}>{valSalidas}</span>)</th>
-              <th className="th-sm">Valor total(<span style={{color: 'rgb(13,110,253)'}}>${valorTotal}</span>)</th>
+              <th className="th-sm">Entradas (<span style={{ color: 'rgb(13,110,253)' }}>{valEntradas}</span>)</th>
+              <th className="th-sm">Salidas (<span style={{ color: 'rgb(13,110,253)' }}>{valSalidas}</span>)</th>
+              <th className="th-sm">Valor total(<span style={{ color: 'rgb(13,110,253)' }}>${valorTotal}</span>)</th>
               <th className="th-sm">Fecha último movimiento</th>
             </tr>
           </thead>
-          <tbody id="tableReportes" className="text-center">
-            {reporte.length > 0 ? (
+          <tbody>
+            {reporte != null && reporte.length > 0 ? (
               <>
                 {reporte.map((element, index) => (
                   <tr key={index}>
@@ -367,7 +369,7 @@ const reporte = () => {
               </>
             ) : (
               <tr>
-                <td colSpan={12}>
+                <td colSpan={6}>
                   <div className="d-flex justify-content-center">
                     <div className="alert alert-danger text-center mt-4 w-50">
                       <h2>En este momento no contamos con ningún reporte.😟</h2>
