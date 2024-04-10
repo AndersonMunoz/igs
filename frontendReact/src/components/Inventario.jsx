@@ -20,6 +20,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExelLogo from "../../img/excel.224x256.png";
 import PdfLogo from "../../img/pdf.224x256.png";
+import portConexion from "../const/portConexion";
 
 const Inventario = () => {
   const [categories, setCategories] = useState([]);
@@ -133,7 +134,7 @@ const Inventario = () => {
   }, []);
 
   function listaCat() {
-    fetch("http://localhost:3000/categoria/listar", {
+    fetch(`http://${portConexion}:3000/categoria/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -153,7 +154,7 @@ const Inventario = () => {
     }
 
     // Realiza la solicitud para obtener los datos
-    fetch(`http://localhost:3000/categoria/listarCategoriaItem/${id}`, {
+    fetch(`http://${portConexion}:3000/categoria/listarCategoriaItem/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "Application/json",
@@ -235,29 +236,30 @@ const Inventario = () => {
                   </tr>
                 </thead>
                 <tbody id="tableProducto" className="text-center">
-                  {categoriaItem.length === 0 ? (
-                    <tr>
-                      <td colSpan={12}>
-                        <div className="d-flex justify-content-center">
-                          <div className="alert alert-danger text-center mt-4 w-50">
-                            <h2> En este momento no contamos con ningún categoriaItem disponible.😟</h2>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
+                  {categoriaItem != null && categoriaItem.length > 0 ? (
                     <>
-                      {categoriaItem.map((element, index) => (
-                        <tr key={index} style={{ textTransform: 'capitalize' }}>
-                          <td>{index + 1}</td>
-                          <td>{element.NombreProducto}</td>
-                          <td>{element.Cantidad}</td>
-                          <td>{element.Unidad}</td>
-                          <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
-                          <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
-                        </tr>
-                      ))}
-                    </>
+                    {categoriaItem.map((element, index) => (
+                      <tr key={index} style={{ textTransform: 'capitalize' }}>
+                        <td>{index + 1}</td>
+                        <td>{element.NombreProducto}</td>
+                        <td>{element.Cantidad}</td>
+                        <td>{element.Unidad}</td>
+                        <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
+                        <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
+                      </tr>
+                    ))}
+                  </>
+                  ) : (
+                    <tr>
+                    <td colSpan={12}>
+                      <div className="d-flex justify-content-center">
+                        <div className="alert alert-danger text-center mt-4 w-50">
+                          <h2> En este momento no contamos con ningún categoriaItem disponible.😟</h2>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                   
                   )}
                 </tbody>
               </table>
