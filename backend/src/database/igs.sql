@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1deb5ubuntu1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 02-04-2024 a las 17:14:39
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.1.12
+-- Servidor: localhost:3306
+-- Tiempo de generación: 10-04-2024 a las 15:46:24
+-- Versión del servidor: 8.0.36-0ubuntu0.22.04.1
+-- Versión de PHP: 8.1.2-1ubuntu2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `bodega` (
-  `id_up` int(11) NOT NULL,
-  `nombre_up` varchar(45) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `id_up` int NOT NULL,
+  `nombre_up` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -40,11 +40,11 @@ CREATE TABLE `bodega` (
 --
 
 CREATE TABLE `categorias_producto` (
-  `id_categoria` int(11) NOT NULL,
-  `nombre_categoria` varchar(45) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `tipo_categoria` enum('perecedero','no perecedero') NOT NULL,
-  `codigo_categoria` varchar(45) NOT NULL
+  `id_categoria` int NOT NULL,
+  `nombre_categoria` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1',
+  `tipo_categoria` enum('perecedero','no perecedero') COLLATE utf8mb4_general_ci NOT NULL,
+  `codigo_categoria` varchar(45) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -71,11 +71,11 @@ INSERT INTO `categorias_producto` (`id_categoria`, `nombre_categoria`, `estado`,
 --
 
 CREATE TABLE `detalles` (
-  `id_detalle` int(11) NOT NULL,
-  `destino_movimiento` enum('taller','produccion','evento') DEFAULT NULL,
-  `fk_id_movimiento` int(11) NOT NULL,
-  `fk_id_titulado` int(11) DEFAULT NULL,
-  `fk_id_instructor` int(11) DEFAULT NULL
+  `id_detalle` int NOT NULL,
+  `destino_movimiento` enum('taller','produccion','evento') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `fk_id_movimiento` int NOT NULL,
+  `fk_id_titulado` int DEFAULT NULL,
+  `fk_id_instructor` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -85,18 +85,18 @@ CREATE TABLE `detalles` (
 --
 
 CREATE TABLE `factura_movimiento` (
-  `id_factura` int(11) NOT NULL,
-  `fecha_movimiento` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `tipo_movimiento` enum('entrada','salida') NOT NULL,
+  `id_factura` int NOT NULL,
+  `fecha_movimiento` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `tipo_movimiento` enum('entrada','salida') COLLATE utf8mb4_general_ci NOT NULL,
   `cantidad_peso_movimiento` float NOT NULL,
   `precio_movimiento` float NOT NULL,
-  `estado_producto_movimiento` enum('optimo','deficiente') DEFAULT NULL,
-  `nota_factura` varchar(300) NOT NULL,
+  `estado_producto_movimiento` enum('optimo','deficiente') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `nota_factura` varchar(300) COLLATE utf8mb4_general_ci NOT NULL,
   `fecha_caducidad` date DEFAULT NULL,
   `precio_total_mov` float DEFAULT NULL,
-  `fk_id_producto` int(11) NOT NULL,
-  `fk_id_usuario` int(11) NOT NULL,
-  `fk_id_proveedor` int(11) DEFAULT NULL
+  `fk_id_producto` int NOT NULL,
+  `fk_id_usuario` int NOT NULL,
+  `fk_id_proveedor` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -106,10 +106,10 @@ CREATE TABLE `factura_movimiento` (
 --
 
 CREATE TABLE `instructores` (
-  `id_instructores` int(11) NOT NULL,
-  `documento_instructor` int(10) UNSIGNED NOT NULL,
-  `nombre_instructor` varchar(45) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `id_instructores` int NOT NULL,
+  `documento_instructor` int UNSIGNED NOT NULL,
+  `nombre_instructor` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -119,11 +119,11 @@ CREATE TABLE `instructores` (
 --
 
 CREATE TABLE `productos` (
-  `id_producto` int(11) NOT NULL,
-  `cantidad_peso_producto` float DEFAULT 0,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `fk_id_up` int(11) NOT NULL,
-  `fk_id_tipo_producto` int(11) NOT NULL
+  `id_producto` int NOT NULL,
+  `cantidad_peso_producto` float DEFAULT '0',
+  `estado` tinyint NOT NULL DEFAULT '1',
+  `fk_id_up` int NOT NULL,
+  `fk_id_tipo_producto` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -133,15 +133,15 @@ CREATE TABLE `productos` (
 --
 
 CREATE TABLE `proveedores` (
-  `id_proveedores` int(11) NOT NULL,
-  `nombre_proveedores` varchar(45) NOT NULL,
-  `telefono_proveedores` varchar(45) NOT NULL,
-  `direccion_proveedores` varchar(50) NOT NULL,
-  `contrato_proveedores` int(11) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
+  `id_proveedores` int NOT NULL,
+  `nombre_proveedores` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `telefono_proveedores` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `direccion_proveedores` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `contrato_proveedores` int NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1',
   `inicio_contrato` date NOT NULL,
   `fin_contrato` date NOT NULL,
-  `archivo_contrato` varchar(45) NOT NULL
+  `archivo_contrato` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -151,11 +151,11 @@ CREATE TABLE `proveedores` (
 --
 
 CREATE TABLE `tipo_productos` (
-  `id_tipo` int(11) NOT NULL,
-  `nombre_tipo` varchar(45) NOT NULL,
-  `fk_categoria_pro` int(11) NOT NULL,
-  `unidad_peso` enum('kg','lb','gr','lt','ml','oz','unidad(es)') NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `id_tipo` int NOT NULL,
+  `nombre_tipo` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `fk_categoria_pro` int NOT NULL,
+  `unidad_peso` enum('kg','lb','gr','lt','ml','oz','unidad(es)') COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -358,10 +358,10 @@ INSERT INTO `tipo_productos` (`id_tipo`, `nombre_tipo`, `fk_categoria_pro`, `uni
 --
 
 CREATE TABLE `titulados` (
-  `id_titulado` int(11) NOT NULL,
-  `nombre_titulado` varchar(45) NOT NULL,
-  `id_ficha` varchar(45) NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1
+  `id_titulado` int NOT NULL,
+  `nombre_titulado` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_ficha` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -371,14 +371,14 @@ CREATE TABLE `titulados` (
 --
 
 CREATE TABLE `usuarios` (
-  `id_usuario` int(11) NOT NULL,
-  `documento_usuario` bigint(50) NOT NULL,
-  `email_usuario` varchar(45) NOT NULL,
-  `nombre_usuario` varchar(45) NOT NULL,
-  `contrasena_usuario` varchar(45) NOT NULL,
-  `tipo_usuario` enum('administrador','coadministrador') NOT NULL,
-  `estado` tinyint(4) NOT NULL DEFAULT 1,
-  `stock_minimo` int(11) DEFAULT 10
+  `id_usuario` int NOT NULL,
+  `documento_usuario` bigint NOT NULL,
+  `email_usuario` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `nombre_usuario` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `contrasena_usuario` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
+  `tipo_usuario` enum('administrador','coadministrador') COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` tinyint NOT NULL DEFAULT '1',
+  `stock_minimo` int DEFAULT '10'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -387,7 +387,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `documento_usuario`, `email_usuario`, `nombre_usuario`, `contrasena_usuario`, `tipo_usuario`, `estado`, `stock_minimo`) VALUES
 (1, 1234567890, 'admin@admin.com', 'Admin', 'U2FsdGVkX19bEFpwZOZoL0IRtUmN/D5kjY4MQh8onY4=', 'administrador', 1, 10),
-(2, 1084259187, 'andersons_munoz@soy.sena.edu.co', 'Anderson Munoz', 'U2FsdGVkX1+rrJzjBliuDua2/1C210jhG/+tIdps4K4=', 'coadministrador', 1, 10);
+(2, 987654321, 'coadministrador@soy.sena.edu.co', 'CoAdministrador', 'U2FsdGVkX18W1O+I1q3eGfW4SvldOnmLRAQyMFfKn0k=', 'coadministrador', 1, 10);
 
 --
 -- Índices para tablas volcadas
@@ -470,61 +470,61 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `bodega`
 --
 ALTER TABLE `bodega`
-  MODIFY `id_up` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_up` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias_producto`
 --
 ALTER TABLE `categorias_producto`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_categoria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles`
 --
 ALTER TABLE `detalles`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detalle` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_movimiento`
 --
 ALTER TABLE `factura_movimiento`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_factura` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `instructores`
 --
 ALTER TABLE `instructores`
-  MODIFY `id_instructores` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_instructores` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_producto` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `proveedores`
 --
 ALTER TABLE `proveedores`
-  MODIFY `id_proveedores` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_proveedores` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_productos`
 --
 ALTER TABLE `tipo_productos`
-  MODIFY `id_tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
+  MODIFY `id_tipo` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT de la tabla `titulados`
 --
 ALTER TABLE `titulados`
-  MODIFY `id_titulado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_titulado` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -535,8 +535,8 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `detalles`
   ADD CONSTRAINT `detalles_ibfk_1` FOREIGN KEY (`fk_id_titulado`) REFERENCES `titulados` (`id_titulado`),
-  ADD CONSTRAINT `fk_id_instructor` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_id_movimiento` FOREIGN KEY (`fk_id_movimiento`) REFERENCES `factura_movimiento` (`id_factura`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_id_instructor` FOREIGN KEY (`fk_id_instructor`) REFERENCES `instructores` (`id_instructores`),
+  ADD CONSTRAINT `fk_id_movimiento` FOREIGN KEY (`fk_id_movimiento`) REFERENCES `factura_movimiento` (`id_factura`);
 
 --
 -- Filtros para la tabla `factura_movimiento`
