@@ -14,7 +14,7 @@ import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 import 'datatables.net-responsive';
 import 'datatables.net-responsive-bs5';
 import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import {DownloadTableExcel}  from 'react-export-table-to-excel';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 import generatePDF from 'react-to-pdf';
 import Select from 'react-select'
 import * as xlsx from 'xlsx';
@@ -48,10 +48,10 @@ const Producto = () => {
     xlsx.writeFile(wb, 'Productos.xlsx');
   };
   // Función para exportar datos a PDF
-  const doc= new jsPDF();
+  const doc = new jsPDF();
   const exportPdfHandler = () => {
     const doc = new jsPDF();
-  // Configuración de las columnas para el PDF
+    // Configuración de las columnas para el PDF
     const columns = [
       { title: 'N°', dataKey: 'id_producto' },
       { title: 'NombreProducto', dataKey: 'NombreProducto' },
@@ -63,7 +63,7 @@ const Producto = () => {
       { title: 'Descripcion', dataKey: 'Descripcion' },
       { title: 'PrecioTotal', dataKey: 'PrecioTotal' }
     ];
-  
+
     // Obtener los datos de la tabla
     const tableData = productos.map((element) => ({
       id_producto: element.id_producto,
@@ -76,7 +76,7 @@ const Producto = () => {
       Descripcion: element.Descripcion,
       PrecioTotal: element.PrecioTotal
     }));
-  
+
     // Agregar las columnas y los datos a la tabla del PDF
     doc.autoTable({
       columns,
@@ -85,13 +85,13 @@ const Producto = () => {
       styles: { overflow: 'linebreak' },
       headStyles: { fillColor: [100, 100, 100] },
     });
-  
+
     // Guardar el PDF
     doc.save('Producto.pdf');
   };
   const getTableData = () => {
     const wsData = [];
-  
+
     // Obtener las columnas
     const columns = [
       'N°',
@@ -105,7 +105,7 @@ const Producto = () => {
       'PrecioTotal'
     ];
     wsData.push(columns);
-  
+
     // Obtener los datos de las filas
     productos.forEach(element => {
       const rowData = [
@@ -117,48 +117,48 @@ const Producto = () => {
         element.PrecioIndividual,
         element.UnidadProductiva,
         element.Descripcion,
-        element.PrecioTotal  
+        element.PrecioTotal
       ];
       wsData.push(rowData);
     });
-  
+
     return wsData;
   };
 
- // Efecto para inicializar la tabla de productos
+  // Efecto para inicializar la tabla de productos
   useEffect(() => {
-		if (productos.length > 0) {
-			if ($.fn.DataTable.isDataTable(tableRef.current)) {
-				$(tableRef.current).DataTable().destroy();
-			}
+    if (productos.length > 0) {
+      if ($.fn.DataTable.isDataTable(tableRef.current)) {
+        $(tableRef.current).DataTable().destroy();
+      }
       $(tableRef.current).DataTable({
         columnDefs: [
           {
-             targets: -1, 
-             responsivePriority: 1 
+            targets: -1,
+            responsivePriority: 1
           }
-       ],
+        ],
         responsive: true,
         language: esES,
         lengthMenu: [
-           [ 10, 50, 100, -1 ],
-           [ '10 Filas', '50 Filas', '100 Filas', 'Ver Todo' ]
+          [10, 50, 100, -1],
+          ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
         ],
         order: [[10, 'asc']],
-     });
-		}
-	}, [productos]);
+      });
+    }
+  }, [productos]);
   useEffect(() => {
-    window.onpopstate = function(event) {
+    window.onpopstate = function (event) {
       window.location.reload();
     }
-  }, []); 
+  }, []);
   // Efecto para cargar productos, tipos y UP al montar el componente
   useEffect(() => {
     setUserRoll(dataDecript(localStorage.getItem("roll")));
-      listarProducto();
-      listarUp();
-  }, []); 
+    listarProducto();
+    listarUp();
+  }, []);
   function listarUp() {
     fetch(`http://${portConexion}:3000/up/listar`, {
       method: "GET",
@@ -183,14 +183,14 @@ const Producto = () => {
       });
   }
 
-    // Función para remover el fondo del modal
+  // Función para remover el fondo del modal
   function removeModalBackdrop() {
     const modalBackdrop = document.querySelector('.modal-backdrop');
     if (modalBackdrop) {
       modalBackdrop.remove();
     }
   }
-    // Función para listar los productos
+  // Función para listar los productos
   function listarProducto() {
     fetch(`http://${portConexion}:3000/producto/listar`, {
       method: "GET",
@@ -199,19 +199,19 @@ const Producto = () => {
         token: localStorage.getItem("token"),
       },
     })
-    .then((res) => {
-      if (res.status === 204) {
-        return null;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      if (data !== null) {
-        setProductos(data);
-      }
-    })
+      .then((res) => {
+        if (res.status === 204) {
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data !== null) {
+          setProductos(data);
+        }
+      })
   }
-    // Función para editar un producto
+  // Función para editar un producto
   function editarProducto(id) {
     fetch(`http://${portConexion}:3000/producto/buscar/${id}`, {
       method: 'GET',
@@ -229,40 +229,40 @@ const Producto = () => {
         console.error('Error:', error);
       });
   }
-    // Función para actualizar un producto
-  function actualizarProducto(id){
+  // Función para actualizar un producto
+  function actualizarProducto(id) {
     const validacionExitosa = Validate.validarCampos('.form-update');
-      
-    fetch(`http://${portConexion}:3000/producto/actualizar/${id}`,{
+
+    fetch(`http://${portConexion}:3000/producto/actualizar/${id}`, {
       method: 'PUT',
-      headers:{
-        'Content-type':'application/json',
+      headers: {
+        'Content-type': 'application/json',
         token: localStorage.getItem("token"),
       },
       body: JSON.stringify(productoSeleccionado),
     })
-    .then((res)=>res.json())
-    .then((data)=>{
-      if (!validacionExitosa) {
-        Sweet.actualizacionFallido();
-        return;
-      }
-      if (data.status == 200) {
-        Sweet.exito(data.message);
-        listarProducto();
-        setUpdateModal(false);
-        removeModalBackdrop();
-        const modalBackdrop = document.querySelector('.modal-backdrop');
-        if (modalBackdrop) {
-          modalBackdrop.remove();
+      .then((res) => res.json())
+      .then((data) => {
+        if (!validacionExitosa) {
+          Sweet.actualizacionFallido();
+          return;
         }
-      }
-      if (data.status == 403) {
-        Sweet.error(data.error.errors[0].msg);
-      return;
-      }
-      
-    })
+        if (data.status == 200) {
+          Sweet.exito(data.message);
+          listarProducto();
+          setUpdateModal(false);
+          removeModalBackdrop();
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
+        }
+        if (data.status == 403) {
+          Sweet.error(data.error.errors[0].msg);
+          return;
+        }
+
+      })
   }
 
   return (
@@ -299,24 +299,73 @@ const Producto = () => {
         </div>
       </div>
       <div className="wrapper-editor">
-      <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
-        <thead className="text-center text-justify">
-          <tr>
-            <th className="th-sm">#Lote</th>
-            <th className="th-sm">Nombre producto</th>
-            <th className="th-sm">Nombre categoria</th>
-            <th className="th-sm">Cantidad</th>
-            <th className="th-sm">Unidad</th>
-            <th className="th-sm">Precio individual</th>
-            <th className="th-sm">Unidad productiva</th>
-            <th className="th-sm">Descripcion</th>
-            <th className="th-sm">PrecioTotal</th>
-            <th className="th-sm text-center">Fecha de Caducidad</th>
-            <th className="th-sm text-center">Acciones</th>
-          </tr>
-        </thead>
+        <table id="dtBasicExample" className="table table-striped table-bordered border display responsive nowrap" cellSpacing={0} width="100%" ref={tableRef}>
+          <thead className="text-center text-justify">
+            <tr>
+              <th className="th-sm">#Lote</th>
+              <th className="th-sm">Nombre producto</th>
+              <th className="th-sm">Nombre categoria</th>
+              <th className="th-sm">Cantidad</th>
+              <th className="th-sm">Unidad</th>
+              <th className="th-sm">Precio individual</th>
+              <th className="th-sm">Unidad productiva</th>
+              <th className="th-sm">Descripcion</th>
+              <th className="th-sm">PrecioTotal</th>
+              <th className="th-sm text-center">Fecha de Caducidad</th>
+              <th className="th-sm text-center">Acciones</th>
+            </tr>
+          </thead>
           <tbody id="tableProducto" className="text-center">
-            {productos.length === 0 ? (
+            {productos != null && productos.length > 0 ? (
+              <>
+                {productos.map((element, index) => (
+                  <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
+                    <td>{index + 1}</td>
+                    <td>{element.NombreProducto}</td>
+                    <td>{element.NombreCategoria}</td>
+                    <td>{element.Cantidad}</td>
+                    <td>{element.Unidad}</td>
+                    <td>
+                      {element.PrecioIndividual ? (
+                        element.PrecioIndividual
+                      ) : (
+                        'No asignada'
+                      )}
+                    </td>
+                    <td>{element.UnidadProductiva}</td>
+                    <td>{element.Descripcion}</td>
+                    <td>
+                      {element.PrecioTotal ? (
+                        element.PrecioTotal
+                      ) : (
+                        'No asignada'
+                      )}
+                    </td>
+                    <td>
+                      {element.FechaCaducidad ? (
+                        Validate.formatFecha(element.FechaCaducidad)
+                      ) : (
+                        'No asignada'
+                      )}
+                    </td>
+                    {userRoll == "administrador" ? (
+                      <td className="p-0">
+                        {element.estado === 1 && (
+                          <>
+                            <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
+                              <IconEdit />
+                            </button>
+                          </>
+                        )}
+                      </td>
+                    ) : (
+                      <td>No disponible</td>
+                    )}
+                  </tr>
+                ))}
+              </>
+
+            ) : (
               <tr>
                 <td colSpan={12}>
                   <div className="d-flex justify-content-center">
@@ -326,60 +375,12 @@ const Producto = () => {
                   </div>
                 </td>
               </tr>
-            ) : ( 
-              <>
-                {productos.map((element, index) => (
-                    <tr key={element.id_producto} style={{ textTransform: 'capitalize' }}>
-                      <td>{index + 1}</td>
-                      <td>{element.NombreProducto}</td>
-                      <td>{element.NombreCategoria}</td>
-                      <td>{element.Cantidad}</td>
-                      <td>{element.Unidad}</td>
-                      <td>
-                        {element.PrecioIndividual ? (
-                          element.PrecioIndividual
-                        ) : (
-                          'No asignada'
-                        )}
-                      </td>
-                      <td>{element.UnidadProductiva}</td>
-                      <td>{element.Descripcion}</td>
-                      <td>
-                        {element.PrecioTotal ? (
-                          element.PrecioTotal
-                        ) : (
-                          'No asignada'
-                        )}
-                      </td>
-                      <td>
-                        {element.FechaCaducidad ? (
-                          Validate.formatFecha(element.FechaCaducidad)
-                        ) : (
-                          'No asignada'
-                        )}
-                      </td>
-                     {userRoll == "administrador"?(
-                       <td className="p-0">
-                       {element.estado === 1 && (
-                         <>
-                           <button className="btn btn-color mx-2" onClick={() => { setUpdateModal(true); editarProducto(element.id_producto); }} data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
-                           <IconEdit /> 
-                           </button>
-                         </>
-                       )}
-                       </td>
-                     ):(
-                      <td>No disponible</td>
-                     )}
-                    </tr>
-                  ))}
-              </>
             )}
           </tbody>
         </table>
       </div>
 
-      <div className="modal fade"data-bs-keyboard="false"id="staticBackdrop2"tabIndex="-1"aria-labelledby="staticBackdropLabel"aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{display:updateModal ? 'block' : 'none' }}>
+      <div className="modal fade" data-bs-keyboard="false" id="staticBackdrop2" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static" ref={modalUpdateRef} style={{ display: updateModal ? 'block' : 'none' }}>
         <div className="modal-dialog modal-dialog-centered d-flex align-items-center">
           <div className="modal-content">
             <div className="modal-header bg text-white">
@@ -392,11 +393,11 @@ const Producto = () => {
                 <div className="row mb-3">
                   <div className="col-md-12">
                     <label htmlFor="fk_id_up" className="label-bold mb-2 text-xl">Bodega</label>
-                    <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_up || ''}onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} id="fk_id_up" name="fk_id_up">
-                    <option value="">Selecciona...</option>
-                    {up.map((option) => (
-                            <option key={option.id_up} value={option.id_up}>{option.nombre_up}</option>
-                          ))}
+                    <select className="form-select limpiar form-update form-control" value={productoSeleccionado.fk_id_up || ''} onChange={(e) => setProductoSeleccionado({ ...productoSeleccionado, fk_id_up: e.target.value })} id="fk_id_up" name="fk_id_up">
+                      <option value="">Selecciona...</option>
+                      {up.map((option) => (
+                        <option key={option.id_up} value={option.id_up}>{option.nombre_up}</option>
+                      ))}
                     </select>
                     <div className="invalid-feedback is-invalid">
                       Por favor, seleccione una bodega.
@@ -408,7 +409,7 @@ const Producto = () => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="button" className="btn btn-color"   onClick={() => {actualizarProducto(productoSeleccionado.id_producto);}}>
+              <button type="button" className="btn btn-color" onClick={() => { actualizarProducto(productoSeleccionado.id_producto); }}>
                 Actualizar
               </button>
             </div>
