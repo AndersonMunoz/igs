@@ -206,16 +206,17 @@ const ProductoCaducar = () => {
                   const diasFaltantes = Math.ceil(diferenciaFechas / (1000 * 60 * 60 * 24));
 
                   let mensaje = '';
+                  console.log(diasFaltantes);
                   if (diasFaltantes >= 7) {
                     mensaje = <span style={{ color: 'green' }}>{`Faltan ${diasFaltantes} días para la fecha de caducidad`}</span>;
-                  } else if (diasFaltantes > 2 && diasFaltantes < 7) {
+                  } else if (diasFaltantes >= 2 && diasFaltantes < 7) {
                     mensaje = <span style={{ color: 'orange' }}>{`Faltan ${diasFaltantes} días para la fecha de caducidad`}</span>;
                   } else if (diasFaltantes === 1) {
                     mensaje = <span style={{ color: 'orange' }}>Falta 1 día para la fecha de caducidad</span>;
                   } else if (diasFaltantes === 0) {
                     mensaje = <span style={{ color: 'red' }}>El producto caduca hoy</span>;
                   } else {
-                    mensaje = <span style={{ color: 'red', fontWeight: 'bold' }}>El producto ya caducó</span>;
+                    mensaje = <span style={{ color: 'red', fontWeight: 'bold' }}>El producto caducó</span>;
                   }
 
                   return (

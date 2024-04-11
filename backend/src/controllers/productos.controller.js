@@ -49,12 +49,12 @@ export const listarProductos = async (req, res) => {
       `SELECT 
       p.id_producto, 
       t.nombre_tipo AS NombreProducto,
-      f.fecha_caducidad AS FechaCaducidad,
+      MAX(f.fecha_caducidad) AS FechaCaducidad,
       c.nombre_categoria AS NombreCategoria,
       p.cantidad_peso_producto AS Cantidad, 
       t.unidad_peso AS Unidad,
-      f.nota_factura AS Descripcion,
-      f.precio_movimiento AS PrecioIndividual, 
+      MAX(f.nota_factura) AS Descripcion,
+      MAX(f.precio_movimiento) AS PrecioIndividual, 
       SUM(precio_total_mov) AS PrecioTotal,
       u.nombre_up AS UnidadProductiva, 
       p.estado AS estado 
