@@ -233,7 +233,7 @@ const handleDestino = (event) => {
     setSelectedOptionIns(null);
     setSelectedInstructor(null);
   }
-    // Llamar a las funciones para listar titulados e instructores si el destino seleccionado es "taller" o "evento"
+    // Llamar a las funciones para listar titulados e instructores, si el destino seleccionado es "taller" o "evento"
     if (selectedDestino === "taller" || selectedDestino === "evento") {
       listarTitulado(); // Listar titulados disponibles
       listarInstructor(); // Listar instructores disponibles
