@@ -322,7 +322,6 @@ export const listarMovimientos = async (req, res) => {
                 f.nota_factura,
                 CASE 
                     WHEN f.fecha_caducidad IS NULL THEN 'No aplica'
-                    WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
                     WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
                     ELSE f.fecha_caducidad
                 END AS fecha_caducidad,
@@ -402,9 +401,10 @@ export const listarMovimientosEntrada = async (req, res) => {
 				(f.precio_movimiento * f.cantidad_peso_movimiento) AS PrecioTotalFactura,
 				f.nota_factura,
 				CASE 
-					WHEN f.fecha_caducidad = '0000-00-00' THEN 'No aplica'
-					ELSE f.fecha_caducidad
-				END as fecha_caducidad,
+                    WHEN f.fecha_caducidad IS NULL THEN 'No aplica'
+                    WHEN f.fecha_caducidad = '1899-11-29' THEN 'No aplica'
+                    ELSE f.fecha_caducidad
+                END AS fecha_caducidad,
 				pr.nombre_proveedores,
 				CASE 
 					WHEN f.precio_total_mov IS NULL THEN 'No aplica'
