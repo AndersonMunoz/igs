@@ -43,6 +43,7 @@ const Movimiento = () => { // Definir componente Movimiento
   const [selectedOptionTit, setSelectedOptionTit] = useState(null); // Estado para la opción de titulado seleccionada
   const [selectedOptionIns, setSelectedOptionIns] = useState(null); // Estado para la opción de instructor seleccionada
   const [destinoMovimiento, setDestinoMovimiento] = useState(''); // Estado para el destino del movimiento
+  const [destinoMovimiento2, setDestinoMovimiento2] = useState(''); // Estado para el destino del movimiento
   const [tituladoList, setTitulado] = useState(null); // Estado para la lista de titulados
   const [selectedTitulado, setSelectedTitulado] = useState(null); // Estado para el titulado seleccionado
   const [instructorList, setInstrucor] = useState(null); // Estado para la lista de instructores
@@ -223,7 +224,15 @@ const handleDestino = (event) => {
   setDestinoMovimiento(selectedDestino, () => {
     // Mostrar u ocultar selectores de instructor y titulado según el destino seleccionado
     setShowInstructorTituladoSelects(selectedDestino === "taller" || selectedDestino === "evento");
+    const showSelects = selectedDestino === "taller" || selectedDestino === "evento";
+  console.log("Mostrar selectores:", showSelects); // Agregado para depuración
 
+  setShowInstructorTituladoSelects(showSelects);
+
+  if (!showSelects) {
+    setSelectedOptionIns(null);
+    setSelectedInstructor(null);
+  }
     // Llamar a las funciones para listar titulados e instructores si el destino seleccionado es "taller" o "evento"
     if (selectedDestino === "taller" || selectedDestino === "evento") {
       listarTitulado(); // Listar titulados disponibles
@@ -242,28 +251,45 @@ useEffect(() => {
 
 const handleDestino2 = (event) => {
   const selectedDestino = event.target.value;
-  //console.log("selectedDestino:", selectedDestino); // Depurar
+  //console.log("Destino seleccionado:", selectedDestino); // Agregado para depuración
 
-  setDestinoMovimiento(selectedDestino);
+  setDestinoMovimiento2(selectedDestino);
 
-  // Actualiza el estado de showInstructorTituladoSelects solo si el destino seleccionado es "taller" o "evento"
   const showSelects = selectedDestino === "taller" || selectedDestino === "evento";
-  //console.log("showSelects:", showSelects); // Depurar
+  //console.log("Mostrar selectores:", showSelects); // Agregado para depuración
+
   setShowInstructorTituladoSelects(showSelects);
 
-  // Restablece el estado del selector de instructor
   if (!showSelects) {
     setSelectedOptionIns(null);
     setSelectedInstructor(null);
   }
 
-  // Llama a las funciones para cargar los datos de instructor y titulado si es necesario
   if (showSelects) {
-    //console.log("Llamando a listarInstructor y listarTitulado"); // Depurar
-    listarInstructorAct();
-    listarTituladoAct();
+    setIsLoading(true);
+    Promise.all([listarInstructorAct(), listarTituladoAct()])
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error al cargar los datos:", error); // Agregado para depuración
+      });
   }
 };
+useEffect(() => {
+  if (destinoMovimiento2 === "taller" || destinoMovimiento2 === "evento") {
+    setIsLoading(true);
+    Promise.all([listarInstructorAct(), listarTituladoAct()])
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error al cargar los datos:", error);
+      });
+  }
+}, [destinoMovimiento2]);
+
+
 
 // Estado para rastrear si los datos se están cargando
 const [isLoading, setIsLoading] = useState(true);
