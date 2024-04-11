@@ -482,7 +482,7 @@ const Instructores = () => {
 											className="form-control form-empty limpiar"
 											id="documento_instructor"
 											name="documentoInstructor"
-											placeholder="Ingrese una ficha"
+											placeholder="Ingrese un documento"
 										/>
 										<div className="invalid-feedback is-invalid">
 											Por favor, Ingresa un documento valido
