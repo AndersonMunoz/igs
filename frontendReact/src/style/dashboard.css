@@ -402,7 +402,9 @@
   right: 0;
   margin-right: 10px;
   width: auto;
-  height: auto;
+  min-height: 150px;
+  max-height: 500px;
+  overflow: auto;
   top: 65px;
   border-radius: 12px;
   border: 0.5px solid rgba(188, 188, 188, 0.845);

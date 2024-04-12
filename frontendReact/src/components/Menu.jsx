@@ -100,6 +100,7 @@ export const Menu = () => {
     listarProducto()
 
   }, []);
+  
   function calcularMIn(stockMin) {
     fetch(`http://${portConexion}:3000/producto/listar`, {
       method: "GET",
