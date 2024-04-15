@@ -847,6 +847,3 @@ export const obtenerProProductos = async (req, res) => {
 		});
 	}
 };
-
-
-

@@ -44,6 +44,7 @@ const Movimiento = () => {
     const [selectedCategoria, setSelectedCategoria] = useState(null);
     const [fechaCaducidadModificada, setFechaCaducidadModificada] = useState(false);
     const [unidadSeleccionada, setUnidadSeleccionada] = useState('');
+    const [fechaCaducidad, setFechaCaducidad] = useState()
 
  // Definición de referencia para la tabla
 const tableRef = useRef(null);
@@ -450,6 +451,16 @@ function editarMovimiento(id) {
   })
     .then((res) => res.json())
     .then((data) => {
+      
+      if (data[0].fecha_caducidad) {
+        let check = document.getElementById('flexCheckDefault2');
+        check.checked = true; // Establecer el valor de check como true
+        handleCheckboxChange2();
+        setFechaCaducidad(data[0].fecha_caducidad)
+        setFechaCaducidadModificada(true);
+    }
+    
+    
       setMovimientoSeleccionado(data[0]);
       setUpdateModal(true);
     })
@@ -498,9 +509,20 @@ function actualizarMovimiento(id) {
       setMovimientoSeleccionado({});
   })
   .catch((error) => {
-      //console.error('Error:', error);
-      Sweet.error(error.message);
-    });
+      error.json().then((body) => {
+          if (body.status === 404) {
+              Sweet.error(body.message);
+          } else if (body.status === 409) {
+              Sweet.error(body.message);
+          }   else if (body.errors) {
+              body.errors.forEach((err) => {
+                  Sweet.error(err.msg);
+              });
+          } else {
+              Sweet.error('Error en el servidor');
+          }
+      });
+  });
 }
 
  // Función para registrar un movimiento
@@ -952,15 +974,15 @@ function listarMovimiento() {
                         </div>
                         {aplicaFechaCaducidad2 && (
                           <div className="col">
-                            <label className="form-label" htmlFor="fecha_caducidad">
+                            <label className="form-label" htmlFor="fecha_caducidad2">
                               Fecha caducidad
                             </label>
                             <input
                               type="date"
-                              id="fecha_caducidad"
+                              id="fecha_caducidad2"
                               className="width: 20% form-control form-update"
-                              value={movimientoSeleccionado.fecha_caducidad || ''} 
-                              name="fecha_caducidad" 
+                              defaultValue={Validate.formatFecha(fechaCaducidad)}
+                              name="fecha_caducidad2" 
                               onChange={(e) => {
                                 setMovimientoSeleccionado({ ...movimientoSeleccionado, fecha_caducidad: e.target.value });
                                 setFechaCaducidadModificada(true);
