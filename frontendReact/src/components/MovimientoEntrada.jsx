@@ -498,20 +498,9 @@ function actualizarMovimiento(id) {
       setMovimientoSeleccionado({});
   })
   .catch((error) => {
-      error.json().then((body) => {
-          if (body.status === 404) {
-              Sweet.error(body.message);
-          } else if (body.status === 409) {
-              Sweet.error(body.message);
-          }   else if (body.errors) {
-              body.errors.forEach((err) => {
-                  Sweet.error(err.msg);
-              });
-          } else {
-              Sweet.error('Error en el servidor');
-          }
-      });
-  });
+      //console.error('Error:', error);
+      Sweet.error(error.message);
+    });
 }
 
  // Función para registrar un movimiento
