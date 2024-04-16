@@ -1,295 +1,218 @@
-import React, { useEffect, useState, useRef } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../style/Style.css";
-import $ from 'jquery';
-import { Link } from "react-router-dom";
-import Validate from '../helpers/Validate'
-import 'bootstrap';
-import 'datatables.net';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-import 'datatables.net-responsive';
-import 'datatables.net-responsive-bs5';
-import 'datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css';
-import esES from '../languages/es-ES.json';
-import { DownloadTableExcel } from 'react-export-table-to-excel';
-import generatePDF from 'react-to-pdf';
-import Select from 'react-select'
-import * as xlsx from 'xlsx';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import ExelLogo from "../../img/excel.224x256.png";
-import PdfLogo from "../../img/pdf.224x256.png";
-import portConexion from "../const/portConexion";
+import { pool } from "../database/conexion.js";
+import { validationResult } from "express-validator";
 
-const Inventario = () => {
-  const [categories, setCategories] = useState([]);
-  const [categoriaItem, setCategoriaItem] = useState([]);
-  const [selectedCategoriaNombre, setSelectedCategoriaNombre] = useState("");
-  const tableRef = useRef();
+// Registra una nueva categoría de producto en la base de datos
+export const registrocategoria_producto = async (req, res) => {
 
-  const handleOnExport = () => {
-    const wsData = getTableData();
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.aoa_to_sheet(wsData);
-    xlsx.utils.book_append_sheet(wb, ws, 'ExcelCategorias');
-    xlsx.writeFile(wb, 'Categorias.xlsx');
-  };
+    try {
 
-  const doc = new jsPDF();
-  const exportPdfHandler = () => {
-    const doc = new jsPDF();
+       let error = validationResult(req);
+        if (!error.isEmpty()) {
+           return res.status(403).json({"status": 403 ,error})
+        };
 
-    const columns = [
-      { title: 'N°', dataKey: 'id_categoria' },
-      { title: 'NombreProducto', dataKey: 'NombreProducto' },
-      { title: 'NombreCategoria', dataKey: 'NombreCategoria' },
-      { title: 'Cantidad', dataKey: 'Cantidad' },
-      { title: 'Unidad', dataKey: 'Unidad' },
-      { title: 'FechaIngreso', dataKey: 'FechaIngreso' },
-      { title: 'FechaCaducidad', dataKey: 'FechaCaducidad' },
-      { title: 'Descripcion', dataKey: 'Descripcion' }
-    ];
+        let { nombre_categoria,tipo_categoria,codigo_categoria
+         } = req.body;
+         const CategoriaQuery = `SELECT * FROM categorias_producto WHERE nombre_categoria = '${nombre_categoria}'`;
+        const [existingCategoria] = await pool.query(CategoriaQuery);
+        const CosigoQuery = `SELECT * FROM categorias_producto WHERE codigo_categoria = '${codigo_categoria}'`;
+        const [existingCodigo] = await pool.query(CosigoQuery);
+        
+       
+        if (existingCategoria.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "La categoria ya esta registrada"
+            });
+        }
+        if (existingCodigo.length > 0) {
+            return res.status(409).json({
+                "status": 409,
+                "message": "El codigo ya esta regirtado"
+            });
+        }
+        let sql = `insert into categorias_producto (nombre_categoria,tipo_categoria,codigo_categoria)
+  values('${nombre_categoria}','${tipo_categoria}','${codigo_categoria}')`;
 
-    // Obtener los datos de la tabla
-    const tableData = categoriaItem.map((element) => ({
-      id_producto: element.id_categoria,
-      NombreProducto: element.NombreProducto,
-      NombreCategoria: element.NombreCategoria,
-      Cantidad: element.Cantidad,
-      Unidad: element.Unidad,
-      FechaIngreso: element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada',
-      FechaCaducidad: element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada',
-      Descripcion: element.Descripcion
-    }));
+        const [rows] = await pool.query(sql);
 
-    // Agregar las columnas y los datos a la tabla del PDF
-    doc.autoTable({
-      columns,
-      body: tableData,
-      margin: { top: 20 },
-      styles: { overflow: 'linebreak' },
-      headStyles: { fillColor: [100, 100, 100] },
-    });
+        if (rows.affectedRows > 0) {
 
-    // Guardar el PDF
-    doc.save('Categoria.pdf');
-  };
-  const getTableData = () => {
-    const wsData = [];
+            res.status(200).json({
+                "status": 200,
+                "menssage": " La categoria fue  registrada  con exito "
+            })
+        } else {
+            res.status(403).json({
+                "status": 403,
+                "menssage": "La categoria  no se puedo registrar"
+            })
 
-    // Obtener las columnas
-    const columns = [
-      'N°',
-      'NombreCategoria',
-      'NombreProducto',
-      'Cantidad',
-      'Unidad',
-      'FechaIngreso',
-      'FechaCaducidad',
-      'Descripcion'
-    ];
-    wsData.push(columns);
-
-    // Obtener los datos de las filas
-    categoriaItem.forEach(element => {
-      const rowData = [
-        element.id_categoria,
-        element.NombreProducto,
-        element.NombreCategoria,
-        element.Cantidad,
-        element.Unidad,
-        element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada',
-        element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada',
-        element.Descripcion,
-      ];
-      wsData.push(rowData);
-    });
-
-    return wsData;
-  };
-
-  const handleModalOpen = (categoryName) => {
-    setSelectedCategoriaNombre(categoryName);
-  }
-
-  useEffect(() => {
-    if (categoriaItem.length > 0) {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        $(tableRef.current).DataTable().destroy();
-      }
-      $(tableRef.current).DataTable({
-        responsive: true,
-        language: esES,
-        lengthMenu: [
-          [10, 50, 100, -1],
-          ['10 Filas', '50 Filas', '100 Filas', 'Ver Todo']
-        ],
-      });
-    }
-  }, [categoriaItem]);
-
-  useEffect(() => {
-    listaCat();
-  }, []);
-
-  function listaCat() {
-    fetch(`http://${portConexion}:3000/categoria/listar`, {
-      method: "get",
-      headers: {
-        "Content-type": "application/json",
-        token: localStorage.getItem('token'),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data);
-      });
-  }
-
-  const listarCategoriaItem = (id) => {
-    // Destruye el DataTable si existe
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy();
+        }
+    } catch (error) {
+        res.status(500).json({
+            "status": 500,
+            "status": "Error interno, intente nuevamente" + error
+        })
     }
 
-    // Realiza la solicitud para obtener los datos
-    fetch(`http://${portConexion}:3000/categoria/listarCategoriaItem/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "Application/json",
-        token: localStorage.getItem('token'),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCategoriaItem(data);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los datos:', error);
-      });
-  }
+}
 
-
-  return (
-    <div className="container rounded p-2 mt-2">
-      <div className="rounded p-1 mb-4 ">
-        <h1 className="text-center hghg">Inventario por Categorias</h1>
-      </div>
-
-      <div className="container">
-        <div className="row">
-          {categories.map((categorie, index) => (
-            <div key={categorie.id_categoria} className="col-md-3" >
-              <div className={`rounded ${index % 2 === 0 ? 'bg-colorrr' : 'bg-colorrr'}`} >
-                <button
-                  type="button"
-                  id="modalProducto"
-                  className="btn btn-block bg-colorrr mb-4"
-                  data-bs-toggle="modal"
-                  style={{ textTransform: 'capitalize' }}
-                  data-bs-target="#staticBackdrop"
-                  value={categorie.id_categoria}
-                  onClick={() => { handleModalOpen(categorie.nombre_categoria); listarCategoriaItem(categorie.id_categoria) }}
-                >
-                  {categorie.nombre_categoria}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-
-      <div className="modal fade" data-bs-keyboard="false" id="staticBackdrop" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static">
-        <div className="modal-dialog  modal-dialog-centered modal-xl">
-          <div className="modal-content">
-            <div className="modal-header bg txt-color ">
-              <h1 className="modal-title fs-5 ">Categoria {selectedCategoriaNombre}</h1>
-              <button type="button" className="btn-close text-white bg-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-              <div className="" title="Descargar Excel">
-                <button onClick={handleOnExport} type="button" className="btn btn-light">
-                  <img src={ExelLogo} className="logoExel" />
-                </button>
-              </div>
-              <div className="" title="Descargar Pdf">
-                <button
-                  type="button"
-                  className="btn btn-light"
-                  onClick={exportPdfHandler}                >
-                  <img src={PdfLogo} className="logoExel" />
-                </button>
-              </div>
-            </div>
-            <div className="modal-body  ">
-              <table id="dtBasicExample max-width-5" className="table table-striped table-bordered border display responsive nowrap " cellSpacing={0} width="100%" ref={tableRef}>
-                <thead className="text-center text-justify">
-                  <tr>
-                    <th className="th-sm">#</th>
-                    <th className="th-sm">Nombre producto</th>
-                    <th className="th-sm">Cantidad</th>
-                    <th className="th-sm">Unidad</th>
-                    <th className="th-sm">Fecha ingreso</th>
-                    <th className="th-sm">Fecha caducidad</th>
-                  </tr>
-                </thead>
-                <tbody id="tableProducto" className="text-center">
-                  {categoriaItem != null && categoriaItem.length > 0 ? (
-                    <>
-                    {categoriaItem.map((element, index) => (
-                      <tr key={index} style={{ textTransform: 'capitalize' }}>
-                        <td>{index + 1}</td>
-                        <td>{element.NombreProducto}</td>
-                        <td>{element.Cantidad}</td>
-                        <td>{element.Unidad}</td>
-                        <td>{element.FechaIngreso ? Validate.formatFecha(element.FechaIngreso) : 'No asignada'}</td>
-                        <td>{element.FechaCaducidad ? Validate.formatFecha(element.FechaCaducidad) : 'No asignada'}</td>
-                      </tr>
-                    ))}
-                  </>
-                  ) : (
-                    <tr>
-                    <td colSpan={12}>
-                      <div className="d-flex justify-content-center">
-                        <div className="alert alert-danger text-center mt-4 w-50">
-                          <h2> En este momento no contamos con ningún categoriaItem disponible.😟</h2>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                   
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                Cerrar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-        <div className="d-flex row mt-2">
-          <div className="col text-center">
-            <button className="btn btn-danger" >
-              <Link to="/producto/caducar" style={{ textDecoration: 'none', color: 'white' }}>
-                <div>
-                  Productos a caducar
-                </div>
-              </Link>
-            </button>
-
-        </div>
-      </div>
-    </div>
-  );
+// Busca una categoría de producto por su ID en la base de datos
+export const buscarCategoria = async (req, res) => {
+    try {
+        let id = req.params.id;
+        const [result] = await pool.query(
+            "SELECT * FROM categorias_producto WHERE id_categoria=" + id
+        );
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(500).json({message: 'Error en buscar: ' + e});
+    }
 };
 
-export const newLink = Inventario.newLink; // Exporta la función newLink
+// Lista todas las categorías de productos disponibles en la base de datos
+export const listarcategoria_producto = async (req, res) => {
+    try {
+        const [result] = await pool.query('SELECT * FROM categorias_producto');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({"status": 204, "message": "No se pudo listar las categorías"});
+        }
+    } catch (err) {
+        res.status(500).json({
+            "status": 500,
+            "message": "Error en el servidor " + err
+        });
+    }
+};
 
-export default Inventario;
+// Lista la cantidad de tipos de productos asociados a cada categoría
+export const listarCountCategoria = async (req, res) => {
+    try {
+        const [result] = await pool.query(`SELECT c.nombre_categoria AS Categoria, COUNT(tp.id_tipo) AS CantidadTiposProductos
+            FROM categorias_producto c
+            LEFT JOIN tipo_productos tp ON c.id_categoria = tp.fk_categoria_pro
+            GROUP BY c.nombre_categoria`);
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({"status": 204, "message": "No se pudo listar las categorías"});
+        }
+    } catch (err) {
+        res.status(500).json({
+            "status": 500,
+            "message": "Error en el servidor " + err
+        });
+    }
+};
+
+// Lista solo las categorías de productos activas en la base de datos
+export const listarActivo = async (req, res) => {
+    try {
+        const [result] = await pool.query('SELECT * FROM categorias_producto WHERE estado = 1');
+        if (result.length > 0) {
+            res.status(200).json(result);
+        } else {
+            res.status(204).json({"status": 204, "message": "No se pudo listar las categorías"});
+        }
+    } catch (err) {
+        res.status(500).json({
+            "status": 500,
+            "message": "Error en el servidor " + err
+        });
+    }
+};
+
+// Edita una categoría de producto existente en la base de datos
+export const editarcategoria_producto = async (req, res) => {
+    try {
+        let error = validationResult(req);
+        if (!error.isEmpty()) {
+            return res.status(400).json(error)
+        }   
+        let id = req.params.id;
+        let { nombre_categoria,tipo_categoria,codigo_categoria } = req.body;
+
+        let sql = `UPDATE categorias_producto SET nombre_categoria = '${nombre_categoria}',tipo_categoria='${tipo_categoria}',codigo_categoria='${codigo_categoria}'
+        WHERE id_categoria = ${id}`;
+        
+
+        const [rows] = await pool.query(sql);
+        if (rows.affectedRows > 0) {
+            res.status(200).json(
+                { "status": 200, "menssge": "Se actualizo con exito la categoria    " });
+        } else {
+            res.status(403).json(
+                { "status": 403, "menssge": "No se actualizo la  categoria   " });
+        }
+    } catch (e) {
+        res.status(500).json({
+            "status": 500,
+            "menssge": "Error interno en el sevidor " + e
+        });
+    }
+}
+
+// Deshabilita una categoría de producto en la base de datos
+export const deshabilitarCategoria = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let sql = `UPDATE categorias_producto SET estado = 0 WHERE id_categoria = ${id}`;
+        const [rows] = await pool.query(sql);
+        if (rows.affectedRows > 0) {
+            res.status(200).json({"status": 200, "message": "Se deshabilitó con éxito la categoría"});
+        } else {
+            res.status(401).json({"status": 401, "message": "No se deshabilitó la categoría"});
+        }
+    } catch (e) {
+        res.status(500).json({"message": "Error en deshabilitar la categoría: " + e});
+    }
+};
+
+// Activa una categoría de producto que previamente fue deshabilitada
+export const activarCategoria = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let sql = `UPDATE categorias_producto SET estado = 1 WHERE id_categoria = ${id}`;
+        const [rows] = await pool.query(sql);
+        if (rows.affectedRows > 0) {
+            res.status(200).json({"status": 200, "message": "Se activó con éxito la categoría"});
+        } else {
+            res.status(401).json({"status": 401, "message": "No se activó la categoría"});
+        }
+    } catch (e) {
+        res.status(500).json({"message": "Error en activar la categoría: " + e});
+    }
+};
+
+// Lista los productos asociados a una categoría específica
+export const listarCategoriaItem = async (req, res) => {
+    try {
+        let id = req.params.id;
+        const [result] = await pool.query(
+            `SELECT
+                c.id_categoria,
+                c.nombre_categoria AS NombreCategoria,
+                p.cantidad_peso_producto AS Cantidad,
+                t.nombre_tipo AS NombreProducto,
+                t.unidad_peso AS Unidad,
+                f.fecha_movimiento AS FechaIngreso,
+                f.fecha_caducidad AS FechaCaducidad,
+                f.nota_factura AS Descripcion
+            FROM categorias_producto c
+            JOIN tipo_productos t ON t.fk_categoria_pro = c.id_categoria
+            JOIN productos p ON p.fk_id_tipo_producto = t.id_tipo
+            LEFT JOIN factura_movimiento f ON p.id_producto = f.fk_id_producto
+            WHERE c.id_categoria = ? GROUP BY NombreCategoria`,
+            [id]
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({
+            "status": 500,
+            "message": "Error listarProductos: " + err.message,
+        });
+    }
+};

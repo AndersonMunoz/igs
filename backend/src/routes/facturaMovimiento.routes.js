@@ -22,7 +22,7 @@ facturaMovimientoRoute.get('/buscarDetalleMovimiento/:id', validarToken, buscarM
 facturaMovimientoRoute.get('/buscar/:id', validarToken, buscarMovimiento);
 
 // Ruta para listar productos caducados
-facturaMovimientoRoute.get('/listarCaducados', listarProductosCaducar);
+facturaMovimientoRoute.get('/listarCaducados',validarToken, listarProductosCaducar);
 
 // Rutas para actualizar movimientos de entrada y salida
 facturaMovimientoRoute.put('/actualizar/:id', validarToken, validarFacturaMovimientoActu, actualizarMovimiento);
