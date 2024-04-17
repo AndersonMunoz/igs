@@ -300,7 +300,7 @@ useEffect(() => {
 
 // Función para listar los UP
 function listarUp() {
-  fetch(`http://${portConexion}:3000/up/listar`, {
+  fetch(`http://${portConexion}/up/listar`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -325,7 +325,7 @@ function listarUp() {
 
 // Función para listar las categorías
 function listarCategoria() {
-  fetch(`http://${portConexion}:3000/categoria/listarActivo`, {
+  fetch(`http://${portConexion}/categoria/listarActivo`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -351,7 +351,7 @@ function listarCategoria() {
 
 // Función para listar los tipos
 function listarTipo(){
-  fetch(`http://${portConexion}:3000/tipo/listarActivo`, {
+  fetch(`http://${portConexion}/tipo/listarActivo`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -376,7 +376,7 @@ function listarTipo(){
 
   // Función para listar los proveedores
 function listarProveedor() {
-  fetch(`http://${portConexion}:3000/proveedor/listarActivo`, {
+  fetch(`http://${portConexion}/proveedor/listarActivo`, {
     method: "GET",
     headers: {
       "content-type": "application/json",
@@ -395,7 +395,7 @@ function listarProveedor() {
 // Función para listar los productos de una categoría
 function listarProductoCategoria(id_categoria) {
   fetch(
-    `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+    `http://${portConexion}/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
     {
       method: "GET",
       headers: {
@@ -418,7 +418,7 @@ function listarProductoCategoria(id_categoria) {
 // Función para listar las unidades de un producto
 function listarUnidadesPro(id_producto) {
   fetch(
-      `http://${portConexion}:3000/facturamovimiento/buscarUnidad/${id_producto}`,
+      `http://${portConexion}/facturamovimiento/buscarUnidad/${id_producto}`,
       {
           method: "GET",
           headers: {
@@ -442,7 +442,7 @@ function listarUnidadesPro(id_producto) {
 
 // Función para editar un movimiento
 function editarMovimiento(id) {
-  fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
+  fetch(`http://${portConexion}/facturamovimiento/buscar/${id}`, {
     method: 'GET',
     headers: {
       'Content-type': 'application/json',
@@ -483,7 +483,7 @@ function actualizarMovimiento(id) {
   if (fecha_caducidad !== null) {
       body.fecha_caducidad = fecha_caducidad;
   }
-  fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
+  fetch(`http://${portConexion}/facturamovimiento/actualizar/${id}`, {
       method: "PUT",
       headers: {
           'Content-type': 'application/json',
@@ -546,7 +546,7 @@ function registrarMovimiento() {
     Sweet.registroFallido();
     return;
   }
-  fetch(`http://${portConexion}:3000/facturamovimiento/registrarEntrada`, {
+  fetch(`http://${portConexion}/facturamovimiento/registrarEntrada`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
@@ -586,7 +586,7 @@ function registrarMovimiento() {
 
 // Función para listar los movimientos
 function listarMovimiento() {
-  fetch(`http://${portConexion}:3000/facturamovimiento/listarEntrada`, {
+  fetch(`http://${portConexion}/facturamovimiento/listarEntrada`, {
     method: "GET",
     headers: {
       "content-type": "application/json",

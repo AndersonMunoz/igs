@@ -130,7 +130,7 @@ const ProductoCaducar = () => {
   }, []); 
 	// Funciones para obtener datos de los productos
   function listarProducto() {
-    fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
+    fetch(`http://${portConexion}/facturamovimiento/listarCaducados`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

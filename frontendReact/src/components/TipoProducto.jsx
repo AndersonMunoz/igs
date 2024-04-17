@@ -200,7 +200,7 @@ const Tipo = () => {
   }
 // Función para listar los tipos   
   function listarTipo() {
-    fetch(`http://${portConexion}:3000/tipo/listar`, {
+    fetch(`http://${portConexion}/tipo/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -225,7 +225,7 @@ const Tipo = () => {
   }
     // Función para listar las categorias  
   function listarCategoria() {
-    fetch(`http://${portConexion}:3000/categoria/listar`, {
+    fetch(`http://${portConexion}/categoria/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -265,7 +265,7 @@ const Tipo = () => {
       return;
     }
 
-    fetch(`http://${portConexion}:3000/tipo/registrar`, {
+    fetch(`http://${portConexion}/tipo/registrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -305,7 +305,7 @@ const Tipo = () => {
   function deshabilitarTipo(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/tipo/deshabilitar/${id}`, {
+        fetch(`http://${portConexion}/tipo/deshabilitar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -333,7 +333,7 @@ const Tipo = () => {
   function activarTipo(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/tipo/activar/${id}`, {
+        fetch(`http://${portConexion}/tipo/activar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -358,7 +358,7 @@ const Tipo = () => {
   }
   // funcion para  llamar  los datos que aparezcan el el modal para actualizar 
   function editarTipo(id) {
-    fetch(`http://${portConexion}:3000/tipo/buscar/${id}`, {
+    fetch(`http://${portConexion}/tipo/buscar/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -377,7 +377,7 @@ const Tipo = () => {
   // funcion para actualizar tipo de  producto 
   function actualizarTipo(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
-    fetch(`http://${portConexion}:3000/tipo/editar/${id}`, {
+    fetch(`http://${portConexion}/tipo/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",

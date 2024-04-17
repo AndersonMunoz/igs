@@ -17,7 +17,7 @@ import detalles from './backend/src/routes/detalles.routes.js';
 import autRouter from './backend/src/routes/autentificacion.routes.js';
 
 // Definimos el puerto en el que se ejecutará nuestra aplicación.
-const port = 3000;
+const port = 3002;
 
 // Creamos nuestra aplicación Express.
 const igs = express();

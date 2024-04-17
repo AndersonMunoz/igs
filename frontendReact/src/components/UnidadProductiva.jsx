@@ -141,7 +141,7 @@ const Up = () => {
   }
 // Función para listar las  bodegas 
   function listarUp() {
-    fetch(`http://${portConexion}:3000/up/listar`, {
+    fetch(`http://${portConexion}/up/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -169,7 +169,7 @@ const Up = () => {
     let nombre_up = document.getElementById("nombreUp").value;
     const validacionExitosa = Validate.validarCampos(".form-empty");
 
-    fetch(`http://${portConexion}:3000/up/registrar`, {
+    fetch(`http://${portConexion}/up/registrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -212,7 +212,7 @@ const Up = () => {
   function deshabilitarUp(id) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/up/deshabilitar/${id}`, {
+        fetch(`http://${portConexion}/up/deshabilitar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -238,7 +238,7 @@ const Up = () => {
   function activarUp(id) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/up/activar/${id}`, {
+        fetch(`http://${portConexion}/up/activar/${id}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -263,7 +263,7 @@ const Up = () => {
   }
 // funcion para  llamar  los datos que aparezcan el modal para actualizar
   function editarUp(id) {
-    fetch(`http://${portConexion}:3000/up/buscar/${id}`, {
+    fetch(`http://${portConexion}/up/buscar/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -282,7 +282,7 @@ const Up = () => {
    // funcion para actualizar la  bodega 
   function actualizarUp(id) {
     const validacionExitosa = Validate.validarCampos(".form-update");
-    fetch(`http://${portConexion}:3000/up/editar/${id}`, {
+    fetch(`http://${portConexion}/up/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",

@@ -229,7 +229,7 @@ useEffect(() => {
 
 // Función para listar las categorías desde el backend
 function listarCategoria() {
-  fetch(`http://${portConexion}:3000/categoria/listar`, {
+  fetch(`http://${portConexion}/categoria/listar`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -255,7 +255,7 @@ function listarCategoria() {
 
 // Función para listar los tipos desde el backend
 function listarTipo() {
-  fetch(`http://${portConexion}:3000/tipo/listar`, {
+  fetch(`http://${portConexion}/tipo/listar`, {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -280,7 +280,7 @@ function listarTipo() {
 
 // Función para listar los proveedores desde el backend
 function listarProveedor() {
-  fetch(`http://${portConexion}:3000/proveedor/listar`, {
+  fetch(`http://${portConexion}/proveedor/listar`, {
     method: "GET",
     headers: {
       "content-type": "application/json",
@@ -299,7 +299,7 @@ function listarProveedor() {
 // Función para listar los productos de una categoría desde el backend
 function listarProductoCategoria(id_categoria) {
   fetch(
-    `http://${portConexion}:3000/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
+    `http://${portConexion}/facturamovimiento/buscarProCat/${id_categoria == '' ? 0 : id_categoria}`,
     {
       method: "GET",
       headers: {
@@ -323,7 +323,7 @@ function listarProductoCategoria(id_categoria) {
  // Función para listar las unidades de un producto desde el backend
 function listarUnidadesPro(id_producto) {
   fetch(
-    `http://${portConexion}:3000/facturamovimiento//buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
+    `http://${portConexion}/facturamovimiento//buscarUnidad/${id_producto == '' ? 0 : id_producto}`,
     {
       method: "GET",
       headers: {
@@ -345,7 +345,7 @@ function listarUnidadesPro(id_producto) {
 
 // Función para editar un movimiento por su ID
 function editarMovimiento(id) {
-  fetch(`http://${portConexion}:3000/facturamovimiento/buscar/${id}`, {
+  fetch(`http://${portConexion}/facturamovimiento/buscar/${id}`, {
     method: 'GET',
     headers: {
       'Content-type': 'application/json',
@@ -367,7 +367,7 @@ function editarMovimiento(id) {
 function actualizarMovimiento(id) {
   const validacionExitosa = Validate.validarCampos('.form-update');
   
-  fetch(`http://${portConexion}:3000/facturamovimiento/actualizar/${id}`, {
+  fetch(`http://${portConexion}/facturamovimiento/actualizar/${id}`, {
     method: "PUT",
     headers: {
       'Content-type': 'application/json',
@@ -419,7 +419,7 @@ function registrarMovimiento() {
   const validacionExitosa = Validate.validarCampos('.form-empty');
 
   // Enviar la solicitud para registrar el movimiento
-  fetch(`http://${portConexion}:3000/facturamovimiento/registrar`, {
+  fetch(`http://${portConexion}/facturamovimiento/registrar`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
@@ -466,7 +466,7 @@ function registrarMovimiento() {
 
  // Función para listar los usuarios desde el backend
 function listarUsuario() {
-  fetch(`http://${portConexion}:3000/usuario/listar`, {
+  fetch(`http://${portConexion}/usuario/listar`, {
     method: "get",
     headers: {
       "content-type": "application/json",
@@ -487,7 +487,7 @@ function listarUsuario() {
 
 // Función para listar los movimientos desde el backend
 function listarMovimiento() {
-  fetch(`http://${portConexion}:3000/facturamovimiento/listar`, {
+  fetch(`http://${portConexion}/facturamovimiento/listar`, {
     method: "GET",
     headers: {
       "content-type": "application/json",

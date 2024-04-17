@@ -102,7 +102,7 @@ export const Menu = () => {
   }, []);
   
   function calcularMIn(stockMin) {
-    fetch(`http://${portConexion}:3000/producto/listar`, {
+    fetch(`http://${portConexion}/producto/listar`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -132,7 +132,7 @@ export const Menu = () => {
   }
 
   function listarProducto() {
-    fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
+    fetch(`http://${portConexion}/facturamovimiento/listarCaducados`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -168,7 +168,7 @@ export const Menu = () => {
 
 
   function listartMen(id_usuario) {
-    fetch(`http://${portConexion}:3000/usuario/buscar/${id_usuario}`, {
+    fetch(`http://${portConexion}/usuario/buscar/${id_usuario}`, {
       method: "get",
       headers: {
         "Content-type": "application/json",

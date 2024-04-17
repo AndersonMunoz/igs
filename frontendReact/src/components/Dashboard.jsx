@@ -34,7 +34,7 @@ const Dashboard = () => {
 		listarMovimiento()
 	}, []);
 	function listarMovimiento() {
-		fetch(`http://${portConexion}:3000/facturamovimiento/listar`, {
+		fetch(`http://${portConexion}/facturamovimiento/listar`, {
 		  method: "GET",
 		  headers: {
 			"content-type": "application/json",
@@ -65,7 +65,7 @@ const Dashboard = () => {
 	  }
 	// Funciones para obtener la cantidad de categorias
 	function listarCountCategoria() {
-		fetch(`http://${portConexion}:3000/categoria/listarCountCategoria`, {
+		fetch(`http://${portConexion}/categoria/listarCountCategoria`, {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
@@ -83,7 +83,7 @@ const Dashboard = () => {
 	}
 	// Funciones para obtener datos de las facturas
 	function obtenerValorTotalProductos() {
-		fetch(`http://${portConexion}:3000/facturamovimiento/listarEntradaSalida`, {
+		fetch(`http://${portConexion}/facturamovimiento/listarEntradaSalida`, {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
@@ -100,7 +100,7 @@ const Dashboard = () => {
 	}
 	// Funciones para obtener lla cantidad de usuarios
 	function listarUsuario() {
-		fetch(`http://${portConexion}:3000/usuario/listarCount`, {
+		fetch(`http://${portConexion}/usuario/listarCount`, {
 			method: "get",
 			headers: {
 				"Content-type": "application/json",
@@ -116,7 +116,7 @@ const Dashboard = () => {
 			});
 	}
 	function listarTitulado() {
-		fetch(`http://${portConexion}:3000/titulado/listarCount`, {
+		fetch(`http://${portConexion}/titulado/listarCount`, {
 			method: "get",
 			headers: {
 				"Content-type": "application/json",
@@ -132,7 +132,7 @@ const Dashboard = () => {
 			});
 	}
 	function listarInstructor() {
-		fetch(`http://${portConexion}:3000/instructor/listarCount`, {
+		fetch(`http://${portConexion}/instructor/listarCount`, {
 			method: "get",
 			headers: {
 				"Content-type": "application/json",
@@ -196,7 +196,7 @@ const Dashboard = () => {
 
 	// Funciones para obtener lla cantidad de usuarios
 	function listarProducto() {
-		fetch(`http://${portConexion}:3000/facturamovimiento/listarCaducados`, {
+		fetch(`http://${portConexion}/facturamovimiento/listarCaducados`, {
 		  method: "GET",
 		  headers: {
 			"Content-type": "application/json",

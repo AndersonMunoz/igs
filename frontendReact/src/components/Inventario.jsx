@@ -134,7 +134,7 @@ const Inventario = () => {
   }, []);
 
   function listaCat() {
-    fetch(`http://${portConexion}:3000/categoria/listar`, {
+    fetch(`http://${portConexion}/categoria/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -154,7 +154,7 @@ const Inventario = () => {
     }
 
     // Realiza la solicitud para obtener los datos
-    fetch(`http://${portConexion}:3000/categoria/listarCategoriaItem/${id}`, {
+    fetch(`http://${portConexion}/categoria/listarCategoriaItem/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "Application/json",

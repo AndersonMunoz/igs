@@ -79,7 +79,7 @@ const PerfilAjustes = () => {
 
 
 	function editarUsuario(userId) {
-		fetch(`http://${portConexion}:3000/usuario/buscar/${userId}`, {
+		fetch(`http://${portConexion}/usuario/buscar/${userId}`, {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
@@ -106,7 +106,7 @@ const PerfilAjustes = () => {
 			stock_minimo: stock_minimo
 			
 		};
-		fetch(`http://${portConexion}:3000/usuario/editarajustes/${userId}`, {
+		fetch(`http://${portConexion}/usuario/editarajustes/${userId}`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",
@@ -146,7 +146,7 @@ const PerfilAjustes = () => {
 
 		};
 
-		fetch(`http://${portConexion}:3000/usuario/editarcontrasena/${userId}`, {
+		fetch(`http://${portConexion}/usuario/editarcontrasena/${userId}`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",
@@ -185,7 +185,7 @@ const PerfilAjustes = () => {
 	}
 
 	function listartMen(id_usuario) {
-		fetch(`http://${portConexion}:3000/usuario/buscar/${id_usuario}`,{
+		fetch(`http://${portConexion}/usuario/buscar/${id_usuario}`,{
 			method: "get",
 			headers: {
 				"Content-type": "application/json",

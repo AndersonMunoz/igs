@@ -16,7 +16,7 @@ const InventarioItem = () => {
 
   const listarCategoriaItem = (category) => {
     console.log(category);
-    fetch(`http://localhost:3000/categoria/listarCategoriaItem/${category}`, {
+    fetch(`http://localhost/categoria/listarCategoriaItem/${category}`, {
       method: "GET",
       headers: {
         'Content-type': 'application/json',

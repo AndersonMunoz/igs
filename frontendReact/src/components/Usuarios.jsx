@@ -208,7 +208,7 @@ const Usuario = () => {
   }
   ///listar usuario
   function listarUsuario() {
-    fetch(`http://${portConexion}:3000/usuario/listar`, {
+    fetch(`http://${portConexion}/usuario/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -232,7 +232,7 @@ const Usuario = () => {
 
     const validacionExitosa = Validate.validarCampos(".form-empty");
 
-    fetch(`http://${portConexion}:3000/usuario/registrar`, {
+    fetch(`http://${portConexion}/usuario/registrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -285,7 +285,7 @@ const Usuario = () => {
   function eliminarUsuario(id_usuario) {
     Sweet.confirmacion().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/usuario/deshabilitar/${id_usuario}`, {
+        fetch(`http://${portConexion}/usuario/deshabilitar/${id_usuario}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -318,7 +318,7 @@ const Usuario = () => {
   function activarUsuario(id_usuario) {
     Sweet.confirmacionActivar().then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://${portConexion}:3000/usuario/activar/${id_usuario}`, {
+        fetch(`http://${portConexion}/usuario/activar/${id_usuario}`, {
           method: "PATCH",
           headers: {
             "Content-type": "application/json",
@@ -342,7 +342,7 @@ const Usuario = () => {
     });
   }
   function editarUsuario(id) {
-    fetch(`http://${portConexion}:3000/usuario/buscar/${id}`, {
+    fetch(`http://${portConexion}/usuario/buscar/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -367,7 +367,7 @@ const Usuario = () => {
     };
 
 
-    fetch(`http://${portConexion}:3000/usuario/editar/${id}`, {
+    fetch(`http://${portConexion}/usuario/editar/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",

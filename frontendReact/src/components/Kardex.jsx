@@ -157,7 +157,7 @@ const Movimiento = () => {
 
     // Función para obtener y listar movimientos desde el servidor
     function listarMovimiento() {
-        fetch(`http://${portConexion}:3000/facturamovimiento/listar`, {
+        fetch(`http://${portConexion}/facturamovimiento/listar`, {
             method: "GET",
             headers: {
                 "content-type": "application/json",

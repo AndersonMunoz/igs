@@ -91,7 +91,7 @@ const Titulados = () => {
 
 
 	function listarTitulados() {
-		fetch(`http://${portConexion}:3000/titulado/listar`, {
+		fetch(`http://${portConexion}/titulado/listar`, {
 			method: "get",
 			headers: {
 				"Content-type": "application/json",
@@ -112,7 +112,7 @@ const Titulados = () => {
 
 		const validacionExitosa = Validate.validarCampos(".form-empty");
 
-		fetch(`http://${portConexion}:3000/titulado/registrar`, {
+		fetch(`http://${portConexion}/titulado/registrar`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -159,7 +159,7 @@ const Titulados = () => {
 	function eliminarTitulado(id_titulado) {
 		Sweet.confirmacion().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://${portConexion}:3000/titulado/deshabilitar/${id_titulado}`, {
+				fetch(`http://${portConexion}/titulado/deshabilitar/${id_titulado}`, {
 					method: "PATCH",
 					headers: {
 						"Content-type": "application/json",
@@ -192,7 +192,7 @@ const Titulados = () => {
 	function activarTitulado(id_titulado) {
 		Sweet.confirmacionActivar().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://${portConexion}:3000/titulado/activar/${id_titulado}`, {
+				fetch(`http://${portConexion}/titulado/activar/${id_titulado}`, {
 					method: "PATCH",
 					headers: {
 						"Content-type": "application/json",
@@ -216,7 +216,7 @@ const Titulados = () => {
 		});
 	}
 	function editarTitulado(id) {
-		fetch(`http://${portConexion}:3000/titulado/buscar/${id}`, {
+		fetch(`http://${portConexion}/titulado/buscar/${id}`, {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
@@ -241,7 +241,7 @@ const Titulados = () => {
 		};
 
 
-		fetch(`http://${portConexion}:3000/titulado/editar/${id}`, {
+		fetch(`http://${portConexion}/titulado/editar/${id}`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",

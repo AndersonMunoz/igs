@@ -21,7 +21,7 @@ const LoginForm = () => {
   const [year, setYear] = useState(new Date().getFullYear())
 
   function handleSubmitRecuperar() {
-    fetch(`http://${portConexion}:3000/usuario/buscarCedula/${documento}`, {
+    fetch(`http://${portConexion}/usuario/buscarCedula/${documento}`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -52,7 +52,7 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`http://${portConexion}:3000/aut/validar`, {
+    fetch(`http://${portConexion}/aut/validar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -159,7 +159,7 @@ const proveedor = () => {
     // Función para listar proveedores desde el servidor
 
   function listarProveedor() {
-    fetch(`http://${portConexion}:3000/proveedor/listar`, {
+    fetch(`http://${portConexion}/proveedor/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -197,7 +197,7 @@ const proveedor = () => {
   // Función para deshabilitar un proveedor cuando vence el contrato
 
   function vencioProveedor(id) {
-    fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
+    fetch(`http://${portConexion}/proveedor/eliminar/${id}`, {
       method: "put",
       headers: {
         "Content-type": "application/json",
@@ -220,7 +220,7 @@ const proveedor = () => {
   function deshabilitarProveedor(id) {
     Sweet.confirmacion().then((res) => {
       if (res.isConfirmed) {
-        fetch(`http://${portConexion}:3000/proveedor/eliminar/${id}`, {
+        fetch(`http://${portConexion}/proveedor/eliminar/${id}`, {
           method: "put",
           headers: {
             "Content-type": "application/json",
@@ -255,7 +255,7 @@ const proveedor = () => {
       formData.append('contrato_proveedores', contrato_proveedores)
       formData.append('archivo_contrato', document.getElementById('archivo_contrato').files[0]);
 
-      fetch(`http://${portConexion}:3000/proveedor/registrar`, {
+      fetch(`http://${portConexion}/proveedor/registrar`, {
         method: "POST",
         headers: {
           "token": localStorage.getItem("token")
@@ -295,7 +295,7 @@ const proveedor = () => {
     document.getElementById("divArchContrato").classList.add("d-none");
     document.getElementById("numContrato").classList.add("d-none");
 
-    fetch(`http://${portConexion}:3000/proveedor/buscar/${id}`, {
+    fetch(`http://${portConexion}/proveedor/buscar/${id}`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -319,7 +319,7 @@ const proveedor = () => {
     // Función para actualizar los datos de un proveedor
 
   function actualizarProveedor(id) {
-    fetch(`http://${portConexion}:3000/proveedor/actualizar/${id}`, {
+    fetch(`http://${portConexion}/proveedor/actualizar/${id}`, {
       method: "PUT",
       headers:{
         'Content-type':'application/json',

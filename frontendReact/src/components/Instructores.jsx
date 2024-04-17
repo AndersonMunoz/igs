@@ -93,7 +93,7 @@ const Instructores = () => {
 
 
 	function listarInstructores() {
-		fetch(`http://${portConexion}:3000/instructor/listar`, {
+		fetch(`http://${portConexion}/instructor/listar`, {
 			method: "get",
 			headers: {
 				"Content-type": "application/json",
@@ -114,7 +114,7 @@ const Instructores = () => {
 
 		const validacionExitosa = Validate.validarCampos(".form-empty");
 
-		fetch(`http://${portConexion}:3000/instructor/registrar`, {
+		fetch(`http://${portConexion}/instructor/registrar`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -161,7 +161,7 @@ const Instructores = () => {
 	function eliminarInstructor(id_instructores) {
 		Sweet.confirmacion().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://${portConexion}:3000/instructor/deshabilitar/${id_instructores}`, {
+				fetch(`http://${portConexion}/instructor/deshabilitar/${id_instructores}`, {
 					method: "PATCH",
 					headers: {
 						"Content-type": "application/json",
@@ -194,7 +194,7 @@ const Instructores = () => {
 	function activarInstructor(id_instructores) {
 		Sweet.confirmacionActivar().then((result) => {
 			if (result.isConfirmed) {
-				fetch(`http://${portConexion}:3000/instructor/activar/${id_instructores}`, {
+				fetch(`http://${portConexion}/instructor/activar/${id_instructores}`, {
 					method: "PATCH",
 					headers: {
 						"Content-type": "application/json",
@@ -218,7 +218,7 @@ const Instructores = () => {
 		});
 	}
 	function editarInstructor(id) {
-		fetch(`http://${portConexion}:3000/instructor/buscar/${id}`, {
+		fetch(`http://${portConexion}/instructor/buscar/${id}`, {
 			method: "GET",
 			headers: {
 				"Content-type": "application/json",
@@ -243,7 +243,7 @@ const Instructores = () => {
 		};
 
 
-		fetch(`http://${portConexion}:3000/instructor/editar/${id}`, {
+		fetch(`http://${portConexion}/instructor/editar/${id}`, {
 			method: "PUT",
 			headers: {
 				"Content-type": "application/json",

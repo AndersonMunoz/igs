@@ -151,7 +151,7 @@ const reporte = () => {
 
   function listaCat() {
     var select = document.getElementById("categoryFilter");
-    fetch(`http://${portConexion}:3000/categoria/listar`, {
+    fetch(`http://${portConexion}/categoria/listar`, {
       method: "get",
       headers: {
         "Content-type": "application/json",
@@ -173,7 +173,7 @@ const reporte = () => {
   // Función para listar productos por rango de fechas
 
   function ListartPorRango(inicio, fin) {
-    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+    fetch(`http://${portConexion}/producto/listarProductoTotal`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -217,7 +217,7 @@ const reporte = () => {
   function filtrarCategorias(inicio, fin) {
     var select = document.getElementById("categoryFilter").value;
 
-    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+    fetch(`http://${portConexion}/producto/listarProductoTotal`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -268,7 +268,7 @@ const reporte = () => {
   }
   // Función para listar los productos
   function listarProducto() {
-    fetch(`http://${portConexion}:3000/producto/listarProductoTotal`, {
+    fetch(`http://${portConexion}/producto/listarProductoTotal`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
