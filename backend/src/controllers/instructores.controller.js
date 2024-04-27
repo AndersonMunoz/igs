@@ -6,7 +6,7 @@ export const registroInstructor = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(403).json(error);
+            return res.status(400).json({"status": 403, error });
         }
         let { documento_instructor, nombre_instructor } = req.body;
         const documento_instructorQuery = `SELECT * FROM  instructores  WHERE documento_instructor = '${documento_instructor}'`;
@@ -114,7 +114,7 @@ export const editarInstructor = async (req, res) => {
     try {
         let error = validationResult(req);
         if (!error.isEmpty()) {
-            return res.status(400).json(error);
+            return res.status(400).json({"status": 400, error });
         }
         let id = req.params.id;
         let { documento_instructor, nombre_instructor } = req.body;

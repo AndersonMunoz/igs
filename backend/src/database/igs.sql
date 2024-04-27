@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-04-2024 a las 21:20:24
+-- Tiempo de generación: 27-04-2024 a las 21:39:02
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.1.17
 
@@ -89,7 +89,7 @@ CREATE TABLE `factura_movimiento` (
   `fecha_movimiento` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `tipo_movimiento` enum('entrada','salida') NOT NULL,
   `cantidad_peso_movimiento` float NOT NULL,
-  `precio_movimiento` float NOT NULL,
+  `precio_movimiento` float DEFAULT NULL,
   `estado_producto_movimiento` enum('optimo','deficiente') DEFAULT NULL,
   `nota_factura` varchar(300) NOT NULL,
   `fecha_caducidad` date DEFAULT NULL,
